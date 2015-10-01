@@ -1,11 +1,12 @@
-bower = require 'bower'
-del = require 'del'
-gulp = require 'gulp'
-coffee = require 'gulp-coffee'
-download = require 'gulp-download'
-exec = require 'gulp-exec'
-path = require 'path'
-fs = require 'fs'
+bower      = require 'bower'
+del        = require 'del'
+gulp       = require 'gulp'
+coffee     = require 'gulp-coffee'
+download   = require 'gulp-download'
+concat      = require 'gulp-concat'
+exec       = require 'gulp-exec'
+path       = require 'path'
+fs         = require 'fs'
 
 plugins = ['org.apache.cordova.file']
 
@@ -49,6 +50,30 @@ gulp.task 'compile:coffee', ->
   # js単体のファイルをコピー
   gulp.src ['src/**/*.js', '!src/**/doc/**/*', '!src/**/snippet/**/*', '!src/**/test/**/*']
   .pipe gulp.dest('www/js')
+
+# Javascriptの結合
+
+jsFiles = [
+  # Kanikama
+  'www/vendor/kanimarker.js'
+  'www/vendor/kanilayer.js'
+  'www/js/kanikama/buffer.js'
+  'www/js/kanikama/kanikama.js'
+  # このプロジェクト固有のプログラム
+  'www/js/app.js'
+  # 通知
+  'www/js/notify.js'
+  # 検索
+  'www/js/searchSetting.js'
+  'www/js/search.js'
+  'www/js/searchReact.js'
+  # テストファイル(alertのみ)
+  'www/js/start.js'
+]
+gulp.task 'concat:js', () ->
+  gulp.src jsFiles
+    .pipe concat('sabatomap.all.js')
+    .pipe gulp.dest 'www/js/'
 
 # cordovaの更新
 gulp.task 'compile:cordova', ['compile:coffee'], (cb)->
