@@ -3831,5 +3831,3 @@ if (typeof searchSetting != 'undefined') {
         document.getElementById('searchBox')
     );
 }
-
-alert('インターネット接続ができませんでした。');

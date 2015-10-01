@@ -68,7 +68,7 @@ jsFiles = [
   'www/js/search.js'
   'www/js/searchReact.js'
   # テストファイル(alertのみ)
-  'www/js/start.js'
+  # 'www/js/start.js'
 ]
 gulp.task 'concat:js', () ->
   gulp.src jsFiles
