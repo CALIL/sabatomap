@@ -4,11 +4,7 @@
     <description>鯖江図書館マップ</description>
     <author email="info@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
-    <access origin="https://127.0.0.1"/>
-    <access origin="https://calil.jp"/>
-    <access origin="https://*.calil.jp"/>
-    <access origin="https://haika.io"/>
-    <access origin="https://*.haika.io"/>
+    <access origin="*"/>
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
@@ -17,8 +13,6 @@
     <preference name="ShowSplashScreenSpinner" value="false"/>
     <!--<allow-intent href="http://*/*" />-->
     <!--<allow-intent href="https://*/*" />-->
-    <!--<platform name="android">-->
-    <!--</platform>-->
     <platform name="ios">
         <preference name="Orientation" value="all" />
     </platform>
