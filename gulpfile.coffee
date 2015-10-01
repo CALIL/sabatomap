@@ -4,6 +4,11 @@ gulp = require 'gulp'
 coffee = require 'gulp-coffee'
 download = require 'gulp-download'
 exec = require 'gulp-exec'
+path = require 'path'
+fs = require 'fs'
+
+plugins = ['org.apache.cordova.file']
+
 
 libs = [
   'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'
@@ -56,3 +61,6 @@ gulp.task 'compile:cordova', ['compile:coffee'], (cb)->
 
 gulp.task 'watch', ->
   gulp.watch ['src/**/*.coffee', 'src/**/*.js'], ['compile:cordova']
+
+
+
