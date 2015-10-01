@@ -231,28 +231,36 @@ $(document).on('ready',
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if kanimarker.headingUp
-      kanimarker.setHeadingUp(false)
-      map.getView().setRotation(0)
-      if kanimarker.position isnt null
-        map.getView().setCenter(kanimarker.position)
-      centerAdjusted = true
+    # Bluetooth OFF
+    if cordova.plugins.BluetoothStatus.hasBTLE and not cordova.plugins.BluetoothStatus.BTenabled
+      $.notify('Bluetoothをオンにしてください', {
+        placement:
+          from: 'bottom'
+          align: 'right'
+      })
+    else if kanimarker.position is null
+      $.notify('現在地が取得できません', {
+        placement:
+          from: 'bottom'
+          align: 'right'
+      })
     else
-      if centerAdjusted
-        kanimarker.setHeadingUp(true)
-        # messageEvent ヘディングアップモード
+      if kanimarker.headingUp
+        kanimarker.setHeadingUp(false)
+        map.getView().setRotation(0)
+        map.getView().setCenter(kanimarker.position)
+        centerAdjusted = true
       else
-        view.setRotation(homeRotaion)
-        if kanimarker.position isnt null
-          view.setCenter(kanimarker.position)
-          centerAdjusted = true
-        if cordova.plugins.BluetoothStatus.hasBTLE and not cordova.plugins.BluetoothStatus.BTenabled and notifyClosed
-          $.notify('Bluetoothをオンにしてください', {
-            placement:
-              from: 'bottom'
-              align: 'right'
-          })
-    invalidatePositionButton()
+        if centerAdjusted
+          kanimarker.setHeadingUp(true)
+          # messageEvent ヘディングアップモード
+        else
+          view.setRotation(homeRotaion)
+          if kanimarker.position isnt null
+            view.setCenter(kanimarker.position)
+            centerAdjusted = true
+      invalidatePositionButton()
+    return
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->

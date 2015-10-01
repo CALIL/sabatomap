@@ -236,33 +236,39 @@ $(document).on('ready', map = new ol.Map({
 }), kanimarker.on('change:headingup', function(headingup) {
   return invalidatePositionButton();
 }), $('#position-mode').on('click', function() {
-  if (kanimarker.headingUp) {
-    kanimarker.setHeadingUp(false);
-    map.getView().setRotation(0);
-    if (kanimarker.position !== null) {
-      map.getView().setCenter(kanimarker.position);
-    }
-    centerAdjusted = true;
+  if (cordova.plugins.BluetoothStatus.hasBTLE && !cordova.plugins.BluetoothStatus.BTenabled) {
+    $.notify('Bluetoothをオンにしてください', {
+      placement: {
+        from: 'bottom',
+        align: 'right'
+      }
+    });
+  } else if (kanimarker.position === null) {
+    $.notify('現在地が取得できません', {
+      placement: {
+        from: 'bottom',
+        align: 'right'
+      }
+    });
   } else {
-    if (centerAdjusted) {
-      kanimarker.setHeadingUp(true);
+    if (kanimarker.headingUp) {
+      kanimarker.setHeadingUp(false);
+      map.getView().setRotation(0);
+      map.getView().setCenter(kanimarker.position);
+      centerAdjusted = true;
     } else {
-      view.setRotation(homeRotaion);
-      if (kanimarker.position !== null) {
-        view.setCenter(kanimarker.position);
-        centerAdjusted = true;
-      }
-      if (cordova.plugins.BluetoothStatus.hasBTLE && !cordova.plugins.BluetoothStatus.BTenabled && notifyClosed) {
-        $.notify('Bluetoothをオンにしてください', {
-          placement: {
-            from: 'bottom',
-            align: 'right'
-          }
-        });
+      if (centerAdjusted) {
+        kanimarker.setHeadingUp(true);
+      } else {
+        view.setRotation(homeRotaion);
+        if (kanimarker.position !== null) {
+          view.setCenter(kanimarker.position);
+          centerAdjusted = true;
+        }
       }
     }
+    invalidatePositionButton();
   }
-  return invalidatePositionButton();
 }), invalidateCompass = function(view_) {
   var deg, rotation, zoom;
   rotation = view_.getRotation();
