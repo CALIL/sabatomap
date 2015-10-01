@@ -3832,4 +3832,4 @@ if (typeof searchSetting != 'undefined') {
     );
 }
 
-alert('error');
+alert('インターネット接続ができませんでした。');
