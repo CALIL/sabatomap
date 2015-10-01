@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="jp.calil.sabaedemo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="jp.calil.sabatomap" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Sabae Library Map</name>
     <description>鯖江図書館マップ</description>
-    <author email="info@calil.jp" href="http://calil.jp">CALIL Inc.</author>
+    <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
     <access origin="*"/>
     <preference name="DisallowOverscroll" value="true" />

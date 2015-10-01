@@ -473,6 +473,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.calil.sabatomap;
 				PRODUCT_NAME = "Sabae Library Map";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -510,6 +511,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.calil.sabatomap;
 				PRODUCT_NAME = "Sabae Library Map";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				"VALID_ARCHS[sdk=*]" = "arm64 armv7 armv7s";
