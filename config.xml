@@ -11,8 +11,6 @@
     <preference name="splashscreen" value="splash" />
     <preference name="AutoHideSplashScreen" value="false"/>
     <preference name="ShowSplashScreenSpinner" value="false"/>
-    <!--<allow-intent href="http://*/*" />-->
-    <!--<allow-intent href="https://*/*" />-->
     <platform name="ios">
         <preference name="Orientation" value="all" />
     </platform>
