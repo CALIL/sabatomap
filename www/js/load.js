@@ -24,15 +24,17 @@ for(var i=0,l=jsFiles.length;i<l;i++){
 }
 
 
-/*　　*/
-var scriptServer = 'https://calil.jp/static/apps/sabatomap/';
-var scriptUrl = 'js/search.js';
+// サーバー
+var scriptServer = 'https://calil.jp/static/apps/sabatomap/www/';
+var scriptUrl = 'js/start.js';
+// タイムアウト ミリ秒
 var scriptTimeout = 5000;
 
 $.ajax({
     type:'GET',
     url: scriptServer+scriptUrl,
     cache: false,
+    dataType: 'script',
     timeout: scriptTimeout,
     success: function(data){
       var script = document.createElement('script');
