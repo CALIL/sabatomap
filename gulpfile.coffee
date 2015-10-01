@@ -76,7 +76,7 @@ gulp.task 'concat:js', () ->
     .pipe gulp.dest 'www/js/'
 
 # cordovaの更新
-gulp.task 'compile:cordova', ['compile:coffee'], (cb)->
+gulp.task 'compile:cordova', ['compile:coffee','concat:js'], (cb)->
   gulp.src('.')
   .pipe exec('cordova prepare', (err, stdout, stderr)->
     console.log stdout
