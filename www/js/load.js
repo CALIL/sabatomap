@@ -21,6 +21,7 @@ $.ajax({
       document.body.appendChild(script);
     },
     complete: function(){
-      console.log('call deviceReady')
+      initializeApp();
+      initializeCordovaPlugin();
     }
 });
