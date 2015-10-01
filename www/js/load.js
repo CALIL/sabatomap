@@ -45,6 +45,8 @@ $.ajax({
       var script = document.createElement('script');
       script.src = scriptUrl;
       document.body.appendChild(script);
-
+    },
+    complete: function(){
+      console.log('call deviceReady')
     }
 });
