@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+    <plugin id="cordova-plugin-bluetooth-status" version="1.0.3" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <engines>
+        <engine name="cordova" version="&gt;=3.0.0" />
+    </engines>
+
+    <name>Bluetooth status</name>
+    <description>Cordova Bluetooth status plugin</description>
+    <keywords>cordova,bluetooth</keywords>
+    <license>MIT</license>
+    <author>Guillaume Monnet</author>
+    <repo>https://github.com/255kb/cordova-plugin-bluetooth-status.git</repo>
+    <issue>https://github.com/255kb/cordova-plugin-bluetooth-status/issues</issue>
+
+    <js-module name="BluetoothStatus" src="BluetoothStatus.js">
+        <clobbers target="cordova.plugins.BluetoothStatus" />
+    </js-module>
+
+    <platform name="android">
+        <source-file src="src/android/com/twofivefivekb/android/bluetoothstatus/BluetoothStatus.java" target-dir="src/com/twofivefivekb/android/bluetoothstatus" />
+
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="BluetoothStatus">
+                <param name="android-package" value="com.twofivefivekb.android.bluetoothstatus.BluetoothStatus" />
+            </feature>
+        </config-file>
+
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.BLUETOOTH" />
+        </config-file>
+
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+        </config-file>
+
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+        </config-file>
+    </platform>
+
+    <platform name="ios">
+        <framework src="CoreBluetooth.framework" />
+        <config-file parent="/*" target="config.xml">
+            <feature name="BluetoothStatus">
+                <param name="ios-package" value="BluetoothStatus" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/ios/BluetoothStatus.m" />
+    </platform>
+</plugin>

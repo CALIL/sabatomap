@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../../javascript/application.js'></script>
+  <script src='../../javascript/search.js'></script>
+  <link rel='stylesheet' href='../../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>snippet</span>
+    &raquo;
+    <span class='title'>create_beacon2latlng.coffee</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        File:
+        create_beacon2latlng.coffee
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>snippet</td>
+        </tr>
+      </table>
+      <h2>Variables Summary</h2>
+      <dl class='constants'>
+  <dt id='POINT_2_LATLNG-variable'>
+    POINT_2_LATLNG
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>[
+  {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.1863696569712, 35.96191126156543],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18639230648637, 35.961905875380126],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18641398322058, 35.96190510933523],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18643599258996, 35.96190433153515],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18645773928517, 35.9619038327686],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18647856748686, 35.96190278200115],
+    &quot;point&quot;: 5
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18650040327566, 35.961901875459894],
+    &quot;point&quot;: 6
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.1865213689799, 35.961901314376206],
+    &quot;point&quot;: 7
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18654250584308, 35.96190083716078],
+    &quot;point&quot;: 8
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18656499963947, 35.961899772490426],
+    &quot;point&quot;: 9
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18658784059397, 35.96189896530245],
+    &quot;point&quot;: 10
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18661084786532, 35.96189815223689],
+    &quot;point&quot;: 11
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18663180388558, 35.96189741166151],
+    &quot;point&quot;: 12
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18665458939978, 35.96189660643273],
+    &quot;point&quot;: 13
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.18667804018332, 35.96189577769361],
+    &quot;point&quot;: 14
+  }, {
+    &quot;lane&quot;: &quot;A&quot;,
+    &quot;latlng&quot;: [136.1867014335756, 35.961896974113614],
+    &quot;point&quot;: 15
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.1863645958551, 35.96181743228368],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18638732106814, 35.96181653926824],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18641004628117, 35.9618156462528],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18643200502703, 35.96181496015777],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18645278986847, 35.96181413571413],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.1864736807471, 35.961813217606256],
+    &quot;point&quot;: 5
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18649558647337, 35.96181257834334],
+    &quot;point&quot;: 6
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18651775487186, 35.961811660046926],
+    &quot;point&quot;: 7
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18653859515052, 35.961810833644094],
+    &quot;point&quot;: 8
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18655994164337, 35.96181012422727],
+    &quot;point&quot;: 9
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18658300674903, 35.96180935407544],
+    &quot;point&quot;: 10
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18660594887302, 35.96180836347738],
+    &quot;point&quot;: 11
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18662703027113, 35.96180788822115],
+    &quot;point&quot;: 12
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18664930228374, 35.96180683138758],
+    &quot;point&quot;: 13
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.1866731362736, 35.961805899188256],
+    &quot;point&quot;: 14
+  }, {
+    &quot;lane&quot;: &quot;B&quot;,
+    &quot;latlng&quot;: [136.18669697026348, 35.961804966988936],
+    &quot;point&quot;: 15
+  }, {
+    &quot;lane&quot;: &quot;C&quot;,
+    &quot;latlng&quot;: [136.18682401061682, 35.96193899448264],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;C&quot;,
+    &quot;latlng&quot;: [136.18682305444435, 35.96192126967809],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;C&quot;,
+    &quot;latlng&quot;: [136.18682209827188, 35.96190354487355],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;C&quot;,
+    &quot;latlng&quot;: [136.18682121956186, 35.96188725600254],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;C&quot;,
+    &quot;latlng&quot;: [136.18682034085185, 35.96187096713153],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18627489493238, 35.96194931833726],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18627392194043, 35.96193127942226],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18627294894847, 35.96191324050726],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.1862719807977, 35.96189529133811],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18627098118253, 35.96187675882095],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18626991863806, 35.96185705960781],
+    &quot;point&quot;: 5
+  }, {
+    &quot;lane&quot;: &quot;D&quot;,
+    &quot;latlng&quot;: [136.18627059384187, 35.961836624606605],
+    &quot;point&quot;: 6
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.18630578213975, 35.96186289564538],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.1863093982123, 35.96192993579218],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.18624939353526, 35.961974946694816],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.1865991356181, 35.96199405792012],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.18667132039457, 35.96206775650696],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.186868095626, 35.961953082088385],
+    &quot;point&quot;: 5
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.1868959775686, 35.961924222503306],
+    &quot;point&quot;: 6
+  }, {
+    &quot;lane&quot;: &quot;main&quot;,
+    &quot;latlng&quot;: [136.18645326254045, 35.96199795415883],
+    &quot;point&quot;: 7
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18688711744204, 35.96182176055322],
+    &quot;point&quot;: 0
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18690607068305, 35.96180139894392],
+    &quot;point&quot;: 1
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18692502392406, 35.96178103733462],
+    &quot;point&quot;: 2
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18693411312233, 35.96175801209845],
+    &quot;point&quot;: 3
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18693403260326, 35.96173283820016],
+    &quot;point&quot;: 4
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.1869257398401, 35.96170781964384],
+    &quot;point&quot;: 5
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.186907531943, 35.96168845658414],
+    &quot;point&quot;: 6
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.1868815979032, 35.96167620025106],
+    &quot;point&quot;: 7
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18685298727485, 35.961669928067366],
+    &quot;point&quot;: 8
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18682419286148, 35.96167157506923],
+    &quot;point&quot;: 9
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.1867980468882, 35.96168113108361],
+    &quot;point&quot;: 10
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18677661682983, 35.961695735621504],
+    &quot;point&quot;: 11
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18676168883835, 35.96171555035333],
+    &quot;point&quot;: 12
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18675283853224, 35.9617399158996],
+    &quot;point&quot;: 13
+  }, {
+    &quot;lane&quot;: &quot;circle&quot;,
+    &quot;latlng&quot;: [136.18674398822614, 35.961764281445866],
+    &quot;point&quot;: 14
+  }
+]</code></pre>
+    <div class='docstring'>
+  <p>point と latlng の変換マップ</p>
+</div>
+<div class='tags'>
+</div>
+  </dd>
+  <dt id='n1map-variable'>
+    n1map
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>{
+  &quot;131&quot;: [&quot;B&quot;, 0],
+  &quot;1&quot;: [&quot;B&quot;, 1],
+  &quot;2&quot;: [&quot;B&quot;, 2],
+  &quot;3&quot;: [&quot;B&quot;, 3],
+  &quot;4&quot;: [&quot;B&quot;, 4],
+  &quot;5&quot;: [&quot;B&quot;, 5],
+  &quot;6&quot;: [&quot;B&quot;, 6],
+  &quot;7&quot;: [&quot;B&quot;, 7],
+  &quot;8&quot;: [&quot;B&quot;, 8],
+  &quot;9&quot;: [&quot;B&quot;, 9],
+  &quot;10&quot;: [&quot;B&quot;, 10],
+  &quot;11&quot;: [&quot;B&quot;, 11],
+  &quot;12&quot;: [&quot;B&quot;, 12],
+  &quot;13&quot;: [&quot;B&quot;, 13],
+  &quot;14&quot;: [&quot;B&quot;, 14],
+  &quot;15&quot;: [&quot;B&quot;, 15],
+  &quot;16&quot;: [&quot;B&quot;, 0],
+  &quot;17&quot;: [&quot;B&quot;, 1],
+  &quot;18&quot;: [&quot;B&quot;, 2],
+  &quot;19&quot;: [&quot;B&quot;, 3],
+  &quot;20&quot;: [&quot;B&quot;, 4],
+  &quot;21&quot;: [&quot;B&quot;, 5],
+  &quot;22&quot;: [&quot;B&quot;, 6],
+  &quot;23&quot;: [&quot;B&quot;, 7],
+  &quot;24&quot;: [&quot;B&quot;, 8],
+  &quot;25&quot;: [&quot;B&quot;, 9],
+  &quot;26&quot;: [&quot;B&quot;, 10],
+  &quot;27&quot;: [&quot;B&quot;, 11],
+  &quot;28&quot;: [&quot;B&quot;, 12],
+  &quot;29&quot;: [&quot;B&quot;, 13],
+  &quot;30&quot;: [&quot;B&quot;, 14],
+  &quot;132&quot;: [&quot;B&quot;, 15],
+  &quot;133&quot;: [&quot;A&quot;, 0],
+  &quot;101&quot;: [&quot;A&quot;, 1],
+  &quot;102&quot;: [&quot;A&quot;, 2],
+  &quot;103&quot;: [&quot;A&quot;, 3],
+  &quot;104&quot;: [&quot;A&quot;, 4],
+  &quot;105&quot;: [&quot;A&quot;, 5],
+  &quot;106&quot;: [&quot;A&quot;, 6],
+  &quot;107&quot;: [&quot;A&quot;, 7],
+  &quot;108&quot;: [&quot;A&quot;, 8],
+  &quot;109&quot;: [&quot;A&quot;, 9],
+  &quot;110&quot;: [&quot;A&quot;, 10],
+  &quot;111&quot;: [&quot;A&quot;, 11],
+  &quot;112&quot;: [&quot;A&quot;, 12],
+  &quot;113&quot;: [&quot;A&quot;, 13],
+  &quot;114&quot;: [&quot;A&quot;, 14],
+  &quot;115&quot;: [&quot;A&quot;, 15],
+  &quot;116&quot;: [&quot;A&quot;, 0],
+  &quot;117&quot;: [&quot;A&quot;, 1],
+  &quot;118&quot;: [&quot;A&quot;, 2],
+  &quot;119&quot;: [&quot;A&quot;, 3],
+  &quot;120&quot;: [&quot;A&quot;, 4],
+  &quot;121&quot;: [&quot;A&quot;, 5],
+  &quot;122&quot;: [&quot;A&quot;, 6],
+  &quot;123&quot;: [&quot;A&quot;, 7],
+  &quot;124&quot;: [&quot;A&quot;, 8],
+  &quot;125&quot;: [&quot;A&quot;, 9],
+  &quot;126&quot;: [&quot;A&quot;, 10],
+  &quot;127&quot;: [&quot;A&quot;, 11],
+  &quot;128&quot;: [&quot;A&quot;, 12],
+  &quot;129&quot;: [&quot;A&quot;, 13],
+  &quot;130&quot;: [&quot;A&quot;, 14],
+  &quot;134&quot;: [&quot;A&quot;, 15],
+  &quot;48&quot;: [&quot;main&quot;, 6],
+  &quot;33&quot;: [&quot;main&quot;, 2],
+  &quot;32&quot;: [&quot;main&quot;, 1],
+  &quot;31&quot;: [&quot;main&quot;, 0],
+  &quot;42&quot;: [&quot;main&quot;, 4],
+  &quot;41&quot;: [&quot;main&quot;, 3],
+  &quot;63&quot;: [&quot;main&quot;, 7],
+  &quot;47&quot;: [&quot;main&quot;, 5]
+}</code></pre>
+    <div class='docstring'>
+  <p>nearest1マップ</p>
+</div>
+<div class='tags'>
+</div>
+  </dd>
+  <dt id='n2map-variable'>
+    n2map
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>[[[133, 116], [&quot;A&quot;, 0]], [[101, 117], [&quot;A&quot;, 1]], [[102, 118], [&quot;A&quot;, 2]], [[103, 119], [&quot;A&quot;, 3]], [[104, 120], [&quot;A&quot;, 4]], [[105, 121], [&quot;A&quot;, 5]], [[106, 122], [&quot;A&quot;, 6]], [[107, 123], [&quot;A&quot;, 7]], [[108, 124], [&quot;A&quot;, 8]], [[109, 125], [&quot;A&quot;, 9]], [[110, 126], [&quot;A&quot;, 10]], [[111, 127], [&quot;A&quot;, 11]], [[112, 128], [&quot;A&quot;, 12]], [[113, 129], [&quot;A&quot;, 13]], [[114, 130], [&quot;A&quot;, 14]], [[115, 134], [&quot;A&quot;, 15]], [[131, 16], [&quot;B&quot;, 0]], [[1, 17], [&quot;B&quot;, 1]], [[2, 18], [&quot;B&quot;, 2]], [[3, 19], [&quot;B&quot;, 3]], [[4, 20], [&quot;B&quot;, 4]], [[5, 21], [&quot;B&quot;, 5]], [[6, 22], [&quot;B&quot;, 6]], [[7, 23], [&quot;B&quot;, 7]], [[8, 24], [&quot;B&quot;, 8]], [[9, 25], [&quot;B&quot;, 9]], [[10, 26], [&quot;B&quot;, 10]], [[11, 27], [&quot;B&quot;, 11]], [[12, 28], [&quot;B&quot;, 12]], [[13, 29], [&quot;B&quot;, 13]], [[14, 30], [&quot;B&quot;, 14]], [[15, 132], [&quot;B&quot;, 15]], [[34, 35], [&quot;D&quot;, 1]], [[35, 36], [&quot;D&quot;, 2]], [[36, 37], [&quot;D&quot;, 3]], [[37, 38], [&quot;D&quot;, 4]], [[38, 39], [&quot;D&quot;, 5]], [[39, 40], [&quot;D&quot;, 6]], [[43, 44], [&quot;C&quot;, 1]], [[44, 45], [&quot;C&quot;, 2]], [[45, 46], [&quot;C&quot;, 3]], [[49, 50], [&quot;circle&quot;, 1]], [[50, 51], [&quot;circle&quot;, 2]], [[51, 52], [&quot;circle&quot;, 3]], [[52, 53], [&quot;circle&quot;, 4]], [[53, 54], [&quot;circle&quot;, 5]], [[54, 55], [&quot;circle&quot;, 6]], [[55, 56], [&quot;circle&quot;, 7]], [[56, 57], [&quot;circle&quot;, 8]], [[57, 58], [&quot;circle&quot;, 9]], [[58, 59], [&quot;circle&quot;, 10]], [[59, 60], [&quot;circle&quot;, 11]], [[60, 61], [&quot;circle&quot;, 12]], [[61, 62], [&quot;circle&quot;, 13]]]</code></pre>
+    <div class='docstring'>
+  <p>nearest2マップ</p>
+</div>
+<div class='tags'>
+</div>
+  </dd>
+  <dt id='ndmap-variable'>
+    ndmap
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>{
+  &quot;39&quot;: [[&quot;D&quot;, 5], [&quot;D&quot;, 6]],
+  &quot;38&quot;: [[&quot;D&quot;, 4], [&quot;D&quot;, 5]],
+  &quot;37&quot;: [[&quot;D&quot;, 3], [&quot;D&quot;, 4]],
+  &quot;36&quot;: [[&quot;D&quot;, 2], [&quot;D&quot;, 3]],
+  &quot;35&quot;: [[&quot;D&quot;, 1], [&quot;D&quot;, 2]],
+  &quot;34&quot;: [[&quot;D&quot;, 0], [&quot;D&quot;, 1]],
+  &quot;40&quot;: [[&quot;D&quot;, 6], [&quot;D&quot;, 7]],
+  &quot;46&quot;: [[&quot;C&quot;, 3], [&quot;C&quot;, 4]],
+  &quot;43&quot;: [[&quot;C&quot;, 0], [&quot;C&quot;, 1]],
+  &quot;44&quot;: [[&quot;C&quot;, 1], [&quot;C&quot;, 2]],
+  &quot;45&quot;: [[&quot;C&quot;, 2], [&quot;C&quot;, 3]]
+}</code></pre>
+    <div class='docstring'>
+  <p>nearestDマップ</p>
+</div>
+<div class='tags'>
+</div>
+  </dd>
+  <dt id='ndoffsets-variable'>
+    ndoffsets
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>{
+  &#39;D&#39;: 90,
+  &#39;C&#39;: 90
+}</code></pre>
+    <div class='docstring'>
+  <p>nearestDオフセット</p>
+</div>
+<div class='tags'>
+</div>
+  </dd>
+</dl>
+      <h2>Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#createTable-'>
+        ~
+(void)
+<b>createTable</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      作成 
+    </span>
+  </li>
+</ul>
+      <h2>Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='createTable-'>
+      ~
+(void)
+<b>createTable</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>作成</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  September 24, 15 15:23:24 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.11
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

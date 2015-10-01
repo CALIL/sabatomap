@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="jp.calil.sabaedemo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Sabae Library Map</name>
+    <description>鯖江図書館マップ</description>
+    <author email="info@calil.jp" href="http://calil.jp">CALIL Inc.</author>
+    <content src="index.html" />
+    <access origin="https://127.0.0.1"/>
+    <access origin="https://calil.jp"/>
+    <access origin="https://*.calil.jp"/>
+    <access origin="https://haika.io"/>
+    <access origin="https://*.haika.io"/>
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="default" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="splashscreen" value="splash" />
+    <preference name="AutoHideSplashScreen" value="false"/>
+    <preference name="ShowSplashScreenSpinner" value="false"/>
+    <!--<allow-intent href="http://*/*" />-->
+    <!--<allow-intent href="https://*/*" />-->
+    <!--<platform name="android">-->
+    <!--</platform>-->
+    <platform name="ios">
+        <preference name="Orientation" value="all" />
+    </platform>
+</widget>

@@ -1,0 +1,123 @@
+html, body, #map {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(232, 224, 216);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+#floor-button {
+    position: absolute;
+    bottom: 50px;
+    height: auto;
+    border: 1px solid rgba(161, 161, 161, 0.25);
+    margin: 10px;
+    font-family: Arial, serif;
+    pointer-events: none;
+}
+
+#floor-button .button {
+    -webkit-user-select: none;
+    user-select: none;
+    height: 48px;
+    width: 45px;
+    line-height: 48px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.80);
+    pointer-events: auto;
+    font-size:18px;
+    font-family: sans-serif;
+}
+
+#floor-button .active {
+    background-color: rgba(56, 149, 255, 0.85) !important;
+    color:#fff;
+}
+
+.ui-button {
+    background-size: 28px;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(83, 83, 83, 0.25);
+    background: rgba(255, 255, 255, 0.80) no-repeat center;
+    pointer-events: auto;
+}
+
+#debug-buttons {
+    position: absolute;
+    top: 24px;
+    width: auto;
+    pointer-events: none;
+}
+
+@media (min-width: 1080px) {
+    #debug-buttons {
+        top: 10px;
+    }
+}
+
+#control-buttons {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    width: auto;
+    height: auto;
+    pointer-events: none;
+}
+
+#debug-buttons .ui-button {
+    float: left;
+    margin-left: 10px;
+}
+
+#control-buttons .ui-button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#debug-buttons #reload {
+    background-image: url(../img/reload.svg);
+}
+
+.position-mode-normal {
+    background-image: url(../img/target.svg);
+    background-color: rgba(255, 255, 255, 0.96);
+}
+
+.position-mode-center {
+    background-image: url(../img/target-white.svg);
+    background-color: rgba(56, 149, 255, 0.85);
+}
+
+.position-mode-heading {
+    background-image: url(../img/navigation.svg);
+    background-color: rgba(56, 149, 255, 0.85);
+}
+
+#compass {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-user-select: none;
+    user-select: none;
+    position: absolute;
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    top: 24px;
+    bottom: auto;
+    left: auto;
+    right: 10px;
+    background-image: url(../img/compass.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 38px;
+}
+#compass.ol-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s linear, visibility 0s linear .25s;
+}

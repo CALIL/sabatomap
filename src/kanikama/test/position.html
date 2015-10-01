@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kanikamaテスト</title>
+</head>
+<body>
+kanikamaテスト
+<br/><br/>
+旧kanikama(http://lab.calil.jp/kanikama/sabae/kanikama.js)と鯖江アプリ用kanikamaで結果が同じになるかのテスト<br/>
+ngがある場合は結果が変わってしまっているので問題あり<br/>
+<br/>
+--<br/>
+<div id="result" style="white-space: pre-wrap;"></div>
+
+<!-- 依存 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="../vendor/geolib.js"></script>
+<script src="../buffer.js"></script>
+
+<script src="http://lab.calil.jp/kanikama/sabae/kanikama.js"></script>
+<script>
+    var OldKanikama = Kanikama;
+</script>
+
+<!-- テスト対象 -->
+<script src="../position_table_1f.js"></script>
+<script src="../kanikama.js"></script>
+<script src="position.js"></script>
+</body>
+</html>

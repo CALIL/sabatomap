@@ -1,0 +1,33 @@
+﻿# Mac
+.DS_Store
+
+# Node
+npm-debug.log
+node_modules
+
+# iOS
+platforms/ios/build/
+platforms/ios/www/
+platforms/ios/cordova/console.log
+*.xcuserdatad
+*.xcworkspace
+
+# android
+platforms/android
+platforms/android/assets/www
+platforms/android/bin
+platforms/android/gen
+platforms/android/local.properties
+platforms/android/ant-build
+platforms/android/ant-gen
+platforms/android/CordovaLib/ant-build
+platforms/android/CordovaLib/ant-gen
+platforms/android/CordovaLib/bin
+platforms/android/CordovaLib/gen
+platforms/android/CordovaLib/local.properties
+
+platforms/browser
+
+/info.txt
+bower_components
+

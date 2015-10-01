@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kanikamaテスト</title>
+</head>
+<body>
+kanikamaテスト
+<br/><br/>
+旧kanikama(http://lab.calil.jp/kanikama/sabae/kanikama.js)と鯖江アプリ用kanikamaで結果が同じになるかのテスト<br/>
+facilityのエラーを検証<br/>
+<br/>
+--<br/>
+
+<div id="result" style="white-space: pre-wrap;"></div>
+
+<!-- 依存 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="../vendor/geolib.js"></script>
+<script src="../buffer.js"></script>
+
+<script src="http://lab.calil.jp/kanikama/sabae/kanikama.js"></script>
+<script>
+    var OldKanikama = Kanikama;
+</script>
+
+<!-- テスト対象 -->
+<script src="../kanikama.js"></script>
+
+<!-- テスト -->
+<script>
+    var kanikama = new OldKanikama();
+    var newKanikama = new Kanikama();
+
+    $(function () {
+        $.when(
+                $.getJSON('https://app.haika.io/api/facility/7/7.geojson'),
+                $.getJSON('https://app.haika.io/api/facility/7/8.geojson')
+        ).then(
+                function () {
+                    var data, j, len;
+                    for (j = 0, len = arguments.length; j < len; j++) {
+                        data = arguments[j];
+                        if (data[1] === 'success') {
+                            kanikama.addGeoJSON(data[0]);
+                            newKanikama.addGeoJSON(data[0]);
+                        }
+                    }
+                }).then(function () {
+                    showResult('テスト開始');
+                    test();
+                }
+        );
+    });
+
+    /**
+     * 空配列のビーコンの時のエラーを検証
+     */
+    test = function() {
+        try {
+            kanikama.buffer.push([]);
+            kanikama.facilityDetector();
+            showResult('空配列 旧 OK');
+        } catch (e) {
+            showResult('空配列 旧 ' + e.toString());
+        }
+        try {
+            newKanikama.buffer.push([]);
+            newKanikama.facilityDetector();
+            showResult('空配列 新 OK');
+        } catch (e) {
+            showResult('空配列 新 ' + e.toString());
+            throw e;
+        }
+    };
+
+    showResult = function (text) {
+        return setTimeout(function () {
+            return $('#result').text($('#result').text() + text + '\n');
+        }, 10);
+    };
+</script>
+</body>
+</html>

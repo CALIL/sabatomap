@@ -1,0 +1,1 @@
+window.searchData = [{"t":"position.coffee","p":"file/position.coffee.html"},{"t":"position.coffee~showResult","p":"file/position.coffee.html#showResult-"},{"t":"position.coffee~test","p":"file/position.coffee.html#test-"}]

@@ -1,0 +1,50 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"browser-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.unarin.cordova.beacon": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-bluetooth-status": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        }
+    },
+    "dependent_plugins": {}
+}
