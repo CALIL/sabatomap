@@ -39,6 +39,9 @@
     <feature name="Compass">
         <param name="ios-package" value="CDVCompass" />
     </feature>
+    <feature name="WKWebViewPolyfill">
+        <param name="ios-package" value="WKWebViewPolyfill" />
+    </feature>
     <preference name="Orientation" value="all" />
     <name>Sabae Library Map</name>
     <description>鯖江図書館マップ</description>

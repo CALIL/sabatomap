@@ -7,16 +7,40 @@
         "files": {
             "framework": {
                 "parents": {
-                    "libz.dylib": [],
-                    "CFNetwork.framework": [],
+                    "libz.dylib": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "CFNetwork.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
                     "SystemConfiguration.framework": [
                         {
                             "xml": true,
                             "count": 1
+                        },
+                        {
+                            "xml": false,
+                            "count": 1
                         }
                     ],
-                    "MobileCoreServices.framework": [],
-                    "WebKit.framework": [],
+                    "MobileCoreServices.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
+                    "WebKit.framework": [
+                        {
+                            "xml": false,
+                            "count": 1
+                        }
+                    ],
                     "CoreBluetooth.framework": [
                         {
                             "xml": false,
@@ -71,6 +95,10 @@
                         {
                             "xml": "<feature name=\"Compass\"><param name=\"ios-package\" value=\"CDVCompass\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"WKWebViewPolyfill\"><param name=\"ios-package\" value=\"WKWebViewPolyfill\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -89,7 +117,12 @@
                             "count": 1
                         }
                     ],
-                    "NSAppTransportSecurity": []
+                    "NSAppTransportSecurity": [
+                        {
+                            "xml": "<dict><key>NSAllowsArbitraryLoads</key><true /></dict>",
+                            "count": 1
+                        }
+                    ]
                 }
             }
         }
@@ -118,7 +151,14 @@
         },
         "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabaedemo"
+        },
+        "com.telerik.plugins.wkwebview": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "jp.calil.sabaedemo"
+        }
+    }
 }
