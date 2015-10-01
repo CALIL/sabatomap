@@ -1,6 +1,9 @@
 ﻿# Mac
 .DS_Store
 
+# PyCharm
+.idea
+
 # Node
 npm-debug.log
 node_modules
