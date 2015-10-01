@@ -111,7 +111,7 @@ didRangeBeaconsInRegion = (beacons)->
   else
     kanimarker.setPosition(null)
 
-initializeCordovaPlugin = ->
+$(document).on 'deviceready', ->
 
   # メッセージ閉じるボタン
   $('.message_close').on('click', ->
@@ -162,7 +162,7 @@ initializeCordovaPlugin = ->
       return
     )
 
-initializeApp = ->
+initialize = ->
   $.when(
     $.getJSON('https://app.haika.io/api/facility/7')
     $.getJSON('https://app.haika.io/api/facility/7/7.geojson')
@@ -179,6 +179,7 @@ initializeApp = ->
     loadFloor(7)
   )
 
+$(document).on('ready',
   map = new ol.Map(
     layers: [
       new ol.layer.Tile(# 世界地図
@@ -281,6 +282,7 @@ initializeApp = ->
       rotation -= 2 * Math.PI
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     view.setRotation(0)
+)
 
 appTest_1f = ->
   didRangeBeaconsInRegion.call(window, [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 1}])

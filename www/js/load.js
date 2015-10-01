@@ -21,7 +21,7 @@ $.ajax({
       document.body.appendChild(script);
     },
     complete: function(){
-      initializeApp();
-      initializeCordovaPlugin();
+      initialize();
+      $(document).trigger('deviceready');
     }
 });
