@@ -1,4 +1,4 @@
-var SABAE, appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, initialize, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
+var SABAE, appTest_1f, appTest_2f, didRangeBeaconsInRegion, facilityTable, homeRotaion, initializeApp, initializeCordovaPlugin, kLayer, kanikama, kanimarker, loadFloor, map, view;
 
 view = new ol.View({
   center: [15139450.747885207, 4163881.1440642904],
@@ -136,7 +136,7 @@ didRangeBeaconsInRegion = function(beacons) {
   }
 };
 
-$(document).on('deviceready', function() {
+initializeCordovaPlugin = function() {
   var compassError, compassSuccess, delegate, locationManager, ref, region;
   $('.message_close').on('click', function() {
     $($(this).parent()).fadeOut(200);
@@ -177,10 +177,11 @@ $(document).on('deviceready', function() {
       cosole.log('native.keyboardshow' + e.keyboardHeight);
     });
   }
-});
+};
 
-initialize = function() {
-  return $.when($.getJSON('https://app.haika.io/api/facility/7'), $.getJSON('https://app.haika.io/api/facility/7/7.geojson'), $.getJSON('https://app.haika.io/api/facility/7/8.geojson')).done(function() {
+initializeApp = function() {
+  var centerAdjusted, extent, invalidateCompass, invalidatePositionButton;
+  $.when($.getJSON('https://app.haika.io/api/facility/7'), $.getJSON('https://app.haika.io/api/facility/7/7.geojson'), $.getJSON('https://app.haika.io/api/facility/7/8.geojson')).done(function() {
     var data, i, len;
     for (i = 0, len = arguments.length; i < len; i++) {
       data = arguments[i];
@@ -195,108 +196,119 @@ initialize = function() {
     }
     return loadFloor(7);
   });
-};
-
-$(document).on('ready', document.addEventListener('online', initialize, false), map = new ol.Map({
-  layers: [
-    new ol.layer.Tile({
-      source: new ol.source.XYZ({
-        url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w',
-        maxZoom: 22
-      }),
-      minResolution: 0.1,
-      maxResolution: 2000000,
-      preload: 3
-    }), kLayer
-  ],
-  controls: [],
-  target: 'map',
-  maxZoom: 26,
-  minZoom: 18,
-  logo: false,
-  view: view
-}), kanimarker = new Kanimarker(map), extent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111], view.fit(extent, map.getSize()), centerAdjusted = false, invalidatePositionButton = function() {
-  $('#position-mode').addClass('position-mode-normal');
-  $('#position-mode').removeClass('position-mode-heading');
-  $('#position-mode').removeClass('position-mode-center');
-  if (kanimarker.headingUp) {
-    return $('#position-mode').addClass('position-mode-heading');
-  } else {
-    if (centerAdjusted) {
-      return $('#position-mode').addClass('position-mode-center');
+  map = new ol.Map({
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.XYZ({
+          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w',
+          maxZoom: 22
+        }),
+        minResolution: 0.1,
+        maxResolution: 2000000,
+        preload: 3
+      }), kLayer
+    ],
+    controls: [],
+    target: 'map',
+    maxZoom: 26,
+    minZoom: 18,
+    logo: false,
+    view: view
+  });
+  kanimarker = new Kanimarker(map);
+  extent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111];
+  view.fit(extent, map.getSize());
+  centerAdjusted = false;
+  invalidatePositionButton = function() {
+    $('#position-mode').addClass('position-mode-normal');
+    $('#position-mode').removeClass('position-mode-heading');
+    $('#position-mode').removeClass('position-mode-center');
+    if (kanimarker.headingUp) {
+      return $('#position-mode').addClass('position-mode-heading');
     } else {
-      return $('#position-mode').addClass('position-mode-normal');
+      if (centerAdjusted) {
+        return $('#position-mode').addClass('position-mode-center');
+      } else {
+        return $('#position-mode').addClass('position-mode-normal');
+      }
     }
-  }
-}, map.on('pointerdrag', function() {
-  if (centerAdjusted) {
-    centerAdjusted = false;
+  };
+  map.on('pointerdrag', function() {
+    if (centerAdjusted) {
+      centerAdjusted = false;
+      return invalidatePositionButton();
+    }
+  });
+  kanimarker.on('change:headingup', function(headingup) {
     return invalidatePositionButton();
-  }
-}), kanimarker.on('change:headingup', function(headingup) {
-  return invalidatePositionButton();
-}), $('#position-mode').on('click', function() {
-  if (kanimarker.headingUp) {
-    kanimarker.setHeadingUp(false);
-    map.getView().setRotation(0);
-    if (kanimarker.position !== null) {
-      map.getView().setCenter(kanimarker.position);
-    }
-    centerAdjusted = true;
-  } else {
-    if (centerAdjusted) {
-      kanimarker.setHeadingUp(true);
-    } else {
-      view.setRotation(homeRotaion);
+  });
+  $('#position-mode').on('click', function() {
+    if (kanimarker.headingUp) {
+      kanimarker.setHeadingUp(false);
+      map.getView().setRotation(0);
       if (kanimarker.position !== null) {
-        view.setCenter(kanimarker.position);
-        centerAdjusted = true;
+        map.getView().setCenter(kanimarker.position);
       }
-      if (cordova.plugins.BluetoothStatus.hasBTLE && !cordova.plugins.BluetoothStatus.BTenabled && notifyClosed) {
-        $.notify('Bluetoothをオンにしてください', {
-          placement: {
-            from: 'bottom',
-            align: 'right'
-          }
-        });
+      centerAdjusted = true;
+    } else {
+      if (centerAdjusted) {
+        kanimarker.setHeadingUp(true);
+      } else {
+        view.setRotation(homeRotaion);
+        if (kanimarker.position !== null) {
+          view.setCenter(kanimarker.position);
+          centerAdjusted = true;
+        }
+        if (cordova.plugins.BluetoothStatus.hasBTLE && !cordova.plugins.BluetoothStatus.BTenabled && notifyClosed) {
+          $.notify('Bluetoothをオンにしてください', {
+            placement: {
+              from: 'bottom',
+              align: 'right'
+            }
+          });
+        }
       }
     }
-  }
-  return invalidatePositionButton();
-}), invalidateCompass = function(view_) {
-  var deg, rotation, zoom;
-  rotation = view_.getRotation();
-  zoom = view_.getZoom();
-  $('#compass').css('transform', "rotate(" + rotation + "rad)");
-  deg = (rotation * 180 / Math.PI) % 360;
-  if (deg < 0) {
-    deg += 360;
-  }
-  if ((deg === 0) || (zoom > 20)) {
-    return $('#compass').addClass('ol-hidden');
-  } else {
-    return $('#compass').removeClass('ol-hidden');
-  }
-}, view.on('change:rotation', function() {
-  return invalidateCompass(this);
-}), view.on('change:resolution', function() {
-  return invalidateCompass(this);
-}), $('#compass').on('click', function() {
-  var rotation;
-  kanimarker.setHeadingUp(false);
-  rotation = view.getRotation();
-  while (rotation < -Math.PI) {
-    rotation += 2 * Math.PI;
-  }
-  while (rotation > Math.PI) {
-    rotation -= 2 * Math.PI;
-  }
-  map.beforeRender(ol.animation.rotate({
-    duration: 400,
-    rotation: rotation
-  }));
-  return view.setRotation(0);
-}));
+    return invalidatePositionButton();
+  });
+  invalidateCompass = function(view_) {
+    var deg, rotation, zoom;
+    rotation = view_.getRotation();
+    zoom = view_.getZoom();
+    $('#compass').css('transform', "rotate(" + rotation + "rad)");
+    deg = (rotation * 180 / Math.PI) % 360;
+    if (deg < 0) {
+      deg += 360;
+    }
+    if ((deg === 0) || (zoom > 20)) {
+      return $('#compass').addClass('ol-hidden');
+    } else {
+      return $('#compass').removeClass('ol-hidden');
+    }
+  };
+  view.on('change:rotation', function() {
+    return invalidateCompass(this);
+  });
+  view.on('change:resolution', function() {
+    return invalidateCompass(this);
+  });
+  return $('#compass').on('click', function() {
+    var rotation;
+    kanimarker.setHeadingUp(false);
+    rotation = view.getRotation();
+    while (rotation < -Math.PI) {
+      rotation += 2 * Math.PI;
+    }
+    while (rotation > Math.PI) {
+      rotation -= 2 * Math.PI;
+    }
+    map.beforeRender(ol.animation.rotate({
+      duration: 400,
+      rotation: rotation
+    }));
+    return view.setRotation(0);
+  });
+};
 
 appTest_1f = function() {
   return didRangeBeaconsInRegion.call(window, [
