@@ -21,7 +21,11 @@ $.ajax({
       document.body.appendChild(script);
     },
     complete: function(){
-      initialize();
+      if (navigator.connection.type == 'none') {
+        document.addEventListener('online', function () {initialize();}, false)
+      } else {
+        initialize();
+      }
       $(document).trigger('deviceready');
     }
 });
