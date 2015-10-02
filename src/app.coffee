@@ -258,16 +258,19 @@ $(document).on('ready',
   invalidateCompass = (view_) ->
     rotation = view_.getRotation()
     zoom = view_.getZoom()
-    $('#compass').css('transform', "rotate(#{rotation}rad)")
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
-    if (deg == 0) or (zoom > 18)
+    if deg==0
       if $('#compass').hasClass('ol-hidden') == false
         $('#compass').addClass('ol-hidden')
-    else
+    else if zoom <= 18
       if $('#compass').hasClass('ol-hidden') == true
+        $('#compass').css('transform', "rotate(#{rotation}rad)")
         $('#compass').removeClass('ol-hidden')
+    else
+      if $('#compass').hasClass('ol-hidden') == false
+        $('#compass').addClass('ol-hidden')
 
   view.on 'change:rotation', ->
     invalidateCompass(@)
