@@ -1,8 +1,14 @@
 // サーバー
 var scriptServer = 'https://calil.jp/static/apps/sabatomap/www/';
-var scriptUrl = 'js/sabatomap.all.js';
+var scriptUrl = 'js/sabatomap2.all.js';
 // タイムアウト ミリ秒
 var scriptTimeout = 5000;
+
+
+var scriptOnLoad = function () {
+  initialize();
+  $(document).trigger('deviceready');
+};
 
 $.ajax({
     type:'GET',
@@ -12,20 +18,16 @@ $.ajax({
     timeout: scriptTimeout,
     success: function(data){
       var script = document.createElement('script');
+      script.onload = scriptOnLoad;
       script.innerHTML = data;
       document.body.appendChild(script);
     },
     error: function(){
       var script = document.createElement('script');
+      script.onload = scriptOnLoad;
       script.src = scriptUrl;
       document.body.appendChild(script);
     },
     complete: function(){
-      if (navigator.connection.type == 'none') {
-        document.addEventListener('online', function () {initialize();}, false)
-      } else {
-        initialize();
-      }
-      $(document).trigger('deviceready');
     }
 });
