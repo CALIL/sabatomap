@@ -3037,7 +3037,7 @@ $(document).on('ready', map = new ol.Map({
   if (deg < 0) {
     deg += 360;
   }
-  if ((deg === 0) || (zoom > 20)) {
+  if ((deg === 0) || (zoom > 18)) {
     return $('#compass').addClass('ol-hidden');
   } else {
     return $('#compass').removeClass('ol-hidden');

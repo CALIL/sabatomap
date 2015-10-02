@@ -209,7 +209,7 @@ $(document).on('ready',
         $('#position-mode').addClass('position-mode-center')
       else
         $('#position-mode').addClass('position-mode-normal')
-    # messageEvent モード変更
+  # messageEvent モード変更
 
   # 現在地に戻したあとマップを動かした
   map.on 'pointerdrag', ->
@@ -262,7 +262,7 @@ $(document).on('ready',
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
-    if (deg == 0) or (zoom > 20)
+    if (deg == 0) or (zoom > 18)
       $('#compass').addClass('ol-hidden')
     else
       $('#compass').removeClass('ol-hidden')
@@ -285,7 +285,9 @@ $(document).on('ready',
 )
 
 appTest_1f = ->
-  didRangeBeaconsInRegion.call(window, [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 1}])
+  didRangeBeaconsInRegion.call(window,
+    [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 1}])
 
 appTest_2f = ->
-  didRangeBeaconsInRegion.call(window, [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 70}])
+  didRangeBeaconsInRegion.call(window,
+    [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 70}])
