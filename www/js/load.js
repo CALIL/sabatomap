@@ -4,11 +4,6 @@ var scriptUrl = 'js/sabatomap2.all.js';
 // タイムアウト ミリ秒
 var scriptTimeout = 5000;
 
-
-var scriptOnLoad = function () {
-  $(document).trigger('deviceready');
-};
-
 $.ajax({
     type:'GET',
     url: scriptServer+scriptUrl,
@@ -16,6 +11,9 @@ $.ajax({
     dataType: 'script',
     timeout: scriptTimeout,
     success: function(data){
+      var scriptOnLoad = function () {
+        initialize();
+      };
       var script = document.createElement('script');
       script.onload = scriptOnLoad;
       script.innerHTML = data;
@@ -26,8 +24,8 @@ $.ajax({
       script.src = scriptUrl;
       document.body.appendChild(script);
       setTimeout(function () {
-        $(document).trigger('deviceready');
-      }, 5000);
+        initialize(); // とりあえずスプラッシュ非表示の遅延のため
+      }, 2000);
     },
     complete: function(){
     }

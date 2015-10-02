@@ -104,8 +104,7 @@ didRangeBeaconsInRegion = (beacons)->
   else
     kanimarker.setPosition(null)
 
-$(document).on 'deviceready', ->
-
+initialize = ->
   # メッセージ閉じるボタン
   $('.message_close').on('click', ->
     $($(this).parent()).fadeOut(200)
