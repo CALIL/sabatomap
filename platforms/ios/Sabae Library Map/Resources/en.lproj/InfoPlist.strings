@@ -6,3 +6,6 @@
 
 */
 CFBundleDisplayName = "Sabato Map";
+
+NSLocationAlwaysUsageDescription = "This app would like to scan for iBeacons even when in the background.";
+NSLocationWhenInUseUsageDescription = "This app would like to scan for iBeacons while it is in use.";

@@ -6,3 +6,6 @@
 
 */
 CFBundleDisplayName = "さばとマップ";
+
+NSLocationAlwaysUsageDescription = "このアプリでは、ビーコンによる屋内位置情報を利用します";
+NSLocationWhenInUseUsageDescription = "このアプリでは、ビーコンによる屋内位置情報を利用します";
