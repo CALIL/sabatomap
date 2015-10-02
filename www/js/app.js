@@ -1,4 +1,4 @@
-var appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, initialize, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
+var appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
 
 view = new ol.View({
   center: [15139450.747885207, 4163881.1440642904],
@@ -130,7 +130,7 @@ didRangeBeaconsInRegion = function(beacons) {
 };
 
 $(document).on('deviceready', function() {
-  var compassError, compassSuccess, delegate, locationManager, ref, region;
+  var compassError, compassSuccess, delegate, loadGeoJSON, locationManager, ref, region;
   $('.message_close').on('click', function() {
     $($(this).parent()).fadeOut(200);
     return $(this).parent().attr('user_closed', true);
@@ -162,25 +162,34 @@ $(document).on('deviceready', function() {
   if (navigator.splashscreen != null) {
     navigator.splashscreen.hide();
   }
-});
-
-initialize = function() {
-  return $.when($.getJSON('https://app.haika.io/api/facility/7'), $.getJSON('https://app.haika.io/api/facility/7/7.geojson'), $.getJSON('https://app.haika.io/api/facility/7/8.geojson')).done(function() {
-    var data, i, len;
-    for (i = 0, len = arguments.length; i < len; i++) {
-      data = arguments[i];
-      if (data[1] === 'success') {
-        if (data[0].table != null) {
-          facilityTable = data[0];
-          facilityTable.table.reverse();
-        } else {
-          kanikama.addGeoJSON(data[0]);
+  loadGeoJSON = function() {
+    $.when($.getJSON('https://app.haika.io/api/facility/7'), $.getJSON('https://app.haika.io/api/facility/7/7.geojson'), $.getJSON('https://app.haika.io/api/facility/7/8.geojson')).done(function() {
+      var data, i, len;
+      for (i = 0, len = arguments.length; i < len; i++) {
+        data = arguments[i];
+        if (data[1] === 'success') {
+          if (data[0].table != null) {
+            facilityTable = data[0];
+            facilityTable.table.reverse();
+          } else {
+            kanikama.addGeoJSON(data[0]);
+          }
         }
       }
-    }
-    return loadFloor(7);
-  });
-};
+      return loadFloor(7);
+    });
+  };
+  if (navigator.connection.type === 'none') {
+    setTimeout(function() {
+      return $.notify('オンラインになるのを待っています', {
+        delay: 10 * 1000
+      });
+    }, 1000);
+    document.addEventListener('online', loadGeoJSON, false);
+  } else {
+    loadGeoJSON();
+  }
+});
 
 $(document).on('ready', map = new ol.Map({
   layers: [

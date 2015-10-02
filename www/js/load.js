@@ -6,7 +6,6 @@ var scriptTimeout = 5000;
 
 
 var scriptOnLoad = function () {
-  initialize();
   $(document).trigger('deviceready');
 };
 
