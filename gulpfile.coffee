@@ -9,7 +9,6 @@ path = require 'path'
 fs = require 'fs'
 
 libs = [
-  'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'
   'https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js'
   'https://s3-ap-northeast-1.amazonaws.com/kanilayer/kanilayer.js'
   'https://s3-ap-northeast-1.amazonaws.com/kanimarker/kanimarker.js'
@@ -24,6 +23,10 @@ bowerLibs = [
 ]
 
 gulp.task 'default', ->
+
+  gulp.src ['bower_components/jquery/dist/jquery.min.js']
+  .pipe gulp.dest('www/vendor')
+
   gulp.start 'compile:cordova'
 
 gulp.task 'update', ['compile:lib'], ->
