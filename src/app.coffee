@@ -265,8 +265,8 @@ $(document).on('ready',
       if $('#compass').hasClass('ol-hidden') == false
         $('#compass').addClass('ol-hidden')
     else if zoom <= 18
+      $('#compass').css('transform', "rotate(#{rotation}rad)")
       if $('#compass').hasClass('ol-hidden') == true
-        $('#compass').css('transform', "rotate(#{rotation}rad)")
         $('#compass').removeClass('ol-hidden')
     else
       if $('#compass').hasClass('ol-hidden') == false
