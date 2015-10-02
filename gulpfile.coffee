@@ -7,6 +7,8 @@ concat = require 'gulp-concat'
 exec = require 'gulp-exec'
 path = require 'path'
 fs = require 'fs'
+cordova_lib = require('cordova-lib')
+cdv = cordova_lib.cordova.raw
 
 # ウェブから依存ライブラリをダウンロードして配置する
 gulp.task 'fetch_depends_web', ->
@@ -53,17 +55,12 @@ gulp.task 'concat', ['compile_coffee'], ->
   .pipe gulp.dest 'www/js/'
   gulp.src(['src/load.js']).pipe gulp.dest('www/js')
 
-# Cordova Build
-gulp.task 'compile:cordova', ['concat'], (cb)->
-  gulp.src('.')
-  .pipe exec('cordova prepare', (err, stdout, stderr)->
-    console.log stdout
-    console.log stderr
-    cb err
-  )
+# Cordovaの処理
+gulp.task 'cordova_prepare', ['concat'], ->
+  cdv.prepare()
 
 gulp.task 'watch', ->
-  gulp.watch ['src/*.coffee', 'src/*.js'], ['compile:cordova']
+  gulp.watch ['src/*.coffee', 'src/*.js'], ['cordova_prepare']
 
 gulp.task 'default', ['update']
 
