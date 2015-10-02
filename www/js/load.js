@@ -23,9 +23,11 @@ $.ajax({
     },
     error: function(){
       var script = document.createElement('script');
-      script.onload = scriptOnLoad;
       script.src = scriptUrl;
       document.body.appendChild(script);
+      setTimeout(function () {
+        $(document).trigger('deviceready');
+      }, 5000);
     },
     complete: function(){
     }
