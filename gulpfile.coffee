@@ -72,7 +72,7 @@ jsFiles = [
 ]
 gulp.task 'concat:js', () ->
   gulp.src jsFiles
-    .pipe concat('sabatomap.all.js')
+    .pipe concat('sabatomap2.all.js')
     .pipe gulp.dest 'www/js/'
 
 # cordovaの更新
