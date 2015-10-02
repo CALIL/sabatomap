@@ -7,7 +7,6 @@ homeRotaion = 3.1115421869123563
 
 kLayer = new Kanilayer()
 
-SABAE = true # kanikama.js 鯖江用の位置検出へ切り替えるフラグ
 kanikama = new Kanikama()
 kanikama.onChangeFloor = ()->
   if kanikama.floor isnt null
@@ -74,12 +73,6 @@ loadFloor = (id)->
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
-  if cordova.plugins.BluetoothStatus.BTenabled and beacons.length <= 0
-#    invalidateErrorMessage(true)
-    # messageEvent ビーコン圏外
-  else
-#    invalidateErrorMessage(false)
-
   # Android版でmajor, minorがStringで来る対策
   if device?.platform is 'Android'
     for b in beacons
@@ -150,17 +143,7 @@ $(document).on 'deviceready', ->
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
     navigator.splashscreen.hide()
-
-  # Android キーボードイベント todo 画面を動かす
-  if device?.platform is 'Android'
-    window.addEventListener('native.keyboardhide', ->
-      cosole.log('native.keyboardhide')
-      return
-    )
-    window.addEventListener('native.keyboardshow', (e)->
-      cosole.log('native.keyboardshow' + e.keyboardHeight)
-      return
-    )
+  return
 
 initialize = ->
   $.when(
