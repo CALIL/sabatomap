@@ -2763,7 +2763,7 @@ Kanikama = (function() {
 
 })();
 
-var SABAE, appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, initialize, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
+var appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, initialize, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
 
 view = new ol.View({
   center: [15139450.747885207, 4163881.1440642904],
@@ -2773,8 +2773,6 @@ view = new ol.View({
 homeRotaion = 3.1115421869123563;
 
 kLayer = new Kanilayer();
-
-SABAE = true;
 
 kanikama = new Kanikama();
 
@@ -2861,11 +2859,6 @@ loadFloor = function(id) {
 
 didRangeBeaconsInRegion = function(beacons) {
   var accuracy, b, center, e, error, i, latlng, len, newAcc;
-  if (cordova.plugins.BluetoothStatus.BTenabled && beacons.length <= 0) {
-
-  } else {
-
-  }
   if ((typeof device !== "undefined" && device !== null ? device.platform : void 0) === 'Android') {
     for (i = 0, len = beacons.length; i < len; i++) {
       b = beacons[i];
@@ -2933,14 +2926,6 @@ $(document).on('deviceready', function() {
   }
   if (navigator.splashscreen != null) {
     navigator.splashscreen.hide();
-  }
-  if ((typeof device !== "undefined" && device !== null ? device.platform : void 0) === 'Android') {
-    window.addEventListener('native.keyboardhide', function() {
-      cosole.log('native.keyboardhide');
-    });
-    return window.addEventListener('native.keyboardshow', function(e) {
-      cosole.log('native.keyboardshow' + e.keyboardHeight);
-    });
   }
 });
 
