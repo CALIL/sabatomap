@@ -194,6 +194,7 @@ $(document).on('ready',
   # 鯖江図書館のサイズに合わせる
   extent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
   view.fit(extent, map.getSize())
+  view.setRotation(178 * Math.PI / 180)
 
   # マーカーとモード切り替えボタン
   centerAdjusted = false
