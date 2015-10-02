@@ -143,24 +143,33 @@ $(document).on 'deviceready', ->
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
     navigator.splashscreen.hide()
+
+  loadGeoJSON = ->
+    $.when(
+      $.getJSON('https://app.haika.io/api/facility/7')
+      $.getJSON('https://app.haika.io/api/facility/7/7.geojson')
+      $.getJSON('https://app.haika.io/api/facility/7/8.geojson')
+    ).done(->
+      for data in arguments
+        if data[1] is 'success'
+          if data[0].table?
+            facilityTable = data[0]
+            facilityTable.table.reverse()
+          else
+            kanikama.addGeoJSON(data[0])
+
+      loadFloor(7)
+    )
+    return
+
+  if navigator.connection.type is 'none'
+    setTimeout(->
+      $.notify('オンラインになるのを待っています', delay: 10 * 1000)
+    , 1000)
+    document.addEventListener('online', loadGeoJSON, false)
+  else
+    loadGeoJSON()
   return
-
-initialize = ->
-  $.when(
-    $.getJSON('https://app.haika.io/api/facility/7')
-    $.getJSON('https://app.haika.io/api/facility/7/7.geojson')
-    $.getJSON('https://app.haika.io/api/facility/7/8.geojson')
-  ).done(->
-    for data in arguments
-      if data[1] is 'success'
-        if data[0].table?
-          facilityTable = data[0]
-          facilityTable.table.reverse()
-        else
-          kanikama.addGeoJSON(data[0])
-
-    loadFloor(7)
-  )
 
 $(document).on('ready',
   map = new ol.Map(
