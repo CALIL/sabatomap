@@ -1,4 +1,5 @@
 ﻿# Mac
+/src/compiled/*.js
 .DS_Store
 
 # PyCharm
