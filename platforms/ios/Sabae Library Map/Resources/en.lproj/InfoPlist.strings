@@ -5,7 +5,7 @@
   Created by rina on 2015/09/30.
 
 */
-CFBundleDisplayName = "Sabato Map";
+CFBundleDisplayName = "Sabae Library Map";
 
 NSLocationAlwaysUsageDescription = "This app would like to scan for iBeacons even when in the background.";
 NSLocationWhenInUseUsageDescription = "This app would like to scan for iBeacons while it is in use.";
