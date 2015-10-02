@@ -263,9 +263,11 @@ $(document).on('ready',
     if deg < 0
       deg += 360
     if (deg == 0) or (zoom > 18)
-      $('#compass').addClass('ol-hidden')
+      if $('#compass').hasClass('ol-hidden') == false
+        $('#compass').addClass('ol-hidden')
     else
-      $('#compass').removeClass('ol-hidden')
+      if $('#compass').hasClass('ol-hidden') == true
+        $('#compass').removeClass('ol-hidden')
 
   view.on 'change:rotation', ->
     invalidateCompass(@)

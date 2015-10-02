@@ -3038,9 +3038,13 @@ $(document).on('ready', map = new ol.Map({
     deg += 360;
   }
   if ((deg === 0) || (zoom > 18)) {
-    return $('#compass').addClass('ol-hidden');
+    if ($('#compass').hasClass('ol-hidden') === false) {
+      return $('#compass').addClass('ol-hidden');
+    }
   } else {
-    return $('#compass').removeClass('ol-hidden');
+    if ($('#compass').hasClass('ol-hidden') === true) {
+      return $('#compass').removeClass('ol-hidden');
+    }
   }
 }, view.on('change:rotation', function() {
   return invalidateCompass(this);
