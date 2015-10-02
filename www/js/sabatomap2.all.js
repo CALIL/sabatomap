@@ -2763,7 +2763,7 @@ Kanikama = (function() {
 
 })();
 
-var appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
+var appTest_1f, appTest_2f, centerAdjusted, didRangeBeaconsInRegion, extent, facilityTable, homeRotaion, initialize, invalidateCompass, invalidatePositionButton, kLayer, kanikama, kanimarker, loadFloor, map, view;
 
 view = new ol.View({
   center: [15139450.747885207, 4163881.1440642904],
@@ -2894,7 +2894,7 @@ didRangeBeaconsInRegion = function(beacons) {
   }
 };
 
-$(document).on('deviceready', function() {
+initialize = function() {
   var compassError, compassSuccess, delegate, loadGeoJSON, locationManager, ref, region;
   $('.message_close').on('click', function() {
     $($(this).parent()).fadeOut(200);
@@ -2954,7 +2954,7 @@ $(document).on('deviceready', function() {
   } else {
     loadGeoJSON();
   }
-});
+};
 
 $(document).on('ready', map = new ol.Map({
   layers: [
