@@ -1,15 +1,12 @@
-bower      = require 'bower'
-del        = require 'del'
-gulp       = require 'gulp'
-coffee     = require 'gulp-coffee'
-download   = require 'gulp-download'
-concat      = require 'gulp-concat'
-exec       = require 'gulp-exec'
-path       = require 'path'
-fs         = require 'fs'
-
-plugins = ['org.apache.cordova.file']
-
+bower = require 'bower'
+del = require 'del'
+gulp = require 'gulp'
+coffee = require 'gulp-coffee'
+download = require 'gulp-download'
+concat = require 'gulp-concat'
+exec = require 'gulp-exec'
+path = require 'path'
+fs = require 'fs'
 
 libs = [
   'https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'
@@ -22,8 +19,8 @@ libs = [
 ]
 
 bowerLibs = [
-    'font-awesome/**/*.min.css'
-    'font-awesome/**/fonts/*'
+  'font-awesome/**/*.min.css'
+  'font-awesome/**/fonts/*'
 ]
 
 gulp.task 'default', ->
@@ -67,16 +64,15 @@ jsFiles = [
   'www/js/searchSetting.js'
   'www/js/search.js'
   'www/js/searchReact.js'
-  # テストファイル(alertのみ)
-  # 'www/js/start.js'
+
 ]
 gulp.task 'concat:js', () ->
   gulp.src jsFiles
-    .pipe concat('sabatomap2.all.js')
-    .pipe gulp.dest 'www/js/'
+  .pipe concat('sabatomap2.all.js')
+  .pipe gulp.dest 'www/js/'
 
 # cordovaの更新
-gulp.task 'compile:cordova', ['compile:coffee','concat:js'], (cb)->
+gulp.task 'compile:cordova', ['compile:coffee', 'concat:js'], (cb)->
   gulp.src('.')
   .pipe exec('cordova prepare', (err, stdout, stderr)->
     console.log stdout
