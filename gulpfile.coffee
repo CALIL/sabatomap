@@ -65,6 +65,6 @@ gulp.task 'watch', ->
 gulp.task 'default', ['update']
 
 gulp.task 'update', ['fetch_depends_web','fetch_depends_bower'], ->
-  gulp.start 'compile:cordova'
+  gulp.start 'cordova_prepare'
 
 

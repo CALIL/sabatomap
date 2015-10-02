@@ -2,7 +2,7 @@ var scriptTimeout = 5000;
 
 $.ajax({
     type: 'GET',
-    url: 'https://calil.jp/static/apps/sabatomap/v100.js',
+    url: 'https://calil.jp/static/apps/sabatomap/update_v100.js',
     cache: false,
     dataType: 'script',
     timeout: scriptTimeout,
@@ -26,4 +26,3 @@ $.ajax({
     complete: function () {
     }
 });
- 
