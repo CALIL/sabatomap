@@ -61,27 +61,22 @@ html, body, #map {
     }
 }
 
-#control-buttons {
-    position: absolute;
-    right: 0;
-    bottom: 50px;
-    width: auto;
-    height: auto;
-    pointer-events: none;
-}
-
 #debug-buttons .ui-button {
     float: left;
     margin-left: 10px;
 }
 
-#control-buttons .ui-button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
 #debug-buttons #reload {
     background-image: url(../img/reload.svg);
+}
+
+#position-mode {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    margin: 10px;
+    box-sizing: content-box;
+    padding: 10px;
 }
 
 .position-mode-normal {
