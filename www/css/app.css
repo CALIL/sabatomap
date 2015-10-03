@@ -97,17 +97,17 @@ html, body, #map {
 }
 
 #compass {
+    height: 48px;
+    width: 48px;
+    padding: 10px;
+    box-sizing: content-box;
+    right: 0;
+    top: 18px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-user-select: none;
     user-select: none;
     position: absolute;
     border-radius: 50%;
-    height: 38px;
-    width: 38px;
-    top: 24px;
-    bottom: auto;
-    left: auto;
-    right: 10px;
     background-image: url(../img/compass.svg);
     background-repeat: no-repeat;
     background-position: center;
