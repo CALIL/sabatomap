@@ -118,12 +118,6 @@ initialize = ->
       $.notify 'この機種は現在地の表示に対応していません'
   , 5000)
 
-  # メッセージ閉じるボタン
-  $('.message_close').on('click', ->
-    $($(this).parent()).fadeOut(200)
-    $(this).parent().attr('user_closed', true)
-  )
-
   # in app browser
   window.open = cordova.InAppBrowser.open
 
