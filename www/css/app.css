@@ -128,3 +128,14 @@ html, body, #map {
     background: #D9EDF7;
     color: #317095;
 }
+
+.offline {
+    display: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px 2px;
+    background: #D9EDF7;
+    color: #317095;
+}
