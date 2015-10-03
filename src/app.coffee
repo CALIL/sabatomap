@@ -107,6 +107,17 @@ didRangeBeaconsInRegion = (beacons)->
 initialize = ->
   cordova.plugins.BluetoothStatus.initPlugin();
 
+  # プラグインの仕様上、初期化直後はhasBTLEが必ずfalseになるためsetTimeout()
+  setTimeout(->
+    if cordova.plugins.BluetoothStatus.hasBTLE
+      if not cordova.plugins.BluetoothStatus.BTenabled
+        $.notify
+          title: '現在地を表示しよう'
+          message: 'Bluetoothをオンにすると現在地が利用できます'
+    else
+      $.notify 'この機種は現在地の表示に対応していません'
+  , 5000)
+
   # メッセージ閉じるボタン
   $('.message_close').on('click', ->
     $($(this).parent()).fadeOut(200)
