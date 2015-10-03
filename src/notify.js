@@ -1,7 +1,6 @@
 var notifyClosed = true;
 $(function () {
     $(document).on('deviceready', function () {
-        cordova.plugins.BluetoothStatus.initPlugin();
         $.notifyDefaults({
             z_index: 100000000,
             placement: {
@@ -15,10 +14,6 @@ $(function () {
                 }
             }
         });
-//            document.addEventListener('offline', function () {
-//                $.notify('インターネットに接続すると、データが読み込めるようになります');
-//            }, false);
-
         // プラグインの仕様上、初期化直後はhasBTLEが必ずfalseになるためsetTimeout()
         setTimeout(function () {
             if (cordova.plugins.BluetoothStatus.hasBTLE) {

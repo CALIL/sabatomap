@@ -116,3 +116,13 @@ html, body, #map {
     visibility: hidden;
     transition: opacity .25s linear, visibility 0s linear .25s;
 }
+.notification {
+    display: none;
+    position: absolute;
+    bottom: 100px;
+    right: 100px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: #D9EDF7;
+    color: #317095;
+}
