@@ -1,5 +1,8 @@
 ﻿# Mac
 /src/compiled/*.js
+/www/js/all.js
+/www/js/load.js
+
 .DS_Store
 
 # PyCharm
