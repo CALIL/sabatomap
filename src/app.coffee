@@ -166,10 +166,11 @@ initialize = ->
     return
 
   if navigator.connection.type is 'none'
-    setTimeout(->
-      $.notify('オンラインになるのを待っています', delay: 10 * 1000)
-    , 1000)
-    document.addEventListener('online', loadGeoJSON, false)
+    $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
+    document.addEventListener('online', ->
+      $('.offline').stop().slideUp('fast')
+      loadGeoJSON()
+    , false)
   else
     loadGeoJSON()
   return
