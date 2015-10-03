@@ -39,8 +39,11 @@ gulp.task 'compile_coffee' , ->
     'src/search.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
 
+gulp.task 'clean_all_js', (cb)->
+  del(['www/js/all.js'], cb)
+
 # アプリケーションファイルを結合
-gulp.task 'concat', ['compile_coffee'], ->
+gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
   gulp.src [
     'www/vendor/kanimarker.js'
     'www/vendor/kanilayer.js'
@@ -54,10 +57,15 @@ gulp.task 'concat', ['compile_coffee'], ->
   ]
   .pipe concat('all.js')
   .pipe gulp.dest 'www/js/'
+
+gulp.task 'copy_load_js', ->
   gulp.src(['src/load.js']).pipe gulp.dest('www/js')
 
+gulp.task 'clean', ->
+  del(['platforms/ios/www/**'])
+
 # Cordovaの処理
-gulp.task 'cordova_prepare', ['concat'], ->
+gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean'], ->
   cdv.prepare()
 
 gulp.task 'watch', ->
@@ -67,5 +75,4 @@ gulp.task 'default', ['update']
 
 gulp.task 'update', ['fetch_depends_web','fetch_depends_bower'], ->
   gulp.start 'cordova_prepare'
-
 
