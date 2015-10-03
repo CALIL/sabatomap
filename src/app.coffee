@@ -104,17 +104,6 @@ didRangeBeaconsInRegion = (beacons)->
 initialize = ->
   cordova.plugins.BluetoothStatus.initPlugin();
 
-  # プラグインの仕様上、初期化直後はhasBTLEが必ずfalseになるためsetTimeout()
-  setTimeout(->
-    if cordova.plugins.BluetoothStatus.hasBTLE
-      if not cordova.plugins.BluetoothStatus.BTenabled
-        $.notify
-          title: '現在地を表示しよう'
-          message: 'Bluetoothをオンにすると現在地が利用できます'
-    else
-      $.notify 'この機種は現在地の表示に対応していません'
-  , 5000)
-
   # in app browser
   window.open = cordova.InAppBrowser.open
 
@@ -125,7 +114,6 @@ initialize = ->
     return
 
   compassError = (e)->
-    alert("コンパスエラー コード:#{e.code}")
     return
 
   navigator.compass.watchHeading(compassSuccess, compassError, frequency: 100)
@@ -232,9 +220,10 @@ $(document).on('ready',
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    # Bluetooth OFF
-    if cordova.plugins.BluetoothStatus.hasBTLE and not cordova.plugins.BluetoothStatus.BTenabled
-      showNotify('Bluetoothをオンにしてください')
+    if not cordova.plugins.BluetoothStatus.hasBTLE
+      showNotify('この機種は現在地の表示に対応していません')
+    if not cordova.plugins.BluetoothStatus.BTenabled
+      showNotify('BluetoothをONにしてください')
     else if kanimarker.position is null
       showNotify('現在地が取得できません')
     else
