@@ -178,6 +178,10 @@ initialize = ->
   return
 
 $(document).on('ready',
+
+  # fastclickを適用
+  FastClick.attach(document.body);
+
   map = new ol.Map(
     layers: [
       new ol.layer.Tile(# 世界地図
