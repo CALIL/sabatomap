@@ -180,7 +180,7 @@ initialize = ->
 $(document).on('ready',
 
   # fastclickを適用
-  FastClick.attach(document.body);
+  FastClick.attach(document.body)
 
   map = new ol.Map(
     layers: [
