@@ -2,6 +2,10 @@
 /src/compiled/*.js
 /www/js/all.js
 /www/js/load.js
+/www/vendor/*.js
+/www/vendor/*.css
+/www/vendor/*/*
+
 
 .DS_Store
 

@@ -13,7 +13,6 @@ cdv = cordova_lib.cordova.raw
 # ウェブから依存ライブラリをダウンロードして配置する
 gulp.task 'fetch_depends_web', ->
   depended_libraries = [
-    'https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js'
     'https://s3-ap-northeast-1.amazonaws.com/kanilayer/kanilayer.js'
     'https://s3-ap-northeast-1.amazonaws.com/kanimarker/kanimarker.js'
     'http://openlayers.org/en/v3.9.0/build/ol.js'
@@ -29,9 +28,11 @@ gulp.task 'fetch_depends_bower', ->
   gulp.src(['bower_components/fastclick/lib/fastclick.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/font-awesome/css/font-awesome.min.css']).pipe gulp.dest('www/vendor/css')
   gulp.src(['bower_components/font-awesome/fonts/*']).pipe gulp.dest('www/vendor/fonts')
+  gulp.src(['bower_components/react/react.js']).pipe gulp.dest('www/vendor')
+  gulp.src(['bower_components/Geolib/dist/geolib.min.js']).pipe gulp.dest('www/vendor')
 
 # CoffeeScriptをコンパイル
-gulp.task 'compile_coffee' , ->
+gulp.task 'compile_coffee', ->
   gulp.src([
     'src/buffer.coffee',
     'src/kanikama.coffee',
@@ -50,7 +51,6 @@ gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
     'src/compiled/buffer.js'
     'src/compiled/kanikama.js'
     'src/compiled/app.js'
-    'src/notify.js'
     'src/searchSetting.js'
     'src/compiled/search.js'
     'src/searchReact.js'
@@ -73,6 +73,6 @@ gulp.task 'watch', ->
 
 gulp.task 'default', ['update']
 
-gulp.task 'update', ['fetch_depends_web','fetch_depends_bower'], ->
+gulp.task 'update', ['fetch_depends_web', 'fetch_depends_bower'], ->
   gulp.start 'cordova_prepare'
 
