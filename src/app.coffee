@@ -105,6 +105,8 @@ didRangeBeaconsInRegion = (beacons)->
     kanimarker.setPosition(null)
 
 initialize = ->
+  cordova.plugins.BluetoothStatus.initPlugin();
+
   # メッセージ閉じるボタン
   $('.message_close').on('click', ->
     $($(this).parent()).fadeOut(200)
@@ -225,17 +227,21 @@ $(document).on('ready',
   $('#position-mode').on 'click', ->
     # Bluetooth OFF
     if cordova.plugins.BluetoothStatus.hasBTLE and not cordova.plugins.BluetoothStatus.BTenabled
-      $.notify('Bluetoothをオンにしてください', {
-        placement:
-          from: 'bottom'
-          align: 'right'
-      })
+      $('.notification').html 'Bluetoothをオンにしてください'
+      setTimeout (->
+        $('.notification').fadeIn()
+      ), 100
+      setTimeout (->
+        $('.notification').fadeOut 500
+      ), 4000
     else if kanimarker.position is null
-      $.notify('現在地が取得できません', {
-        placement:
-          from: 'bottom'
-          align: 'right'
-      })
+      $('.notification').html '現在地が取得できません'
+      setTimeout (->
+        $('.notification').fadeIn()
+      ), 100
+      setTimeout (->
+        $('.notification').fadeOut 500
+      ), 4000
     else
       if kanimarker.headingUp
         kanimarker.setHeadingUp(false)
