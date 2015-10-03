@@ -227,21 +227,9 @@ $(document).on('ready',
   $('#position-mode').on 'click', ->
     # Bluetooth OFF
     if cordova.plugins.BluetoothStatus.hasBTLE and not cordova.plugins.BluetoothStatus.BTenabled
-      $('.notification').html 'Bluetoothをオンにしてください'
-      setTimeout (->
-        $('.notification').fadeIn()
-      ), 100
-      setTimeout (->
-        $('.notification').fadeOut 500
-      ), 4000
+      showNotify('Bluetoothをオンにしてください')
     else if kanimarker.position is null
-      $('.notification').html '現在地が取得できません'
-      setTimeout (->
-        $('.notification').fadeIn()
-      ), 100
-      setTimeout (->
-        $('.notification').fadeOut 500
-      ), 4000
+      showNotify('現在地が取得できません')
     else
       if kanimarker.headingUp
         kanimarker.setHeadingUp(false)
@@ -302,3 +290,10 @@ appTest_1f = ->
 appTest_2f = ->
   didRangeBeaconsInRegion.call(window,
     [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 70}])
+
+showNotify = (message)->
+    $('.notification').html(message)
+    $('.notification').stop().fadeIn ->
+      setTimeout ->
+        $('.notification').fadeOut(500)
+      , 4000
