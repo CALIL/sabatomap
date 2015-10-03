@@ -51,7 +51,7 @@ loadFloor = (id)->
       oldAngle = view.getRotation() * 180 / Math.PI
       #newAngle = -geojson.properties.floor.angle
       newAngle = homeRotaion * 180 / Math.PI
-      if Math.abs(oldAngle - newAngle) > 20
+      if Math.abs(oldAngle - newAngle) > 0
         rotate = ol.animation.rotate(duration: 400, rotation: view.getRotation())
         map.beforeRender(rotate)
         view.setRotation(calcDeg(oldAngle, newAngle) * Math.PI / 180)
