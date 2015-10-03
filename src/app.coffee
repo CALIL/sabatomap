@@ -19,44 +19,41 @@ loadFloor = (id)->
   kanimarker.setPosition(null)
   kLayer.setFloorId(id)
 
+  # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
-    calcDeg = (ra, rb)->
-      diff = (ra % 360) - (rb % 360)
-      if diff < 0
-        if diff <= -180
-          diff = (360 - (diff * -1))
-        else
-          diff = diff * -1
-      else
-        if diff > 180
-          diff = 360 - diff
-        else
-          diff = diff * -1
-      return ra + diff
-
-    # 画面をgeojsonサイズにフィットさせる
     geojson = kanikama.geojsons[7][id]
     if geojson?
+      oldAngle = view.getRotation() * 180 / Math.PI
+      newAngle = homeRotaion * 180 / Math.PI
+
+      # アニメーションのための仮想的な角度を計算
+      # 左回りの場合はマイナスの値をとる場合がある
+      if newAngle > oldAngle
+        n = newAngle - oldAngle
+        if n <= 180
+          virtualAngle = oldAngle + n # 右回り n度回る
+        else
+          virtualAngle = oldAngle - (360 - n) # 左回り 360 - n度回る
+      else
+        n = oldAngle - newAngle
+        if n <= 180
+          virtualAngle = oldAngle - n # 左回り n度回る
+        else
+          virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
+
+      # 回転
+      map.beforeRender(ol.animation.rotate(duration: 400, rotation: view.getRotation()))
+      view.setRotation(virtualAngle * Math.PI / 180)
+
+      # geojsonサイズにフィットさせる
       extent = new ol.extent.boundingExtent([
         ol.proj.transform([geojson.bbox[0], geojson.bbox[1]], 'EPSG:4326', 'EPSG:3857')
         ol.proj.transform([geojson.bbox[2], geojson.bbox[3]], 'EPSG:4326', 'EPSG:3857')
       ])
-
-      # 回転アニメーション
       pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: view.getCenter())
       map.beforeRender(pan)
       zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
       map.beforeRender(zoom)
-
-      oldAngle = view.getRotation() * 180 / Math.PI
-      #newAngle = -geojson.properties.floor.angle
-      newAngle = homeRotaion * 180 / Math.PI
-      if Math.abs(oldAngle - newAngle) > 0
-        rotate = ol.animation.rotate(duration: 400, rotation: view.getRotation())
-        map.beforeRender(rotate)
-        view.setRotation(calcDeg(oldAngle, newAngle) * Math.PI / 180)
-
-      # geojsonサイズにフィットさせる
       view.fit(extent, map.getSize())
   , 100)
 
