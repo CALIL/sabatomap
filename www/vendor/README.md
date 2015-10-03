@@ -1,0 +1,1 @@
+This folder located files after gulp.

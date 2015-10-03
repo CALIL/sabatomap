@@ -4,7 +4,7 @@
   "authors": [
     "info@calil.jp"
   ],
-  "description": "鯖江図書館向けマップアプリ",
+  "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "main": "",
   "moduleType": [],
   "license": "MIT",
@@ -20,6 +20,8 @@
   "dependencies": {
     "fastclick": "~1.0.6",
     "font-awesome": "4.4.0",
-    "jquery": "2.1.4"
+    "jquery": "2.1.4",
+    "react": "~0.13.3",
+    "Geolib": "geolib#~2.0.18"
   }
 }
