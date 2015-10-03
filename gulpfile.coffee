@@ -26,6 +26,7 @@ gulp.task 'fetch_depends_web', ->
 gulp.task 'fetch_depends_bower', ->
   bower.commands.install()
   gulp.src(['bower_components/jquery/dist/jquery.min.js']).pipe gulp.dest('www/vendor')
+  gulp.src(['bower_components/fastclick/lib/fastclick.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/font-awesome/css/font-awesome.min.css']).pipe gulp.dest('www/vendor/css')
   gulp.src(['bower_components/font-awesome/fonts/*']).pipe gulp.dest('www/vendor/fonts')
 
