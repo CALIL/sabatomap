@@ -1,35 +1,45 @@
 # さばとマップ
 
-### インストール
+### 準備
+基本作業
 ```bash
-npm install
-gulp update
+npm update
 ```
+
+コンパイルが通らないのでひとまず↓のコマンドを実行
+```bash
+cordova platform update ios
+```
+
 ### コンパイル
+platforms以下のios, android用のプロジェクトに反映
 ```bash
 gulp
 ```
-or
+又は, 
 ```bash
 gulp watch
 ```
-これでplatforms以下のios, android用のプロジェクトが更新される
 
-## 作成時コマンドラインでの作業
-cordova create sabaedemo jp.calil.sabaedemo
+## プロジェクトを作成した時の作業
+
+```bash
+cordova create sabatomap jp.calil.sabatomap
 cordova platform add ios
 cordova plugin add cordova-plugin-splashscreen
 cordova plugin add https://github.com/petermetz/cordova-plugin-ibeacon.git
+```
 
 /config.xmlの修正
 
+```bash
 cordova build ios
+```
 
-## Xcodeの作業
-platforms/ios/sabaedemo.xcodeproj
+### Xcodeの作業
+platforms/ios/Sabae\ Library\ Map.xcodeproj
 
 Deployment Targetの修正(iOSのバージョン)
-Device Orientationの設定
 
 App Icons Sourceの設定
 Launch Images Sourceの設定
@@ -37,7 +47,7 @@ Launch Images Sourceの設定
 Resource/splashへもスプラッシュを入れる
 
 
-# アイコンダウンロード先一覧
+## アイコンダウンロード先一覧
 http://fortawesome.github.io/Font-Awesome/icon/refresh/
 http://fortawesome.github.io/Font-Awesome/icon/thumb-tack/
 http://fortawesome.github.io/Font-Awesome/icon/globe/
