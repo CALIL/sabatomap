@@ -131,11 +131,16 @@ html, body, #map {
 
 .offline {
     display: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     width: 100%;
     text-align: center;
     padding: 20px 10px 2px;
     background: #D9EDF7;
     color: #317095;
+}
+@media screen and (orientation:landscape) {
+    .offline {
+        width: 100%;
+    }
 }
