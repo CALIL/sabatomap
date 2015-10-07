@@ -157,6 +157,9 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
     "dependent_plugins": {
