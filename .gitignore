@@ -24,7 +24,12 @@ platforms/ios/cordova/console.log
 *.xcworkspace
 
 # android
-platforms/android
+platforms/android/.gradle
+platforms/android/gradle
+platforms/android/gradlew
+platforms/android/gradlew.bat
+platforms/android/**/build
+platforms/android/build.xml
 platforms/android/assets/www
 platforms/android/bin
 platforms/android/gen
