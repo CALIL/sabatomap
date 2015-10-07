@@ -8,6 +8,10 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
+    <platform name="android">
+        <allow-intent href="http://*/*" />
+        <allow-intent href="https://*/*" />
+    </platform>
     <platform name="ios">
         <preference name="FadeSplashScreen" value="true"/>
         <preference name="ShowSplashScreenSpinner" value="false"/>

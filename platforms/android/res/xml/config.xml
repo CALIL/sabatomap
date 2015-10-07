@@ -31,6 +31,8 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
     <name>Sabae Library Map</name>
     <description>鯖江図書館マップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
