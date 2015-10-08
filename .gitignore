@@ -24,6 +24,7 @@ platforms/ios/cordova/console.log
 *.xcworkspace
 
 # android
+platforms/android/**/*.iml
 platforms/android/.gradle
 platforms/android/gradle
 platforms/android/gradlew
