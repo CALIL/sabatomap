@@ -35,6 +35,9 @@
     <preference default="14+" name="xwalkVersion" />
     <preference default="--disable-pull-to-refresh-effect" name="xwalkCommandLine" />
     <preference default="embedded" name="xwalkMode" />
+    <preference name="xwalkVersion" value="14+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <name>Sabae Library Map</name>
@@ -45,7 +48,4 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
-    <preference name="xwalkVersion" value="14+" />
-    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-    <preference name="xwalkMode" value="embedded" />
 </widget>

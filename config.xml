@@ -9,6 +9,9 @@
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
     <platform name="android">
+        <preference name="xwalkVersion" value="14+"/>
+        <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect"/>
+        <preference name="xwalkMode" value="embedded"/>
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
     </platform>
@@ -18,7 +21,4 @@
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="Orientation" value="all" />
     </platform>
-    <preference name="xwalkVersion" value="14+" />
-    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-    <preference name="xwalkMode" value="embedded" />
 </widget>
