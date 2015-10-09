@@ -5,9 +5,6 @@ html, body, #map {
     padding: 0;
     background-color: rgb(232, 224, 216);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    /*overflow: hidden;*/
-}
-#map {
     overflow: hidden;
 }
 
