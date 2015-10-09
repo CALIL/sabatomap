@@ -217,11 +217,11 @@ var SearchResult = React.createClass({
     },
     closeHandler: function () {
         $(this.refs.searchResult.getDOMNode()).fadeOut();
-        $('html,body').css('overflow', 'hidden');
+        $('html,body').css('overflow-y', 'hidden');
         this.stop();
     },
     render: function () {
-        $('html,body').css('overflow', 'visible');
+        $('html,body').css('overflow-y', 'visible');
         var messageNode = null;
         if (this.props.target.message) {
             messageNode = React.createElement("p", {className: "searchMessage"}, this.props.target.message)
