@@ -7,6 +7,9 @@ html, body, #map {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     /*overflow: hidden;*/
 }
+#map {
+    overflow: hidden;
+}
 
 #floor-button {
     position: absolute;
