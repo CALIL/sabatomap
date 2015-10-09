@@ -291,7 +291,7 @@ appTest_2f = ->
 
 showNotify = (message)->
     $('.notification').html(message)
-    $('.notification').stop().fadeIn ->
+    $('.notification').stop().fadeTo 'normal', 0.5, ->
       setTimeout ->
         $('.notification').fadeOut(500)
       , 4000
