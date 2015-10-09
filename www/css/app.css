@@ -118,15 +118,28 @@ html, body, #map {
     visibility: hidden;
     transition: opacity .25s linear, visibility 0s linear .25s;
 }
+
 .notification {
     display: none;
     position: absolute;
-    bottom: 100px;
-    right: 100px;
     padding: 5px 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     background: #D9EDF7;
     color: #317095;
+}
+
+@media (max-width: 320px) {
+    .notification {
+        bottom: 140px;
+        right: 10px;
+    }
+}
+
+@media (min-width: 321px) {
+    .notification {
+        bottom: 70px;
+        right: 88px;
+    }
 }
 
 .offline {
