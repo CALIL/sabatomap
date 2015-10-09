@@ -98,8 +98,10 @@ didRangeBeaconsInRegion = (beacons)->
   # 表示中のフロアが違ったら現在地を出さない
   if kanikama.floor? #and kanikama.floor.id is kLayer.floorId
     kanimarker.setPosition(center, accuracy)
+    $('#position-mode').fadeTo(300, 1.0)
   else
     kanimarker.setPosition(null)
+    $('#position-mode').fadeTo(500, 0.5)
 
 initialize = ->
   cordova.plugins.BluetoothStatus.initPlugin();

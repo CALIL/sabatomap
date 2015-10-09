@@ -76,6 +76,7 @@ html, body, #map {
     margin: 10px;
     box-sizing: content-box;
     padding: 10px;
+    opacity: 0.5;
 }
 
 .position-mode-normal {
