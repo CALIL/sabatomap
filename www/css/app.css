@@ -129,14 +129,14 @@ html, body, #map {
     color: #317095;
 }
 
-@media (max-width: 341px) {
+@media (max-width: 374px) {
     .notification {
         bottom: 140px;
         right: 10px;
     }
 }
 
-@media (min-width: 342px) {
+@media (min-width: 375px) {
     .notification {
         bottom: 80px;
         right: 88px;
