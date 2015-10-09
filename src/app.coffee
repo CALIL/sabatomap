@@ -221,7 +221,7 @@ $(document).on('ready',
   # モード切り替え
   $('#position-mode').on 'click', ->
     if not cordova.plugins.BluetoothStatus.hasBTLE
-      showNotify('この機種は現在地の表示に対応していません')
+      showNotify('この機種は現在地を測定できません')
     else if not cordova.plugins.BluetoothStatus.BTenabled
       showNotify('BluetoothをONにしてください')
     else if kanimarker.position is null
