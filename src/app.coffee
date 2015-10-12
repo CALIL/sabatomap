@@ -230,8 +230,12 @@ $(document).on('ready',
   $('#position-mode').on 'click', ->
     if not cordova.plugins.BluetoothStatus.hasBTLE
       showNotify('この機種は現在地を測定できません')
+      if kLayer.floorId
+        loadFloor(kLayer.floorId)
     else if not cordova.plugins.BluetoothStatus.BTenabled
       showNotify('BluetoothをONにしてください')
+      if device.platform == 'Android'
+        cordova.plugins.BluetoothStatus.promptForBT()
     else if kanimarker.position is null
       showNotify('現在地が取得できません')
     else
