@@ -51,8 +51,9 @@
     },
     "cordova-plugin-device-orientation": {
         "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device-orientation"
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-device-orientation.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
