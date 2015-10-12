@@ -133,7 +133,9 @@ initialize = ->
 
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
-    navigator.splashscreen.hide()
+    setTimeout(->
+        navigator.splashscreen.hide()
+      ,2000)
 
   loadGeoJSON = ->
     $.when(
