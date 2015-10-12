@@ -17,19 +17,22 @@ gulp.task 'fetch_depends_web', ->
     'https://s3-ap-northeast-1.amazonaws.com/kanimarker/kanimarker.js'
     'http://lab.calil.jp/ol3custom/v3.10.1/ol.js'
     'http://openlayers.org/en/v3.10.1/css/ol.css'
-    'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'
   ]
   download(depended_libraries).pipe gulp.dest('www/vendor')
 
-# bowerでパッケージ管理しているライブラリを配置する
-gulp.task 'fetch_depends_bower', ->
+gulp.task 'bower_install', ->
   bower.commands.install()
+
+# bowerでパッケージ管理しているライブラリを配置する
+gulp.task 'fetch_depends_bower', ['bower_install'], ->
   gulp.src(['bower_components/jquery/dist/jquery.min.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/fastclick/lib/fastclick.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/font-awesome/css/font-awesome.min.css']).pipe gulp.dest('www/vendor/css')
   gulp.src(['bower_components/font-awesome/fonts/*']).pipe gulp.dest('www/vendor/fonts')
   gulp.src(['bower_components/react/react.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/Geolib/dist/geolib.min.js']).pipe gulp.dest('www/vendor')
+  gulp.src(['bower_components/font-awesome/css/bootstrap.min.css']).pipe gulp.dest('www/vendor')
+
 
 # CoffeeScriptをコンパイル
 gulp.task 'compile_coffee', ->

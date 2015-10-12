@@ -22,6 +22,7 @@
     "font-awesome": "4.4.0",
     "jquery": "2.1.4",
     "react": "~0.13.3",
-    "Geolib": "geolib#~2.0.18"
+    "Geolib": "geolib#~2.0.18",
+    "bootstrap": "~3.3.5"
   }
 }
