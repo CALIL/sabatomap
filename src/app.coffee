@@ -16,7 +16,6 @@ kanimarker = null
 facilityTable = null
 
 loadFloor = (id)->
-  $('#position-mode').stop().fadeTo(200, 0.5)
   kanimarker.setPosition(null)
   kLayer.setFloorId(id)
 
@@ -99,10 +98,8 @@ didRangeBeaconsInRegion = (beacons)->
   # 表示中のフロアが違ったら現在地を出さない
   if kanikama.floor? #and kanikama.floor.id is kLayer.floorId
     kanimarker.setPosition(center, accuracy)
-    $('#position-mode').stop().fadeTo(300, 1.0)
   else
     kanimarker.setPosition(null)
-    $('#position-mode').stop().fadeTo(500, 0.5)
 
 initialize = ->
   cordova.plugins.BluetoothStatus.initPlugin();
@@ -199,6 +196,17 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
   centerAdjusted = false
   invalidatePositionButton = ->
+    if not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
+      $('#position-mode').stop().fadeTo(200, 0.5)
+      if kanimarker.headingUp
+        kanimarker.setHeadingUp(false)
+        map.getView().setRotation(0)
+        if kanimarker.position
+          map.getView().setCenter(kanimarker.position)
+      centerAdjusted = false
+    else
+      $('#position-mode').stop().fadeTo(200, 1)
+
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
@@ -207,9 +215,6 @@ $(document).on('ready',
     else
       if centerAdjusted
         $('#position-mode').addClass('position-mode-center')
-      else
-        $('#position-mode').addClass('position-mode-normal')
-  # messageEvent モード変更
 
   # 現在地に戻したあとマップを動かした
   map.on 'pointerdrag', ->
@@ -233,7 +238,8 @@ $(document).on('ready',
       if kanimarker.headingUp
         kanimarker.setHeadingUp(false)
         map.getView().setRotation(0)
-        map.getView().setCenter(kanimarker.position)
+        if kanimarker.position
+          map.getView().setCenter(kanimarker.position)
         centerAdjusted = true
       else
         if centerAdjusted
@@ -271,6 +277,13 @@ $(document).on('ready',
   view.on 'change:resolution', ->
     invalidateCompass(@)
 
+
+  window.addEventListener 'BluetoothStatus.enabled', ->
+    invalidatePositionButton()
+
+  window.addEventListener 'BluetoothStatus.disabled', ->
+    invalidatePositionButton()
+
   $('#compass').on 'click', ->
     kanimarker.setHeadingUp(false)
     rotation = view.getRotation()
@@ -292,7 +305,4 @@ appTest_2f = ->
 
 showNotify = (message)->
     $('.notification').html(message)
-    $('.notification').stop().fadeTo 'normal', 0.75, ->
-      setTimeout ->
-        $('.notification').fadeOut(500)
-      , 4000
+    $('.notification').stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
