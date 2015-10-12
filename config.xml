@@ -25,4 +25,12 @@
         <preference name="windows-target-version" value="10.0" />
         <preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
     </platform>
+    <platform name="browser">
+        <preference name="SplashScreen" value="img/splash_for_browser.png" />
+        <preference name="SplashScreenDelay" value="3000" />
+        <preference name="SplashScreenBackgroundColor" value="#0068B1" />
+        <preference name="ShowSplashScreen" value="true" />
+        <preference name="SplashScreenWidth" value="451" />
+        <preference name="SplashScreenHeight" value="800" />
+    </platform>
 </widget>

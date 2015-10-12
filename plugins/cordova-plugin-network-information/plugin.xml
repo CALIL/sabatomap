@@ -21,7 +21,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-network-information"
-      version="1.0.1">
+      version="1.0.2-dev">
 
     <name>Network Information</name>
     <description>Cordova Network Information Plugin</description>
@@ -146,14 +146,14 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <!-- windows8 -->
     <platform name="windows8">
         <js-module src="src/windows/NetworkInfoProxy.js" name="NetworkInfoProxy">
-            <merges target="" />
+            <runs/>
         </js-module>
     </platform>
 
     <!-- windows -->
     <platform name="windows">
         <js-module src="src/windows/NetworkInfoProxy.js" name="NetworkInfoProxy">
-            <merges target="" />
+            <runs/>
         </js-module>
     </platform>
 
@@ -166,9 +166,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
     <!-- browser -->
     <platform name="browser">
-        <js-module src="www/browser/network.js" name="browserNetwork">
-            <clobbers target="navigator.connection" />
-            <clobbers target="navigator.network.connection" />
+        <js-module src="src/browser/network.js" name="NetworkInfoProxy">
+            <runs/>
         </js-module>
     </platform>
 </plugin>

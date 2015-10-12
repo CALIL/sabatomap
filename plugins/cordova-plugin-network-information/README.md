@@ -16,10 +16,9 @@
 #         specific language governing permissions and limitations
 #         under the License.
 -->
-
+ 
 # cordova-plugin-network-information
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-network-information.svg)](https://travis-ci.org/apache/cordova-plugin-network-information)
 
 This plugin provides an implementation of an old version of the
 [Network Information API](http://www.w3.org/TR/2011/WD-netinfo-api-20110607/).

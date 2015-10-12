@@ -102,7 +102,8 @@ didRangeBeaconsInRegion = (beacons)->
     kanimarker.setPosition(null)
 
 initialize = ->
-  cordova.plugins.BluetoothStatus.initPlugin();
+  if cordova.plugins.BluetoothStatus?
+    cordova.plugins.BluetoothStatus.initPlugin();
 
   # in app browser
   window.open = cordova.InAppBrowser.open
@@ -116,7 +117,8 @@ initialize = ->
   compassError = (e)->
     return
 
-  navigator.compass.watchHeading(compassSuccess, compassError, frequency: 100)
+  if navigator.compass?
+    navigator.compass.watchHeading(compassSuccess, compassError, frequency: 100)
 
   # イベントリスナ設定
   if cordova.plugins?.locationManager?
@@ -134,8 +136,8 @@ initialize = ->
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
     setTimeout(->
-        navigator.splashscreen.hide()
-      ,2000)
+      navigator.splashscreen.hide()
+    , 2000)
 
   loadGeoJSON = ->
     $.when(
@@ -155,7 +157,7 @@ initialize = ->
     )
     return
 
-  if navigator.connection.type is 'none'
+  if navigator.connection? and navigator.connection.type is 'none'
     $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
     document.addEventListener('online', ->
       $('.offline').stop().slideUp('fast')
@@ -198,7 +200,9 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
   centerAdjusted = false
   invalidatePositionButton = ->
-    if not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
+    if not cordova.plugins.BluetoothStatus?
+      $('#position-mode').stop().fadeTo(200, 0.5)
+    else if not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
       $('#position-mode').stop().fadeTo(200, 0.5)
       if kanimarker.headingUp
         kanimarker.setHeadingUp(false)
@@ -230,7 +234,7 @@ $(document).on('ready',
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if not cordova.plugins.BluetoothStatus.hasBTLE
+    if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
       showNotify('この機種は現在地を測定できません')
       if kLayer.floorId
         loadFloor(kLayer.floorId)
@@ -266,7 +270,7 @@ $(document).on('ready',
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
-    if deg==0
+    if deg == 0
       if $('#compass').hasClass('ol-hidden') == false
         $('#compass').addClass('ol-hidden')
     else if zoom <= 18
@@ -310,5 +314,5 @@ appTest_2f = ->
     [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 70}])
 
 showNotify = (message)->
-    $('.notification').html(message)
-    $('.notification').stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
+  $('.notification').html(message)
+  $('.notification').stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
