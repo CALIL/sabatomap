@@ -21,4 +21,8 @@
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="Orientation" value="all" />
     </platform>
+    <platform name="windows">
+        <preference name="windows-target-version" value="10.0" />
+        <preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
+    </platform>
 </widget>
