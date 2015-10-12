@@ -33,9 +33,4 @@
         <preference name="SplashScreenWidth" value="451" />
         <preference name="SplashScreenHeight" value="800" />
     </platform>
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen"/>
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen"/>
-        <param name="onload" value="true"/>
-    </feature>
 </widget>
