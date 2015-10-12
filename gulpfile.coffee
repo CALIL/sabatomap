@@ -15,7 +15,7 @@ gulp.task 'fetch_depends_web', ->
   depended_libraries = [
     'https://s3-ap-northeast-1.amazonaws.com/kanilayer/kanilayer.js'
     'https://s3-ap-northeast-1.amazonaws.com/kanimarker/kanimarker.js'
-    'http://openlayers.org/en/v3.10.1/build/ol.js'
+    'http://lab.calil.jp/ol3custom/v3.10.1/ol.js'
     'http://openlayers.org/en/v3.10.1/css/ol.css'
     'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'
   ]
