@@ -27,7 +27,7 @@ _BETA_ - things may break, [please post your feedback :)](https://github.com/Edd
 
 * For a seamless upgrade to iOS9 this plugin wipes any existing `NSAppTransportSecurity` configuration you may have done (a new feature in iOS9) to allow communication with even HTTP (non-S) backends, like previous iOS versions did. You can and should configure access rules (`config.xml`) and use the whitelist plugin as before.
 * [Ionic](http://ionicframework.com/) tip: to prevent flashes of a black background, make sure you set `ion-nav-view`'s `background-color` to `transparent`.
-* If you need the [device plugin](org.apache.cordova.device), use at least Cordova-iOS 3.6.3 (deviceready never fires with 3.5.0 due to a currently unknown reason).
+* If you need the [device plugin](https://github.com/apache/cordova-plugin-device), use at least Cordova-iOS 3.6.3 (deviceready never fires with 3.5.0 due to a currently unknown reason).
 * When making AJAX requests to a remote server make sure it supports CORS. See the [Telerik Verified Marketplace documentation](http://plugins.telerik.com/plugin/wkwebview) for more details on this and other valuable pointers. As a last resort you can add [this CORS-Proxy](https://github.com/gr2m/CORS-Proxy) between your app and the server.
 * You can load files from the app's cache folders by using the entire path (/var/.../Library/...) or simply '/Library/..' (or '/Documents/..').
 * This plugin features crash recovery: if the WKWebView crashes, it will auto-restart (otherwise you'd have an app with a blank page as it doesn't crash the app itself). Crash recovery requires a filled `<title>anything</title>` tag in your html files. If you want to disable this feature, set the `config.xml` property `DisableCrashRecovery` to `true`.
@@ -50,6 +50,8 @@ $ cordova prepare
 No need for anything else - you can now open the project in XCode 6 if you like.
 
 ## 4. Changelog
+* __0.6.3__  By default the embedded webserver uses port `12344`, but if you want to you can now override that port by setting f.i. `<preference name="WKWebViewPluginEmbeddedServerPort" value="20000" />` in `config.xml`.
+* __0.6.2__  LocalStorage is copied from UIWebView to WKWebView again (iOS location was recently changed as it appears).
 * __0.6.1__  Allow reading files from /tmp, so the camera plugin file URI's work. Thx #155.
 * __0.6.0__  iOS9 (GM) compatibility. Also, compatibility with iOS8 devices when building with XCode 7 (iOS9 SDK). Dialogs (alert, prompt, confirm) were broken.
 * __0.5.1__  Added support for `config.xml` property `DisableLocalStorageSyncWithUIWebView` (default `false`). Set it to `true` if you want to switch back to UIWebView and retain LS changes made while running WKWebView.

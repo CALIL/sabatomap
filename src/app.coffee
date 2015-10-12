@@ -14,6 +14,8 @@ kanikama.onChangeFloor = ()->
 map = null
 kanimarker = null
 facilityTable = null
+window.alert = (s)->
+  console.log s
 
 loadFloor = (id)->
   kanimarker.setPosition(null)
