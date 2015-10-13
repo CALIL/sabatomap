@@ -243,36 +243,45 @@ $(document).on('ready',
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
-      showNotify('この機種は現在地を測定できません')
-      if kLayer.floorId
-        loadFloor(kLayer.floorId)
-    else if not cordova.plugins.BluetoothStatus.BTenabled
-      showNotify('BluetoothをONにしてください')
-      if device.platform == 'Android'
-        cordova.plugins.BluetoothStatus.promptForBT()
-    else if kanimarker.position is null
-      showNotify('現在地が取得できません')
+    if kanimarker.headingUp
+      kanimarker.setHeadingUp(false)
+      map.getView().setRotation(homeRotaion)
+      if kanimarker.position
+        map.getView().setCenter(kanimarker.position)
+      centerAdjusted = true
+    else if centerAdjusted
+      kanimarker.setHeadingUp(true)
     else
-      if kanimarker.headingUp
-        kanimarker.setHeadingUp(false)
-        map.getView().setRotation(0)
-        if kanimarker.position
-          map.getView().setCenter(kanimarker.position)
-        centerAdjusted = true
+      if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
+        showNotify('この機種は現在地を測定できません')
+        if kLayer.floorId
+          loadFloor(kLayer.floorId)
+      else if not cordova.plugins.BluetoothStatus.BTenabled
+        showNotify('BluetoothをONにしてください')
+        if device.platform == 'Android'
+          cordova.plugins.BluetoothStatus.promptForBT()
       else
-        if centerAdjusted
-          kanimarker.setHeadingUp(true)
-          # messageEvent ヘディングアップモード
+        floorChanged=false
+        if kanikama.floor isnt null and kanikama.positionLatLng isnt null
+          if kanikama.floor.id != kLayer.floorId
+            loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
+            floorChanged=true
+        if floorChanged
+          setTimeout(=>
+            if kanimarker.position isnt null
+              view.setCenter(kanimarker.position)
+              centerAdjusted = true
+            else
+              showNotify('現在地が取得できません')
+          ,2000)
         else
-          view.setRotation(homeRotaion)
           if kanimarker.position isnt null
-            if kLayer.floorId != kanikama.floor.id
-               loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
             view.setCenter(kanimarker.position)
             centerAdjusted = true
-      invalidatePositionButton()
-    return
+          else
+            showNotify('現在地が取得できません')
+
+    invalidatePositionButton()
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
