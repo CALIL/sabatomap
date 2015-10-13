@@ -268,7 +268,7 @@ $(document).on('ready',
           view.setRotation(homeRotaion)
           if kanimarker.position isnt null
             if kLayer.floorId != kanikama.floor.id
-               loadFloor(kanikama.floor.id)
+               loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
             view.setCenter(kanimarker.position)
             centerAdjusted = true
       invalidatePositionButton()
