@@ -340,7 +340,7 @@ showNotify = (message)->
 # 目的地を表示する
 navigateShelf = (floorId, shelfId)->
   if floorId != kLayer.floorId
-    kLayer.setFloorId(floorId)
+    loadFloor(floorId)
   kLayer.setTargetShelf(shelfId)
   $('.searchResult').fadeOut()
   return
