@@ -79,27 +79,28 @@ didRangeBeaconsInRegion = (beacons)->
       b.minor = Number(b.minor)
 
   # kanikamaにバグがあるのでとりあえずtry catch
-  center = null
-  accuracy = null
   try
     kanikama.pushBeacons(beacons)
-    latlng = kanikama.positionLatLng
-    newAcc = kanikama.positionAccuracy
-
-    center = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
-    accuracy = 6.0
-    if newAcc >= 0
-      accuracy = 6.0
-    if newAcc >= 0.3
-      accuracy = 4.0
-    if newAcc >= 0.9
-      accuracy = 0.1
   catch e
-    console.error(e)
+#    console.error(e)
 
-  # 表示中のフロアが違ったら現在地を出さない
-  if kanikama.floor? #and kanikama.floor.id is kLayer.floorId
-    kanimarker.setPosition(center, accuracy)
+  # 現在地あり
+  if kanikama.floor isnt null and kanikama.positionLatLng isnt null
+    # 表示中のフロアと同じフロアの時だけ現在地を表示する
+    if kanikama.floor.id is kLayer.floorId
+      newAcc = kanikama.positionAccuracy
+      accuracy = 6.0
+      if newAcc >= 0
+        accuracy = 6.0
+      if newAcc >= 0.3
+        accuracy = 4.0
+      if newAcc >= 0.9
+        accuracy = 0.1
+
+      center = ol.proj.transform(kanikama.positionLatLng, 'EPSG:4326', 'EPSG:3857')
+      kanimarker.setPosition(center, accuracy)
+    else
+      kanimarker.setPosition(null) # 別のフロア todo フロアボタンを光らせる？ ユーザーへの通知
   else
     kanimarker.setPosition(null)
 
