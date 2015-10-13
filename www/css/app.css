@@ -6,7 +6,7 @@ html, body, #map {
     background-color: rgb(232, 224, 216);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overflow: hidden;
-    font-family:  "ƒqƒ‰ƒMƒmŠpƒS ProN W3", "Hiragino Kaku Gothic ProN", "ŸàƒSƒVƒbƒN", YuGothic, "ƒƒCƒŠƒI", Meiryo, sans-serif;
+    font-family: "ƒqƒ‰ƒMƒmŠpƒS ProN W3", "Hiragino Kaku Gothic ProN", "ŸàƒSƒVƒbƒN", YuGothic, "ƒƒCƒŠƒI", Meiryo, sans-serif;
 }
 
 #floor-button {
@@ -15,7 +15,7 @@ html, body, #map {
     height: auto;
     border: 1px solid rgba(161, 161, 161, 0.25);
     margin: 10px;
-    font-family: Arial, serif;
+    font-family: Helvetica, Arial, serif;
     pointer-events: none;
 }
 
