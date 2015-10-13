@@ -13,7 +13,7 @@ html, body, #map {
     position: absolute;
     bottom: 50px;
     height: auto;
-    border: 1px solid rgba(161, 161, 161, 0.25);
+    border: 1px solid #fff;
     margin: 10px;
     pointer-events: none;
 }
