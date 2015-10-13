@@ -25,8 +25,10 @@ loadFloor = (id)->
   setTimeout(->
     geojson = kanikama.geojsons[7][id]
     if geojson?
-      oldAngle = view.getRotation() * 180 / Math.PI
-      newAngle = homeRotaion * 180 / Math.PI
+      oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
+      if oldAngle < 0
+        oldAngle += 360
+      newAngle = (homeRotaion * 180 / Math.PI) % 360
 
       # アニメーションのための仮想的な角度を計算
       # 左回りの場合はマイナスの値をとる場合がある
@@ -44,7 +46,7 @@ loadFloor = (id)->
           virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
 
       # 回転
-      map.beforeRender(ol.animation.rotate(duration: 400, rotation: view.getRotation()))
+      map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
       view.setRotation(virtualAngle * Math.PI / 180)
 
       # geojsonサイズにフィットさせる
