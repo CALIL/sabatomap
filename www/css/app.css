@@ -27,13 +27,13 @@ html, body, #map {
     text-align: center;
     background-color: rgba(255, 255, 255, 0.80);
     pointer-events: auto;
-    font-size:18px;
+    font-size: 18px;
     font-family: sans-serif;
 }
 
 #floor-button .active {
     background-color: rgba(56, 149, 255, 0.85) !important;
-    color:#fff;
+    color: #fff;
 }
 
 .ui-button {
@@ -114,6 +114,7 @@ html, body, #map {
     background-position: center;
     background-size: 38px;
 }
+
 #compass.ol-hidden {
     opacity: 0;
     visibility: hidden;
@@ -153,7 +154,8 @@ html, body, #map {
     background: #D9EDF7;
     color: #317095;
 }
-@media screen and (orientation:landscape) {
+
+@media screen and (orientation: landscape) {
     .offline {
         width: 100%;
     }
