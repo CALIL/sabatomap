@@ -2,8 +2,6 @@
   "name": "sabatomap",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "dependencies": {
-    "cordova-android": "^3.7.2",
-    "cordova-ios": "^3.5.0"
   },
   "devDependencies": {
     "bower": "^1.5.3",
