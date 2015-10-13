@@ -336,3 +336,11 @@ appTest_2f = ->
 showNotify = (message)->
   $('.notification').html(message)
   $('.notification').stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
+
+# 目的地を表示する
+navigateShelf = (floorId, shelfId)->
+  if floorId != kLayer.floorId
+    kLayer.setFloorId(floorId)
+  kLayer.setTargetShelf(shelfId)
+  $('.searchResult').fadeOut()
+  return
