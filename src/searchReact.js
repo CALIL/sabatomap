@@ -4,9 +4,6 @@
 function log(obj) {
     console.log(obj);
 }
-function isAndroid(){
-    return navigator.userAgent.match(/Android/);
-}
 
 var Search = React.createClass({
     displayName: "Search",
@@ -220,28 +217,24 @@ var SearchResult = React.createClass({
     },
     closeHandler: function () {
         $(this.refs.searchResult.getDOMNode()).fadeOut();
-        if(isAndroid()){
-            $('html,body').css('overflow-y', 'hidden');
-        }
         this.stop();
     },
     render: function () {
-        if(isAndroid()){
-            $('html,body').css('overflow-y', 'visible');
-        }
         var messageNode = null;
         if (this.props.target.message) {
             messageNode = React.createElement("p", {className: "searchMessage"}, this.props.target.message)
         }
         return (
-            React.createElement("div", {className: "searchResult", ref: "searchResult"},
-                React.createElement(BookList, {
-                    books: this.props.target.books,
-                    queryText: this.props.queryText,
-                    clickHandler: this.clickHandler,
-                    closeHandler: this.closeHandler
-                }),
-                messageNode
+            React.createElement("div", {className: "searchDiv"},
+                React.createElement("div", {className: "searchResult", ref: "searchResult"},
+                    React.createElement(BookList, {
+                        books: this.props.target.books,
+                        queryText: this.props.queryText,
+                        clickHandler: this.clickHandler,
+                        closeHandler: this.closeHandler
+                    }),
+                    messageNode
+                )
             )
         );
     }
