@@ -216,7 +216,9 @@ var SearchResult = React.createClass({
         }
     },
     closeHandler: function () {
-        $(this.refs.searchResult.getDOMNode()).fadeOut();
+        $(this.refs.searchResult.getDOMNode()).fadeOut(function(){
+            $(this).hide();
+        });
         this.stop();
     },
     render: function () {
@@ -225,8 +227,8 @@ var SearchResult = React.createClass({
             messageNode = React.createElement("p", {className: "searchMessage"}, this.props.target.message)
         }
         return (
-            React.createElement("div", {className: "searchDiv"},
-                React.createElement("div", {className: "searchResult", ref: "searchResult"},
+            React.createElement("div", {className: "searchResult", ref: "searchResult"},
+                React.createElement("div", {className: "searchDiv", ref: "searchDiv"},
                     React.createElement(BookList, {
                         books: this.props.target.books,
                         queryText: this.props.queryText,
