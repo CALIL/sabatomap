@@ -6,6 +6,7 @@ html, body, #map {
     background-color: rgb(232, 224, 216);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overflow: hidden;
+    font-family:  "ƒqƒ‰ƒMƒmŠpƒS ProN W3", "Hiragino Kaku Gothic ProN", "ŸàƒSƒVƒbƒN", YuGothic, "ƒƒCƒŠƒI", Meiryo, sans-serif;
 }
 
 #floor-button {
