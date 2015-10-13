@@ -84,6 +84,7 @@
   height: 100px;
   max-width: 74px;
   margin-right: 10px;
+  border: 1px solid #CCCCCC;
 }
 .book a {
   color: #000000;
