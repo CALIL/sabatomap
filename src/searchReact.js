@@ -127,7 +127,7 @@ var SearchBox = React.createClass({
                         className: "",
                         id: "queryTextInput",
                         ref: "queryTextInput",
-                        placeholder: "探したいこと・調べたいこと",
+                        placeholder: " 探したいこと・調べたいこと",
                         onChange: this.handleChange
                     }),
                     React.createElement("i", {className: "fa fa-search searchBtn", onClick: this.handleSubmit})
