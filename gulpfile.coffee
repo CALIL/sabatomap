@@ -31,7 +31,6 @@ gulp.task 'fetch_depends_bower', ['bower_install'], ->
   gulp.src(['bower_components/font-awesome/fonts/*']).pipe gulp.dest('www/vendor/fonts')
   gulp.src(['bower_components/react/react.js']).pipe gulp.dest('www/vendor')
   gulp.src(['bower_components/Geolib/dist/geolib.min.js']).pipe gulp.dest('www/vendor')
-  gulp.src(['bower_components/font-awesome/css/bootstrap.min.css']).pipe gulp.dest('www/vendor')
 
 
 # CoffeeScriptをコンパイル
