@@ -33,4 +33,12 @@
         <preference name="SplashScreenWidth" value="451" />
         <preference name="SplashScreenHeight" value="800" />
     </platform>
+    <platform name="android">
+        <preference name="SplashScreen" value="splash" />
+        <icon src="www/res/icons/android/icon-48-mdpi.png" density="mdpi" />
+        <icon src="www/res/icons/android/icon-72-hdpi.png" density="hdpi" />
+        <icon src="www/res/icons/android/icon-96-xhdpi.png" density="xhdpi" />
+        <icon src="www/res/icons/android/icon-144-xxhdpi.png" density="xxhdpi" />
+        <icon src="www/res/icons/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
+    </platform>
 </widget>
