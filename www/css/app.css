@@ -13,7 +13,7 @@ html, body, #map {
     position: absolute;
     bottom: 50px;
     height: auto;
-    border: 1px solid rgb(154, 154, 154);
+    border: 1px solid #E2E2E2;
     margin: 10px;
     pointer-events: none;
 }
@@ -32,7 +32,7 @@ html, body, #map {
 }
 
 #floor-button .active {
-    background-color: rgba(56, 149, 255, 0.85) !important;
+    background-color: rgba(56, 149, 255, 0.9) !important;
     color: #fff;
 }
 
