@@ -4,7 +4,7 @@ view = new ol.View(
 )
 
 homeRotaion = 3.1115421869123563
-
+centerAdjusted = false
 kLayer = new Kanilayer()
 
 kanikama = new Kanikama()
@@ -18,10 +18,14 @@ window.alert = (s)->
   console.log s
 
 loadFloor = (id)->
-  kanimarker.setPosition(null)
-  kLayer.setFloorId(id)
+  if kLayer.floorId != id
+    kanimarker.setPosition(null)
+    kLayer.setFloorId(id)
+    centerAdjusted=false
+    invalidatePositionButton()
 
-  # 画面をgeojsonサイズにフィットさせる
+
+    # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
     geojson = kanikama.geojsons[7][id]
     if geojson?
@@ -203,7 +207,7 @@ $(document).on('ready',
   view.setRotation(178 * Math.PI / 180)
 
   # マーカーとモード切り替えボタン
-  centerAdjusted = false
+
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus?
       $('#position-mode').stop().fadeTo(200, 0.5)
