@@ -83,7 +83,7 @@ var Search = React.createClass({
             var resultNode = null;
         }
         return (
-            React.createElement("div", {className: "searchbox"},
+            React.createElement("div", {className: "search"},
                 React.createElement(SearchBox, {
                     handleUserInput: this.handleUserInput,
                     submit: this.state.submit,
