@@ -286,9 +286,9 @@ $(document).on('ready',
   # コンパス関係の処理
   invalidateCompass = (view_) ->
 
-    mapSize = Math.min(map.getSize()) # マップの短辺を取得
+    mapSize = Math.min(map.getSize()[0],map.getSize()[1]) # マップの短辺を取得
     pixelPerMeter = (1 / view_.getResolution()) * window.devicePixelRatio # 1メートルのピクセル数
-
+    console.log pixelPerMeter*50
     rotation = view_.getRotation()
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
@@ -296,7 +296,7 @@ $(document).on('ready',
     if deg == 0
       if $('#compass').hasClass('ol-hidden') == false
         $('#compass').addClass('ol-hidden')
-    else if 50 * pixelPerMeter < mapSize # 短辺が50m以下の場合は表示しない
+    else if 100 * pixelPerMeter < mapSize # 短辺が100m以上の時に表示する
       $('#compass').css('transform', "rotate(#{rotation}rad)")
       if $('#compass').hasClass('ol-hidden') == true
         $('#compass').removeClass('ol-hidden')
