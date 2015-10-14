@@ -2,9 +2,15 @@ machine:
   node:
     version:
       0.12.7
+  java:
+    version: openjdk7
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
 dependencies:
   post:
     - npm update
+  override:
+    - echo y | android update sdk --no-ui --filter "android-23,build-tools-24.4"
 test:
   override:
     - gulp
