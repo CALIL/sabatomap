@@ -21,11 +21,11 @@ loadFloor = (id)->
   if kLayer.floorId != id
     kanimarker.setPosition(null)
     kLayer.setFloorId(id)
-    centerAdjusted=false
+    centerAdjusted = false
     invalidatePositionButton()
 
 
-    # 画面をgeojsonサイズにフィットさせる
+  # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
     geojson = kanikama.geojsons[7][id]
     if geojson?
@@ -88,7 +88,7 @@ didRangeBeaconsInRegion = (beacons)->
   try
     kanikama.pushBeacons(beacons)
   catch e
-#    console.error(e)
+  #    console.error(e)
 
   # 現在地あり
   if kanikama.floor isnt null and kanikama.positionLatLng isnt null
@@ -261,11 +261,11 @@ $(document).on('ready',
         if device.platform == 'Android'
           cordova.plugins.BluetoothStatus.promptForBT()
       else
-        floorChanged=false
+        floorChanged = false
         if kanikama.floor isnt null and kanikama.positionLatLng isnt null
           if kanikama.floor.id != kLayer.floorId
             loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
-            floorChanged=true
+            floorChanged = true
         if floorChanged
           setTimeout(=>
             if kanimarker.position isnt null
@@ -273,7 +273,7 @@ $(document).on('ready',
               centerAdjusted = true
             else
               showNotify('現在地が取得できません')
-          ,1200)
+          , 1200)
         else
           if kanimarker.position isnt null
             view.setCenter(kanimarker.position)
