@@ -273,7 +273,7 @@ $(document).on('ready',
               centerAdjusted = true
             else
               showNotify('現在地が取得できません')
-          ,2000)
+          ,1200)
         else
           if kanimarker.position isnt null
             view.setCenter(kanimarker.position)
