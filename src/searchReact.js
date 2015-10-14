@@ -253,7 +253,7 @@ var BookList = React.createClass({
         return (
             React.createElement("div", {className: "booklist"},
                 React.createElement("div", {className: "booklistTitle"}, this.props.queryText, "の検索結果"),
-                React.createElement("div", {className: "booklistClose", onClick: this.props.closeHandler}, "×"),
+                React.createElement("div", {className: "booklistClose fa fa-times", onClick: this.props.closeHandler}, ""),
                 bookNodes
             )
         );
