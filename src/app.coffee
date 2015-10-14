@@ -1,5 +1,6 @@
 view = new ol.View(
   center: [15139450.747885207, 4163881.1440642904] # 初期状態で日本地図を出しておく
+  rotation: 3.1115421869123563
   zoom: 6
 )
 
@@ -198,7 +199,6 @@ $(document).on('ready',
     minZoom: 18
     logo: false
     view: view
-    rotation: 3.1115421869123563
   )
   kanimarker = new Kanimarker(map)
 
