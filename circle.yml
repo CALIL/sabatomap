@@ -1,0 +1,10 @@
+machine:
+  node:
+    version:
+      0.12.7
+dependencies:
+  post:
+    - npm update
+test:
+  override:
+    - gulp
