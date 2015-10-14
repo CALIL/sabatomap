@@ -3,7 +3,7 @@ general:
     only:
       - master
   artifacts:
-    - "platforms/android/build/outputs/apk/android-armv7-release.apk"
+    - "platforms/android/build/outputs/apk/android-armv7-debug.apk"
 machine:
   timezone:
     Asia/Tokyo
@@ -25,4 +25,4 @@ test:
     - ./node_modules/.bin/gulp
     - cordova platform update android
     - cordova build android
-    - curl -F "file=@platforms/android/build/outputs/apk/android-armv7-release.apk" -F "token=$DEPLOYGATE_KEY" -F "message=from circleci" https://deploygate.com/api/users/caliljp/apps
+    - curl -F "file=@platforms/android/build/outputs/apk/android-armv7-debug.apk" -F "token=$DEPLOYGATE_KEY" -F "message=from circleci" https://deploygate.com/api/users/caliljp/apps
