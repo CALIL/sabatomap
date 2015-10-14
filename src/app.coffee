@@ -286,9 +286,9 @@ $(document).on('ready',
   # コンパス関係の処理
   invalidateCompass = (view_) ->
 
-    mapSize = Math.min(map.getSize()[0],map.getSize()[1]) # マップの短辺を取得
+    mapSize = Math.min(map.getSize()[0], map.getSize()[1]) # マップの短辺を取得
     pixelPerMeter = (1 / view_.getResolution()) * window.devicePixelRatio # 1メートルのピクセル数
-    console.log pixelPerMeter*50
+
     rotation = view_.getRotation()
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
