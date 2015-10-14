@@ -6,15 +6,15 @@ html, body, #map {
     background-color: rgb(232, 224, 216);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overflow: hidden;
+    font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif;
 }
 
 #floor-button {
     position: absolute;
     bottom: 50px;
     height: auto;
-    border: 1px solid rgba(161, 161, 161, 0.25);
+    border: 1px solid #E2E2E2;
     margin: 10px;
-    font-family: Arial, serif;
     pointer-events: none;
 }
 
@@ -27,13 +27,13 @@ html, body, #map {
     text-align: center;
     background-color: rgba(255, 255, 255, 0.80);
     pointer-events: auto;
-    font-size:18px;
-    font-family: sans-serif;
+    font-size: 18px;
+    font-family: Helvetica, Arial, serif;
 }
 
 #floor-button .active {
-    background-color: rgba(56, 149, 255, 0.85) !important;
-    color:#fff;
+    background-color: rgba(56, 149, 255, 0.9) !important;
+    color: #fff;
 }
 
 .ui-button {
@@ -114,6 +114,7 @@ html, body, #map {
     background-position: center;
     background-size: 38px;
 }
+
 #compass.ol-hidden {
     opacity: 0;
     visibility: hidden;
@@ -127,6 +128,8 @@ html, body, #map {
     border-radius: 5px;
     background: #D9EDF7;
     color: #317095;
+    font-size: 14px;
+    font-family: sans-serif;
 }
 
 @media (max-width: 374px) {
@@ -153,7 +156,8 @@ html, body, #map {
     background: #D9EDF7;
     color: #317095;
 }
-@media screen and (orientation:landscape) {
+
+@media screen and (orientation: landscape) {
     .offline {
         width: 100%;
     }
