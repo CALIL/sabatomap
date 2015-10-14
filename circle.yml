@@ -1,4 +1,6 @@
 machine:
+  timezone:
+    Asia/Tokyo
   node:
     version:
       0.12.7
@@ -13,4 +15,4 @@ dependencies:
     - echo y | android update sdk --no-ui --filter "android-23,build-tools-24.4"
 test:
   override:
-    - gulp
+    - ./node_modules/.bin/gulp
