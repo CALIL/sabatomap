@@ -285,15 +285,25 @@ $(document).on('ready',
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
+    HIDE_THRESHOLD = 50 # 50メートル
+
+    mapSize = map.getSize()
+    if mapSize[0] < mapSize[1]
+      shortSideSize = mapSize[0]
+    else
+      shortSideSize = mapSize[1]
+
+    resolution = view_.getResolution()
+    size = (HIDE_THRESHOLD / resolution) * window.devicePixelRatio
+
     rotation = view_.getRotation()
-    zoom = view_.getZoom()
     deg = (rotation * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
     if deg == 0
       if $('#compass').hasClass('ol-hidden') == false
         $('#compass').addClass('ol-hidden')
-    else if zoom <= 18
+    else if size < shortSideSize
       $('#compass').css('transform', "rotate(#{rotation}rad)")
       if $('#compass').hasClass('ol-hidden') == true
         $('#compass').removeClass('ol-hidden')
