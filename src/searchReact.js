@@ -216,7 +216,7 @@ var SearchResult = React.createClass({
         }
     },
     closeHandler: function () {
-        $(this.refs.searchResult.getDOMNode()).fadeOut(function(){
+        $(this.refs.searchResult.getDOMNode()).fadeOut(300, function(){
             $(this).hide();
         });
         this.stop();
