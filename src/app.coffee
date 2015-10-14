@@ -3,7 +3,7 @@ view = new ol.View(
   zoom: 6
 )
 
-homeRotaion = 3.1115421869123563
+homeRotationRadian = 3.1115421869123563
 centerAdjusted = false
 kLayer = new Kanilayer()
 
@@ -32,7 +32,7 @@ loadFloor = (id)->
       oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
       if oldAngle < 0
         oldAngle += 360
-      newAngle = (homeRotaion * 180 / Math.PI) % 360
+      newAngle = (homeRotationRadian * 180 / Math.PI) % 360
 
       # アニメーションのための仮想的な角度を計算
       # 左回りの場合はマイナスの値をとる場合がある
@@ -198,13 +198,13 @@ $(document).on('ready',
     minZoom: 18
     logo: false
     view: view
+    rotation: 3.1115421869123563
   )
   kanimarker = new Kanimarker(map)
 
   # 鯖江図書館のサイズに合わせる
   extent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
   view.fit(extent, map.getSize())
-  view.setRotation(178 * Math.PI / 180)
 
   # マーカーとモード切り替えボタン
 
@@ -245,7 +245,7 @@ $(document).on('ready',
   $('#position-mode').on 'click', ->
     if kanimarker.headingUp
       kanimarker.setHeadingUp(false)
-      map.getView().setRotation(homeRotaion)
+      map.getView().setRotation(homeRotationRadian)
       if kanimarker.position
         map.getView().setCenter(kanimarker.position)
       centerAdjusted = true
@@ -285,31 +285,22 @@ $(document).on('ready',
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
-
     mapSize = Math.min(map.getSize()[0], map.getSize()[1]) # マップの短辺を取得
     pixelPerMeter = (1 / view_.getResolution()) * window.devicePixelRatio # 1メートルのピクセル数
-
-    rotation = view_.getRotation()
-    deg = (rotation * 180 / Math.PI) % 360
+    deg = (view_.getRotation() * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
-    if deg == 0
-      if $('#compass').hasClass('ol-hidden') == false
-        $('#compass').addClass('ol-hidden')
-    else if 100 * pixelPerMeter < mapSize # 短辺が100m以上の時に表示する
-      $('#compass').css('transform', "rotate(#{rotation}rad)")
-      if $('#compass').hasClass('ol-hidden') == true
-        $('#compass').removeClass('ol-hidden')
+    if deg == 0 or 100 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
+      $('#compass').addClass('ol-hidden')
     else
-      if $('#compass').hasClass('ol-hidden') == false
-        $('#compass').addClass('ol-hidden')
+      $('#compass').css('transform', "rotate(#{deg}deg)")
+      $('#compass').removeClass('ol-hidden')
 
   view.on 'change:rotation', ->
     invalidateCompass(@)
 
   view.on 'change:resolution', ->
     invalidateCompass(@)
-
 
   window.addEventListener 'BluetoothStatus.enabled', ->
     invalidatePositionButton()
