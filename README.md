@@ -1,6 +1,7 @@
 # 鯖江市図書館マップ「さばとマップ」
 
-[![Circle CI](https://circleci.com/gh/CALIL/sabatomap/tree/master.svg?style=svg&circle-token=e92750cac39532ccb9f2a48ecda9153c233eb125)](https://circleci.com/gh/CALIL/sabatomap/tree/master)
+[![Circle CI](https://circleci.com/gh/CALIL/sabatomap/tree/master.svg?style=svg&circle-token=e92750cac39532ccb9f2a48ecda9153c233eb125)](https://circleci.com/gh/CALIL/sabatomap/tree/master) 
+[<img src="https://dply.me/a231vi/button/small" alt="Download to device">](https://dply.me/a231vi#install)
 
 ![Splash](www/img/splash_for_browser.png)
 
