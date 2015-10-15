@@ -14,6 +14,8 @@ machine:
     version: openjdk7
   environment:
     ANDROID_HOME: /usr/local/android-sdk-linux
+  xcode:
+    version: "7.0"
 dependencies:
   post:
     - npm update
@@ -23,6 +25,7 @@ dependencies:
 test:
   override:
     - ./node_modules/.bin/gulp
+    - cordova platform update ios
     - cordova platform update android
     - cordova build android
     - curl -F "file=@platforms/android/build/outputs/apk/android-armv7-debug.apk" -F "token=$DEPLOYGATE_KEY" -F "message=from circleci" https://deploygate.com/api/users/caliljp/apps
