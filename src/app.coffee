@@ -29,36 +29,36 @@ loadFloor = (id)->
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
-      oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
-      if oldAngle < 0
-        oldAngle += 360
-      newAngle = (homeRotationRadian * 180 / Math.PI) % 360
+    oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
+    if oldAngle < 0
+      oldAngle += 360
+    newAngle = (homeRotationRadian * 180 / Math.PI) % 360
 
-      # アニメーションのための仮想的な角度を計算
-      # 左回りの場合はマイナスの値をとる場合がある
-      if newAngle > oldAngle
-        n = newAngle - oldAngle
-        if n <= 180
-          virtualAngle = oldAngle + n # 右回り n度回る
-        else
-          virtualAngle = oldAngle - (360 - n) # 左回り 360 - n度回る
+    # アニメーションのための仮想的な角度を計算
+    # 左回りの場合はマイナスの値をとる場合がある
+    if newAngle > oldAngle
+      n = newAngle - oldAngle
+      if n <= 180
+        virtualAngle = oldAngle + n # 右回り n度回る
       else
-        n = oldAngle - newAngle
-        if n <= 180
-          virtualAngle = oldAngle - n # 左回り n度回る
-        else
-          virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
+        virtualAngle = oldAngle - (360 - n) # 左回り 360 - n度回る
+    else
+      n = oldAngle - newAngle
+      if n <= 180
+        virtualAngle = oldAngle - n # 左回り n度回る
+      else
+        virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
 
-      # 回転
-      map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
-      view.setRotation(virtualAngle * Math.PI / 180)
+    # 回転
+    map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
+    view.setRotation(virtualAngle * Math.PI / 180)
 
-      # geojsonサイズにフィットさせる
-      pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: view.getCenter())
-      map.beforeRender(pan)
-      zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-      map.beforeRender(zoom)
-      view.fit(homeExtent, map.getSize())
+    # geojsonサイズにフィットさせる
+    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: view.getCenter())
+    map.beforeRender(pan)
+    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+    map.beforeRender(zoom)
+    view.fit(homeExtent, map.getSize())
   , 100)
 
   # フロアボタンを表示
