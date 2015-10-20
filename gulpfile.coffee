@@ -36,8 +36,6 @@ gulp.task 'fetch_depends_bower', ['bower_install'], ->
 # CoffeeScriptをコンパイル
 gulp.task 'compile_coffee', ->
   gulp.src([
-    'src/buffer.coffee',
-    'src/kanikama.coffee',
     'src/app.coffee',
     'src/search.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
@@ -48,6 +46,7 @@ gulp.task 'clean_all_js', (cb)->
 # アプリケーションファイルを結合
 gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
   gulp.src [
+    'node_modules/Kanikama/kanikama.js'
     'www/vendor/kanimarker.js'
     'www/vendor/kanilayer.js'
     'src/compiled/buffer.js'
