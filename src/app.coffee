@@ -87,11 +87,11 @@ didRangeBeaconsInRegion = (beacons)->
   #    console.error(e)
 
   # 現在地あり
-  if kanikama.floor isnt null and kanikama.positionLatLng isnt null
+  if kanikama.currentPosition isnt null
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
     if kanikama.floor.id is kLayer.floorId
-      center = ol.proj.transform(kanikama.positionLatLng, 'EPSG:4326', 'EPSG:3857')
-      kanimarker.setPosition(center, kanikama.accuracy)
+      position = ol.proj.transform(kanikama.currentPosition, 'EPSG:4326', 'EPSG:3857')
+      kanimarker.setPosition(position, kanikama.accuracy)
     else
       kanimarker.setPosition(null) # 別のフロア todo フロアボタンを光らせる？ ユーザーへの通知
   else
@@ -246,7 +246,7 @@ $(document).on('ready',
           cordova.plugins.BluetoothStatus.promptForBT()
       else
         floorChanged = false
-        if kanikama.floor isnt null and kanikama.positionLatLng isnt null
+        if kanikama.currentPosition isnt null
           if kanikama.floor.id != kLayer.floorId
             loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
             floorChanged = true
