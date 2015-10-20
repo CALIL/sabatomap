@@ -19,6 +19,8 @@ lastFloor = null
 window.alert = (s)->
   console.log s
 
+# フロアを読み込む
+# @param id {String} フロアID
 loadFloor = (id)->
   if kLayer.floorId != id
     kanimarker.setPosition(null)
