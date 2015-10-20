@@ -10,12 +10,12 @@ centerAdjusted = false
 kLayer = new Kanilayer()
 
 kanikama = new Kanikama()
-kanikama.onChangeFloor = ()->
-  if kanikama.currentFloor isnt null
-    loadFloor(kanikama.currentFloor.id)
+
 map = null
 kanimarker = null
 facilityTable = null
+lastFloor = null
+
 window.alert = (s)->
   console.log s
 
@@ -80,11 +80,15 @@ didRangeBeaconsInRegion = (beacons)->
       b.major = Number(b.major)
       b.minor = Number(b.minor)
 
-  # kanikamaにバグがあるのでとりあえずtry catch
-  try
-    kanikama.push(beacons)
-  catch e
-  #    console.error(e)
+  # 最新の現在地を調べる
+  kanikama.push(beacons)
+
+  # フロアあり
+  if kanikama.currentFloor isnt null
+    # フロア切り替え発生
+    if lastFloor is null or kanikama.currentFloor.id isnt lastFloor.id
+      lastFloor = kanikama.currentFloor
+      loadFloor(kanikama.currentFloor.id)
 
   # 現在地あり
   if kanikama.currentPosition isnt null
