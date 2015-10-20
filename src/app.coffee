@@ -82,7 +82,7 @@ didRangeBeaconsInRegion = (beacons)->
 
   # kanikamaにバグがあるのでとりあえずtry catch
   try
-    kanikama.pushBeacons(beacons)
+    kanikama.push(beacons)
   catch e
   #    console.error(e)
 
@@ -115,7 +115,7 @@ initialize = ->
 
   # コンパスを受け取る
   compassSuccess = (heading)->
-    kanikama.pushCompass(heading.magneticHeading)
+    kanikama.heading = heading.magneticHeading
     kanimarker.setDirection(parseInt(heading.magneticHeading)) # 小数点以下の変化は変更しない
     return
 
