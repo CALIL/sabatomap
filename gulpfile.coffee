@@ -49,7 +49,6 @@ gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
     'node_modules/Kanikama/kanikama.js'
     'www/vendor/kanimarker.js'
     'www/vendor/kanilayer.js'
-    'src/compiled/buffer.js'
     'src/compiled/app.js'
     'src/searchSetting.js'
     'src/compiled/search.js'
