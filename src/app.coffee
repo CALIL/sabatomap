@@ -94,7 +94,9 @@ didRangeBeaconsInRegion = (beacons)->
   if kanikama.currentPosition isnt null
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
     if kanikama.currentFloor.id is kLayer.floorId
-      position = ol.proj.transform(kanikama.currentPosition, 'EPSG:4326', 'EPSG:3857')
+      latlng = [kanikama.currentPosition.latitude
+                kanikama.currentPosition.longitude]
+      position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
       kanimarker.setPosition(position, kanikama.accuracy)
     else
       kanimarker.setPosition(null) # 別のフロア todo フロアボタンを光らせる？ ユーザーへの通知
