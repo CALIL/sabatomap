@@ -5,9 +5,9 @@
     "Kanikama": "git+https://github.com/CALIL/Kanikama.git"
   },
   "devDependencies": {
-    "bower": "^1.5.3",
+    "bower": "^1.6.3",
     "coffee-script": "^1.10.0",
-    "cordova-lib": "^0.21.13",
+    "cordova-lib": "^5.3.3",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-add-src": "^0.2.0",
