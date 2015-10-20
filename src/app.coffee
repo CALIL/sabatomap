@@ -152,7 +152,7 @@ initialize = ->
   loadGeoJSON = ->
     $.when(
       $.getJSON('https://app.haika.io/api/facility/7')
-      $.getJSON('../data/sabae.json')
+      $.getJSON('data/sabae.json')
     ).done(->
       for data in arguments
         if data[1] is 'success'
