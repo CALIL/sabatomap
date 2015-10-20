@@ -156,7 +156,7 @@ initialize = ->
           else
             kanikama.facilities_ = data[0]
 
-      loadFloor(7)
+      loadFloor('7')
     )
     return
 
