@@ -11,8 +11,8 @@ kLayer = new Kanilayer()
 
 kanikama = new Kanikama()
 kanikama.onChangeFloor = ()->
-  if kanikama.floor isnt null
-    loadFloor(kanikama.floor.id)
+  if kanikama.currentFloor isnt null
+    loadFloor(kanikama.currentFloor.id)
 map = null
 kanimarker = null
 facilityTable = null
@@ -89,7 +89,7 @@ didRangeBeaconsInRegion = (beacons)->
   # 現在地あり
   if kanikama.currentPosition isnt null
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
-    if kanikama.floor.id is kLayer.floorId
+    if kanikama.currentFloor.id is kLayer.floorId
       position = ol.proj.transform(kanikama.currentPosition, 'EPSG:4326', 'EPSG:3857')
       kanimarker.setPosition(position, kanikama.accuracy)
     else
@@ -247,8 +247,8 @@ $(document).on('ready',
       else
         floorChanged = false
         if kanikama.currentPosition isnt null
-          if kanikama.floor.id != kLayer.floorId
-            loadFloor(kanikama.floor.id) # フロアが違う場合は切り替える
+          if kanikama.currentFloor.id != kLayer.floorId
+            loadFloor(kanikama.currentFloor.id) # フロアが違う場合は切り替える
             floorChanged = true
         if floorChanged
           setTimeout(=>
