@@ -4,6 +4,7 @@ view = new ol.View(
   zoom: 6
 )
 
+homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
 centerAdjusted = false
 kLayer = new Kanilayer()
@@ -28,8 +29,6 @@ loadFloor = (id)->
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
-    geojson = kanikama.geojsons[7][id]
-    if geojson?
       oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
       if oldAngle < 0
         oldAngle += 360
@@ -55,15 +54,11 @@ loadFloor = (id)->
       view.setRotation(virtualAngle * Math.PI / 180)
 
       # geojsonサイズにフィットさせる
-      extent = new ol.extent.boundingExtent([
-        ol.proj.transform([geojson.bbox[0], geojson.bbox[1]], 'EPSG:4326', 'EPSG:3857')
-        ol.proj.transform([geojson.bbox[2], geojson.bbox[3]], 'EPSG:4326', 'EPSG:3857')
-      ])
       pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: view.getCenter())
       map.beforeRender(pan)
       zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
       map.beforeRender(zoom)
-      view.fit(extent, map.getSize())
+      view.fit(homeExtent, map.getSize())
   , 100)
 
   # フロアボタンを表示
@@ -202,8 +197,7 @@ $(document).on('ready',
   kanimarker = new Kanimarker(map)
 
   # 鯖江図書館のサイズに合わせる
-  extent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
-  view.fit(extent, map.getSize())
+  view.fit(homeExtent, map.getSize())
 
   # マーカーとモード切り替えボタン
 
