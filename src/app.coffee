@@ -152,8 +152,7 @@ initialize = ->
   loadGeoJSON = ->
     $.when(
       $.getJSON('https://app.haika.io/api/facility/7')
-      $.getJSON('https://app.haika.io/api/facility/7/7.geojson')
-      $.getJSON('https://app.haika.io/api/facility/7/8.geojson')
+      $.getJSON('../data/sabae.json')
     ).done(->
       for data in arguments
         if data[1] is 'success'
@@ -161,7 +160,7 @@ initialize = ->
             facilityTable = data[0]
             facilityTable.table.reverse()
           else
-            kanikama.addGeoJSON(data[0])
+            kanikama.facilities_ = data[0]
 
       loadFloor(7)
     )
