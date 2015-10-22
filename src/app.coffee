@@ -6,12 +6,12 @@ view = new ol.View(
 
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
-kLayer = new Kanilayer()
 
+kLayer = new Kanilayer()
 kanikama = new Kanikama()
+kanimarker = null
 
 map = null
-kanimarker = null
 facilityTable = null
 
 window.alert = (s)->
@@ -73,28 +73,20 @@ loadFloor = (id)->
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
-  if device?.platform is 'Android' # Androidの場合は型を変換する
-    for b in beacons
-      b.major = Number(b.major)
-      b.minor = Number(b.minor)
   kanikama.push(beacons)
 
 initialize = ->
   if cordova.plugins.BluetoothStatus?
     cordova.plugins.BluetoothStatus.initPlugin();
 
-  # in app browser
   window.open = cordova.InAppBrowser.open
 
-  # コンパスを受け取る
-  compassSuccess = (heading)->
-    kanikama.heading = heading.magneticHeading
-    kanimarker.setHeading(parseInt(heading.magneticHeading))
-
-  compassError = (e)->
-    return
-
   if navigator.compass?
+    compassSuccess = (heading)->
+      kanikama.heading = heading.magneticHeading
+      kanimarker.setHeading(parseInt(heading.magneticHeading))
+    compassError = (e)->
+      return false
     navigator.compass.watchHeading(compassSuccess, compassError, frequency: 100)
 
   # イベントリスナ設定
@@ -128,10 +120,8 @@ initialize = ->
             facilityTable.table.reverse()
           else
             kanikama.facilities_ = data[0]
-
       loadFloor('7')
     )
-    return
 
   if navigator.connection? and navigator.connection.type is 'none'
     $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
@@ -144,10 +134,7 @@ initialize = ->
   return
 
 $(document).on('ready',
-
-  # fastclickを適用
   FastClick.attach(document.body)
-
   map = new ol.Map(
     layers: [
       new ol.layer.Tile(# 世界地図
@@ -207,8 +194,6 @@ $(document).on('ready',
         kanimarker.setPosition(null)
     else
       kanimarker.setPosition(null)
-
-
 
   # モード切り替え
   $('#position-mode').on 'click', ->
