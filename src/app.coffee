@@ -7,7 +7,7 @@ view = new ol.View(
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
 
-kLayer = new Kanilayer()
+kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 kanimarker = null
 
@@ -20,9 +20,9 @@ window.alert = (s)->
 # フロアを読み込む
 # @param id {String} フロアID
 loadFloor = (id)->
-  if kLayer.floorId != id
+  if kanilayer.floorId != id
     kanimarker.setPosition(null)
-    kLayer.setFloorId(id)
+    kanilayer.setFloorId(id)
     invalidatePositionButton()
 
 
@@ -144,7 +144,7 @@ $(document).on('ready',
         minResolution: 0.1
         maxResolution: 2000000
         preload: 3)
-      kLayer
+      kanilayer
     ]
     controls: []
     target: 'map'
@@ -185,7 +185,7 @@ $(document).on('ready',
   kanikama.on 'change:position',(p)->
     if kanikama.currentPosition isnt null
       # 表示中のフロアと同じフロアの時だけ現在地を表示する
-      if kanikama.currentFloor.id is kLayer.floorId
+      if kanikama.currentFloor.id is kanilayer.floorId
         latlng = [kanikama.currentPosition.latitude
                   kanikama.currentPosition.longitude]
         position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
@@ -207,8 +207,8 @@ $(document).on('ready',
     else
       if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
         showNotify('この機種は現在地を測定できません')
-        if kLayer.floorId
-          loadFloor(kLayer.floorId)
+        if kanilayer.floorId
+          loadFloor(kanilayer.floorId)
       else if not cordova.plugins.BluetoothStatus.BTenabled
         showNotify('BluetoothをONにしてください')
         if device.platform == 'Android'
@@ -216,7 +216,7 @@ $(document).on('ready',
       else
         floorChanged = false
         if kanikama.currentPosition isnt null
-          if kanikama.currentFloor.id != kLayer.floorId
+          if kanikama.currentFloor.id != kanilayer.floorId
             loadFloor(kanikama.currentFloor.id) # フロアが違う場合は切り替える
             floorChanged = true
         if floorChanged
@@ -277,7 +277,7 @@ showNotify = (message)->
 
 # 目的地を表示する
 navigateShelf = (floorId, shelfId)->
-  if floorId != kLayer.floorId
+  if floorId != kanilayer.floorId
     loadFloor(floorId)
-  kLayer.setTargetShelf(shelfId)
+  kanilayer.setTargetShelf(shelfId)
   $('.searchResult').fadeOut()
