@@ -6,7 +6,6 @@ view = new ol.View(
 
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
-centerAdjusted = false
 kLayer = new Kanilayer()
 
 kanikama = new Kanikama()
@@ -14,7 +13,6 @@ kanikama = new Kanikama()
 map = null
 kanimarker = null
 facilityTable = null
-lastFloor = null
 
 window.alert = (s)->
   console.log s
@@ -25,7 +23,6 @@ loadFloor = (id)->
   if kLayer.floorId != id
     kanimarker.setPosition(null)
     kLayer.setFloorId(id)
-    centerAdjusted = false
     invalidatePositionButton()
 
 
@@ -76,34 +73,11 @@ loadFloor = (id)->
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
-  # Android版でmajor, minorがStringで来る対策
-  if device?.platform is 'Android'
+  if device?.platform is 'Android' # Androidの場合は型を変換する
     for b in beacons
       b.major = Number(b.major)
       b.minor = Number(b.minor)
-
-  # 最新の現在地を調べる
   kanikama.push(beacons)
-
-  # フロアあり
-  if kanikama.currentFloor isnt null
-    # フロア切り替え発生
-    if lastFloor is null or kanikama.currentFloor.id isnt lastFloor.id
-      lastFloor = kanikama.currentFloor
-      loadFloor(kanikama.currentFloor.id)
-
-  # 現在地あり
-  if kanikama.currentPosition isnt null
-    # 表示中のフロアと同じフロアの時だけ現在地を表示する
-    if kanikama.currentFloor.id is kLayer.floorId
-      latlng = [kanikama.currentPosition.latitude
-                kanikama.currentPosition.longitude]
-      position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
-      kanimarker.setPosition(position, kanikama.accuracy)
-    else
-      kanimarker.setPosition(null) # 別のフロア todo フロアボタンを光らせる？ ユーザーへの通知
-  else
-    kanimarker.setPosition(null)
 
 initialize = ->
   if cordova.plugins.BluetoothStatus?
@@ -115,8 +89,7 @@ initialize = ->
   # コンパスを受け取る
   compassSuccess = (heading)->
     kanikama.heading = heading.magneticHeading
-    kanimarker.setDirection(parseInt(heading.magneticHeading)) # 小数点以下の変化は変更しない
-    return
+    kanimarker.setHeading(parseInt(heading.magneticHeading))
 
   compassError = (e)->
     return
@@ -201,48 +174,51 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
 
   invalidatePositionButton = ->
-    if not cordova.plugins.BluetoothStatus?
+    if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
       $('#position-mode').stop().fadeTo(200, 0.5)
-    else if not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
-      $('#position-mode').stop().fadeTo(200, 0.5)
-      if kanimarker.headingUp
-        kanimarker.setHeadingUp(false)
+      if kanimarker.mode=='headingup'
         map.getView().setRotation(0)
-        if kanimarker.position
-          map.getView().setCenter(kanimarker.position)
-      centerAdjusted = false
+      kanimarker.setMode('normal')
     else
       $('#position-mode').stop().fadeTo(200, 1)
-
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
-    if kanimarker.headingUp
+    if kanimarker.mode=='headingup'
       $('#position-mode').addClass('position-mode-heading')
-    else
-      if centerAdjusted
-        $('#position-mode').addClass('position-mode-center')
+    else if kanimarker.mode=='centered'
+      $('#position-mode').addClass('position-mode-center')
 
-  # 現在地に戻したあとマップを動かした
-  map.on 'pointerdrag', ->
-    if centerAdjusted
-      centerAdjusted = false
-      invalidatePositionButton()
-
-  # 追従モードが外れた時
-  kanimarker.on 'change:headingup', (headingup)->
+  kanimarker.on 'change:mode', (mode)->
     invalidatePositionButton()
+
+  kanikama.on 'change:floor',(floor)->
+    loadFloor(floor.id)
+
+  kanikama.on 'change:position',(p)->
+    if kanikama.currentPosition isnt null
+      # 表示中のフロアと同じフロアの時だけ現在地を表示する
+      if kanikama.currentFloor.id is kLayer.floorId
+        latlng = [kanikama.currentPosition.latitude
+                  kanikama.currentPosition.longitude]
+        position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
+        kanimarker.setPosition(position, kanikama.accuracy)
+      else
+        kanimarker.setPosition(null)
+    else
+      kanimarker.setPosition(null)
+
+
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if kanimarker.headingUp
-      kanimarker.setHeadingUp(false)
+    if kanimarker.mode=='headingup'
+      kanimarker.setMode('centered')
       map.getView().setRotation(homeRotationRadian)
       if kanimarker.position
         map.getView().setCenter(kanimarker.position)
-      centerAdjusted = true
-    else if centerAdjusted
-      kanimarker.setHeadingUp(true)
+    else if kanimarker.mode=='centered'
+      kanimarker.setMode('headingup')
     else
       if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
         showNotify('この機種は現在地を測定できません')
@@ -261,15 +237,13 @@ $(document).on('ready',
         if floorChanged
           setTimeout(=>
             if kanimarker.position isnt null
-              view.setCenter(kanimarker.position)
-              centerAdjusted = true
+              kanimarker.setMode('centered')
             else
               showNotify('現在地が取得できません')
           , 1200)
         else
           if kanimarker.position isnt null
-            view.setCenter(kanimarker.position)
-            centerAdjusted = true
+            kanimarker.setMode('centered')
           else
             showNotify('現在地が取得できません')
 
@@ -301,7 +275,8 @@ $(document).on('ready',
     invalidatePositionButton()
 
   $('#compass').on 'click', ->
-    kanimarker.setHeadingUp(false)
+    if kanimarker.mode=='headingup'
+       kanimarker.setMode('centered')
     rotation = view.getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
@@ -310,14 +285,6 @@ $(document).on('ready',
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     view.setRotation(0)
 )
-
-appTest_1f = ->
-  didRangeBeaconsInRegion.call(window,
-    [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 1}])
-
-appTest_2f = ->
-  didRangeBeaconsInRegion.call(window,
-    [{"major": 105, "uuid": "00000000-71C7-1001-B000-001C4D532518", "rssi": -60, "minor": 70}])
 
 showNotify = (message)->
   $('.notification').html(message)
@@ -329,4 +296,3 @@ navigateShelf = (floorId, shelfId)->
     loadFloor(floorId)
   kLayer.setTargetShelf(shelfId)
   $('.searchResult').fadeOut()
-  return
