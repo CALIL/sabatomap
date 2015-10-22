@@ -174,16 +174,13 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
 
   invalidatePositionButton = ->
-    if not cordova.plugins.BluetoothStatus?
-      $('#position-mode').stop().fadeTo(200, 0.5)
-    else if not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
+    if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
       $('#position-mode').stop().fadeTo(200, 0.5)
       if kanimarker.mode=='headingup'
         map.getView().setRotation(0)
       kanimarker.setMode('normal')
     else
       $('#position-mode').stop().fadeTo(200, 1)
-
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
