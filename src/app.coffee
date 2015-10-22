@@ -1,11 +1,11 @@
-view = new ol.View(
-  center: [15139450.747885207, 4163881.1440642904] # 初期状態で日本地図を出しておく
-  rotation: 3.1115421869123563
-  zoom: 6
-)
-
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
+
+view = new ol.View(
+  center: [15139450.747885207, 4163881.1440642904]
+  rotation: homeRotationRadian
+  zoom: 6
+)
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
@@ -24,7 +24,6 @@ loadFloor = (id)->
     kanimarker.setPosition(null)
     kanilayer.setFloorId(id)
     invalidatePositionButton()
-
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
@@ -97,9 +96,7 @@ initialize = ->
     delegate.didRangeBeaconsInRegion = ({beacons}) ->
       didRangeBeaconsInRegion.apply(window, [beacons]) # thisが変わってしまうのでapplyで変える
     locationManager.setDelegate(delegate)
-
-    # レンジング開始
-    region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518')
+    region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
     locationManager.startRangingBeaconsInRegion(region).fail(alert)
 
   # スプラッシュスクリーンを非表示
@@ -159,7 +156,6 @@ $(document).on('ready',
   view.fit(homeExtent, map.getSize())
 
   # マーカーとモード切り替えボタン
-
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
       $('#position-mode').stop().fadeTo(200, 0.5)
@@ -183,15 +179,12 @@ $(document).on('ready',
     loadFloor(floor.id)
 
   kanikama.on 'change:position',(p)->
-    if kanikama.currentPosition isnt null
-      # 表示中のフロアと同じフロアの時だけ現在地を表示する
-      if kanikama.currentFloor.id is kanilayer.floorId
-        latlng = [kanikama.currentPosition.latitude
-                  kanikama.currentPosition.longitude]
-        position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
-        kanimarker.setPosition(position, kanikama.accuracy)
-      else
-        kanimarker.setPosition(null)
+    # 表示中のフロアと同じフロアの時だけ現在地を表示する
+    if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
+      latlng = [kanikama.currentPosition.latitude
+                kanikama.currentPosition.longitude]
+      position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
+      kanimarker.setPosition(position, kanikama.accuracy)
     else
       kanimarker.setPosition(null)
 
