@@ -117,20 +117,11 @@ initialize = ->
       navigator.splashscreen.hide()
     , 2000)
 
-  loadGeoJSON = ->
-    $.getJSON('data/sabae.json', (data)->
-      kanikama.facilities_ = data
-      loadFloor('7')
-    )
-
   if navigator.connection? and navigator.connection.type is 'none'
     $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
     document.addEventListener('online', ->
       $('.offline').stop().slideUp('fast')
-      loadGeoJSON()
     , false)
-  else
-    loadGeoJSON()
   return
 
 $(document).on('ready',
@@ -265,6 +256,11 @@ $(document).on('ready',
       rotation -= 2 * Math.PI
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     view.setRotation(0)
+
+  $.getJSON('data/sabae.json', (data)->
+    kanikama.facilities_ = data
+    loadFloor('7')
+  )
 )
 
 showNotify = (message)->
