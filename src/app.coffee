@@ -12,10 +12,24 @@ kanikama = new Kanikama()
 kanimarker = null
 
 map = null
-facilityTable = null
 
 window.alert = (s)->
   console.log s
+
+# フロアボタンを作成
+createButton = (floors, activeId)->
+  $('#floor-button').empty()
+  floors.sort((a, b)-> Number(b.label) - Number(a.label))
+  for floor in floors
+    $('<div/>',
+      class: 'button'
+      text: floor.label
+      floorId: floor.id
+      on:
+        click: ->
+          loadFloor($(this).attr('floorId'))
+    ).appendTo('#floor-button')
+  $('#' + activeId).addClass('active')
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -24,6 +38,15 @@ loadFloor = (id)->
     kanimarker.setPosition(null)
     kanilayer.setFloorId(id)
     invalidatePositionButton()
+
+  # 施設が1つなら自動的に選ぶ
+  if kanikama.facilities_.length is 1
+    createButton(kanikama.facilities_[0].floors, id)
+  else
+    if kanikama.currentFacility isnt null
+      createButton(kanikama.currentFacility.floors, id)
+    else
+      # todo 施設がない場合は施設選択が必要
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
@@ -58,17 +81,6 @@ loadFloor = (id)->
     map.beforeRender(zoom)
     view.fit(homeExtent, map.getSize())
   , 100)
-
-  # フロアボタンを表示
-  button = $('#floor-button')
-  button.empty()
-  if facilityTable.table.length > 1
-    for floor in facilityTable.table
-      button.append("""<div class="button" id="#{floor.floor_id}">#{floor.label}</div>""")
-      $('#' + floor.floor_id).on 'click', ->
-        id_ = $(this).attr('id')
-        loadFloor(id_)
-    $('#' + id).addClass('active')
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
@@ -106,17 +118,8 @@ initialize = ->
     , 2000)
 
   loadGeoJSON = ->
-    $.when(
-      $.getJSON('https://app.haika.io/api/facility/7')
-      $.getJSON('data/sabae.json')
-    ).done(->
-      for data in arguments
-        if data[1] is 'success'
-          if data[0].table?
-            facilityTable = data[0]
-            facilityTable.table.reverse()
-          else
-            kanikama.facilities_ = data[0]
+    $.getJSON('data/sabae.json', (data)->
+      kanikama.facilities_ = data
       loadFloor('7')
     )
 
