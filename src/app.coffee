@@ -32,19 +32,19 @@ createButton = (floors, activeId)->
   $('#' + activeId).addClass('active')
 
 # フロアを読み込む
-# @param id {String} フロアID
-loadFloor = (id)->
-  if kanilayer.floorId != id
+# @param newFloorId {String} フロアID
+loadFloor = (newFloorId)->
+  if kanilayer.floorId != newFloorId
     kanimarker.setPosition(null)
-    kanilayer.setFloorId(id)
+    kanilayer.setFloorId(newFloorId)
     invalidatePositionButton()
 
   # 施設が1つなら自動的に選ぶ
   if kanikama.facilities_.length is 1
-    createButton(kanikama.facilities_[0].floors, id)
+    createButton(kanikama.facilities_[0].floors, newFloorId)
   else
     if kanikama.currentFacility isnt null
-      createButton(kanikama.currentFacility.floors, id)
+      createButton(kanikama.currentFacility.floors, newFloorId)
     else
       # todo 施設がない場合は施設選択が必要
 
