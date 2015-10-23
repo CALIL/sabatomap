@@ -1,12 +1,6 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = 3.1115421869123563
 
-view = new ol.View(
-  center: [15139450.747885207, 4163881.1440642904]
-  rotation: homeRotationRadian
-  zoom: 6
-)
-
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 kanimarker = null
@@ -51,7 +45,7 @@ loadFloor = (newFloorId)->
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
-    oldAngle = (view.getRotation() * 180 / Math.PI ) % 360
+    oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
     if oldAngle < 0
       oldAngle += 360
     newAngle = (homeRotationRadian * 180 / Math.PI) % 360
@@ -73,14 +67,14 @@ loadFloor = (newFloorId)->
 
     # 回転
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
-    view.setRotation(virtualAngle * Math.PI / 180)
+    map.getView().setRotation(virtualAngle * Math.PI / 180)
 
     # geojsonサイズにフィットさせる
-    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: view.getCenter())
+    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
     map.beforeRender(pan)
     zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
     map.beforeRender(zoom)
-    view.fit(homeExtent, map.getSize())
+    map.getView().fit(homeExtent, map.getSize())
   , 100)
 
 # ビーコンを処理
@@ -143,12 +137,16 @@ $(document).on('ready',
     maxZoom: 26
     minZoom: 18
     logo: false
-    view: view
+    view: new ol.View(
+      center: [15139450.747885207, 4163881.1440642904]
+      rotation: homeRotationRadian
+      zoom: 6
+    )
   )
   kanimarker = new Kanimarker(map)
 
   # 鯖江図書館のサイズに合わせる
-  view.fit(homeExtent, map.getSize())
+  map.getView().fit(homeExtent, map.getSize())
 
   # マーカーとモード切り替えボタン
   invalidatePositionButton = ->
@@ -235,10 +233,10 @@ $(document).on('ready',
       $('#compass').css('transform', "rotate(#{deg}deg)")
       $('#compass').removeClass('ol-hidden')
 
-  view.on 'change:rotation', ->
+  map.getView().on 'change:rotation', ->
     invalidateCompass(@)
 
-  view.on 'change:resolution', ->
+  map.getView().on 'change:resolution', ->
     invalidateCompass(@)
 
   window.addEventListener 'BluetoothStatus.enabled', ->
@@ -250,13 +248,13 @@ $(document).on('ready',
   $('#compass').on 'click', ->
     if kanimarker.mode=='headingup'
        kanimarker.setMode('centered')
-    rotation = view.getRotation()
+    rotation = map.getView().getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
     while rotation > Math.PI
       rotation -= 2 * Math.PI
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
-    view.setRotation(0)
+    map.getView().setRotation(0)
 
   $.getJSON('data/sabae.json', (data)->
     kanikama.facilities_ = data
