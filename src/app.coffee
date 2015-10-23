@@ -23,13 +23,14 @@ createButton = (floors, activeId)->
   for floor in floors
     $('<div/>',
       class: 'button'
+      id: 'floor' + floor.id
       text: floor.label
       floorId: floor.id
       on:
         click: ->
           loadFloor($(this).attr('floorId'))
     ).appendTo('#floor-button')
-  $('#' + activeId).addClass('active')
+  $('#floor' + activeId).addClass('active')
 
 # フロアを読み込む
 # @param newFloorId {String} フロアID
