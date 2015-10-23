@@ -11,7 +11,7 @@ window.alert = (s)->
   console.log s
 
 # フロアボタンを作成
-createButton = (floors, activeId)->
+createFloorButton = (floors, activeId)->
   $('#floor-button').empty()
   floors.sort((a, b)-> Number(b.label) - Number(a.label))
   for floor in floors
@@ -36,10 +36,10 @@ loadFloor = (newFloorId)->
 
   # 施設が1つなら自動的に選ぶ
   if kanikama.facilities_.length is 1
-    createButton(kanikama.facilities_[0].floors, newFloorId)
+    createFloorButton(kanikama.facilities_[0].floors, newFloorId)
   else
     if kanikama.currentFacility isnt null
-      createButton(kanikama.currentFacility.floors, newFloorId)
+      createFloorButton(kanikama.currentFacility.floors, newFloorId)
     else
       # todo 施設がない場合は施設選択が必要
 
