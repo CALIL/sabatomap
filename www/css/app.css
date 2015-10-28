@@ -77,23 +77,30 @@ html, body, #map {
     box-sizing: content-box;
     padding: 10px;
     opacity: 0.5;
-    background-size: 32px;
 }
 
 .position-mode-normal {
-    background: rgba(255, 255, 255, 0.96) url(../img/target.svg);
+    background-size: 32px;
+    background-image: url(../img/target.svg);
+    background-color: rgba(255, 255, 255, 0.96);
 }
 
 .position-mode-center {
-    background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg);
+    background-size: 32px;
+    background-image: url(../img/target-white.svg);
+    background-color: rgba(56, 149, 255, 0.85);
 }
 
 .position-mode-heading {
-    background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg);
+    background-size: 32px;
+    background-image: url(../img/navigation.svg);
+    background-color: rgba(56, 149, 255, 0.85);
 }
 
 .position-mode-wait {
-    background: rgba(255, 255, 255, 0.96) url(../img/spinner.svg);
+    background-size: 32px;
+    background-image: url(../img/spinner.svg);
+    background-color: rgba(255, 255, 255, 0.96);
 }
 #compass {
     height: 48px;
