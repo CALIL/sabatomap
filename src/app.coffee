@@ -206,7 +206,7 @@ $(document).on('ready',
       if waitingPosition == 1 and kanikama.currentPosition is null
         showNotify('現在地が取得できませんでした')
         invalidatePositionButton()
-      if waitingPosition > 1
+      if waitingPosition >= 1
         waitingPosition--
     , 6000)
 
