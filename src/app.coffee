@@ -207,7 +207,6 @@ $(document).on('ready',
         kanimarker.setPosition(null)
 
   waitPosition = ->
-    showNotify('現在地が取得しています')
     positionChangeWaiting = true
     if positionWaitTimer
       clearTimeout(positionWaitTimer)
