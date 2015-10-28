@@ -4,7 +4,6 @@ homeRotationRadian = 3.1115421869123563
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 kanimarker = null
-
 map = null
 
 waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
@@ -15,7 +14,6 @@ window.alert = (s)->
 # フロアボタンを作成
 createFloorButton = (floors, activeId)->
   $('#floor-button').empty()
-  floors.sort((a, b)-> Number(b.label) - Number(a.label))
   for floor in floors
     $('<div/>',
       class: 'button'
@@ -105,8 +103,9 @@ initialize = ->
       navigator.splashscreen.hide()
     , 2000
 
+  # オフラインメッセージの表示
   if navigator.connection? and navigator.connection.type is 'none'
-    $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
+    $('.offline').stop().slideDown('fast')
     document.addEventListener('online', ->
       $('.offline').stop().slideUp('fast')
     , false)
@@ -143,24 +142,20 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
-      $('#position-mode').stop().fadeTo(200, 0.5)
-      if kanimarker.mode == 'headingup'
-        map.getView().setRotation(0)
       kanimarker.setMode('normal')
+      $('#position-mode').stop().fadeTo(200, 0.5)
     else
       $('#position-mode').stop().fadeTo(200, 1)
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
     $('#position-mode').removeClass('position-mode-wait')
-
     if waitingPosition
       $('#position-mode').addClass('position-mode-wait')
-    else
-      if kanimarker.mode == 'headingup'
-        $('#position-mode').addClass('position-mode-heading')
-      else if kanimarker.mode == 'centered'
-        $('#position-mode').addClass('position-mode-center')
+    else if kanimarker.mode == 'headingup'
+      $('#position-mode').addClass('position-mode-heading')
+    else if kanimarker.mode == 'centered'
+      $('#position-mode').addClass('position-mode-center')
 
   kanimarker.on 'change:mode', (mode)->
     invalidatePositionButton()
@@ -233,15 +228,6 @@ $(document).on('ready',
       $('#compass').css('transform', "rotate(#{deg}deg)")
       $('#compass').removeClass('ol-hidden')
 
-  map.getView().on 'change:rotation', ->
-    invalidateCompass(@)
-
-  map.getView().on 'change:resolution', ->
-    invalidateCompass(@)
-
-  window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
-  window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
-
   $('#compass').on 'click', ->
     kanimarker.setMode('normal')
     rotation = map.getView().getRotation()
@@ -251,6 +237,15 @@ $(document).on('ready',
       rotation -= 2 * Math.PI
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     map.getView().setRotation(0)
+
+  map.getView().on 'change:rotation', ->
+    invalidateCompass(@)
+
+  map.getView().on 'change:resolution', ->
+    invalidateCompass(@)
+
+  window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
+  window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
 
   $.getJSON 'data/sabae.json', (data)->
     kanikama.facilities_ = data

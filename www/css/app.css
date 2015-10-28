@@ -36,39 +36,6 @@ html, body, #map {
     color: #fff;
 }
 
-.ui-button {
-    -webkit-user-select: none;
-    user-select: none;
-    height: 48px;
-    width: 48px;
-    border-radius: 50%;
-    border: 1px solid rgba(83, 83, 83, 0.25);
-    background: rgba(255, 255, 255, 0.80) no-repeat center;
-    pointer-events: auto;
-}
-
-#debug-buttons {
-    position: absolute;
-    top: 24px;
-    width: auto;
-    pointer-events: none;
-}
-
-@media (min-width: 1080px) {
-    #debug-buttons {
-        top: 10px;
-    }
-}
-
-#debug-buttons .ui-button {
-    float: left;
-    margin-left: 10px;
-}
-
-#debug-buttons #reload {
-    background-image: url(../img/reload.svg);
-}
-
 #position-mode {
     position: absolute;
     right: 0;
@@ -77,30 +44,23 @@ html, body, #map {
     box-sizing: content-box;
     padding: 10px;
     opacity: 0.5;
+    background-size: 32px;
 }
 
 .position-mode-normal {
-    background-size: 32px;
-    background-image: url(../img/target.svg);
-    background-color: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.96) url(../img/target.svg);
 }
 
 .position-mode-center {
-    background-size: 32px;
-    background-image: url(../img/target-white.svg);
-    background-color: rgba(56, 149, 255, 0.85);
+    background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg);
 }
 
 .position-mode-heading {
-    background-size: 32px;
-    background-image: url(../img/navigation.svg);
-    background-color: rgba(56, 149, 255, 0.85);
+    background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg);
 }
 
 .position-mode-wait {
-    background-size: 32px;
-    background-image: url(../img/spinner.svg);
-    background-color: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.96) url(../img/spinner.svg);
 }
 #compass {
     height: 48px;
@@ -114,9 +74,7 @@ html, body, #map {
     user-select: none;
     position: absolute;
     border-radius: 50%;
-    background-image: url(../img/compass.svg);
-    background-repeat: no-repeat;
-    background-position: center;
+    background: url(../img/compass.svg) no-repeat center;
     background-size: 38px;
 }
 
