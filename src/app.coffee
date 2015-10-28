@@ -198,12 +198,12 @@ $(document).on('ready',
   waitPosition = ->
     waitingPosition++
     setTimeout(->
-      if waitingPosition == 1 and kanikama.currentPosition is null
+      if waitingPosition > 0
+        waitingPosition--
+      if waitingPosition is 0 and kanikama.currentPosition is null
         showNotify('現在地が取得できませんでした')
         invalidatePositionButton()
-      if waitingPosition >= 1
-        waitingPosition--
-    , 6000)
+    , 4000)
 
   # モード切り替え
   $('#position-mode').on 'click', ->
@@ -224,23 +224,18 @@ $(document).on('ready',
         if device.platform == 'Android'
           cordova.plugins.BluetoothStatus.promptForBT()
       else
-        floorChanged = false
-        if kanikama.currentPosition isnt null
-          if kanikama.currentFloor.id != kanilayer.floorId
-            loadFloor(kanikama.currentFloor.id) # フロアが違う場合は切り替える
-            floorChanged = true
-        if floorChanged
-          setTimeout(=>
-            if kanimarker.position isnt null
-              kanimarker.setMode('centered')
-            else
-              waitPosition()
-          , 1200)
-        else
-          if kanimarker.position isnt null
+        # 現在地が不明な場合は待つ
+        if kanikama.currentPosition is null
+          waitPosition()
+        # フロアが違う場合はフロアを切り替える
+        else if kanikama.currentFloor.id != kanilayer.floorId
+          loadFloor(kanikama.currentFloor.id)
+          setTimeout ->
             kanimarker.setMode('centered')
-          else
-            waitPosition()
+          , 1200
+        # そのほかの場合はcenteredモードに切り替える
+        else
+          kanimarker.setMode('centered')
 
     invalidatePositionButton()
 
