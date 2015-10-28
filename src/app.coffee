@@ -34,18 +34,10 @@ loadFloor = (newFloorId)->
   if kanilayer.floorId != newFloorId
     kanimarker.setPosition(null)
     kanilayer.setFloorId(newFloorId)
-    invalidatePositionButton()
 
-  # 施設が1つなら自動的に選ぶ
-  if kanikama.facilities_.length is 1
-    createFloorButton(kanikama.facilities_[0].floors, newFloorId)
-  else
-    if kanikama.currentFacility isnt null
-      createFloorButton(kanikama.currentFacility.floors, newFloorId)
-    else
-      # todo 施設がない場合は施設選択が必要
+  createFloorButton(kanikama.facilities_[0].floors, newFloorId)
 
-      # 画面をgeojsonサイズにフィットさせる
+  # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
     oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
     if oldAngle < 0
@@ -179,14 +171,12 @@ $(document).on('ready',
     loadFloor(floor.id)
 
   kanikama.on 'change:position', (p)->
-    if waitingPosition
-      if kanikama.currentFloor.id isnt kanilayer.floorId
-        loadFloor(kanikama.currentFloor.id)
+    if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
+      loadFloor(kanikama.currentFloor.id)
 
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
-    if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
-      position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
-      kanimarker.setPosition(position, p.accuracy)
+    if kanikama.currentFloor.id is kanilayer.floorId and p isnt null
+      kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
     else
       kanimarker.setPosition(null)
 
