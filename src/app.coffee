@@ -185,6 +185,11 @@ $(document).on('ready',
 
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
     if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
+      if p.accuracy >= 6
+        kanimarker.moveDuration = 10000
+      else
+        kanimarker.moveDuration = 2000
+
       position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
       kanimarker.setPosition(position, p.accuracy)
     else
