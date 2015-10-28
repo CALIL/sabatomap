@@ -9,13 +9,6 @@ var searchSetting = {
             "libid": 100622,
             "params": {"prefix": "", "systemid": "Fukui_Sabae"},
             "clickHandler":  function (data) {
-                //if (typeof data.shelfId != 'undefined') {
-                //    kLayer.setFloorId(data.floorId);
-                //    kLayer.setTargetShelf(data.shelfId);
-                //    //setVectorPoint(data.floorId, data.shelfId);
-                //}else{
-                //    kLayer.setTargetShelf(null);
-                //}
             }
         }
     ]
