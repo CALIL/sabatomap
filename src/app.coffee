@@ -30,12 +30,11 @@ createFloorButton = (floors, activeId)->
 
 # フロアを読み込む
 # @param newFloorId {String} フロアID
-loadFloor = (newFloorId)->
-  if kanilayer.floorId != newFloorId
+loadFloor = (id)->
+  if kanilayer.floorId != id
     kanimarker.setPosition(null)
-    kanilayer.setFloorId(newFloorId)
-
-  createFloorButton(kanikama.facilities_[0].floors, newFloorId)
+    kanilayer.setFloorId(id)
+    createFloorButton(kanikama.facilities_[0].floors, id)
 
   # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
@@ -77,7 +76,7 @@ didRangeBeaconsInRegion = (beacons)->
 
 initialize = ->
   if cordova.plugins.BluetoothStatus?
-    cordova.plugins.BluetoothStatus.initPlugin();
+    cordova.plugins.BluetoothStatus.initPlugin()
 
   window.open = cordova.InAppBrowser.open
 
@@ -102,16 +101,15 @@ initialize = ->
 
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
-    setTimeout(->
+    setTimeout ->
       navigator.splashscreen.hide()
-    , 2000)
+    , 2000
 
   if navigator.connection? and navigator.connection.type is 'none'
     $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
     document.addEventListener('online', ->
       $('.offline').stop().slideUp('fast')
     , false)
-  return
 
 $(document).on('ready',
   FastClick.attach(document.body)
@@ -173,28 +171,26 @@ $(document).on('ready',
   kanikama.on 'change:position', (p)->
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
       loadFloor(kanikama.currentFloor.id)
-
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
     if kanikama.currentFloor.id is kanilayer.floorId and p isnt null
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
+      if waitingPosition
+        waitingPosition = 0
+        kanimarker.setMode('centered')
     else
       kanimarker.setPosition(null)
-
-    if waitingPosition
-      waitingPosition = 0
-      kanimarker.setMode('centered')
-      invalidatePositionButton()
 
   waitPosition = ->
     waitingPosition++
     invalidatePositionButton()
-    setTimeout(->
+    setTimeout ->
       if waitingPosition > 0
         waitingPosition--
-      if waitingPosition is 0 and kanikama.currentPosition is null
-        showNotify('現在地が取得できませんでした')
+      if waitingPosition is 0
+        if kanikama.currentPosition is null
+          showNotify('現在地が取得できませんでした')
         invalidatePositionButton()
-    , 4000)
+    , 4000
 
   # モード切り替え
   $('#position-mode').on 'click', ->
@@ -209,20 +205,20 @@ $(document).on('ready',
           if kanilayer.floorId
             loadFloor(kanilayer.floorId)
         else if not cordova.plugins.BluetoothStatus.BTenabled
-          showNotify('BluetoothをONにしてください')
           if device.platform == 'Android'
             cordova.plugins.BluetoothStatus.promptForBT()
-        else
-          # 現在地が不明な場合は待つ
-          if kanikama.currentPosition is null
-            waitPosition()
-          # フロアが違う場合はフロアを切り替える
-          else if kanikama.currentFloor.id != kanilayer.floorId
-            loadFloor(kanikama.currentFloor.id)
-            waitPosition()
-          # そのほかの場合はcenteredモードに切り替える
           else
-            kanimarker.setMode('centered')
+            showNotify('BluetoothをONにしてください')
+        # 現在地が不明な場合は待つ
+        else if kanikama.currentPosition is null
+          waitPosition()
+        # フロアが違う場合はフロアを切り替える
+        else if kanikama.currentFloor.id != kanilayer.floorId
+          loadFloor(kanikama.currentFloor.id)
+          waitPosition()
+        # centeredモードに切り替える
+        else
+          kanimarker.setMode('centered')
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
