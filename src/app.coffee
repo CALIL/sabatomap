@@ -7,6 +7,9 @@ kanimarker = null
 
 map = null
 
+positionChangeWaiting = false
+positionWaitTimer = null
+
 window.alert = (s)->
   console.log s
 
@@ -160,10 +163,15 @@ $(document).on('ready',
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
-    if kanimarker.mode=='headingup'
-      $('#position-mode').addClass('position-mode-heading')
-    else if kanimarker.mode=='centered'
-      $('#position-mode').addClass('position-mode-center')
+    $('#position-mode').removeClass('position-mode-wait')
+
+    if positionChangeWaiting
+      $('#position-mode').addClass('position-mode-wait')
+    else
+      if kanimarker.mode=='headingup'
+        $('#position-mode').addClass('position-mode-heading')
+      else if kanimarker.mode=='centered'
+        $('#position-mode').addClass('position-mode-center')
 
   kanimarker.on 'change:mode', (mode)->
     invalidatePositionButton()
@@ -172,14 +180,43 @@ $(document).on('ready',
     loadFloor(floor.id)
 
   kanikama.on 'change:position',(p)->
-    # 表示中のフロアと同じフロアの時だけ現在地を表示する
-    if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
-      latlng = [kanikama.currentPosition.latitude
-                kanikama.currentPosition.longitude]
-      position = ol.proj.transform(latlng, 'EPSG:4326', 'EPSG:3857')
-      kanimarker.setPosition(position, kanikama.accuracy)
+    # ウエイト中なら強制的に現在地に移動
+    if positionChangeWaiting
+      if positionWaitTimer
+        clearTimeout(positionWaitTimer)
+      positionChangeWaiting = false
+      if kanikama.currentFloor.id isnt kanilayer.floorId
+        loadFloor(kanikama.currentFloor.id)
+        setTimeout(->
+          position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
+          kanimarker.setPosition(position, p.accuracy)
+          kanimarker.setMode('centered')
+          invalidatePositionButton()
+        , 1000)
+      else
+        position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
+        kanimarker.setPosition(position, p.accuracy)
+        kanimarker.setMode('centered')
+        invalidatePositionButton()
     else
-      kanimarker.setPosition(null)
+      # 表示中のフロアと同じフロアの時だけ現在地を表示する
+      if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
+        position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
+        kanimarker.setPosition(position, p.accuracy)
+      else
+        kanimarker.setPosition(null)
+
+  waitPosition = ->
+    showNotify('現在地が取得しています')
+    positionChangeWaiting = true
+    if positionWaitTimer
+      clearTimeout(positionWaitTimer)
+    positionWaitTimer = setTimeout(->
+      if kanikama.currentPosition is null
+        showNotify('現在地が取得できません')
+      positionChangeWaiting = false
+      invalidatePositionButton()
+    , 6000)
 
   # モード切り替え
   $('#position-mode').on 'click', ->
@@ -210,13 +247,13 @@ $(document).on('ready',
             if kanimarker.position isnt null
               kanimarker.setMode('centered')
             else
-              showNotify('現在地が取得できません')
+              waitPosition()
           , 1200)
         else
           if kanimarker.position isnt null
             kanimarker.setMode('centered')
           else
-            showNotify('現在地が取得できません')
+            waitPosition()
 
     invalidatePositionButton()
 
