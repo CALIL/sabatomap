@@ -209,14 +209,14 @@ $(document).on('ready',
             cordova.plugins.BluetoothStatus.promptForBT()
           else
             showNotify('BluetoothをONにしてください')
-        # 現在地が不明な場合は待つ
+          # 現在地が不明な場合は待つ
         else if kanikama.currentPosition is null
           waitPosition()
-        # フロアが違う場合はフロアを切り替える
+          # フロアが違う場合はフロアを切り替える
         else if kanikama.currentFloor.id != kanilayer.floorId
           loadFloor(kanikama.currentFloor.id)
           waitPosition()
-        # centeredモードに切り替える
+          # centeredモードに切り替える
         else
           kanimarker.setMode('centered')
 
@@ -239,11 +239,8 @@ $(document).on('ready',
   map.getView().on 'change:resolution', ->
     invalidateCompass(@)
 
-  window.addEventListener 'BluetoothStatus.enabled', ->
-    invalidatePositionButton()
-
-  window.addEventListener 'BluetoothStatus.disabled', ->
-    invalidatePositionButton()
+  window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
+  window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
 
   $('#compass').on 'click', ->
     kanimarker.setMode('normal')
@@ -255,10 +252,9 @@ $(document).on('ready',
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     map.getView().setRotation(0)
 
-  $.getJSON('data/sabae.json', (data)->
+  $.getJSON 'data/sabae.json', (data)->
     kanikama.facilities_ = data
     loadFloor('7')
-  )
 )
 
 showNotify = (message)->
