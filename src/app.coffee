@@ -40,7 +40,6 @@ loadFloor = (id)->
     if oldAngle < 0
       oldAngle += 360
     newAngle = (homeRotationRadian * 180 / Math.PI) % 360
-
     # アニメーションのための仮想的な角度を計算
     # 左回りの場合はマイナスの値をとる場合がある
     if newAngle > oldAngle
@@ -142,7 +141,7 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
-      kanimarker.setMode('normal')
+      kanimarker.setMode 'normal'
       $('#position-mode').stop().fadeTo(200, 0.5)
     else
       $('#position-mode').stop().fadeTo(200, 1)
@@ -171,7 +170,7 @@ $(document).on('ready',
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
       if waitingPosition
         waitingPosition = 0
-        kanimarker.setMode('centered')
+        kanimarker.setMode 'centered'
     else
       kanimarker.setPosition(null)
 
@@ -191,9 +190,9 @@ $(document).on('ready',
   $('#position-mode').on 'click', ->
     switch kanimarker.mode
       when 'headingup'
-        kanimarker.setMode('centered')
+        kanimarker.setMode 'centered'
       when 'centered'
-        kanimarker.setMode('headingup')
+        kanimarker.setMode 'headingup'
       when 'normal'
         if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
           showNotify('この機種は現在地を測定できません')
@@ -213,7 +212,7 @@ $(document).on('ready',
           waitPosition()
           # centeredモードに切り替える
         else
-          kanimarker.setMode('centered')
+          kanimarker.setMode 'centered'
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
@@ -229,7 +228,7 @@ $(document).on('ready',
       $('#compass').removeClass('ol-hidden')
 
   $('#compass').on 'click', ->
-    kanimarker.setMode('normal')
+    kanimarker.setMode 'normal'
     rotation = map.getView().getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
