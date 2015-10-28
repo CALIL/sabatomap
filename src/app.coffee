@@ -8,7 +8,6 @@ kanimarker = null
 map = null
 
 positionChangeWaiting = false
-positionWaitTimer = null
 
 window.alert = (s)->
   console.log s
@@ -180,41 +179,31 @@ $(document).on('ready',
     loadFloor(floor.id)
 
   kanikama.on 'change:position',(p)->
-    # ウエイト中なら強制的に現在地に移動
     if positionChangeWaiting
-      if positionWaitTimer
-        clearTimeout(positionWaitTimer)
-      positionChangeWaiting = false
       if kanikama.currentFloor.id isnt kanilayer.floorId
         loadFloor(kanikama.currentFloor.id)
-        setTimeout(->
-          position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
-          kanimarker.setPosition(position, p.accuracy)
-          kanimarker.setMode('centered')
-          invalidatePositionButton()
-        , 1000)
-      else
-        position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
-        kanimarker.setPosition(position, p.accuracy)
-        kanimarker.setMode('centered')
-        invalidatePositionButton()
-    else
-      # 表示中のフロアと同じフロアの時だけ現在地を表示する
-      if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
-        position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
-        kanimarker.setPosition(position, p.accuracy)
-      else
-        kanimarker.setPosition(null)
 
+    # 表示中のフロアと同じフロアの時だけ現在地を表示する
+    if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
+      position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
+      kanimarker.setPosition(position, p.accuracy)
+    else
+      kanimarker.setPosition(null)
+
+    if positionChangeWaiting
+      positionChangeWaiting = false
+      kanimarker.setMode('centered')
+      invalidatePositionButton()
+
+  timer_ = null
   waitPosition = ->
     positionChangeWaiting = true
-    if positionWaitTimer
-      clearTimeout(positionWaitTimer)
-    positionWaitTimer = setTimeout(->
-      if kanikama.currentPosition is null
-        showNotify('現在地が取得できません')
-      positionChangeWaiting = false
-      invalidatePositionButton()
+    clearTimeout(timer_)
+    timer_ = setTimeout(->
+      if positionChangeWaiting and kanikama.currentPosition is null
+        showNotify('現在地が取得できませんでした')
+        positionChangeWaiting = false
+        invalidatePositionButton()
     , 6000)
 
   # モード切り替え
