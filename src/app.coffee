@@ -230,9 +230,7 @@ $(document).on('ready',
         # フロアが違う場合はフロアを切り替える
         else if kanikama.currentFloor.id != kanilayer.floorId
           loadFloor(kanikama.currentFloor.id)
-          setTimeout ->
-            kanimarker.setMode('centered')
-          , 1200
+          waitPosition()
         # そのほかの場合はcenteredモードに切り替える
         else
           kanimarker.setMode('centered')
