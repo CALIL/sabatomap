@@ -197,6 +197,7 @@ $(document).on('ready',
 
   waitPosition = ->
     waitingPosition++
+    invalidatePositionButton()
     setTimeout(->
       if waitingPosition > 0
         waitingPosition--
@@ -207,35 +208,31 @@ $(document).on('ready',
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if kanimarker.mode == 'headingup'
-      kanimarker.setMode('centered')
-      map.getView().setRotation(homeRotationRadian)
-      if kanimarker.position
-        map.getView().setCenter(kanimarker.position)
-    else if kanimarker.mode == 'centered'
-      kanimarker.setMode('headingup')
-    else
-      if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
-        showNotify('この機種は現在地を測定できません')
-        if kanilayer.floorId
-          loadFloor(kanilayer.floorId)
-      else if not cordova.plugins.BluetoothStatus.BTenabled
-        showNotify('BluetoothをONにしてください')
-        if device.platform == 'Android'
-          cordova.plugins.BluetoothStatus.promptForBT()
-      else
-        # 現在地が不明な場合は待つ
-        if kanikama.currentPosition is null
-          waitPosition()
-        # フロアが違う場合はフロアを切り替える
-        else if kanikama.currentFloor.id != kanilayer.floorId
-          loadFloor(kanikama.currentFloor.id)
-          waitPosition()
-        # そのほかの場合はcenteredモードに切り替える
+    switch kanimarker.mode
+      when 'headingup'
+        kanimarker.setMode('centered')
+      when 'centered'
+        kanimarker.setMode('headingup')
+      when 'normal'
+        if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
+          showNotify('この機種は現在地を測定できません')
+          if kanilayer.floorId
+            loadFloor(kanilayer.floorId)
+        else if not cordova.plugins.BluetoothStatus.BTenabled
+          showNotify('BluetoothをONにしてください')
+          if device.platform == 'Android'
+            cordova.plugins.BluetoothStatus.promptForBT()
         else
-          kanimarker.setMode('centered')
-
-    invalidatePositionButton()
+          # 現在地が不明な場合は待つ
+          if kanikama.currentPosition is null
+            waitPosition()
+          # フロアが違う場合はフロアを切り替える
+          else if kanikama.currentFloor.id != kanilayer.floorId
+            loadFloor(kanikama.currentFloor.id)
+            waitPosition()
+          # そのほかの場合はcenteredモードに切り替える
+          else
+            kanimarker.setMode('centered')
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
