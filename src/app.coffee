@@ -195,7 +195,6 @@ $(document).on('ready',
       kanimarker.setMode('centered')
       invalidatePositionButton()
 
-  timer_ = null
   waitPosition = ->
     waitingPosition++
     setTimeout(->
