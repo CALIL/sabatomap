@@ -36,6 +36,39 @@ html, body, #map {
     color: #fff;
 }
 
+.ui-button {
+    -webkit-user-select: none;
+    user-select: none;
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(83, 83, 83, 0.25);
+    background: rgba(255, 255, 255, 0.80) no-repeat center;
+    pointer-events: auto;
+}
+
+#debug-buttons {
+    position: absolute;
+    top: 24px;
+    width: auto;
+    pointer-events: none;
+}
+
+@media (min-width: 1080px) {
+    #debug-buttons {
+        top: 10px;
+    }
+}
+
+#debug-buttons .ui-button {
+    float: left;
+    margin-left: 10px;
+}
+
+#debug-buttons #reload {
+    background-image: url(../img/reload.svg);
+}
+
 #position-mode {
     position: absolute;
     right: 0;
@@ -74,7 +107,9 @@ html, body, #map {
     user-select: none;
     position: absolute;
     border-radius: 50%;
-    background: url(../img/compass.svg) no-repeat center;
+    background-image: url(../img/compass.svg);
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: 38px;
 }
 
