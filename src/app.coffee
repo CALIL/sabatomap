@@ -7,7 +7,7 @@ kanimarker = null
 
 map = null
 
-positionChangeWaiting = false
+waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 
 window.alert = (s)->
   console.log s
@@ -45,7 +45,7 @@ loadFloor = (newFloorId)->
     else
       # todo 施設がない場合は施設選択が必要
 
-  # 画面をgeojsonサイズにフィットさせる
+      # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
     oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
     if oldAngle < 0
@@ -154,7 +154,7 @@ $(document).on('ready',
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
       $('#position-mode').stop().fadeTo(200, 0.5)
-      if kanimarker.mode=='headingup'
+      if kanimarker.mode == 'headingup'
         map.getView().setRotation(0)
       kanimarker.setMode('normal')
     else
@@ -164,22 +164,22 @@ $(document).on('ready',
     $('#position-mode').removeClass('position-mode-center')
     $('#position-mode').removeClass('position-mode-wait')
 
-    if positionChangeWaiting
+    if waitingPosition
       $('#position-mode').addClass('position-mode-wait')
     else
-      if kanimarker.mode=='headingup'
+      if kanimarker.mode == 'headingup'
         $('#position-mode').addClass('position-mode-heading')
-      else if kanimarker.mode=='centered'
+      else if kanimarker.mode == 'centered'
         $('#position-mode').addClass('position-mode-center')
 
   kanimarker.on 'change:mode', (mode)->
     invalidatePositionButton()
 
-  kanikama.on 'change:floor',(floor)->
+  kanikama.on 'change:floor', (floor)->
     loadFloor(floor.id)
 
-  kanikama.on 'change:position',(p)->
-    if positionChangeWaiting
+  kanikama.on 'change:position', (p)->
+    if waitingPosition
       if kanikama.currentFloor.id isnt kanilayer.floorId
         loadFloor(kanikama.currentFloor.id)
 
@@ -195,30 +195,29 @@ $(document).on('ready',
     else
       kanimarker.setPosition(null)
 
-    if positionChangeWaiting
-      positionChangeWaiting = false
+    if waitingPosition
+      waitingPosition = 0
       kanimarker.setMode('centered')
       invalidatePositionButton()
 
-  timer_ = null
   waitPosition = ->
-    positionChangeWaiting = true
-    clearTimeout(timer_)
-    timer_ = setTimeout(->
-      if positionChangeWaiting and kanikama.currentPosition is null
+    waitingPosition++
+    setTimeout(->
+      if waitingPosition == 1 and kanikama.currentPosition is null
         showNotify('現在地が取得できませんでした')
-        positionChangeWaiting = false
         invalidatePositionButton()
+      if waitingPosition > 1
+        waitingPosition--
     , 6000)
 
   # モード切り替え
   $('#position-mode').on 'click', ->
-    if kanimarker.mode=='headingup'
+    if kanimarker.mode == 'headingup'
       kanimarker.setMode('centered')
       map.getView().setRotation(homeRotationRadian)
       if kanimarker.position
         map.getView().setCenter(kanimarker.position)
-    else if kanimarker.mode=='centered'
+    else if kanimarker.mode == 'centered'
       kanimarker.setMode('headingup')
     else
       if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
@@ -276,8 +275,8 @@ $(document).on('ready',
     invalidatePositionButton()
 
   $('#compass').on 'click', ->
-    if kanimarker.mode=='headingup'
-       kanimarker.setMode('centered')
+    if kanimarker.mode == 'headingup'
+      kanimarker.setMode('centered')
     rotation = map.getView().getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
