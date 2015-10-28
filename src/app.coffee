@@ -260,8 +260,7 @@ $(document).on('ready',
     invalidatePositionButton()
 
   $('#compass').on 'click', ->
-    if kanimarker.mode == 'headingup'
-      kanimarker.setMode('centered')
+    kanimarker.setMode('normal')
     rotation = map.getView().getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
