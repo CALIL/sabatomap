@@ -4,7 +4,6 @@ homeRotationRadian = 3.1115421869123563
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 kanimarker = null
-
 map = null
 
 waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
@@ -15,7 +14,6 @@ window.alert = (s)->
 # フロアボタンを作成
 createFloorButton = (floors, activeId)->
   $('#floor-button').empty()
-  floors.sort((a, b)-> Number(b.label) - Number(a.label))
   for floor in floors
     $('<div/>',
       class: 'button'
@@ -30,28 +28,18 @@ createFloorButton = (floors, activeId)->
 
 # フロアを読み込む
 # @param newFloorId {String} フロアID
-loadFloor = (newFloorId)->
-  if kanilayer.floorId != newFloorId
+loadFloor = (id)->
+  if kanilayer.floorId != id
     kanimarker.setPosition(null)
-    kanilayer.setFloorId(newFloorId)
-    invalidatePositionButton()
+    kanilayer.setFloorId(id)
+    createFloorButton(kanikama.facilities_[0].floors, id)
 
-  # 施設が1つなら自動的に選ぶ
-  if kanikama.facilities_.length is 1
-    createFloorButton(kanikama.facilities_[0].floors, newFloorId)
-  else
-    if kanikama.currentFacility isnt null
-      createFloorButton(kanikama.currentFacility.floors, newFloorId)
-    else
-      # todo 施設がない場合は施設選択が必要
-
-      # 画面をgeojsonサイズにフィットさせる
+  # 画面をgeojsonサイズにフィットさせる
   setTimeout(->
     oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
     if oldAngle < 0
       oldAngle += 360
     newAngle = (homeRotationRadian * 180 / Math.PI) % 360
-
     # アニメーションのための仮想的な角度を計算
     # 左回りの場合はマイナスの値をとる場合がある
     if newAngle > oldAngle
@@ -85,7 +73,7 @@ didRangeBeaconsInRegion = (beacons)->
 
 initialize = ->
   if cordova.plugins.BluetoothStatus?
-    cordova.plugins.BluetoothStatus.initPlugin();
+    cordova.plugins.BluetoothStatus.initPlugin()
 
   window.open = cordova.InAppBrowser.open
 
@@ -110,16 +98,16 @@ initialize = ->
 
   # スプラッシュスクリーンを非表示
   if navigator.splashscreen?
-    setTimeout(->
+    setTimeout ->
       navigator.splashscreen.hide()
-    , 2000)
+    , 2000
 
+  # オフラインメッセージの表示
   if navigator.connection? and navigator.connection.type is 'none'
-    $('.offline').stop().slideDown('fast') # オフラインメッセージの表示
+    $('.offline').stop().slideDown('fast')
     document.addEventListener('online', ->
       $('.offline').stop().slideUp('fast')
     , false)
-  return
 
 $(document).on('ready',
   FastClick.attach(document.body)
@@ -153,24 +141,20 @@ $(document).on('ready',
   # マーカーとモード切り替えボタン
   invalidatePositionButton = ->
     if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
+      kanimarker.setMode 'normal'
       $('#position-mode').stop().fadeTo(200, 0.5)
-      if kanimarker.mode == 'headingup'
-        map.getView().setRotation(0)
-      kanimarker.setMode('normal')
     else
       $('#position-mode').stop().fadeTo(200, 1)
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
     $('#position-mode').removeClass('position-mode-wait')
-
     if waitingPosition
       $('#position-mode').addClass('position-mode-wait')
-    else
-      if kanimarker.mode == 'headingup'
-        $('#position-mode').addClass('position-mode-heading')
-      else if kanimarker.mode == 'centered'
-        $('#position-mode').addClass('position-mode-center')
+    else if kanimarker.mode == 'headingup'
+      $('#position-mode').addClass('position-mode-heading')
+    else if kanimarker.mode == 'centered'
+      $('#position-mode').addClass('position-mode-center')
 
   kanimarker.on 'change:mode', (mode)->
     invalidatePositionButton()
@@ -179,65 +163,62 @@ $(document).on('ready',
     loadFloor(floor.id)
 
   kanikama.on 'change:position', (p)->
-    if waitingPosition
-      if kanikama.currentFloor.id isnt kanilayer.floorId
-        loadFloor(kanikama.currentFloor.id)
-
+    if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
+      loadFloor(kanikama.currentFloor.id)
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
-    if kanikama.currentFloor.id is kanilayer.floorId and kanikama.currentPosition isnt null
+
+    if kanikama.currentFloor.id is kanilayer.floorId and p isnt null
       if p.accuracy >= 6
         kanimarker.moveDuration = 10000
       else
         kanimarker.moveDuration = 2000
 
-      position = ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857')
-      kanimarker.setPosition(position, p.accuracy)
+      kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
+      if waitingPosition
+        waitingPosition = 0
+        kanimarker.setMode 'centered'
     else
       kanimarker.setPosition(null)
-
-    if waitingPosition
-      waitingPosition = 0
-      kanimarker.setMode('centered')
-      invalidatePositionButton()
 
   waitPosition = ->
     waitingPosition++
     invalidatePositionButton()
-    setTimeout(->
+    setTimeout ->
       if waitingPosition > 0
         waitingPosition--
-      if waitingPosition is 0 and kanikama.currentPosition is null
-        showNotify('現在地が取得できませんでした')
+      if waitingPosition is 0
+        if kanikama.currentPosition is null
+          showNotify('現在地が取得できませんでした')
         invalidatePositionButton()
-    , 4000)
+    , 4000
 
   # モード切り替え
   $('#position-mode').on 'click', ->
     switch kanimarker.mode
       when 'headingup'
-        kanimarker.setMode('centered')
+        kanimarker.setMode 'centered'
       when 'centered'
-        kanimarker.setMode('headingup')
+        kanimarker.setMode 'headingup'
       when 'normal'
         if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
           showNotify('この機種は現在地を測定できません')
           if kanilayer.floorId
             loadFloor(kanilayer.floorId)
         else if not cordova.plugins.BluetoothStatus.BTenabled
-          showNotify('BluetoothをONにしてください')
           if device.platform == 'Android'
             cordova.plugins.BluetoothStatus.promptForBT()
-        else
-          # 現在地が不明な場合は待つ
-          if kanikama.currentPosition is null
-            waitPosition()
-          # フロアが違う場合はフロアを切り替える
-          else if kanikama.currentFloor.id != kanilayer.floorId
-            loadFloor(kanikama.currentFloor.id)
-            waitPosition()
-          # そのほかの場合はcenteredモードに切り替える
           else
-            kanimarker.setMode('centered')
+            showNotify('BluetoothをONにしてください')
+          # 現在地が不明な場合は待つ
+        else if kanikama.currentPosition is null
+          waitPosition()
+          # フロアが違う場合はフロアを切り替える
+        else if kanikama.currentFloor.id != kanilayer.floorId
+          loadFloor(kanikama.currentFloor.id)
+          waitPosition()
+          # centeredモードに切り替える
+        else
+          kanimarker.setMode 'centered'
 
   # コンパス関係の処理
   invalidateCompass = (view_) ->
@@ -252,21 +233,8 @@ $(document).on('ready',
       $('#compass').css('transform', "rotate(#{deg}deg)")
       $('#compass').removeClass('ol-hidden')
 
-  map.getView().on 'change:rotation', ->
-    invalidateCompass(@)
-
-  map.getView().on 'change:resolution', ->
-    invalidateCompass(@)
-
-  window.addEventListener 'BluetoothStatus.enabled', ->
-    invalidatePositionButton()
-
-  window.addEventListener 'BluetoothStatus.disabled', ->
-    invalidatePositionButton()
-
   $('#compass').on 'click', ->
-    if kanimarker.mode == 'headingup'
-      kanimarker.setMode('centered')
+    kanimarker.setMode 'normal'
     rotation = map.getView().getRotation()
     while rotation < -Math.PI
       rotation += 2 * Math.PI
@@ -275,15 +243,22 @@ $(document).on('ready',
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     map.getView().setRotation(0)
 
-  $.getJSON('data/sabae.json', (data)->
+  map.getView().on 'change:rotation', ->
+    invalidateCompass(@)
+
+  map.getView().on 'change:resolution', ->
+    invalidateCompass(@)
+
+  window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
+  window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
+
+  $.getJSON 'data/sabae.json', (data)->
     kanikama.facilities_ = data
     loadFloor('7')
-  )
 )
 
 showNotify = (message)->
-  $('.notification').html(message)
-  $('.notification').stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
+  $('.notification').html(message).stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
 
 # 目的地を表示する
 navigateShelf = (floorId, shelfId)->
