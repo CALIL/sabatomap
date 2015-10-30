@@ -85,11 +85,9 @@ initialize = ->
           heading += window.orientation # for iOS8 WKWebView
         when 'Android'
           heading += screen.orientation.angle # for Android Crosswalk
-        else
-          # fixme それ以外のデバイスごとで違いを吸収する
 
       # 0-360の範囲に収める
-      while heading < 0
+      if heading < 0
         heading += 360 # マイナスの値を考慮
       heading %= 360
 
