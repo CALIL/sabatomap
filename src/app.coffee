@@ -1,5 +1,6 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = -2.5 / 180 * Math.PI
+homeTrueHeadingRadian = 7.38
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
@@ -79,11 +80,21 @@ initialize = ->
 
   if navigator.compass?
     compassSuccess = (heading)->
-      kanikama.heading = heading.magneticHeading
-      kanimarker.setHeading(parseInt(heading.magneticHeading))
-    compassError = (e)->
-      return false
-    navigator.compass.watchHeading(compassSuccess, compassError, frequency: 100)
+      heading = heading.magneticHeading + homeTrueHeadingRadian
+      switch device.platform
+        when 'iOS'
+          heading += window.orientation # for iOS8 WKWebView
+        when 'Android'
+          heading += screen.orientation.angle # for Android Crosswalk
+
+      # 0-360の範囲に収める
+      if heading < 0
+        heading += 360 # マイナスの値を考慮
+      heading %= 360
+
+      kanikama.heading = heading
+      kanimarker.setHeading(parseInt(heading))
+    navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
 
   # イベントリスナ設定
   if cordova.plugins?.locationManager?
