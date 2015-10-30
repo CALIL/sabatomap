@@ -166,7 +166,13 @@ $(document).on('ready',
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
       loadFloor(kanikama.currentFloor.id)
     # 表示中のフロアと同じフロアの時だけ現在地を表示する
+
     if kanikama.currentFloor.id is kanilayer.floorId and p isnt null
+      if p.accuracy >= 6
+        kanimarker.moveDuration = 10000
+      else
+        kanimarker.moveDuration = 2000
+
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
       if waitingPosition
         waitingPosition = 0
