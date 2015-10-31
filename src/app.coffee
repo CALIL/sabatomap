@@ -60,7 +60,7 @@ loadFloor = (id)->
             loadFloor($(this).attr('floorId'))
       ).appendTo('#floor-button')
     $('#floor' + id).addClass('active')
-    setTimeout fitFloor,100
+  setTimeout fitFloor, 100
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
@@ -103,9 +103,7 @@ initialize = ->
 
     # スプラッシュスクリーンを非表示
     if navigator.splashscreen?
-      setTimeout ->
-        navigator.splashscreen.hide()
-      , 2000
+      setTimeout navigator.splashscreen.hide, 2000
 
     # オフラインメッセージの表示
     if navigator.connection? and navigator.connection.type is 'none'
@@ -150,10 +148,7 @@ initialize = ->
         $('#position-mode').stop().fadeTo(200, 0.5)
       else
         $('#position-mode').stop().fadeTo(200, 1)
-    $('#position-mode').addClass('position-mode-normal')
-    $('#position-mode').removeClass('position-mode-heading')
-    $('#position-mode').removeClass('position-mode-center')
-    $('#position-mode').removeClass('position-mode-wait')
+    $('#position-mode').addClass('position-mode-normal').removeClass('position-mode-heading').removeClass('position-mode-center').removeClass('position-mode-wait')
     if waitingPosition
       $('#position-mode').addClass('position-mode-wait')
     else if kanimarker.mode == 'headingup'
