@@ -36,6 +36,7 @@ gulp.task 'fetch_depends_bower', ['bower_install'], ->
 # CoffeeScriptをコンパイル
 gulp.task 'compile_coffee', ->
   gulp.src([
+    'src/load.coffee',
     'src/app.coffee',
     'src/search.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
@@ -58,7 +59,7 @@ gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
   .pipe gulp.dest 'www/js/'
 
 gulp.task 'copy_load_js', ->
-  gulp.src(['src/load.js']).pipe gulp.dest('www/js')
+  gulp.src(['src/compiled/load.js']).pipe gulp.dest('www/js')
 
 gulp.task 'clean', ->
   del(['platforms/ios/www/**'])

@@ -73,54 +73,52 @@ didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
 initialize = ->
-  if cordova.plugins.BluetoothStatus?
-    cordova.plugins.BluetoothStatus.initPlugin()
+  if cordova?
+    if cordova.plugins.BluetoothStatus?
+      cordova.plugins.BluetoothStatus.initPlugin()
+    window.open = cordova.InAppBrowser.open
+    if navigator.compass?
+      compassSuccess = (heading)->
+        heading = heading.magneticHeading + homeTrueHeadingRadian
+        switch device.platform
+          when 'iOS'
+            heading += window.orientation # for iOS8 WKWebView
+          when 'Android'
+            heading += screen.orientation.angle # for Android Crosswalk
 
-  window.open = cordova.InAppBrowser.open
+        # 0-360の範囲に収める
+        if heading < 0
+          heading += 360 # マイナスの値を考慮
+        heading %= 360
 
-  if navigator.compass?
-    compassSuccess = (heading)->
-      heading = heading.magneticHeading + homeTrueHeadingRadian
-      switch device.platform
-        when 'iOS'
-          heading += window.orientation # for iOS8 WKWebView
-        when 'Android'
-          heading += screen.orientation.angle # for Android Crosswalk
+        kanikama.heading = heading
+        kanimarker.setHeading(parseInt(heading))
+      navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
 
-      # 0-360の範囲に収める
-      if heading < 0
-        heading += 360 # マイナスの値を考慮
-      heading %= 360
+    # イベントリスナ設定
+    if cordova.plugins?.locationManager?
+      locationManager = cordova.plugins.locationManager
+      locationManager.requestWhenInUseAuthorization()
+      delegate = new locationManager.Delegate()
+      delegate.didRangeBeaconsInRegion = ({beacons}) ->
+        didRangeBeaconsInRegion.apply(window, [beacons]) # thisが変わってしまうのでapplyで変える
+      locationManager.setDelegate(delegate)
+      region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
+      locationManager.startRangingBeaconsInRegion(region).fail(alert)
 
-      kanikama.heading = heading
-      kanimarker.setHeading(parseInt(heading))
-    navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
+    # スプラッシュスクリーンを非表示
+    if navigator.splashscreen?
+      setTimeout ->
+        navigator.splashscreen.hide()
+      , 2000
 
-  # イベントリスナ設定
-  if cordova.plugins?.locationManager?
-    locationManager = cordova.plugins.locationManager
-    locationManager.requestWhenInUseAuthorization()
-    delegate = new locationManager.Delegate()
-    delegate.didRangeBeaconsInRegion = ({beacons}) ->
-      didRangeBeaconsInRegion.apply(window, [beacons]) # thisが変わってしまうのでapplyで変える
-    locationManager.setDelegate(delegate)
-    region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
-    locationManager.startRangingBeaconsInRegion(region).fail(alert)
+    # オフラインメッセージの表示
+    if navigator.connection? and navigator.connection.type is 'none'
+      $('.offline').stop().slideDown('fast')
+      document.addEventListener('online', ->
+        $('.offline').stop().slideUp('fast')
+      , false)
 
-  # スプラッシュスクリーンを非表示
-  if navigator.splashscreen?
-    setTimeout ->
-      navigator.splashscreen.hide()
-    , 2000
-
-  # オフラインメッセージの表示
-  if navigator.connection? and navigator.connection.type is 'none'
-    $('.offline').stop().slideDown('fast')
-    document.addEventListener('online', ->
-      $('.offline').stop().slideUp('fast')
-    , false)
-
-$(document).on('ready',
   FastClick.attach(document.body)
   map = new ol.Map(
     layers: [
@@ -151,11 +149,12 @@ $(document).on('ready',
 
   # マーカーとモード切り替えボタン
   invalidatePositionButton = ->
-    if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
-      kanimarker.setMode 'normal'
-      $('#position-mode').stop().fadeTo(200, 0.5)
-    else
-      $('#position-mode').stop().fadeTo(200, 1)
+    if cordova?
+      if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
+        kanimarker.setMode 'normal'
+        $('#position-mode').stop().fadeTo(200, 0.5)
+      else
+        $('#position-mode').stop().fadeTo(200, 1)
     $('#position-mode').addClass('position-mode-normal')
     $('#position-mode').removeClass('position-mode-heading')
     $('#position-mode').removeClass('position-mode-center')
@@ -211,7 +210,7 @@ $(document).on('ready',
       when 'centered'
         kanimarker.setMode 'headingup'
       when 'normal'
-        if not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
+        if not cordova? or not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
           showNotify('この機種は現在地を測定できません')
           if kanilayer.floorId
             loadFloor(kanilayer.floorId)
@@ -266,7 +265,6 @@ $(document).on('ready',
   $.getJSON 'data/sabae.json', (data)->
     kanikama.facilities_ = data
     loadFloor('7')
-)
 
 showNotify = (message)->
   $('.notification').html(message).stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
