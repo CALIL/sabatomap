@@ -1,6 +1,6 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = -2.5 / 180 * Math.PI
-homeTrueHeadingRadian = 7.38
+headingDifference = 7.38 # 磁北と真北の差
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
@@ -79,7 +79,7 @@ initialize = ->
     window.open = cordova.InAppBrowser.open
     if navigator.compass?
       compassSuccess = (heading)->
-        heading = heading.magneticHeading + homeTrueHeadingRadian
+        heading = heading.magneticHeading + headingDifference
         switch device.platform
           when 'iOS'
             heading += window.orientation # for iOS8 WKWebView
@@ -166,11 +166,8 @@ initialize = ->
     else if kanimarker.mode == 'centered'
       $('#position-mode').addClass('position-mode-center')
 
-  kanimarker.on 'change:mode', (mode)->
-    invalidatePositionButton()
-
-  kanikama.on 'change:floor', (floor)->
-    loadFloor(floor.id)
+  kanimarker.on 'change:mode', -> invalidatePositionButton()
+  kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
 
   kanikama.on 'change:position', (p)->
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
@@ -253,12 +250,8 @@ initialize = ->
     map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
     map.getView().setRotation(0)
 
-  map.getView().on 'change:rotation', ->
-    invalidateCompass(@)
-
-  map.getView().on 'change:resolution', ->
-    invalidateCompass(@)
-
+  map.getView().on 'change:rotation', -> invalidateCompass(@)
+  map.getView().on 'change:resolution', -> invalidateCompass(@)
   window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
   window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
 
