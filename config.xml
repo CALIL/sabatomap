@@ -30,8 +30,8 @@
         <preference name="SplashScreenDelay" value="3000" />
         <preference name="SplashScreenBackgroundColor" value="#0068B1" />
         <preference name="ShowSplashScreen" value="true" />
-        <preference name="SplashScreenWidth" value="451" />
-        <preference name="SplashScreenHeight" value="800" />
+        <preference name="SplashScreenWidth" value="428" />
+        <preference name="SplashScreenHeight" value="154" />
     </platform>
     <platform name="android">
         <preference name="SplashScreen" value="splash" />
