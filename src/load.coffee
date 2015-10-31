@@ -19,7 +19,7 @@ load = ->
         initialize()
       document.body.appendChild script
       return true
-if window.isCordovaApp? and typeof device is 'undefined'
+if typeof device is 'undefined'
   document.addEventListener 'deviceready', load
 else
   load()
