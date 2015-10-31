@@ -58,7 +58,7 @@ gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
   .pipe concat('all.js')
   .pipe gulp.dest 'www/js/'
 
-gulp.task 'copy_load_js', ->
+gulp.task 'copy_load_js',['compile_coffee'], ->
   gulp.src(['src/compiled/load.js']).pipe gulp.dest('www/js')
 
 gulp.task 'clean', ->
