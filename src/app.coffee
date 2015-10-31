@@ -1,6 +1,5 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = -2.5 / 180 * Math.PI
-headingDifference = 7.38 # 磁北と真北の差
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
@@ -28,7 +27,7 @@ createFloorButton = (floors, activeId)->
   $('#floor' + activeId).addClass('active')
 
 # フロアを読み込む
-# @param newFloorId {String} フロアID
+# @param id {String} フロアID
 loadFloor = (id)->
   if kanilayer.floorId != id
     kanimarker.setPosition(null)
@@ -79,6 +78,7 @@ initialize = ->
     window.open = cordova.InAppBrowser.open
     if navigator.compass?
       compassSuccess = (heading)->
+        headingDifference = 7.38 # 磁北と真北の差(単位は度)
         heading = heading.magneticHeading + headingDifference
         switch device.platform
           when 'iOS'
@@ -237,8 +237,7 @@ initialize = ->
     if deg == 0 or 100 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
       $('#compass').addClass('ol-hidden')
     else
-      $('#compass').css('transform', "rotate(#{deg}deg)")
-      $('#compass').removeClass('ol-hidden')
+      $('#compass').css('transform', "rotate(#{deg}deg)").removeClass('ol-hidden')
 
   $('#compass').on 'click', ->
     kanimarker.setMode 'normal'
