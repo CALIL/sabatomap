@@ -69,10 +69,6 @@ body{
     margin-left: 10px;
 }
 
-#debug-buttons #reload {
-    background-image: url(../img/reload.svg);
-}
-
 #position-mode {
     position: absolute;
     right: 0;
