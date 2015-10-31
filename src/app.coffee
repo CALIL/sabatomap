@@ -11,20 +11,36 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 window.alert = (s)->
   console.log s
 
-# フロアボタンを作成
-createFloorButton = (floors, activeId)->
-  $('#floor-button').empty()
-  for floor in floors
-    $('<div/>',
-      class: 'button'
-      id: 'floor' + floor.id
-      text: floor.label
-      floorId: floor.id
-      on:
-        click: ->
-          loadFloor($(this).attr('floorId'))
-    ).appendTo('#floor-button')
-  $('#floor' + activeId).addClass('active')
+fitFloor = ->
+  oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
+  if oldAngle < 0
+    oldAngle += 360
+  newAngle = (homeRotationRadian * 180 / Math.PI) % 360
+  # アニメーションのための仮想的な角度を計算
+  # 左回りの場合はマイナスの値をとる場合がある
+  if newAngle > oldAngle
+    n = newAngle - oldAngle
+    if n <= 180
+      virtualAngle = oldAngle + n # 右回り n度回る
+    else
+      virtualAngle = oldAngle - (360 - n) # 左回り 360 - n度回る
+  else
+    n = oldAngle - newAngle
+    if n <= 180
+      virtualAngle = oldAngle - n # 左回り n度回る
+    else
+      virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
+
+  # 回転
+  map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
+  map.getView().setRotation(virtualAngle * Math.PI / 180)
+
+  # geojsonサイズにフィットさせる
+  pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
+  map.beforeRender(pan)
+  zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+  map.beforeRender(zoom)
+  map.getView().fit(homeExtent, map.getSize())
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -32,40 +48,19 @@ loadFloor = (id)->
   if kanilayer.floorId != id
     kanimarker.setPosition(null)
     kanilayer.setFloorId(id)
-    createFloorButton(kanikama.facilities_[0].floors, id)
-
-  # 画面をgeojsonサイズにフィットさせる
-  setTimeout(->
-    oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
-    if oldAngle < 0
-      oldAngle += 360
-    newAngle = (homeRotationRadian * 180 / Math.PI) % 360
-    # アニメーションのための仮想的な角度を計算
-    # 左回りの場合はマイナスの値をとる場合がある
-    if newAngle > oldAngle
-      n = newAngle - oldAngle
-      if n <= 180
-        virtualAngle = oldAngle + n # 右回り n度回る
-      else
-        virtualAngle = oldAngle - (360 - n) # 左回り 360 - n度回る
-    else
-      n = oldAngle - newAngle
-      if n <= 180
-        virtualAngle = oldAngle - n # 左回り n度回る
-      else
-        virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
-
-    # 回転
-    map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
-    map.getView().setRotation(virtualAngle * Math.PI / 180)
-
-    # geojsonサイズにフィットさせる
-    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
-    map.beforeRender(pan)
-    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-    map.beforeRender(zoom)
-    map.getView().fit(homeExtent, map.getSize())
-  , 100)
+    $('#floor-button').empty()
+    for floor in kanikama.facilities_[0].floors
+      $('<div/>',
+        class: 'button'
+        id: 'floor' + floor.id
+        text: floor.label
+        floorId: floor.id
+        on:
+          click: ->
+            loadFloor($(this).attr('floorId'))
+      ).appendTo('#floor-button')
+    $('#floor' + id).addClass('active')
+    setTimeout fitFloor,100
 
 # ビーコンを処理
 didRangeBeaconsInRegion = (beacons)->
@@ -104,7 +99,7 @@ initialize = ->
         didRangeBeaconsInRegion.apply(window, [beacons]) # thisが変わってしまうのでapplyで変える
       locationManager.setDelegate(delegate)
       region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
-      locationManager.startRangingBeaconsInRegion(region).fail(alert)
+      locationManager.startRangingBeaconsInRegion(region).fail(console.error)
 
     # スプラッシュスクリーンを非表示
     if navigator.splashscreen?
@@ -210,7 +205,7 @@ initialize = ->
         if not cordova? or not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
           showNotify('この機種は現在地を測定できません')
           if kanilayer.floorId
-            loadFloor(kanilayer.floorId)
+            fitFloor()
         else if not cordova.plugins.BluetoothStatus.BTenabled
           if device.platform == 'Android'
             cordova.plugins.BluetoothStatus.promptForBT()
