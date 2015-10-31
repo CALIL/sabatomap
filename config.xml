@@ -14,6 +14,13 @@
         <preference name="xwalkMode" value="embedded"/>
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
+        <!--<preference name="BackgroundColor" value="0xff0000ff"/>-->
+        <preference name="SplashScreen" value="splash" />
+        <icon src="www/res/icons/android/icon-48-mdpi.png" density="mdpi" />
+        <icon src="www/res/icons/android/icon-72-hdpi.png" density="hdpi" />
+        <icon src="www/res/icons/android/icon-96-xhdpi.png" density="xhdpi" />
+        <icon src="www/res/icons/android/icon-144-xxhdpi.png" density="xxhdpi" />
+        <icon src="www/res/icons/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
     </platform>
     <platform name="ios">
         <preference name="FadeSplashScreen" value="true" />
@@ -32,14 +39,5 @@
         <preference name="ShowSplashScreen" value="true" />
         <preference name="SplashScreenWidth" value="428" />
         <preference name="SplashScreenHeight" value="154" />
-    </platform>
-    <platform name="android">
-        <preference name="BackgroundColor" value="0xff0000ff"/>
-        <preference name="SplashScreen" value="splash" />
-        <icon src="www/res/icons/android/icon-48-mdpi.png" density="mdpi" />
-        <icon src="www/res/icons/android/icon-72-hdpi.png" density="hdpi" />
-        <icon src="www/res/icons/android/icon-96-xhdpi.png" density="xhdpi" />
-        <icon src="www/res/icons/android/icon-144-xxhdpi.png" density="xxhdpi" />
-        <icon src="www/res/icons/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
     </platform>
 </widget>
