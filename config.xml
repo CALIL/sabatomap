@@ -40,6 +40,6 @@
         <icon src="www/res/icons/android/icon-96-xhdpi.png" density="xhdpi" />
         <icon src="www/res/icons/android/icon-144-xxhdpi.png" density="xxhdpi" />
         <icon src="www/res/icons/android/icon-192-xxxhdpi.png" density="xxxhdpi" />
-        <preference name="backgroundColor" value="26801" />
+        <preference name="backgroundColor" value="0xff0068B1" />
     </platform>
 </widget>
