@@ -34,6 +34,7 @@
         <preference name="SplashScreenHeight" value="154" />
     </platform>
     <platform name="android">
+        <preference name="BackgroundColor" value="0xff0000ff"/>
         <preference name="SplashScreen" value="splash" />
         <icon src="www/res/icons/android/icon-48-mdpi.png" density="mdpi" />
         <icon src="www/res/icons/android/icon-72-hdpi.png" density="hdpi" />

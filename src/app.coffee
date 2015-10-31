@@ -1,5 +1,5 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
-homeRotationRadian = -2.5 / 180 * Math.PI
+homeRotationRadian =(180 -2.5) / 180 * Math.PI
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
@@ -58,7 +58,7 @@ loadFloor = (id)->
         on:
           click: ->
             loadFloor($(this).attr('floorId'))
-      ).appendTo('#floor-button')
+      ).prependTo('#floor-button')
     $('#floor' + id).addClass('active')
   setTimeout fitFloor, 100
 
