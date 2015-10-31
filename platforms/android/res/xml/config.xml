@@ -46,7 +46,6 @@
     <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
     <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
     <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
-    <preference name="backgroundColor" value="0xff0068B1" />
     <name>Sabae Library Map</name>
     <description>鯖江図書館マップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
