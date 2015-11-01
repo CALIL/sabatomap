@@ -24,9 +24,6 @@
         "com.telerik.plugins.wkwebview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -52,6 +49,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.unarin.cordova.beacon": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

@@ -33,10 +33,6 @@
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app would like to scan for iBeacons even when in the background.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app would like to scan for iBeacons while it is in use.</string>
     <key>NSMainNibFile~ipad</key>
     <string></string>
     <key>UIInterfaceOrientation</key>
@@ -59,5 +55,9 @@
       <string>UIInterfaceOrientationLandscapeLeft</string>
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app would like to scan for iBeacons even when in the background.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app would like to scan for iBeacons while it is in use.</string>
   </dict>
 </plist>

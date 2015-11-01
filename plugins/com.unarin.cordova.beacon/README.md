@@ -1,3 +1,6 @@
+このリポジトリは、Android向けのAltBeaconライブラリを最新版にアップデートするために作成したものです。
+
+
 <!---
  license: Licensed to the Apache Software Foundation (ASF) under one
          or more contributor license agreements.  See the NOTICE file
@@ -16,7 +19,6 @@
          specific language governing permissions and limitations
          under the License.
 -->
-
 
 ## ![iBeacon Cordova Plugin](http://icons.iconarchive.com/icons/artua/mac/128/Bluetooth-icon.png) Cordova / Phonegap iBeacon plugin
 

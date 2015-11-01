@@ -13,10 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
                             "count": 1
                         },
@@ -58,6 +54,10 @@
                         },
                         {
                             "xml": "<preference default=\"embedded\" name=\"xwalkMode\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -134,9 +134,6 @@
         "com.telerik.plugins.wkwebview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -162,6 +159,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.unarin.cordova.beacon": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

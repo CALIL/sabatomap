@@ -7,15 +7,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.unarin.cordova.beacon": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
@@ -96,6 +87,15 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-crosswalk-webview"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.unarin.cordova.beacon": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/CALIL/cordova-plugin-ibeacon.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
