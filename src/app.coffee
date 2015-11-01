@@ -1,10 +1,10 @@
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
-homeRotationRadian =(180 -2.5) / 180 * Math.PI
+homeRotationRadian = (180 - 2.5) / 180 * Math.PI
 
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 if device.platform is 'Android'
-  kanikama.timeout=5000
+  kanikama.timeout = 5000
 kanimarker = null
 map = null
 
@@ -171,6 +171,11 @@ initialize = ->
         kanimarker.moveDuration = 10000
       else
         kanimarker.moveDuration = 2000
+      if kanimarker.accuracy? and Math.abs(kanimarker.accuracy - p.accuracy) > 3
+        kanimarker.accuracyDuration = 8000
+      else
+        kanimarker.accuracyDuration = 2500
+
 
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
       if waitingPosition
