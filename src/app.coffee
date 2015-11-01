@@ -13,7 +13,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 window.alert = (s)->
   console.log s
 
-fitFloor = ->
+fitRotaion = ()->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
   if oldAngle < 0
     oldAngle += 360
@@ -37,7 +37,8 @@ fitFloor = ->
   map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
-  # geojsonサイズにフィットさせる
+fitFloor = ()->
+  fitRotaion()
   pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
   map.beforeRender(pan)
   zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
@@ -176,7 +177,6 @@ initialize = ->
       else
         kanimarker.accuracyDuration = 2500
 
-
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
       if waitingPosition
         waitingPosition = 0
@@ -201,6 +201,7 @@ initialize = ->
     switch kanimarker.mode
       when 'headingup'
         kanimarker.setMode 'centered'
+        fitRotaion()
       when 'centered'
         kanimarker.setMode 'headingup'
       when 'normal'
