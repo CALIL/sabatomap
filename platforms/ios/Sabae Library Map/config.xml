@@ -14,6 +14,18 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="Orientation" value="all" />
+    <name>Sabae Library Map</name>
+    <description>鯖江図書館マップ</description>
+    <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="default" />
+    <preference name="webviewbounce" value="false" />
     <feature name="InAppBrowser">
         <param name="ios-package" value="CDVInAppBrowser" />
     </feature>
@@ -42,16 +54,4 @@
     <feature name="LocationManager">
         <param name="ios-package" value="CDVLocationManager" />
     </feature>
-    <preference name="FadeSplashScreen" value="true" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="AutoHideSplashScreen" value="false" />
-    <preference name="Orientation" value="all" />
-    <name>Sabae Library Map</name>
-    <description>鯖江図書館マップ</description>
-    <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
-    <content src="index.html" />
-    <access origin="*" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="Orientation" value="default" />
-    <preference name="webviewbounce" value="false" />
 </widget>

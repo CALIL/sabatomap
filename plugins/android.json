@@ -9,11 +9,7 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         },
                         {
@@ -21,11 +17,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -33,11 +25,19 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -95,6 +95,10 @@
                     ],
                     "/*": [
                         {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 2
+                        },
+                        {
                             "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
                             "count": 1
                         },
@@ -115,10 +119,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 2
-                        },
-                        {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
                             "count": 1
                         }
@@ -128,34 +128,35 @@
         }
     },
     "installed_plugins": {
-        "com.ionic.keyboard": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "com.telerik.plugins.wkwebview": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "cordova-plugin-bluetooth-status": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "cordova-plugin-device-orientation": {
+        "cordova-plugin-webserver": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-splashscreen": {
+        "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-webserver": {
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.telerik.plugins.wkwebview": {
+            "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-crosswalk-webview": {
