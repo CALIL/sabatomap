@@ -4,7 +4,7 @@ homeRotationRadian = (180 - 2.5) / 180 * Math.PI
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 if device.platform is 'Android'
-  kanikama.timeout = 5000
+  kanikama.setTimeout(5000)
 kanimarker = null
 map = null
 
