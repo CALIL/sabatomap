@@ -1,25 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="10006" id="jp.calil.sabatomap" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
-    <preference name="xwalkVersion" value="14+" />
-    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-    <preference name="xwalkMode" value="embedded" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <preference name="SplashScreen" value="splash" />
-    <icon density="mdpi" src="www/res/icons/android/icon-48-mdpi.png" />
-    <icon density="hdpi" src="www/res/icons/android/icon-72-hdpi.png" />
-    <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
-    <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
-    <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
-    <name>Sabae Library Map</name>
-    <description>鯖江図書館マップ</description>
-    <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
-    <content src="index.html" />
-    <access origin="*" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="Orientation" value="default" />
-    <preference name="webviewbounce" value="false" />
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
@@ -54,4 +35,23 @@
     <feature name="LocationManager">
         <param name="android-package" value="com.unarin.cordova.beacon.LocationManager" />
     </feature>
+    <preference name="xwalkVersion" value="14+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <preference name="SplashScreen" value="splash" />
+    <icon density="mdpi" src="www/res/icons/android/icon-48-mdpi.png" />
+    <icon density="hdpi" src="www/res/icons/android/icon-72-hdpi.png" />
+    <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
+    <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
+    <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
+    <name>Sabae Library Map</name>
+    <description>鯖江図書館マップ</description>
+    <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="default" />
+    <preference name="webviewbounce" value="false" />
 </widget>
