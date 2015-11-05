@@ -10,11 +10,7 @@
 - iOS (iOS8.3+)
 - Android (4.4+)
 
-## ビルド環境
-
-- node.js (0.12+)
-- bower
-- Cordava 5.1.1
+## ビルド手順
 
 ```bash
 npm install -g bower
@@ -25,7 +21,9 @@ cordova platform update android
 gulp
 ```
 
-## ライセンス
+## 更新履歴
+
+## ライセンスについて
 
 The MIT License (MIT)
 
