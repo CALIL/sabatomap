@@ -13,7 +13,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 window.alert = (s)->
   console.log s
 
-fitRotation = ()->
+fitRotation = ->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
   if oldAngle < 0
     oldAngle += 360
@@ -32,12 +32,10 @@ fitRotation = ()->
       virtualAngle = oldAngle - n # 左回り n度回る
     else
       virtualAngle = oldAngle + (360 - n) # 右回り 360 - n度回る
-
-  # 回転
   map.beforeRender(ol.animation.rotate(duration: 400, rotation: oldAngle * Math.PI / 180))
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
-fitFloor = ()->
+fitFloor = ->
   fitRotation()
   pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
   map.beforeRender(pan)
@@ -80,8 +78,10 @@ initialize = ->
         heading = heading.magneticHeading + headingDifference
         switch device.platform
           when 'iOS'
+          #noinspection JSUnresolvedVariable
             heading += window.orientation # for iOS8 WKWebView
           when 'Android'
+          #noinspection JSUnresolvedVariable
             heading += screen.orientation.angle # for Android Crosswalk
 
         # 0-360の範囲に収める
@@ -101,7 +101,7 @@ initialize = ->
       delegate.didRangeBeaconsInRegion = ({beacons}) ->
         didRangeBeaconsInRegion.apply(window, [beacons]) # thisが変わってしまうのでapplyで変える
       locationManager.setDelegate(delegate)
-      region = new locationManager.BeaconRegion('warabi', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
+      region = new locationManager.BeaconRegion('sabatomap', '00000000-71C7-1001-B000-001C4D532518') # レンジング開始
       locationManager.startRangingBeaconsInRegion(region).fail(console.error)
 
     # スプラッシュスクリーンを非表示
