@@ -13,7 +13,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 window.alert = (s)->
   console.log s
 
-fitRotaion = ()->
+fitRotation = ()->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
   if oldAngle < 0
     oldAngle += 360
@@ -38,7 +38,7 @@ fitRotaion = ()->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ()->
-  fitRotaion()
+  fitRotation()
   pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
   map.beforeRender(pan)
   zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
@@ -201,7 +201,7 @@ initialize = ->
     switch kanimarker.mode
       when 'headingup'
         kanimarker.setMode 'centered'
-        fitRotaion()
+        fitRotation()
       when 'centered'
         kanimarker.setMode 'headingup'
       when 'normal'
