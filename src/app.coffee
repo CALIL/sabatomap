@@ -1,3 +1,13 @@
+###
+
+鯖江市図書館マップ「さばとマップ」
+
+Copyright (c) 2015 CALIL Inc.
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+
+###
+
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = (180 - 2.5) / 180 * Math.PI
 

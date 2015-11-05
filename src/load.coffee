@@ -1,3 +1,4 @@
+
 load = ->
   script = document.createElement('script')
   script.onload = ->
