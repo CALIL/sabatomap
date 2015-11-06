@@ -8,6 +8,8 @@ http://opensource.org/licenses/mit-license.php
 
 ###
 
+mapboxToken = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w' # Please change here
+
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = (180 - 2.5) / 180 * Math.PI
 waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
@@ -129,7 +131,7 @@ initialize = ->
     layers: [
       new ol.layer.Tile(# 世界地図
         source: new ol.source.XYZ(
-          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
+          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + mapboxToken
           maxZoom: 22)
         minResolution: 0.1
         maxResolution: 2000000
