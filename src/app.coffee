@@ -10,15 +10,14 @@ http://opensource.org/licenses/mit-license.php
 
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = (180 - 2.5) / 180 * Math.PI
+waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 
+map = null
+kanimarker = null
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
 if device.platform is 'Android'
   kanikama.setTimeout(5000)
-kanimarker = null
-map = null
-
-waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 
 window.alert = (s)->
   console.log s
@@ -224,15 +223,15 @@ initialize = ->
             cordova.plugins.BluetoothStatus.promptForBT()
           else
             showNotify('BluetoothをONにしてください')
-          # 現在地が不明な場合は待つ
         else if kanikama.currentPosition is null
+          # 現在地が不明な場合は待つ
           waitPosition()
-          # フロアが違う場合はフロアを切り替える
         else if kanikama.currentFloor.id != kanilayer.floorId
+          # フロアが違う場合はフロアを切り替える
           loadFloor(kanikama.currentFloor.id)
           waitPosition()
-          # centeredモードに切り替える
         else
+          # centeredモードに切り替える
           kanimarker.setMode 'centered'
 
   # コンパス関係の処理
