@@ -18,9 +18,6 @@ map = null
 kanimarker = null
 kanilayer = new Kanilayer()
 kanikama = new Kanikama()
-if device.platform is 'Android'
-  kanikama.setTimeout(5000)
-
 window.alert = (s)->
   console.log s
 
@@ -80,6 +77,8 @@ didRangeBeaconsInRegion = (beacons)->
 
 initialize = ->
   if cordova?
+    if device.platform is 'Android'
+      kanikama.setTimeout(5000)
     if cordova.plugins.BluetoothStatus?
       cordova.plugins.BluetoothStatus.initPlugin()
     window.open = cordova.InAppBrowser.open
