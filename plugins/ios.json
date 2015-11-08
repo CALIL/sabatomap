@@ -162,10 +162,10 @@
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-crosswalk-webview": {
+        "com.unarin.cordova.beacon": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "com.unarin.cordova.beacon": {
+        "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

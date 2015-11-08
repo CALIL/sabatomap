@@ -21,6 +21,7 @@ package org.crosswalk.engine;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 
 import org.apache.cordova.CordovaBridge;
@@ -44,6 +45,7 @@ import org.xwalk.core.XWalkView;
 public class XWalkWebViewEngine implements CordovaWebViewEngine {
 
     public static final String TAG = "XWalkWebViewEngine";
+    public static final String XWALK_USER_AGENT = "xwalkUserAgent";
 
     protected final XWalkCordovaView webView;
     protected XWalkCordovaCookieManager cookieManager;
@@ -56,9 +58,11 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
     protected NativeToJsMessageQueue nativeToJsMessageQueue;
     protected XWalkActivityDelegate activityDelegate;
     protected String startUrl;
+    protected CordovaPreferences preferences;
 
     /** Used when created via reflection. */
     public XWalkWebViewEngine(Context context, CordovaPreferences preferences) {
+        this.preferences = preferences;
         Runnable cancelCommand = new Runnable() {
             @Override
             public void run() {
@@ -125,6 +129,16 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
 
     private void initWebViewSettings() {
         webView.setVerticalScrollBarEnabled(false);
+
+        // Set xwalk webview settings by Cordova preferences.
+        String xwalkUserAgent = preferences == null ? "" : preferences.getString(XWALK_USER_AGENT, "");
+        if (!xwalkUserAgent.isEmpty()) {
+            webView.setUserAgentString(xwalkUserAgent);
+        }
+        if (preferences.contains("BackgroundColor")) {
+            int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
+            webView.setBackgroundColor(backgroundColor);
+        }
     }
 
     private static void exposeJsInterface(XWalkView webView, CordovaBridge bridge) {
@@ -208,5 +222,9 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
             return;
         }
         webView.load(url, null);
+    }
+
+    public boolean isXWalkReady() {
+        return activityDelegate.isXWalkReady();
     }
 }

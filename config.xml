@@ -9,9 +9,6 @@
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
     <platform name="android">
-        <preference name="xwalkVersion" value="14+" />
-        <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-        <preference name="xwalkMode" value="embedded" />
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
         <preference name="SplashScreen" value="splash" />
@@ -20,6 +17,7 @@
         <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
         <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
         <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
+        <preference name="BackgroundColor" value="0xFF0068B1" />
     </platform>
     <platform name="ios">
         <preference name="FadeSplashScreen" value="true" />
@@ -39,4 +37,8 @@
         <preference name="SplashScreenWidth" value="428" />
         <preference name="SplashScreenHeight" value="154" />
     </platform>
+    <preference name="xwalkVersion" value="15+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
 </widget>
