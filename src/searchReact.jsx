@@ -192,14 +192,13 @@ var SearchResult = React.createClass({
         return (
           <div className="searchResult" ref="searchResult">
             <div className="searchDiv" ref="search">
-              {{messageNode}}
               <BookList books={this.props.target.books} queryText={this.props.queryText} clickHandler={this.clickHandler} closeHandler={this.closeHandler}></BookList>
+              {{messageNode}}
             </div>
           </div>
         );
     }
 });
-
 
 var BookList = React.createClass({
   render: function() {
@@ -235,7 +234,6 @@ var Book = React.createClass({
     );
   }
 });
-
 
 if (typeof searchSetting != 'undefined') {
     React.render(

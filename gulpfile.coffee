@@ -55,7 +55,7 @@ gulp.task 'compile_jsx', ->
       errorHandler: notify.onError "Error: <%= error.message %>"
     }))
     .pipe(react())
-    .pipe(gulp.dest('src'))
+    .pipe(gulp.dest('src/compiled'))
 
 gulp.task 'clean_all_js', (cb)->
   del(['www/js/all.js'], cb)
@@ -69,7 +69,7 @@ gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
     'src/compiled/app.js'
     'src/searchSetting.js'
     'src/compiled/search.js'
-    'src/searchReact.js'
+    'src/compiled/searchReact.js'
   ]
   .pipe concat('all.js')
   .pipe gulp.dest 'www/js/'
