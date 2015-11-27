@@ -24,20 +24,12 @@ var Search = React.createClass({
             }
         };
     },
-    getTarget: function (targets, targetId) {
-        for (i in targets) {
-            if (targets[i].id == targetId) {
-                return targets[i];
-            }
-        }
-        return alert('図書館設定が見つかりませんでした。');
-    },
     componentDidMount: function () {
         log('componentDidMount');
         log(this.props)
 
         this.setProps({
-            targets: this.props.searchSetting.targets,
+            target: this.props.searchSetting.targets[0],
 //      target : this.getTarget(this.props.searchSetting.targets, kanikama.facility.systemid),
             clickHandler: this.props.searchSetting.clickHandler
         });
@@ -50,12 +42,6 @@ var Search = React.createClass({
     },
     // 検索クエリーをstateに反映
     handleUserInput: function (submit, queryText) {
-        log(this.props.targets)
-        var target = this.getTarget(this.props.targets, "Fukui_Sabae")
-        this.setProps({
-            target: target,
-            clickHandler: target.clickHandler
-        });
         this.setState({
             submit: submit,
             queryText: queryText,
@@ -72,7 +58,7 @@ var Search = React.createClass({
         log('SearchBox render');
         //if(this.state.submit && this.state.queryText!=''){
         if (this.state.queryText != '') {
-          var resultNode = <SearchList queryText={this.state.queryText} target={this.state.target} rerender={this.rerender} clickHandler={this.props.clickHandler}></SearchList>;
+          var resultNode = <SearchResult queryText={this.state.queryText} target={this.props.target} rerender={this.rerender} clickHandler={this.props.clickHandler}></SearchResult>;
         }
         return (
           <div className="search">
@@ -104,7 +90,7 @@ var SearchBox = React.createClass({
     render: function () {
         return (
             <div className="searchBox">
-                <form action="get" id="searchForm" className="form-inline" onSubmit="this.handleSubmit">
+                <form action="get" id="searchForm" className="form-inline" onSubmit={this.handleSubmit}>
                     <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと" onChange={this.handleChange} />
                     <i className="fa fa-search searchBtn" onClick={this.handleSubmit}></i>
                 </form>
@@ -115,7 +101,6 @@ var SearchBox = React.createClass({
 
 
 var SearchResult = React.createClass({
-    displayName: "SearchResult",
     searchInstances: {},
     queryText: '',
     format: function () {
@@ -129,6 +114,8 @@ var SearchResult = React.createClass({
         this.props.target.error    = false;
     },
     start: function () {
+        log(this.props.target)
+        alert()
         this.queryText = this.props.queryText;
         this.stop();
         this.format();
@@ -223,7 +210,7 @@ var BookList = React.createClass({
     }.bind(this));
     return (
       <div className="booklist">
-        <div className="booklistTitle" dangerouslySetInnerHTML={this.props.queryText+"の検索結果"}></div>
+        <div className="booklistTitle" dangerouslySetInnerHTML={{__html: this.props.queryText+"の検索結果"}}></div>
         <div className="booklistClose fa fa-times" onClick={this.props.closeHandler}></div>
         {bookNodes}
       </div>
@@ -240,8 +227,8 @@ var Book = React.createClass({
             <img id={'image' + this.props.book.id} className="thumbnail" src="https://calil.jp/public/img/no-image/medium-noborder.gif" alt=""/>
 
           </div>
-          <a href={this.props.book.url} target="_blank" id={this.props.book.id} dangerouslySetInnerHTML={this.props.book.title}></a>
-          <div id={this.props.book.id} dangerouslySetInnerHTML={this.props.book.title}></div>
+          <a href={this.props.book.url} target="_blank" id={this.props.book.id} dangerouslySetInnerHTML={{__html: this.props.book.title}}></a>
+          <div id={this.props.book.id} dangerouslySetInnerHTML={{__html: this.props.book.title}}></div>
         </div>
         <div className="stock" id={'stock' + this.props.book.id}></div>
       </div>
