@@ -2,7 +2,7 @@
 load = ->
   script = document.createElement('script')
   script.onload = ->
-    initialize()
+    initializeApp()
   $.ajax
     type: 'GET'
     url: 'https://calil.jp/static/apps/sabatomap/update_v100.js'

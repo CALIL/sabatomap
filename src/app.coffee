@@ -75,7 +75,7 @@ loadFloor = (id)->
 didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
-initialize = ->
+initializeApp = ->
   if cordova?
     if device.platform is 'Android'
       kanikama.setTimeout(5000)

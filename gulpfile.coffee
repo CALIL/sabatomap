@@ -61,7 +61,7 @@ gulp.task 'clean_all_js', (cb)->
   del(['www/js/all.js'], cb)
 
 # アプリケーションファイルを結合
-gulp.task 'concat', ['compile_coffee', 'clean_all_js'], ->
+gulp.task 'concat', ['compile_coffee', 'clean_all_js','compile_jsx'], ->
   gulp.src [
     'node_modules/Kanikama/kanikama.js'
     'www/vendor/kanimarker.js'
