@@ -15,7 +15,7 @@ load = ->
     error: ->
       script.src = 'js/all.js'
       document.body.appendChild script
-if typeof device is 'undefined'
+if window.device
   document.addEventListener 'deviceready', load
 else
   load()
