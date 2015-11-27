@@ -114,13 +114,10 @@ var SearchResult = React.createClass({
         this.props.target.error    = false;
     },
     start: function () {
-        log(this.props.target)
-        alert()
         this.queryText = this.props.queryText;
         this.stop();
         this.format();
         this.searchInstances['local'] = new api();
-        log(this.props.target)
         this.searchInstances['local'].search(this.props.target, this.props.queryText, this.props.rerender);
     },
     stop: function () {
