@@ -15,7 +15,7 @@ load = ->
     error: ->
       script.src = 'js/all.js'
       document.body.appendChild script
-if cordova?
-  document.addEventListener 'deviceready', load
-else
-  load()
+#if cordova?
+#  document.addEventListener 'deviceready', load
+#else
+load()
