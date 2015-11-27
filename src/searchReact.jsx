@@ -6,7 +6,7 @@ var log = function(obj){
     console.log(obj)
   }catch(e){}
 };
-var Search = React.createClass({displayName: "Search",
+var Search = React.createClass({
     getInitialState: function () {
         log('getInitialState');
         return {
@@ -72,13 +72,13 @@ var Search = React.createClass({displayName: "Search",
         log('SearchBox render');
         //if(this.state.submit && this.state.queryText!=''){
         if (this.state.queryText != '') {
-          var resultNode = React.createElement(SearchList, {queryText: this.state.queryText, target: this.state.target, rerender: this.rerender, clickHandler: this.props.clickHandler});
+          var resultNode = <SearchList queryText={this.state.queryText} target={this.state.target} rerender={this.rerender} clickHandler={this.props.clickHandler}></SearchList>;
         }
         return (
-          React.createElement("div", {className: "search"}, 
-            React.createElement(SearchBox, {handleUserInput: this.handleUserInput, submit: this.state.submit, queryText: this.props.queryText}), 
-            resultNode
-          )
+          <div className="search">
+            <SearchBox handleUserInput={this.handleUserInput} submit={this.state.submit} queryText={this.props.queryText}></SearchBox>
+            {resultNode}
+          </div>
         );
     }
 });
@@ -86,7 +86,7 @@ var Search = React.createClass({displayName: "Search",
 
 
 
-var SearchBox = React.createClass({displayName: "SearchBox",
+var SearchBox = React.createClass({
     handleSubmit: function (e) {
         e.preventDefault();
         this.props.handleUserInput(
@@ -103,12 +103,12 @@ var SearchBox = React.createClass({displayName: "SearchBox",
     },
     render: function () {
         return (
-            React.createElement("div", {className: "searchBox"}, 
-                React.createElement("form", {action: "get", id: "searchForm", className: "form-inline", onSubmit: "this.handleSubmit"}, 
-                    React.createElement("input", {type: "search", id: "queryTextInput", ref: "queryTextInput", placeholder: "探したいこと・調べたいこと", onChange: this.handleChange}), 
-                    React.createElement("i", {className: "fa fa-search searchBtn", onClick: this.handleSubmit})
-                )
-            )
+            <div className="searchBox">
+                <form action="get" id="searchForm" className="form-inline" onSubmit="this.handleSubmit">
+                    <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと" onChange={this.handleChange} />
+                    <i className="fa fa-search searchBtn" onClick={this.handleSubmit}></i>
+                </form>
+            </div>
         );
     }
 });
@@ -200,51 +200,51 @@ var SearchResult = React.createClass({
     render: function () {
         var messageNode = null;
         if (this.props.target.message) {
-            messageNode = React.createElement("p", {className: "searchMessage", dangerouslySetInnerHTML: {__html: this.props.target.message}})
+            messageNode = <p className="searchMessage" dangerouslySetInnerHTML={{__html: this.props.target.message}}></p>
         }
         return (
-          React.createElement("div", {className: "searchResult", ref: "searchResult"}, 
-            React.createElement("div", {className: "searchDiv", ref: "search"}, 
-              {messageNode}, 
-              React.createElement(BookList, {books: this.props.target.books, queryText: this.props.queryText, clickHandler: this.clickHandler, closeHandler: this.closeHandler})
-            )
-          )
+          <div className="searchResult" ref="searchResult">
+            <div className="searchDiv" ref="search">
+              {{messageNode}}
+              <BookList books={this.props.target.books} queryText={this.props.queryText} clickHandler={this.clickHandler} closeHandler={this.closeHandler}></BookList>
+            </div>
+          </div>
         );
     }
 });
 
 
-var BookList = React.createClass({displayName: "BookList",
+var BookList = React.createClass({
   render: function() {
     var bookNodes = this.props.books.map(function (book, i) {
       return (
-        React.createElement(Book, {key: book.id, book: book, clickHandler: this.props.clickHandler})
+        <Book key={book.id} book={book} clickHandler={this.props.clickHandler}></Book>
       );
     }.bind(this));
     return (
-      React.createElement("div", {className: "booklist"}, 
-        React.createElement("div", {className: "booklistTitle", dangerouslySetInnerHTML: this.props.queryText+"の検索結果"}), 
-        React.createElement("div", {className: "booklistClose fa fa-times", onClick: this.props.closeHandler}), 
-        bookNodes
-      )
+      <div className="booklist">
+        <div className="booklistTitle" dangerouslySetInnerHTML={this.props.queryText+"の検索結果"}></div>
+        <div className="booklistClose fa fa-times" onClick={this.props.closeHandler}></div>
+        {bookNodes}
+      </div>
     );
   }
 });
 
-var Book = React.createClass({displayName: "Book",
+var Book = React.createClass({
   render: function() {
     return (
-      React.createElement("div", {className: "book"}, 
-        React.createElement("div", {className: "leftblock"}, 
-          React.createElement("div", null, 
-            React.createElement("img", {id: 'image' + this.props.book.id, className: "thumbnail", src: "https://calil.jp/public/img/no-image/medium-noborder.gif", alt: ""})
+      <div className="book">
+        <div className="leftblock">
+          <div>
+            <img id={'image' + this.props.book.id} className="thumbnail" src="https://calil.jp/public/img/no-image/medium-noborder.gif" alt=""/>
 
-          ), 
-          React.createElement("a", {href: this.props.book.url, target: "_blank", id: this.props.book.id, dangerouslySetInnerHTML: this.props.book.title}), 
-          React.createElement("div", {id: this.props.book.id, dangerouslySetInnerHTML: this.props.book.title})
-        ), 
-        React.createElement("div", {className: "stock", id: 'stock' + this.props.book.id})
-      )
+          </div>
+          <a href={this.props.book.url} target="_blank" id={this.props.book.id} dangerouslySetInnerHTML={this.props.book.title}></a>
+          <div id={this.props.book.id} dangerouslySetInnerHTML={this.props.book.title}></div>
+        </div>
+        <div className="stock" id={'stock' + this.props.book.id}></div>
+      </div>
     );
   }
 });
@@ -252,7 +252,7 @@ var Book = React.createClass({displayName: "Book",
 
 if (typeof searchSetting != 'undefined') {
     React.render(
-      React.createElement(Search, {searchSetting: searchSetting}),
+      <Search searchSetting={searchSetting} />,
       document.getElementById('searchBox')
     );
 }
