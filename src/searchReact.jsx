@@ -227,7 +227,6 @@ var Book = React.createClass({
 
           </div>
           <a href={this.props.book.url} target="_blank" id={this.props.book.id} dangerouslySetInnerHTML={{__html: this.props.book.title}}></a>
-          <div id={this.props.book.id} dangerouslySetInnerHTML={{__html: this.props.book.title}}></div>
         </div>
         <div className="stock" id={'stock' + this.props.book.id}></div>
       </div>

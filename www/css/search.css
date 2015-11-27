@@ -102,6 +102,7 @@
 
 .book a {
     color: #000000;
+    text-decoration: none;
 }
 
 .bookStatus {
