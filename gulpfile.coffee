@@ -10,6 +10,12 @@ fs = require 'fs'
 cordova_lib = require('cordova-lib')
 cdv = cordova_lib.cordova.raw
 
+react       = require('gulp-react')
+# gulp-plumber コンパイルエラーによる強制停止を防止する
+plumber     = require('gulp-plumber')
+notify      = require('gulp-notify')
+
+
 # ウェブから依存ライブラリをダウンロードして配置する
 gulp.task 'fetch_depends_web', ->
   depended_libraries = [
@@ -41,6 +47,16 @@ gulp.task 'compile_coffee', ->
     'src/search.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
 
+
+# JSXファイルをコンパイル
+gulp.task 'compile_jsx', ->
+  gulp.src('src/searchReact.jsx')
+    .pipe(plumber({
+      errorHandler: notify.onError "Error: <%= error.message %>"
+    }))
+    .pipe(react())
+    .pipe(gulp.dest('src'))
+
 gulp.task 'clean_all_js', (cb)->
   del(['www/js/all.js'], cb)
 
@@ -70,9 +86,10 @@ gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean'], ->
 
 gulp.task 'watch', ->
   gulp.watch ['src/*.coffee', 'src/*.js'], ['cordova_prepare']
+  # JSXファイルの開発用
+  gulp.watch('src/*.jsx', ['compile_jsx'])
 
 gulp.task 'default', ['update']
 
 gulp.task 'update', ['fetch_depends_web', 'fetch_depends_bower'], ->
   gulp.start 'cordova_prepare'
-
