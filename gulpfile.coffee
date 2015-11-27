@@ -87,7 +87,7 @@ gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean'], ->
 gulp.task 'watch', ->
   gulp.watch ['src/*.coffee', 'src/*.js'], ['cordova_prepare']
   # JSXファイルの開発用
-  gulp.watch('src/*.jsx', ['compile_jsx'])
+  gulp.watch('src/*.jsx', ['compile_jsx', 'concat'])
 
 gulp.task 'default', ['update']
 
