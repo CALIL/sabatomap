@@ -19,7 +19,6 @@ notify      = require('gulp-notify')
 # ウェブから依存ライブラリをダウンロードして配置する
 gulp.task 'fetch_depends_web', ->
   depended_libraries = [
-    'https://s3-ap-northeast-1.amazonaws.com/kanilayer/kanilayer.js'
     'https://s3-ap-northeast-1.amazonaws.com/kanimarker/kanimarker.js'
     'http://lab.calil.jp/ol3custom/v3.10.1/ol.js'
     'http://openlayers.org/en/v3.10.1/css/ol.css'
@@ -64,6 +63,7 @@ gulp.task 'clean_all_js', (cb)->
 gulp.task 'concat', ['compile_coffee', 'clean_all_js','compile_jsx'], ->
   gulp.src [
     'node_modules/Kanikama/kanikama.js'
+    'node_modules/Kanilayer/kanilayer.js'
     'www/vendor/kanimarker.js'
     'www/vendor/kanilayer.js'
     'src/compiled/app.js'

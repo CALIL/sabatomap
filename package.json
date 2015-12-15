@@ -3,7 +3,8 @@
   "version": "1.3.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "dependencies": {
-    "Kanikama": "git+https://github.com/CALIL/Kanikama.git"
+    "Kanikama": "git+https://github.com/CALIL/Kanikama.git",
+    "Kanilayer": "git+https://github.com/CALIL/Kanilayer.git"
   },
   "devDependencies": {
     "bower": "^1.6.3",

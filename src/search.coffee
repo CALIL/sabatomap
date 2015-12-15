@@ -17,6 +17,7 @@ Queue::size = ->
 Queue::toString = ->
   '[' + @__a.join(',') + ']'
 
+
 class api
   count: null
   session: null
@@ -181,7 +182,7 @@ class api
       k: id
       s: target.params.systemid
       session: @session
-      version: '1.1.0'
+      version: '1.3.0'
     $.ajax
       url: 'https://api.calil.jp/search_warabi_v1'
       type: 'GET'

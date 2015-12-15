@@ -16,7 +16,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 
 map = null
 kanimarker = null
-kanilayer = new Kanilayer({targetImageUrl:'img/flag.png'})
+kanilayer = new Kanilayer({targetImageUrl:'img/flag.png',targetImageUrl2:'img/flag2.png'})
 kanikama = new Kanikama()
 window.alert = (s)->
   console.log s
@@ -270,8 +270,8 @@ showNotify = (message)->
   $('.notification').html(message).stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
 
 # 目的地を表示する
-navigateShelf = (floorId, shelfId)->
+navigateShelf = (floorId, shelves)->
   if floorId != kanilayer.floorId
     loadFloor(floorId)
-  kanilayer.setTargetShelf(shelfId)
+  kanilayer.setTargetShelves(shelves)
   $('.searchResult').fadeOut()
