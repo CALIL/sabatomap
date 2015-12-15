@@ -16,7 +16,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 
 map = null
 kanimarker = null
-kanilayer = new Kanilayer()
+kanilayer = new Kanilayer({targetImageUrl:'img/flag.png'})
 kanikama = new Kanikama()
 window.alert = (s)->
   console.log s

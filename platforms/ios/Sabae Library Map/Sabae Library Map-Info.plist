@@ -29,34 +29,16 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSMainNibFile~ipad</key>
-    <string></string>
-    <key>UIInterfaceOrientation</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-    </array>
+    <string/>
     <key>UIRequiresFullScreen</key>
     <true/>
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-    <key>UISupportedInterfaceOrientations~ipad</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
+    <key>WKWebViewPluginEmbeddedServerPort</key>
+    <string>12344</string>
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
-    <key>WKWebViewPluginEmbeddedServerPort</key>
-    <string>12344</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>This app would like to scan for iBeacons even when in the background.</string>
     <key>NSLocationWhenInUseUsageDescription</key>

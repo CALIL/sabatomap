@@ -72,7 +72,7 @@ body{
 #position-mode {
     position: absolute;
     right: 0;
-    bottom: 50px;
+    bottom: 0;
     margin: 10px;
     box-sizing: content-box;
     padding: 10px;
@@ -107,8 +107,8 @@ body{
     width: 48px;
     padding: 10px;
     box-sizing: content-box;
-    right: 0;
-    top: 18px;
+    right: 5px;
+    top: 95px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-user-select: none;
     user-select: none;
@@ -129,24 +129,24 @@ body{
 .notification {
     display: none;
     position: absolute;
-    padding: 5px 10px;
+    padding: 10px 10px;
+    border: 1px solid #D6D6D6;
     border-radius: 5px;
-    background: #D9EDF7;
-    color: #317095;
+    background: rgb(255, 255, 255);
+    color: #6B6B6B;
     font-size: 14px;
     font-family: sans-serif;
 }
-
 @media (max-width: 374px) {
     .notification {
-        bottom: 140px;
+        bottom: 90px;
         right: 10px;
     }
 }
 
 @media (min-width: 375px) {
     .notification {
-        bottom: 80px;
+        bottom: 30px;
         right: 88px;
     }
 }
