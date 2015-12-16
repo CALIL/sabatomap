@@ -3,7 +3,7 @@
 }
 .searchBox {
     position: absolute;
-    top: 20px;
+    top: 60px;
     left: 16px;
     right: 16px;
     z-index: 1000000;
@@ -48,7 +48,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     position: absolute;
-    top: 69px;
+    top: 109px;
     z-index: 1000001;
     left: 16px;
     bottom: 0px;
@@ -90,9 +90,8 @@
   cursor: pointer;
   color: #CCCCCC;
   font-size: 36px;
-    /* line-height: 32px; */
     padding: 20px;
-    margin-right: -45px;
+    margin-right: -25px;
     margin-top: -20px;
 }
 

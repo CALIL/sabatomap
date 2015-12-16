@@ -15,7 +15,7 @@ body{
 }
 #floor-button {
     position: absolute;
-    bottom: 50px;
+    bottom: 0px;
     height: auto;
     border: 1px solid #E2E2E2;
     margin: 10px;
