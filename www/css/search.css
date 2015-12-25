@@ -36,6 +36,21 @@ body {
 
 .searchBox input::-webkit-search-cancel-button {
     -webkit-appearance: none;
+    transition: opacity 0.4s;
+
+}
+
+.searchBox input::-webkit-search-cancel-button:after {
+    content: 'クリア';
+    display: block;
+    width: 50px;
+    text-align: center;
+    margin-right:30px;
+    font-size:12px;
+    padding:8px;
+    border-radius: 5px;
+    height: 10px;
+    background-color:#eee;
 }
 
 .searchBox input::-webkit-input-placeholder {
