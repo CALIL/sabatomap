@@ -111,23 +111,25 @@ body {
     width: 48px;
     padding: 10px;
     box-sizing: content-box;
-    right: 5px;
-    top: 95px;
+    right: 2px;
+    top: 65px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-user-select: none;
     user-select: none;
     position: absolute;
     border-radius: 50%;
-    background-image: url(../img/compass.svg);
-    background-repeat: no-repeat;
-    background-position: center;
+    background: url(../img/compass.svg) no-repeat center;
     background-size: 38px;
+    transition: opacity .25s linear, visibility 0.25s linear .25s;
+}
+
+.ios #compass{
+    top:85px;
 }
 
 #compass.ol-hidden {
     opacity: 0;
-    visibility: hidden;
-    transition: opacity .25s linear, visibility 0s linear .25s;
+    pointer-events: none;
 }
 
 .notification {

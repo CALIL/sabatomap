@@ -1,195 +1,91 @@
-// React.js 使い方・ハマりどころのメモ
-// https://www.evernote.com/l/AAGt9tKUiupOHqRT82I4O3XGVbu6eB68nHE
-
-var log = function (obj) {
-    try {
-        console.log(obj)
-    } catch (e) {
-    }
-};
 var Search = React.createClass({
     getInitialState: function () {
-        log('getInitialState');
-        return {
-            animation: true,
-            queryText: ''
-        };
+        return {query: ''};
     },
-    getDefaultProps: function () {
-        return {
-            queryText: '',
-            target: [],
-            clickHandler: function () {
-            }
-        };
+    doSearch: function (query) {
+        this.setState({query: query});
     },
-    componentDidMount: function () {
-        log('componentDidMount');
-        log(this.props);
-        this.setProps({
-            target: this.props.searchSetting.targets[0],
-            clickHandler: this.props.searchSetting.clickHandler
-        });
-        if (this.props.searchSetting.queryText != '') {
-            this.setState({
-                queryText: this.props.searchSetting.queryText
-            })
-            $('#queryTextInput').val(this.props.searchSetting.queryText);
-        }
-    },
-    // 検索クエリーをstateに反映
-    handleUserInput: function (submit, queryText) {
-        this.setState({
-            submit: submit,
-            queryText: queryText
-        });
-    },
-    // 再レンダリング
-    rerender: function () {
-        this.setState({
-            submit: false,
-            animation: false
-        });
+    doClose: function () {
+        this.doSearch('');
     },
     render: function () {
-        log('SearchBox render');
-        if (this.state.queryText != '') {
-            var resultNode = <SearchResult queryText={this.state.queryText} target={this.props.target}
-                                           rerender={this.rerender}
-                                           clickHandler={this.props.clickHandler}/>;
-        }
         return (
-            <div className="search">
-                <SearchBox handleUserInput={this.handleUserInput} submit={this.state.submit}
-                           queryText={this.props.queryText}/>
-                {resultNode}
+            <div className="reactSearch">
+                <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと"/>
+                <SearchResult systemid='Fukui_Sabae' query={this.state.query} onClose={this.doClose}/>
             </div>
         );
     }
 });
-
 
 var SearchBox = React.createClass({
-    handleSubmit: function (e) {
-        e.preventDefault();
-        this.props.handleUserInput(
-            true,
-            this.refs.queryTextInput.getDOMNode().value
-        );
-        this.refs.queryTextInput.getDOMNode().blur()
-    },
-    componentDidMount: function () {
-        var textInputNode = this.refs.queryTextInput.getDOMNode();
-        if (this.props.queryText != '') {
-            textInputNode.value = this.props.queryText;
+    onInput: function () {
+        if(this.refs.query.getDOMNode().value==''){
+            this.props.onSearch('');
         }
+    },
+    doSubmit: function () {
+        this.props.onSearch(this.refs.query.getDOMNode().value);
+        this.refs.query.getDOMNode().blur(); //フォーカスを外す
     },
     render: function () {
         return (
-            <div className="searchBox">
-                <form id="searchForm" action="#" onSubmit={this.handleSubmit}>
-                    <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと"/>
-                    <i className="fa fa-search searchBtn" onClick={this.handleSubmit}/>
-                </form>
-            </div>
+            <form className="box" action="#" onSubmit={this.doSubmit}>
+                <input type="search" ref="query" placeholder={this.props.placeholder} onInput={this.onInput} />
+                <button type="submit" className="fa fa-search"/>
+            </form>
         );
     }
 });
-
 
 var SearchResult = React.createClass({
-    searchInstances: {},
-    queryText: '',
-    format: function () {
-        // データを初期化する renderが走るのでsetPropsは使わない
-        this.props.target.message = null;
-        this.props.target.count = 0;
-        this.props.target.books = [];
-        this.props.target.bookimages = [];
-        this.props.target.opacurl = null;
-        this.props.target.complete = false;
-        this.props.target.error = false;
+    api: null,
+    query: '',
+    getInitialState: function () {
+        return {
+            books: [],
+            message: '',
+            hint: ''
+        };
     },
-    start: function () {
-        this.queryText = this.props.queryText;
-        this.stop();
-        this.format();
-        this.searchInstances['local'] = new api();
-        this.searchInstances['local'].search(this.props.target, this.props.queryText, this.props.rerender);
-    },
-    stop: function () {
-        // レンダリングをしないようにする
-        if (typeof this.searchInstances['local'] != 'undefined') {
-            this.searchInstances['local'].stop();
-        }
-    },
-    componentWillMount: function () {
-        log('SearchList componentWillMount')
-        // 初回のrenderのためにデータの初期化が必要
-        this.format()
+    doUpdate: function (data) {
+        this.setState(data);
     },
     componentDidMount: function () {
-        log('SearchList componentDidMount')
-        this.start();
+        if (this.props.query != this.query && this.props.query!='') {
+            if (this.api) {
+                this.api.kill();
+            }
+            this.query = this.props.query;
+            this.api = new api(this.props.systemid, this.props.query, this.doUpdate);
+        }
     },
     componentDidUpdate: function () {
-        log('SearchList componentDidUpdate')
-        var $searchResult = $(this.refs.searchResult.getDOMNode());
-        log(this.props.target)
-        if (this.props.target.message) {
-            $searchResult.fadeIn(500);
-        } else if (this.props.target.complete) {
-            $searchResult.fadeIn(800);
-        }
-        if ((this.queryText != this.props.queryText) || (this.props.submit && this.props.target.error === true)) {
-            this.start();
-        }
+        this.componentDidMount();
     },
     componentWillUnmount: function () {
-        // レンダリングをしないようにする
-        this.stop();
-    },
-    clickHandler: function (e) {
-        if (this.props.clickHandler) {
-            e.preventDefault();
-            var data = $(e.target).closest('.book').attr('data');
-            if (data) {
-                data = JSON.parse(data);
-                $(this.refs.searchResult.getDOMNode()).fadeOut();
-                this.stop();
-                this.props.clickHandler(data);
-            }
+        if (this.api) {
+            this.api.kill();
         }
     },
-    closeHandler: function () {
-        $(this.refs.searchResult.getDOMNode()).fadeOut(300, function () {
-            $(this).hide();
-        });
-        this.stop();
-    },
     render: function () {
-        return (
-            <div className="searchResult" ref="searchResult">
-                <div className="booklistClose fa fa-times" onClick={this.closeHandler}></div>
-                <p className="searchMessage">{this.props.target.message}</p>
-                <BookList books={this.props.target.books}/>
-                <p>{this.props.target.hint}</p>
-            </div>
-        );
-    }
-});
-
-var BookList = React.createClass({
-    render: function () {
-
-        var bookNodes = this.props.books.map(function (book, i) {
+        var books = this.state.books.map(function (book) {
             return (
                 <Book key={book.id} book={book}/>
             );
-        }.bind(this));
+        });
+        var cls = 'results';
+        if (this.props.query == '') {
+            cls += ' empty';
+        }
         return (
-            <div className="booklist">
-                {bookNodes}
+            <div className={cls}>
+                <div className="close fa fa-times" onClick={this.props.onClose}></div>
+                <p className="message">{this.state.message}</p>
+                <div className="books">
+                    {books}
+                </div>
+                <p>{this.state.hint}</p>
             </div>
         );
     }
@@ -199,22 +95,16 @@ var Book = React.createClass({
     render: function () {
         return (
             <div className="book">
-                <div className="leftblock">
-                    <div>
-                        <img id={'image' + this.props.book.id} className="thumbnail"
-                             src="https://calil.jp/public/img/no-image/medium-noborder.gif" alt=""/>
-                    </div>
-                    <a href={this.props.book.url} target="_blank" id={this.props.book.id}>{this.props.book.title}</a>
-                </div>
+                <img id={'image' + this.props.book.id} className="thumbnail"
+                     src="https://calil.jp/public/img/no-image/medium-noborder.gif"/>
+                <a href={this.props.book.url} target="_blank">{this.props.book.title}</a>
                 <div className="stock" id={'stock' + this.props.book.id}></div>
             </div>
         );
     }
 });
 
-if (typeof searchSetting != 'undefined') {
-    React.render(
-        <Search searchSetting={searchSetting}/>,
-        document.getElementById('searchBox')
-    );
-}
+var searchbox = React.render(
+    <Search />,
+    document.getElementById('searchBox')
+);

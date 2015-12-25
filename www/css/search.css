@@ -2,80 +2,72 @@ body {
     margin: 0;
 }
 
-#searchBox, .search {
+.reactSearch {
     height: 100%;
 }
 
-.searchBox {
+.reactSearch .box {
     position: absolute;
     top: 20px;
     left: 16px;
     right: 16px;
     z-index: 1000000;
-    background-color: #ffffff;
-    padding: 0;
-    border-bottom: none;
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.ios .searchBox {
+.ios .reactSearch .box {
     top: 40px;
 }
 
-.searchBox input {
+.reactSearch .box input {
     color: #727171;
     font-family: sans-serif;
     font-size: 100%;
     width: 100%;
-    height: auto;
-    padding: 15px;
-    border: 0;
+    padding: 12px;
+    border: 2px solid #D4D4D4;
     outline: none;
     -webkit-user-select: text;
+    transition: border 0.9s;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
 }
 
-.searchBox input::-webkit-search-cancel-button {
+.reactSearch .box input::-webkit-search-cancel-button {
     -webkit-appearance: none;
-    transition: opacity 0.4s;
-
 }
 
-.searchBox input::-webkit-search-cancel-button:after {
-    content: 'クリア';
-    display: block;
-    width: 50px;
-    text-align: center;
-    margin-right:30px;
-    font-size:12px;
-    padding:8px;
-    border-radius: 5px;
-    height: 10px;
-    background-color:#eee;
-}
-
-.searchBox input::-webkit-input-placeholder {
+.reactSearch .box input::-webkit-input-placeholder {
     transition: opacity 0.4s;
 }
 
-.searchBox input:focus::-webkit-input-placeholder {
+.reactSearch .box input:focus::-webkit-input-placeholder {
     opacity: 0;
 }
 
-.searchBtn {
+.reactSearch .box input:focus {
+    border: 2px solid rgba(56, 149, 255, 0.85);
+}
+.reactSearch .box input:focus + button {
+    color:rgba(56, 149, 255, 0.85);
+}
+.reactSearch .box button {
     position: absolute;
     cursor: pointer;
     color: #999999;
     margin: auto;
-    height: 20px;
-    font-size:20px;
+    height: auto;
+    font-size: 20px;
     bottom: 0;
-    top:0;
-    padding: 10px 15px 10px 10px;
+    top: 0;
     right: 0;
+    padding: 10px 15px 10px 10px;
+    border: none;
+    background: none;
+    transition: color 0.4s;
 }
-
-.searchResult {
-    display: none;
+.reactSearch .box button:hover {
+    color:rgba(56, 149, 255, 0.85);
+}
+.results {
     overflow-y: scroll;
     overflow-x: hidden;
     position: absolute;
@@ -89,39 +81,19 @@ body {
     padding: 10px 20px 20px;
     width: auto;
     height: auto;
+    transition: opacity 0.6s;
 }
 
-.ios .searchResult {
+.results.empty {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ios .results {
     top: 90px;
 }
 
-.searchDiv {
-    width: calc(100% - 40px);
-    min-height: calc(100% - 20px);
-    background-color: #FFFFFF;
-    padding: 10px 20px;
-
-}
-
-.searchMessage {
-    /*   clear: both;*/
-}
-
-.booklist {
-    padding-top: 20px;
-}
-
-.booklistTitle {
-    float: left;
-    color: #727171;
-    font-family: sans-serif;
-    font-size: 24px;
-    line-height: 34px;
-    font-weight: 100;
-    margin-bottom: 30px;
-}
-
-.booklistClose {
+.results .close {
     float: right;
     cursor: pointer;
     color: #CCCCCC;
@@ -131,9 +103,11 @@ body {
     margin-top: -20px;
 }
 
+.results .books {
+    padding-top: 20px;
+}
+
 .book {
-    /* clear: both; */
-    /* font-family: sans-serif; */
     font-size: 14px;
     line-height: 1.2em;
     border-bottom: 1px solid #EFEFEF;
@@ -223,7 +197,4 @@ body {
     color: #848484;
     display: inline-block;
     font-size: 12px;
-}
-
-.leftblock {
 }

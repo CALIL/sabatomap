@@ -277,4 +277,4 @@ navigateShelf = (floorId, shelves)->
   if floorId != kanilayer.floorId
     loadFloor(floorId)
   kanilayer.setTargetShelves(shelves)
-  $('.searchResult').fadeOut()
+  searchbox.doClose()
