@@ -1,3 +1,14 @@
+input[type="search"] {
+    -webkit-appearance: textfield;
+    -webkit-box-sizing: content-box;
+}
+input[type="search"]:focus {
+    outline-offset: -2px;
+}
+input[type="search"]::-webkit-search-decoration {
+    display: none;
+}
+
 body {
     margin: 0;
 }
