@@ -12,7 +12,7 @@ var Search = React.createClass({
         log('getInitialState');
         return {
             animation: true,
-            queryText: '',
+            queryText: ''
         };
     },
     getDefaultProps: function () {
@@ -25,14 +25,14 @@ var Search = React.createClass({
     },
     componentDidMount: function () {
         log('componentDidMount');
-        log(this.props)
+        log(this.props);
         this.setProps({
             target: this.props.searchSetting.targets[0],
             clickHandler: this.props.searchSetting.clickHandler
         });
         if (this.props.searchSetting.queryText != '') {
             this.setState({
-                queryText: this.props.searchSetting.queryText,
+                queryText: this.props.searchSetting.queryText
             })
             $('#queryTextInput').val(this.props.searchSetting.queryText);
         }
@@ -41,14 +41,14 @@ var Search = React.createClass({
     handleUserInput: function (submit, queryText) {
         this.setState({
             submit: submit,
-            queryText: queryText,
+            queryText: queryText
         });
     },
     // 再レンダリング
     rerender: function () {
         this.setState({
             submit: false,
-            animation: false,
+            animation: false
         });
     },
     render: function () {
@@ -56,12 +56,12 @@ var Search = React.createClass({
         if (this.state.queryText != '') {
             var resultNode = <SearchResult queryText={this.state.queryText} target={this.props.target}
                                            rerender={this.rerender}
-                                           clickHandler={this.props.clickHandler}></SearchResult>;
+                                           clickHandler={this.props.clickHandler}/>;
         }
         return (
             <div className="search">
                 <SearchBox handleUserInput={this.handleUserInput} submit={this.state.submit}
-                           queryText={this.props.queryText}></SearchBox>
+                           queryText={this.props.queryText}/>
                 {resultNode}
             </div>
         );
@@ -87,10 +87,9 @@ var SearchBox = React.createClass({
     render: function () {
         return (
             <div className="searchBox">
-                <form action="get" id="searchForm" className="form-inline" onSubmit={this.handleSubmit}>
-                    <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと"
-                           onChange={this.handleChange}/>
-                    <i className="fa fa-search searchBtn" onClick={this.handleSubmit}></i>
+                <form id="searchForm" onSubmit={this.handleSubmit}>
+                    <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと"/>
+                    <i className="fa fa-search searchBtn" onClick={this.handleSubmit}/>
                 </form>
             </div>
         );
@@ -173,7 +172,7 @@ var SearchResult = React.createClass({
             <div className="searchResult" ref="searchResult">
                 <div className="booklistClose fa fa-times" onClick={this.closeHandler}></div>
                 <p className="searchMessage">{this.props.target.message}</p>
-                <BookList books={this.props.target.books}></BookList>
+                <BookList books={this.props.target.books}/>
                 <p>{this.props.target.hint}</p>
             </div>
         );
@@ -185,7 +184,7 @@ var BookList = React.createClass({
 
         var bookNodes = this.props.books.map(function (book, i) {
             return (
-                <Book key={book.id} book={book}></Book>
+                <Book key={book.id} book={book}/>
             );
         }.bind(this));
         return (

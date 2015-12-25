@@ -77,6 +77,9 @@ didRangeBeaconsInRegion = (beacons)->
 
 initializeApp = ->
   if cordova?
+    if device.platform is 'iOS'
+      body=document.getElementsByTagName('body')
+      body.classList.add('ios')
     if device.platform is 'Android'
       kanikama.setTimeout(5000)
     if cordova.plugins.BluetoothStatus?

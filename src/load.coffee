@@ -5,7 +5,7 @@ load = ->
     initializeApp()
   $.ajax
     type: 'GET'
-    url: 'https://calil.jp/static/apps/sabatomap/update_v100.js'
+    url: 'https://calil.jp/static/apps/sabatomap/update_v120.js'
     cache: false
     dataType: 'script'
     timeout: 5000

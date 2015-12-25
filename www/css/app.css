@@ -7,12 +7,15 @@ html, body, #map {
     overflow: hidden;
     font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif;
 }
-body{
+
+body {
     background-color: #0068B1;
 }
-#map{
+
+#map {
     background-color: #eeeeee;
 }
+
 #floor-button {
     position: absolute;
     bottom: 0px;
@@ -102,6 +105,7 @@ body{
     background-image: url(../img/spinner.svg);
     background-color: rgba(255, 255, 255, 0.96);
 }
+
 #compass {
     height: 48px;
     width: 48px;
@@ -137,6 +141,7 @@ body{
     font-size: 14px;
     font-family: sans-serif;
 }
+
 @media (max-width: 374px) {
     .notification {
         bottom: 90px;
