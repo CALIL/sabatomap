@@ -87,7 +87,7 @@ var SearchBox = React.createClass({
     render: function () {
         return (
             <div className="searchBox">
-                <form id="searchForm" onSubmit={this.handleSubmit}>
+                <form id="searchForm" action="#" onSubmit={this.handleSubmit}>
                     <input type="search" id="queryTextInput" ref="queryTextInput" placeholder="探したいこと・調べたいこと"/>
                     <i className="fa fa-search searchBtn" onClick={this.handleSubmit}/>
                 </form>
