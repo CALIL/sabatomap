@@ -12,7 +12,6 @@
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
         <preference name="SplashScreen" value="splash" />
-        <preference name="SplashScreenDelay" value="3000" />
         <icon density="mdpi" src="www/res/icons/android/icon-48-mdpi.png" />
         <icon density="hdpi" src="www/res/icons/android/icon-72-hdpi.png" />
         <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
@@ -25,6 +24,7 @@
         <preference name="ShowSplashScreenSpinner" value="false" />
         <preference name="AutoHideSplashScreen" value="false" />
         <preference name="Orientation" value="all" />
+        <preference name="SplashScreenDelay" value="3000" />
     </platform>
     <platform name="windows">
         <preference name="windows-target-version" value="10.0" />
