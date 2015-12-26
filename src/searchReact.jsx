@@ -12,27 +12,39 @@ var Search = React.createClass({
         return (
             <div className="reactSearch">
                 <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと"/>
-                <SearchResult systemid='Fukui_Sabae' query={this.state.query} onClose={this.doClose}/>
+                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}/>
             </div>
         );
     }
 });
 
 var SearchBox = React.createClass({
+    onClose: function () {
+        this.refs.query.value = '';
+    },
+    onFocus: function () {
+        var check = document.querySelectorAll(".results.empty");
+        if (check.length != 0) {
+            this.refs.query.getDOMNode().select();
+        }
+    },
     onInput: function () {
-        if(this.refs.query.getDOMNode().value==''){
+        if (this.refs.query.getDOMNode().value == '') {
             this.props.onSearch('');
         }
     },
-    doSubmit: function () {
+    doSubmit: function (e) {
         this.props.onSearch(this.refs.query.getDOMNode().value);
         this.refs.query.getDOMNode().blur(); //フォーカスを外す
+        e.stopPropagation();
     },
     render: function () {
         return (
             <form className="box" action="#" onSubmit={this.doSubmit}>
-                <input type="search" ref="query" placeholder={this.props.placeholder} onInput={this.onInput} />
-                <button type="submit" className="fa fa-search"/>
+                <input type="search" ref="query" placeholder={this.props.placeholder} onInput={this.onInput}
+                       onFocus={this.onFocus}/>
+                <button type="submit" className="search fa fa-search" title="検索する"/>
+                <button className="clear fa fa-times" title="検索結果を閉じる" onClick={this.onClose}/>
             </form>
         );
     }
@@ -52,7 +64,7 @@ var SearchResult = React.createClass({
         this.setState(data);
     },
     componentDidMount: function () {
-        if (this.props.query != this.query && this.props.query!='') {
+        if (this.props.query != this.query && this.props.query != '') {
             if (this.api) {
                 this.api.kill();
             }
@@ -105,6 +117,6 @@ var Book = React.createClass({
 });
 
 var searchbox = React.render(
-    <Search />,
+    <Search systemid="Fukui_Sabae"/>,
     document.getElementById('searchBox')
 );
