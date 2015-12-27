@@ -54,24 +54,6 @@ body {
     pointer-events: auto;
 }
 
-#debug-buttons {
-    position: absolute;
-    top: 24px;
-    width: auto;
-    pointer-events: none;
-}
-
-@media (min-width: 1080px) {
-    #debug-buttons {
-        top: 10px;
-    }
-}
-
-#debug-buttons .ui-button {
-    float: left;
-    margin-left: 10px;
-}
-
 #position-mode {
     position: absolute;
     right: 0;
@@ -130,10 +112,6 @@ body {
 #compass.ol-hidden {
     opacity: 0;
     pointer-events: none;
-}
-
-#compass:hover{
-
 }
 
 .notification {
