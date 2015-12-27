@@ -245,7 +245,7 @@ initializeApp = ->
     deg = (view_.getRotation() * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
-    if deg == 0 or 100 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
+    if deg == 0 or 500 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
       $('#compass').addClass('ol-hidden')
     else
       $('#compass').css('transform', "rotate(#{deg}deg)").removeClass('ol-hidden')

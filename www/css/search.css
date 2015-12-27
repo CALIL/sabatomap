@@ -157,7 +157,7 @@ input[type=search]::-webkit-search-results-decoration {
     min-height: 24px;
 }
 
-.spinner:before {
+.loading:before {
     content: 'Loading…';
     position: absolute;
     top: 50%;
@@ -168,7 +168,7 @@ input[type=search]::-webkit-search-results-decoration {
     margin-left: -10px;
 }
 
-.spinner:not(:required):before {
+.loading:not(:required):before {
     content: '';
     border-radius: 50%;
     border: 2px solid rgba(0, 0, 0, .3);
@@ -176,6 +176,7 @@ input[type=search]::-webkit-search-results-decoration {
     animation: spinner .6s linear infinite;
     -webkit-animation: spinner .6s linear infinite;
 }
+
 .ios .results {
     top: 90px;
 }

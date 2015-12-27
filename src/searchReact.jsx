@@ -31,7 +31,7 @@ var SearchBox = React.createClass({
         }, 100);
     },
     onFocus: function (e) {
-        var check = document.querySelectorAll(".results.empty");
+        var check = document.querySelectorAll(".reactSearch.empty");
         if (check.length != 0) {
             this.refs.query.select();
         }
@@ -53,7 +53,7 @@ var SearchBox = React.createClass({
                 <input type="search" ref="query" placeholder={this.props.placeholder} onInput={this.onInput}
                        onFocus={this.onFocus}/>
                 <button type="submit" className="search fa fa-search" title="検索する"/>
-                <button className="clear fa fa-times" title="検索結果を閉じる" onClick={this.onClose}/>
+                <button className="clear fa fa-times loading" title="検索結果を閉じる" onClick={this.onClose}/>
             </form>
         );
     }
