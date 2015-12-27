@@ -77,15 +77,11 @@ input[type=search]::-webkit-search-results-decoration {
     right: 0;
     border: none;
     background: none;
-    transition: color 0.4s;
+    transition: color 0.4s,right 0.4s,opacity 0.6s;
 }
 
 .reactSearch .box button:hover {
     color: rgba(56, 149, 255, 0.85);
-}
-
-.reactSearch .box .search {
-    right: 45px;
 }
 
 .reactSearch .box .clear:after {
@@ -99,15 +95,17 @@ input[type=search]::-webkit-search-results-decoration {
     transition: border-left-color 0.4s;
 }
 
+
+
 .results {
     overflow-y: scroll;
     overflow-x: hidden;
     position: absolute;
-    top: 70px;
-    z-index: 1000001;
-    left: 16px;
+    top: 0;
+    z-index: 90000;
+    left: 0;
     bottom: 0;
-    right: 16px;
+    right: 0;
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     padding: 10px 20px 20px;
@@ -115,12 +113,69 @@ input[type=search]::-webkit-search-results-decoration {
     height: auto;
     transition: opacity 0.6s;
 }
+.results::-webkit-scrollbar {
+    background-color:#fff;
+    width: 10px;
+}
 
-.results.empty {
+.results::-webkit-scrollbar-track {
+    background: none;
+}
+
+.results::-webkit-scrollbar-thumb {
+    background-color:#ddd;
+}
+.reactSearch .box .search {
+    right: 45px;
+}
+
+/* 検索結果がない場合 */
+.empty .results {
     opacity: 0;
     pointer-events: none;
 }
+.empty .box .search {
+    right: 0;
+}
+.empty .box .clear {
+    -webkit-user-select: none;
+    user-focus: none;
+    right: -45px;
+    opacity: 0;
+    visibility:hidden;
+}
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
 
+@-webkit-keyframes spinner {
+    to {-webkit-transform: rotate(360deg);}
+}
+
+.spinner {
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.spinner:before {
+    content: 'Loading…';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -10px;
+    margin-left: -10px;
+}
+
+.spinner:not(:required):before {
+    content: '';
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, .3);
+    border-top-color: rgba(0, 0, 0, .6);
+    animation: spinner .6s linear infinite;
+    -webkit-animation: spinner .6s linear infinite;
+}
 .ios .results {
     top: 90px;
 }

@@ -62,6 +62,8 @@ gulp.task 'clean_all_js', (cb)->
 # アプリケーションファイルを結合
 gulp.task 'concat', ['compile_coffee', 'clean_all_js','compile_jsx'], ->
   gulp.src [
+    'bower_components/react/react.min.js'
+    'bower_components/react/react-dom.min.js'
     'node_modules/Kanikama/kanikama.js'
     'node_modules/Kanilayer/kanilayer.js'
     'www/vendor/kanimarker.js'

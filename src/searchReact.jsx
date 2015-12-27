@@ -9,8 +9,12 @@ var Search = React.createClass({
         this.doSearch('');
     },
     render: function () {
+        var cls = 'reactSearch';
+        if (this.state.query == '') {
+            cls += ' empty';
+        }
         return (
-            <div className="reactSearch">
+            <div className={cls}>
                 <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと"/>
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}/>
             </div>
@@ -21,21 +25,26 @@ var Search = React.createClass({
 var SearchBox = React.createClass({
     onClose: function () {
         this.refs.query.value = '';
+        var q = this.refs.query;
+        setTimeout(function () {
+            q.focus();
+        }, 100);
     },
-    onFocus: function () {
+    onFocus: function (e) {
         var check = document.querySelectorAll(".results.empty");
         if (check.length != 0) {
-            this.refs.query.getDOMNode().select();
+            this.refs.query.select();
         }
+        e.preventDefault();
     },
     onInput: function () {
-        if (this.refs.query.getDOMNode().value == '') {
+        if (this.refs.query.value == '') {
             this.props.onSearch('');
         }
     },
     doSubmit: function (e) {
-        this.props.onSearch(this.refs.query.getDOMNode().value);
-        this.refs.query.getDOMNode().blur(); //フォーカスを外す
+        this.props.onSearch(this.refs.query.value);
+        this.refs.query.blur(); //フォーカスを外す
         e.stopPropagation();
     },
     render: function () {
@@ -86,13 +95,8 @@ var SearchResult = React.createClass({
                 <Book key={book.id} book={book}/>
             );
         });
-        var cls = 'results';
-        if (this.props.query == '') {
-            cls += ' empty';
-        }
         return (
-            <div className={cls}>
-                <div className="close fa fa-times" onClick={this.props.onClose}></div>
+            <div className="results">
                 <p className="message">{this.state.message}</p>
                 <div className="books">
                     {books}
@@ -116,7 +120,7 @@ var Book = React.createClass({
     }
 });
 
-var searchbox = React.render(
+var searchbox = ReactDOM.render(
     <Search systemid="Fukui_Sabae"/>,
     document.getElementById('searchBox')
 );
