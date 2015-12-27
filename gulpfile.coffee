@@ -82,7 +82,7 @@ gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_
   cdv.prepare()
 
 gulp.task 'watch', ->
-  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.scss'], ['concat','sass']
+  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat','sass']
 
 gulp.task 'default', ['cordova_prepare']
 

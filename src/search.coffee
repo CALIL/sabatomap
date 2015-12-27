@@ -1,11 +1,11 @@
 class api
   constructor: (systemid, query, callback) ->
     console.log('[API] start session for query -> ' + query)
-    @value = {
+    @value =
+      completed:false
       message: ''
       hint: ''
       books: []
-    }
     @bookimages = {}
     @showImageInstance = null
     @continue_count = 0
@@ -27,7 +27,10 @@ class api
           @session = data.session
           @receive(data)
         error: () =>
+          @value.completed=true
           @updateMessage('データ取得に失敗しました。')
+    else
+      @value.completed=true
     @changed()
 
   kill: ()->
@@ -50,6 +53,7 @@ class api
       success: (data) =>
         @receive(data)
       error: () =>
+        @value.completed=true
         @updateMessage('データ取得に失敗しました。')
 
   receive: (data)->
@@ -61,6 +65,7 @@ class api
         return
     else
       console.log('[API] session complete.')
+    @value.completed=true
     resultData = data.results[@systemid]
     if resultData.status == 'Error'
       @updateMessage('検索エラーが発生しました。')
@@ -82,6 +87,8 @@ class api
         @queue.push(book.K)
       result = data.results[@systemid]
       @value.count = result.count
+      @value.completed=true
+
       @value.message = resultData.count + '件見つかりました'
       if resultData.count > 50
         @value.hint = '結果のうち50件目までを表示しています。'

@@ -1,12 +1,15 @@
 var Search = React.createClass({
     getInitialState: function () {
-        return {query: ''};
+        return {query: '', completed: true};
     },
     doSearch: function (query) {
         this.setState({query: query});
     },
     doClose: function () {
         this.doSearch('');
+    },
+    setCompleted: function (x) {
+        this.setState({completed: x});
     },
     render: function () {
         var cls = 'reactSearch';
@@ -15,8 +18,9 @@ var Search = React.createClass({
         }
         return (
             <div className={cls}>
-                <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと"/>
-                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}/>
+                <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
+                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
+                              setCompleted={this.setCompleted}/>
             </div>
         );
     }
@@ -43,17 +47,21 @@ var SearchBox = React.createClass({
         }
     },
     doSubmit: function (e) {
-        e.stopPropagation();
+        e.preventDefault();
         this.props.onSearch(this.refs.query.value);
         this.refs.query.blur(); //フォーカスを外す
     },
     render: function () {
+        var cls="clear fa fa-times"
+        if(this.props.completed==false){
+            cls+=" loading"
+        }
         return (
             <form className="box" action="#" onSubmit={this.doSubmit}>
                 <input type="search" ref="query" placeholder={this.props.placeholder} onInput={this.onInput}
                        onFocus={this.onFocus}/>
                 <button type="submit" className="search fa fa-search" title="検索する"/>
-                <button className="clear fa fa-times loading" title="検索結果を閉じる" onClick={this.onClose}/>
+                <button className={cls} title="検索結果を閉じる" onClick={this.onClose}/>
             </form>
         );
     }
@@ -71,6 +79,7 @@ var SearchResult = React.createClass({
     },
     doUpdate: function (data) {
         this.setState(data);
+        this.props.setCompleted(data.completed);
     },
     componentDidMount: function () {
         if (this.props.query != this.query && this.props.query != '') {
