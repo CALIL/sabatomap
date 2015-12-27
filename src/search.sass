@@ -15,6 +15,8 @@ input[type=search]
 
 #searchBox
   height: 100%
+  width: 100%
+  overflow: hidden
   .box
     position: absolute
     top: 16px
@@ -99,7 +101,7 @@ input[type=search]
       left: 0
       right: 16px
       pointer-events: none
-      background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)
     &::-webkit-scrollbar
       background-color: #fff
       width: 10px
@@ -116,7 +118,6 @@ input[type=search]
       opacity: 0
       pointer-events: none
     .clear
-      -webkit-user-select: none
       user-focus: none
       right: -45px !important
       opacity: 0

@@ -14,7 +14,7 @@ var Search = React.createClass({
     render: function () {
         var cls = '';
         if (this.state.query == '') {
-            cls += ' empty';
+            cls += 'empty';
         }
         return (
             <div className={cls}>
@@ -38,7 +38,7 @@ var SearchBox = React.createClass({
         }
     },
     onFocus: function (e) {
-        var check = document.querySelectorAll(".reactSearch.empty");
+        var check = document.querySelectorAll(".empty");
         if (check.length != 0) {
             this.refs.query.select();
         }
