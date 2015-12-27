@@ -1,288 +1,242 @@
+@charset "UTF-8";
 input[type=search] {
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-}
-
-input[type=search]::-webkit-search-cancel-button,
-input[type=search]::-webkit-search-decoration,
-input[type=search]::-webkit-search-results-button,
-input[type=search]::-webkit-search-results-decoration {
-    -webkit-appearance: none;
-}
+  -webkit-appearance: none;
+  -webkit-border-radius: 0; }
+  input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration, input[type=search]::-webkit-search-results-button, input[type=search]::-webkit-search-results-decoration {
+    -webkit-appearance: none; }
 
 .reactSearch {
-    height: 100%;
-}
-
-.reactSearch .box {
+  height: 100%; }
+  .reactSearch .box {
     position: absolute;
     top: 16px;
     left: 14px;
     right: 14px;
-    z-index: 1000000;
-}
+    z-index: 1000000; }
 
 .ios .reactSearch .box {
-    top: 36px;
-}
+  top: 36px; }
 
 .reactSearch .box input {
-    color: #727171;
-    font-family: sans-serif;
-    font-size: 100%;
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #D4D4D4;
-    outline: none;
-    -webkit-user-select: text;
-    transition: border 0.9s;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-}
+  color: #727171;
+  font-family: sans-serif;
+  font-size: 100%;
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #D4D4D4;
+  outline: none;
+  -webkit-user-select: text;
+  -webkit-transition: border 0.9s;
+  transition: border 0.9s;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  border-radius: 4px; }
+  .reactSearch .box input::-webkit-search-cancel-button {
+    -webkit-appearance: none; }
+  .reactSearch .box input::-webkit-input-placeholder {
+    -webkit-transition: opacity 0.4s;
+    transition: opacity 0.4s; }
+  .reactSearch .box input:focus {
+    border: 2px solid rgba(56, 149, 255, 0.85); }
+    .reactSearch .box input:focus::-webkit-input-placeholder {
+      opacity: 0; }
+    .reactSearch .box input:focus button {
+      color: rgba(56, 149, 255, 0.85); }
+      .reactSearch .box input:focus button .clear:after {
+        border-left: 1px solid rgba(56, 149, 255, 0.4); }
 
-.reactSearch .box input::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-}
-
-.reactSearch .box input::-webkit-input-placeholder {
-    transition: opacity 0.4s;
-}
-
-.reactSearch .box input:focus::-webkit-input-placeholder {
-    opacity: 0;
-}
-
-.reactSearch .box input:focus {
-    border: 2px solid rgba(56, 149, 255, 0.85);
-}
-
-.reactSearch .box input:focus ~ button {
-    color: rgba(56, 149, 255, 0.85);
-}
-.reactSearch .box input:focus ~ .clear:after {
-    border-left: 1px solid rgba(56, 149, 255, 0.4);
-}
 .reactSearch .box button {
-    position: absolute;
-    cursor: pointer;
-    color: #999999;
-    margin: auto;
-    height: auto;
-    padding-left:0;
-    padding-right:0;
-    font-size: 20px;
-    width:45px;
-    bottom: 0;
-    top: 0;
-    right: 0;
-    border: none;
-    background: none;
-    transition: color 0.4s,right 0.4s,opacity 0.6s;
-}
-
-.reactSearch .box button:hover {
-    color: rgba(56, 149, 255, 0.85);
-}
+  position: absolute;
+  cursor: pointer;
+  color: #999999;
+  margin: auto;
+  height: auto;
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 20px;
+  width: 45px;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  border: none;
+  background: none;
+  -webkit-transition: color 0.4s,right 0.4s,opacity 0.6s;
+  transition: color 0.4s,right 0.4s,opacity 0.6s; }
+  .reactSearch .box button:hover {
+    color: rgba(56, 149, 255, 0.85); }
 
 .reactSearch .box .clear:after {
-    border-left: 1px solid #DADADA;
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: 15px;
-    bottom: 15px;
-    width: 0;
-    transition: border-left-color 0.4s;
-}
-
-
+  border-left: 1px solid #DADADA;
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 15px;
+  bottom: 15px;
+  width: 0;
+  -webkit-transition: border-left-color 0.4s;
+  transition: border-left-color 0.4s; }
 
 .results {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    position: absolute;
-    top: 0;
-    z-index: 90000;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: absolute;
+  top: 0;
+  z-index: 90000;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  padding: 10px 20px 20px;
+  width: auto;
+  height: auto;
+  -webkit-transition: opacity 0.6s;
+  transition: opacity 0.6s; }
+  .results::-webkit-scrollbar {
     background-color: #fff;
-    padding: 10px 20px 20px;
-    width: auto;
-    height: auto;
-    transition: opacity 0.6s;
-}
-.results::-webkit-scrollbar {
-    background-color:#fff;
-    width: 10px;
-}
+    width: 10px; }
+  .results::-webkit-scrollbar-track {
+    background: none; }
+  .results::-webkit-scrollbar-thumb {
+    background-color: #ddd; }
 
-.results::-webkit-scrollbar-track {
-    background: none;
-}
-
-.results::-webkit-scrollbar-thumb {
-    background-color:#ddd;
-}
 .reactSearch .box .search {
-    right: 45px;
-}
+  right: 45px; }
 
 /* 検索結果がない場合 */
 .empty .results {
-    opacity: 0;
-    pointer-events: none;
-}
+  opacity: 0;
+  pointer-events: none; }
+
 .empty .box .search {
-    right: 0;
-}
+  right: 0; }
+
 .empty .box .clear {
-    -webkit-user-select: none;
-    user-focus: none;
-    right: -45px;
-    opacity: 0;
-    visibility:hidden;
-}
+  -webkit-user-select: none;
+  user-focus: none;
+  right: -45px;
+  opacity: 0;
+  visibility: hidden; }
+
 @keyframes spinner {
-    to {transform: rotate(360deg);}
-}
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
 
 @-webkit-keyframes spinner {
-    to {-webkit-transform: rotate(360deg);}
-}
+  to {
+    -webkit-transform: rotate(360deg); } }
 
 .spinner {
-    min-width: 24px;
-    min-height: 24px;
-}
+  min-width: 24px;
+  min-height: 24px; }
 
 .loading:before {
-    content: 'Loading…';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 16px;
-    margin-top: -10px;
-    margin-left: -10px;
-}
+  content: 'Loading…';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -10px;
+  margin-left: -10px; }
 
 .loading:not(:required):before {
-    content: '';
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, .3);
-    border-top-color: rgba(0, 0, 0, .6);
-    animation: spinner .6s linear infinite;
-    -webkit-animation: spinner .6s linear infinite;
-}
+  content: '';
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: rgba(0, 0, 0, 0.6);
+  animation: spinner .6s linear infinite;
+  -webkit-animation: spinner .6s linear infinite; }
 
 .ios .results {
-    top: 90px;
-}
+  top: 90px; }
 
 .results .close {
-    float: right;
-    cursor: pointer;
-    color: #CCCCCC;
-    font-size: 36px;
-    padding: 20px;
-    margin-right: -25px;
-    margin-top: -20px;
-}
+  float: right;
+  cursor: pointer;
+  color: #CCCCCC;
+  font-size: 36px;
+  padding: 20px;
+  margin-right: -25px;
+  margin-top: -20px; }
 
 .results .books {
-    padding-top: 20px;
-}
+  padding-top: 20px; }
 
 .book {
-    font-size: 14px;
-    line-height: 1.2em;
-    border-bottom: 1px solid #EFEFEF;
-    padding-bottom: 10px;
-    margin-bottom: 16px;
-    min-height: 120px;
-}
-
-.book .thumbnail {
+  font-size: 14px;
+  line-height: 1.2em;
+  border-bottom: 1px solid #EFEFEF;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  min-height: 120px; }
+  .book .thumbnail {
     float: left;
     height: 100px;
     max-width: 74px;
     margin-right: 10px;
-    border: 1px solid #CCCCCC;
-}
-
-.book a {
+    border: 1px solid #CCCCCC; }
+  .book a {
     color: #000000;
-    text-decoration: none;
-}
+    text-decoration: none; }
 
 .bookStatus {
-    display: block;
-    color: #999999;
-    font-size: 85%;
-    margin-top: 5px;
-}
+  display: block;
+  color: #999999;
+  font-size: 85%;
+  margin-top: 5px; }
 
 /* 所蔵場所の表示 */
-
 .stock {
-    right: 15px;
-    width: 100%;
-    text-align: right;
-    font-size: 20px;
-}
+  right: 15px;
+  width: 100%;
+  text-align: right;
+  font-size: 20px; }
 
 .place {
-    font-weight: bold;
-}
+  font-weight: bold; }
 
 .stockbox {
-    font-size: 80%;
-    border: 2px solid #555;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #C5E4FF;
-    text-align: center;
-    margin-left: 10px;
-    width: 110px;
-    height: 70px;
-    display: inline-block;
-}
+  font-size: 80%;
+  border: 2px solid #555;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #C5E4FF;
+  text-align: center;
+  margin-left: 10px;
+  width: 110px;
+  height: 70px;
+  display: inline-block; }
 
 .no {
-    margin-top: 5px;
-    font-size: 90%;
-    margin-bottom: 5px;
-}
+  margin-top: 5px;
+  font-size: 90%;
+  margin-bottom: 5px; }
 
 .open {
-    font-size: 90%;
-    margin-top: 10px;
-}
+  font-size: 90%;
+  margin-top: 10px; }
 
 .reserve {
-    border: 2px solid #BFBFBF;
-    border-radius: 10px;
-    padding: 4px;
-    background-color: #EFEFEF;
-    text-align: center;
-    margin-left: 10px;
-    width: 120px;
-    color: #848484;
-    display: inline-block;
-    font-size: 12px;
-}
+  border: 2px solid #BFBFBF;
+  border-radius: 10px;
+  padding: 4px;
+  background-color: #EFEFEF;
+  text-align: center;
+  margin-left: 10px;
+  width: 120px;
+  color: #848484;
+  display: inline-block;
+  font-size: 12px; }
 
 .rental {
-    border: 2px solid #BFBFBF;
-    border-radius: 10px;
-    padding: 4px;
-    background-color: #FFF5AC;
-    text-align: center;
-    margin-left: 10px;
-    width: 120px;
-    color: #848484;
-    display: inline-block;
-    font-size: 12px;
-}
+  border: 2px solid #BFBFBF;
+  border-radius: 10px;
+  padding: 4px;
+  background-color: #FFF5AC;
+  text-align: center;
+  margin-left: 10px;
+  width: 120px;
+  color: #848484;
+  display: inline-block;
+  font-size: 12px; }

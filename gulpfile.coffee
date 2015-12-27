@@ -5,6 +5,7 @@ coffee = require 'gulp-coffee'
 download = require 'gulp-download'
 concat = require 'gulp-concat'
 exec = require 'gulp-exec'
+sass = require('gulp-sass');
 cordova_lib = require('cordova-lib')
 cdv = cordova_lib.cordova.raw
 react = require('gulp-react')
@@ -48,7 +49,8 @@ gulp.task 'compile_jsx', ->
   .pipe(react())
   .pipe(gulp.dest('src/compiled'))
 
-gulp.task 'concat', ['compile_coffee', 'compile_jsx','copy_jquery','copy_fastclick','copy_font-awesome-css','copy_font-awesome-fonts','copy_geolib'], ->
+gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastclick', 'copy_font-awesome-css',
+  'copy_font-awesome-fonts', 'copy_geolib'], ->
   gulp.src [
     'node_modules/react/dist/react.min.js'
     'node_modules/react-dom/dist/react-dom.min.js'
@@ -62,17 +64,25 @@ gulp.task 'concat', ['compile_coffee', 'compile_jsx','copy_jquery','copy_fastcli
   .pipe concat('all.js')
   .pipe gulp.dest 'www/js/'
 
+gulp.task 'sass', [], ->
+  postcss = require('gulp-postcss');
+  gulp.src('src/search.sass')
+  .pipe(sass())
+  .pipe(postcss([require('autoprefixer')]))
+  .pipe(gulp.dest('www/css'))
+
+
 gulp.task 'copy_load_js', ['compile_coffee'], ->
   gulp.src(['src/compiled/load.js']).pipe gulp.dest('www/js')
 
 gulp.task 'clean', ->
   del(['platforms/ios/www/**'])
 
-gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean','fetch_depends_files'], ->
+gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_files','sass'], ->
   cdv.prepare()
 
 gulp.task 'watch', ->
-  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx'], ['concat']
+  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.scss'], ['concat','sass']
 
 gulp.task 'default', ['cordova_prepare']
 

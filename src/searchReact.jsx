@@ -43,9 +43,9 @@ var SearchBox = React.createClass({
         }
     },
     doSubmit: function (e) {
+        e.stopPropagation();
         this.props.onSearch(this.refs.query.value);
         this.refs.query.blur(); //フォーカスを外す
-        e.stopPropagation();
     },
     render: function () {
         return (
