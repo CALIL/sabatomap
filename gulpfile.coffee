@@ -5,16 +5,11 @@ coffee = require 'gulp-coffee'
 download = require 'gulp-download'
 concat = require 'gulp-concat'
 exec = require 'gulp-exec'
-path = require 'path'
-fs = require 'fs'
 cordova_lib = require('cordova-lib')
 cdv = cordova_lib.cordova.raw
-
-react       = require('gulp-react')
-# gulp-plumber コンパイルエラーによる強制停止を防止する
-plumber     = require('gulp-plumber')
-notify      = require('gulp-notify')
-
+react = require('gulp-react')
+plumber = require('gulp-plumber') # コンパイルエラーによる強制停止を防止する
+notify = require('gulp-notify')
 
 # ウェブから依存ライブラリをダウンロードして配置する
 gulp.task 'fetch_depends_web', ->
@@ -33,7 +28,6 @@ gulp.task 'fetch_depends_bower', [], ->
   gulp.src(['node_modules/font-awesome/fonts/*']).pipe gulp.dest('www/vendor/fonts')
   gulp.src(['node_modules/Geolib/dist/geolib.min.js']).pipe gulp.dest('www/vendor')
 
-
 # CoffeeScriptをコンパイル
 gulp.task 'compile_coffee', ->
   gulp.src([
@@ -42,37 +36,31 @@ gulp.task 'compile_coffee', ->
     'src/search.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
 
-
 # JSXファイルをコンパイル
 gulp.task 'compile_jsx', ->
   gulp.src('src/searchReact.jsx')
-    .pipe(plumber({
-      errorHandler: notify.onError "Error: <%= error.message %>"
-    }))
-    .pipe(react())
-    .pipe(gulp.dest('src/compiled'))
-
-gulp.task 'clean_all_js', (cb)->
-  del(['www/js/all.js'], cb)
+  .pipe(plumber({
+    errorHandler: notify.onError "Error: <%= error.message %>"
+  }))
+  .pipe(react())
+  .pipe(gulp.dest('src/compiled'))
 
 # アプリケーションファイルを結合
-gulp.task 'concat', ['compile_coffee', 'clean_all_js','compile_jsx'], ->
+gulp.task 'concat', ['compile_coffee', 'compile_jsx'], ->
   gulp.src [
-    'node_modules/react/react.min.js'
-    'node_modules/react/react-dom.min.js'
+    'node_modules/react/dist/react.min.js'
+    'node_modules/react-dom/dist/react-dom.min.js'
     'node_modules/Kanikama/kanikama.js'
     'node_modules/Kanilayer/kanilayer.js'
-    'www/vendor/kanimarker.js'
-    'www/vendor/kanilayer.js'
+    'node_modules/kanimarker/kanimarker.js'
     'src/compiled/app.js'
-    'src/searchSetting.js'
     'src/compiled/search.js'
     'src/compiled/searchReact.js'
   ]
   .pipe concat('all.js')
   .pipe gulp.dest 'www/js/'
 
-gulp.task 'copy_load_js',['compile_coffee'], ->
+gulp.task 'copy_load_js', ['compile_coffee'], ->
   gulp.src(['src/compiled/load.js']).pipe gulp.dest('www/js')
 
 gulp.task 'clean', ->
@@ -83,7 +71,8 @@ gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean'], ->
   cdv.prepare()
 
 gulp.task 'watch', ->
-  gulp.watch ['src/*.coffee', 'src/*.js'], ['cordova_prepare']
+  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx'], ['concat']
+
 # JSXファイルの開発用
 gulp.task 'watch-jsx', ->
   gulp.watch('src/*.jsx', ['compile_jsx', 'concat'])

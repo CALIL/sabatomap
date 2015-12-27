@@ -10,7 +10,8 @@
     "font-awesome": "^4.5.0",
     "geolib": "^2.0.18",
     "jquery": "^2.1.4",
-    "react": "^0.14.3"
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
   },
   "devDependencies": {
     "coffee-script": "^1.10.0",
