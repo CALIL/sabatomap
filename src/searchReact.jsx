@@ -12,7 +12,7 @@ var Search = React.createClass({
         this.setState({completed: x});
     },
     render: function () {
-        var cls = 'reactSearch';
+        var cls = '';
         if (this.state.query == '') {
             cls += ' empty';
         }
@@ -29,10 +29,13 @@ var Search = React.createClass({
 var SearchBox = React.createClass({
     onClose: function () {
         this.refs.query.value = '';
-        var q = this.refs.query;
-        setTimeout(function () {
-            q.focus();
-        }, 100);
+        var check = document.querySelectorAll(".ios");
+        if (check.length == 0) {
+            var q = this.refs.query;
+            setTimeout(function () {
+                q.focus();
+            }, 100);
+        }
     },
     onFocus: function (e) {
         var check = document.querySelectorAll(".reactSearch.empty");
@@ -52,9 +55,9 @@ var SearchBox = React.createClass({
         this.refs.query.blur(); //フォーカスを外す
     },
     render: function () {
-        var cls="clear fa fa-times"
-        if(this.props.completed==false){
-            cls+=" loading"
+        var cls = "clear fa fa-times";
+        if (this.props.completed == false) {
+            cls += " loading"
         }
         return (
             <form className="box" action="#" onSubmit={this.doSubmit}>

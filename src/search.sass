@@ -59,7 +59,7 @@ input[type=search]
       width: 45px
       bottom: 0
       top: 0
-      right: 0
+      right: 2px
       border: none
       background: none
       transition: color 0.4s, right 0.4s, opacity 0.6s
@@ -75,9 +75,10 @@ input[type=search]
         width: 0
         transition: border-left-color 0.4s
       &.search
-        right: 45px
+        right: 47px
 
   .results
+    -webkit-user-select: none
     overflow-y: scroll
     overflow-x: hidden
     position: absolute
@@ -89,9 +90,16 @@ input[type=search]
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2)
     background-color: #fff
     padding: 70px 20px 20px
-    width: auto
-    height: auto
     transition: opacity 0.6s
+    &:before
+      content: ''
+      position: fixed
+      top: 0
+      height: 120px
+      left: 0
+      right: 16px
+      pointer-events: none
+      background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%)
     &::-webkit-scrollbar
       background-color: #fff
       width: 10px
@@ -102,7 +110,7 @@ input[type=search]
     .books
       padding-top: 20px
     .ios &
-      top: 90px
+      padding-top: 100px
   .empty
     .results
       opacity: 0
@@ -114,7 +122,7 @@ input[type=search]
       opacity: 0
       visibility: hidden
     .search
-      right: 0 !important
+      right: 2px !important
 
   .loading
     &:before

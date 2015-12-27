@@ -91,7 +91,7 @@ class api
 
       @value.message = resultData.count + '件見つかりました'
       if resultData.count > 50
-        @value.hint = '結果のうち50件目までを表示しています。'
+        @value.hint = '結果のうち新しい順で50件目までを表示しています。必要に応じてキーワードを絞り込んでください。'
       else
         @value.hint = ''
       @detail()

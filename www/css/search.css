@@ -62,7 +62,7 @@ input[type=search] {
       width: 45px;
       bottom: 0;
       top: 0;
-      right: 0;
+      right: 2px;
       border: none;
       background: none;
       -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
@@ -80,8 +80,9 @@ input[type=search] {
         -webkit-transition: border-left-color 0.4s;
         transition: border-left-color 0.4s; }
       #searchBox .box button.search {
-        right: 45px; }
+        right: 47px; }
   #searchBox .results {
+    -webkit-user-select: none;
     overflow-y: scroll;
     overflow-x: hidden;
     position: absolute;
@@ -93,10 +94,18 @@ input[type=search] {
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     padding: 70px 20px 20px;
-    width: auto;
-    height: auto;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
+    #searchBox .results:before {
+      content: '';
+      position: fixed;
+      top: 0;
+      height: 120px;
+      left: 0;
+      right: 16px;
+      pointer-events: none;
+      background: -webkit-linear-gradient(top, white 0%, rgba(255, 255, 255, 0) 100%);
+      background: linear-gradient(to bottom, white 0%, rgba(255, 255, 255, 0) 100%); }
     #searchBox .results::-webkit-scrollbar {
       background-color: #fff;
       width: 10px; }
@@ -107,7 +116,7 @@ input[type=search] {
     #searchBox .results .books {
       padding-top: 20px; }
     .ios #searchBox .results {
-      top: 90px; }
+      padding-top: 100px; }
   #searchBox .empty .results {
     opacity: 0;
     pointer-events: none; }
@@ -118,7 +127,7 @@ input[type=search] {
     opacity: 0;
     visibility: hidden; }
   #searchBox .empty .search {
-    right: 0 !important; }
+    right: 2px !important; }
   #searchBox .loading:before {
     content: '読み込み中';
     position: absolute;

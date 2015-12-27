@@ -4,6 +4,7 @@ html, body, #map {
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
     overflow: hidden;
     font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif;
 }
