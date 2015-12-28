@@ -57,18 +57,7 @@ loadFloor = (id)->
   if kanilayer.floorId != id
     kanimarker.setPosition(null)
     kanilayer.setFloorId(id)
-    $('#floor-button').empty()
-    for floor in kanikama.facilities_[0].floors
-      $('<div/>',
-        class: 'button'
-        id: 'floor' + floor.id
-        text: floor.label
-        floorId: floor.id
-        on:
-          click: ->
-            loadFloor($(this).attr('floorId'))
-      ).prependTo('#floor-button')
-    $('#floor' + id).addClass('active')
+    searchbox.refs.floors.setState({'id':id})
   setTimeout fitFloor, 100
 
 # ビーコンを処理

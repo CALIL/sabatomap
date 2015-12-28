@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="ja-JP">
 <head>
-    <meta charset="utf-8">
-    <title>Sabae Library Map</title>
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
-    <meta name="viewport"
-          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=device-dpi"/>
-    <meta name="msapplication-tap-highlight" content="no">
-    <link href="vendor/ol.css" rel="stylesheet" type="text/css">
-    <link href="vendor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="css/app.css" rel="stylesheet" type="text/css">
-    <link href="css/search.css" rel="stylesheet" type="text/css">
+  <meta charset="utf-8">
+  <title>Sabae Library Map</title>
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=device-dpi"/>
+  <meta name="msapplication-tap-highlight" content="no">
+  <link href="vendor/ol.css" rel="stylesheet" type="text/css">
+  <link href="vendor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="css/app.css" rel="stylesheet" type="text/css">
+  <link href="css/search.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div id="map" class="map"></div>
@@ -27,5 +27,56 @@
 <script src="vendor/ol.js"></script>
 <script src="vendor/geolib.min.js"></script>
 <script src="js/load.js"></script>
+
+
+<style>
+  .floors {
+    position: absolute;
+    bottom: 20px;
+    left: 14px;
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .floors > div {
+    display: block;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 45px;
+    width: 45px;
+  }
+  .floors > div label{
+    line-height: 48px;
+    text-align: center;
+    font-size: 18px;
+    font-family: Helvetica, Arial, serif;
+    display: block;
+    -webkit-user-select: none;
+    height: 45px;
+    width: 45px;
+    background-color: #fff;
+    transition: 0.5s;
+  }
+  .floors > div:first-child label {
+    border-radius: 2px 2px 0 0;
+  }
+
+  .floors > div:last-child label{
+    border-radius: 0 0 2px 2px;
+  }
+  .floors > div:only-child label{
+    display: none !important;
+  }
+  .floors > div input {
+    display: none;
+  }
+  .floors > div input:checked + label {
+    background-color: rgba(56, 149, 255, 0.9) !important;
+    color: #fff;
+  }
+
+</style>
+
+
 </body>
 </html>

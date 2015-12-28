@@ -21,6 +21,7 @@ var Search = React.createClass({
                 <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
+                <Floors floors={this.props.floors} ref="floors"/>
             </div>
         );
     }
@@ -132,7 +133,41 @@ var Book = React.createClass({
     }
 });
 
+
+var Floors = React.createClass({
+    getInitialState: function () {
+        return {
+            id: null
+        };
+    },
+    onchange: function (e) {
+        this.setState({id:e.target.value});
+        setTimeout(function(){
+            loadFloor(e.target.value);
+        },10);
+    },
+    render: function () {
+        var floors = this.props.floors.map(function (floor) {
+            return (
+                <div className="floor">
+                    <input name="view" type="radio" id={'F'+floor.id} checked={this.state.id === floor.id}
+                           value={floor.id} onChange={this.onchange}/>
+                    <label htmlFor={'F'+floor.id}>{floor.label}</label>
+                </div>
+            );
+        }, this);
+        floors.reverse();
+        return (
+            <div className="floors">
+                {floors}
+            </div>
+        );
+    }
+});
+
+var floors = [{id: "7", label: '1', selected: true}, {id: "8", label: '2', selected: false}];
+
 var searchbox = ReactDOM.render(
-    <Search systemid="Fukui_Sabae"/>,
+    <Search systemid="Fukui_Sabae" floors={floors}/>,
     document.getElementById('searchBox')
 );
