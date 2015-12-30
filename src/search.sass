@@ -80,6 +80,7 @@ input[type=search]
         right: 47px
 
   .results
+    -webkit-overflow-scrolling: touch
     -webkit-user-select: none
     overflow-y: scroll
     overflow-x: hidden
@@ -201,3 +202,38 @@ input[type=search]
     color: #848484
     display: inline-block
     font-size: 12px
+
+.floors
+  position: absolute
+  bottom: 20px
+  left: 14px
+  border-radius: 2px
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25)
+  > div
+    display: block
+    -webkit-user-select: none
+    user-select: none
+    height: 45px
+    width: 45px
+    label
+      line-height: 48px
+      text-align: center
+      font-size: 18px
+      font-family: Helvetica, Arial, serif
+      display: block
+      -webkit-user-select: none
+      height: 45px
+      width: 45px
+      background-color: #fff
+      transition: background-color 0.5s
+    &:first-child label
+      border-radius: 2px 2px 0 0
+    &:last-child label
+      border-radius: 0 0 2px 2px
+    &:only-child label
+      display: none !important
+    input
+      display: none
+      &:checked + label
+        background-color: rgba(56, 149, 255, 0.9) !important
+        font-weight: bold
