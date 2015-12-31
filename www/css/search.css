@@ -1,4 +1,20 @@
 @charset "UTF-8";
+html, body, #map {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  overflow: hidden;
+  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif; }
+
+body {
+  background-color: #0068B1; }
+
+#map {
+  background-color: #eeeeee; }
+
 input[type=search] {
   -webkit-appearance: none;
   -webkit-border-radius: 0; }
@@ -19,13 +35,15 @@ input[type=search] {
   width: 100%;
   overflow: hidden; }
   #searchBox .box {
+    overflow: hidden;
     position: absolute;
-    top: 16px;
-    left: 14px;
-    right: 14px;
+    top: 2px;
+    left: 0;
+    right: 0;
+    padding: 14px;
     z-index: 1000000; }
     .ios #searchBox .box {
-      top: 36px; }
+      top: 22px; }
     #searchBox .box input {
       color: #727171;
       font-family: sans-serif;
@@ -62,9 +80,9 @@ input[type=search] {
       padding-right: 0;
       font-size: 20px;
       width: 45px;
-      bottom: 0;
-      top: 0;
-      right: 2px;
+      bottom: 14px;
+      top: 14px;
+      right: 16px;
       border: none;
       background: none;
       -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
@@ -75,17 +93,17 @@ input[type=search] {
         border-left: 1px solid #DADADA;
         content: '';
         position: absolute;
-        left: 3px;
+        left: 0;
         top: 15px;
         bottom: 15px;
         width: 0;
         -webkit-transition: border-left-color 0.4s;
         transition: border-left-color 0.4s; }
       #searchBox .box button.search {
-        right: 47px; }
+        right: 63px; }
   #searchBox .results {
     -webkit-overflow-scrolling: touch;
-    -webkit-user-select: none;
+    -webkit-uuser-select: none;
     overflow-y: scroll;
     overflow-x: hidden;
     position: absolute;
@@ -125,11 +143,11 @@ input[type=search] {
     pointer-events: none; }
   #searchBox .empty .clear {
     user-focus: none;
-    right: -45px !important;
+    right: -31px !important;
     opacity: 0;
     visibility: hidden; }
   #searchBox .empty .search {
-    right: 2px !important; }
+    right: 16px !important; }
   #searchBox .loading:before {
     content: '読み込み中';
     position: absolute;
@@ -201,13 +219,13 @@ input[type=search] {
     display: inline-block;
     font-size: 12px; }
 
-.floors {
+#floors {
   position: absolute;
-  bottom: 20px;
+  bottom: 16px;
   left: 14px;
   border-radius: 2px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25); }
-  .floors > div {
+  #floors > div {
     display: block;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -215,7 +233,7 @@ input[type=search] {
          user-select: none;
     height: 45px;
     width: 45px; }
-    .floors > div label {
+    #floors > div label {
       line-height: 48px;
       text-align: center;
       font-size: 18px;
@@ -225,16 +243,41 @@ input[type=search] {
       height: 45px;
       width: 45px;
       background-color: #fff;
-      -webkit-transition: background-color 0.5s;
-      transition: background-color 0.5s; }
-    .floors > div:first-child label {
+      -webkit-transition: background-color 0.3s;
+      transition: background-color 0.3s; }
+    #floors > div:first-child label {
       border-radius: 2px 2px 0 0; }
-    .floors > div:last-child label {
+    #floors > div:last-child label {
       border-radius: 0 0 2px 2px; }
-    .floors > div:only-child label {
+    #floors > div:only-child label {
       display: none !important; }
-    .floors > div input {
+    #floors > div input {
       display: none; }
-      .floors > div input:checked + label {
+      #floors > div input:checked + label {
         background-color: rgba(56, 149, 255, 0.9) !important;
-        font-weight: bold; }
+        font-weight: bold;
+        color: #fff; }
+
+#compass {
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+  box-sizing: content-box;
+  right: 2px;
+  top: 70px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+   -ms-user-select: none;
+       user-select: none;
+  position: absolute;
+  border-radius: 50%;
+  background: url(../img/compass.svg) no-repeat center;
+  background-size: 30px;
+  -webkit-transition: opacity .25s linear, visibility 0.25s linear .25s;
+  transition: opacity .25s linear, visibility 0.25s linear .25s; }
+  #compass.ol-hidden {
+    opacity: 0;
+    pointer-events: none; }
+  .ios #compass {
+    top: 80px; }

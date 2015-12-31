@@ -1,118 +1,44 @@
-html, body, #map {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-touch-callout: none;
-    overflow: hidden;
-    font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif;
-}
-
-body {
-    background-color: #0068B1;
-}
-
-#map {
-    background-color: #eeeeee;
-}
-
-#floor-button {
-    position: absolute;
-    bottom: 0;
-    height: auto;
-    border: 1px solid #E2E2E2;
-    margin: 10px;
-    pointer-events: none;
-}
-
-#floor-button .button {
-    -webkit-user-select: none;
-    user-select: none;
-    height: 48px;
-    width: 45px;
-    line-height: 48px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.80);
-    pointer-events: auto;
-    font-size: 18px;
-    font-family: Helvetica, Arial, serif;
-}
-
-#floor-button .active {
-    background-color: rgba(56, 149, 255, 0.9) !important;
-    color: #fff;
-}
-
-.ui-button {
-    -webkit-user-select: none;
-    user-select: none;
-    height: 48px;
-    width: 48px;
-    border-radius: 50%;
-    border: 1px solid rgba(83, 83, 83, 0.25);
-    background: rgba(255, 255, 255, 0.80) no-repeat center;
-    pointer-events: auto;
-}
 
 #position-mode {
+    -webkit-user-select: none;
+    user-select: none;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.80) no-repeat center;
+    pointer-events: auto;
     position: absolute;
     right: 0;
     bottom: 0;
-    margin: 10px;
+    margin: 13px;
     box-sizing: content-box;
     padding: 10px;
     opacity: 0.5;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
 }
 
 .position-mode-normal {
-    background-size: 32px;
-    background-image: url(../img/target.svg);
-    background-color: rgba(255, 255, 255, 0.96);
+    background-size: 32px !important;
+    background-image: url(../img/target.svg) !important;
+    background-color: rgba(255, 255, 255, 0.96) !important;
 }
 
 .position-mode-center {
-    background-size: 32px;
-    background-image: url(../img/target-white.svg);
-    background-color: rgba(56, 149, 255, 0.85);
+    background-size: 32px !important;
+    background-image: url(../img/target-white.svg) !important;
+    background-color: rgba(56, 149, 255, 0.85) !important;
 }
 
 .position-mode-heading {
-    background-size: 32px;
-    background-image: url(../img/navigation.svg);
-    background-color: rgba(56, 149, 255, 0.85);
+    background-size: 32px !important;
+    background-image: url(../img/navigation.svg) !important;
+    background-color: rgba(56, 149, 255, 0.85) !important;
 }
 
 .position-mode-wait {
-    background-size: 32px;
-    background-image: url(../img/spinner.svg);
-    background-color: rgba(255, 255, 255, 0.96);
-}
-
-#compass {
-    height: 40px;
-    width: 40px;
-    padding: 10px;
-    box-sizing: content-box;
-    right: 2px;
-    top: 70px;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-user-select: none;
-    user-select: none;
-    position: absolute;
-    border-radius: 50%;
-    background: url(../img/compass.svg) no-repeat center;
-    background-size: 30px;
-    transition: opacity .25s linear, visibility 0.25s linear .25s;
-}
-
-.ios #compass{
-    top:80px;
-}
-
-#compass.ol-hidden {
-    opacity: 0;
-    pointer-events: none;
+    background-size: 32px !important;
+    background-image: url(../img/spinner.svg) !important;
+    background-color: rgba(255, 255, 255, 0.96) !important;
 }
 
 .notification {

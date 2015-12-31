@@ -158,14 +158,15 @@ var Floors = React.createClass({
         }, this);
         floors.reverse();
         return (
-            <div className="floors">
+            <div id="floors">
                 {floors}
             </div>
         );
     }
 });
 
-var floors = [{id: "7", label: '1', selected: true}, {id: "8", label: '2', selected: false}];
+
+var floors = [{id: "7", label: '1'}, {id: "8", label: '2'}];
 
 var searchbox = ReactDOM.render(
     <Search systemid="Fukui_Sabae" floors={floors}/>,

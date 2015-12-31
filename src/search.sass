@@ -1,3 +1,19 @@
+html, body, #map
+  height: 100%
+  width: 100%
+  margin: 0
+  padding: 0
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  -webkit-touch-callout: none
+  overflow: hidden
+  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif
+
+body
+  background-color: #0068B1
+
+#map
+  background-color: #eeeeee
+
 // 検索ボタンのリセット(iOS用)
 input[type=search]
   -webkit-appearance: none
@@ -18,13 +34,15 @@ input[type=search]
   width: 100%
   overflow: hidden
   .box
+    overflow: hidden
     position: absolute
-    top: 16px
-    left: 14px
-    right: 14px
+    top: 2px
+    left: 0
+    right: 0
+    padding: 14px
     z-index: 1000000
     .ios &
-      top: 36px
+      top: 22px
     input
       color: #727171
       font-family: sans-serif
@@ -59,9 +77,9 @@ input[type=search]
       padding-right: 0
       font-size: 20px
       width: 45px
-      bottom: 0
-      top: 0
-      right: 2px
+      bottom: 14px
+      top: 14px
+      right: 16px
       border: none
       background: none
       transition: color 0.4s, right 0.4s, opacity 0.6s
@@ -71,17 +89,17 @@ input[type=search]
         border-left: 1px solid #DADADA
         content: ''
         position: absolute
-        left: 3px
+        left: 0
         top: 15px
         bottom: 15px
         width: 0
         transition: border-left-color 0.4s
       &.search
-        right: 47px
+        right: 63px
 
   .results
     -webkit-overflow-scrolling: touch
-    -webkit-user-select: none
+    -webkit-uuser-select: none
     overflow-y: scroll
     overflow-x: hidden
     position: absolute
@@ -114,17 +132,18 @@ input[type=search]
       padding-top: 20px
     .ios &
       padding-top: 100px
+
   .empty
     .results
       opacity: 0
       pointer-events: none
     .clear
       user-focus: none
-      right: -45px !important
+      right: -31px !important
       opacity: 0
       visibility: hidden
     .search
-      right: 2px !important
+      right: 16px !important
 
   .loading
     &:before
@@ -203,9 +222,9 @@ input[type=search]
     display: inline-block
     font-size: 12px
 
-.floors
+#floors
   position: absolute
-  bottom: 20px
+  bottom: 16px
   left: 14px
   border-radius: 2px
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25)
@@ -225,7 +244,7 @@ input[type=search]
       height: 45px
       width: 45px
       background-color: #fff
-      transition: background-color 0.5s
+      transition: background-color 0.3s
     &:first-child label
       border-radius: 2px 2px 0 0
     &:last-child label
@@ -237,3 +256,25 @@ input[type=search]
       &:checked + label
         background-color: rgba(56, 149, 255, 0.9) !important
         font-weight: bold
+        color: #fff
+
+#compass
+  height: 40px
+  width: 40px
+  padding: 10px
+  box-sizing: content-box
+  right: 2px
+  top: 70px
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  -webkit-user-select: none
+  user-select: none
+  position: absolute
+  border-radius: 50%
+  background: url(../img/compass.svg) no-repeat center
+  background-size: 30px
+  transition: opacity .25s linear, visibility 0.25s linear .25s
+  &.ol-hidden
+    opacity: 0
+    pointer-events: none
+  .ios &
+    top: 80px
