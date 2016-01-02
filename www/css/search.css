@@ -281,3 +281,35 @@ input[type=search] {
     pointer-events: none; }
   .ios #compass {
     top: 80px; }
+
+#locator {
+  position: absolute;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  height: 36px;
+  width: 36px;
+  border: none;
+  border-radius: 50%;
+  pointer-events: auto;
+  right: 0;
+  bottom: 0;
+  margin: 13px;
+  box-sizing: content-box;
+  padding: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  background-size: 32px;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s; }
+  #locator.disabled {
+    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center;
+    opacity: 0.5; }
+  #locator.normal {
+    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center; }
+  #locator.centered {
+    background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center; }
+  #locator.headingup {
+    background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center; }
+  #locator.waiting {
+    background: rgba(255, 255, 255, 0.96) url(../img/spinner.svg) no-repeat center; }

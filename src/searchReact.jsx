@@ -22,6 +22,7 @@ var Search = React.createClass({
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.props.floors} ref="floors"/>
+                <Locator ref="locator"/>
             </div>
         );
     }
@@ -165,6 +166,27 @@ var Floors = React.createClass({
     }
 });
 
+
+var Locator = React.createClass({
+    getInitialState: function () {
+        return {
+            mode: 'disabled',
+            message: ''
+        };
+    },
+    onclick: function (e) {
+        locatorClicked();
+    },
+    render: function () {
+        var cls='normal';
+        if(this.state.mode!=''){
+            cls=this.state.mode;
+        }
+        return (
+            <button id="locator" className={cls} onClick={this.onclick}/>
+        );
+    }
+});
 
 var floors = [{id: "7", label: '1'}, {id: "8", label: '2'}];
 
