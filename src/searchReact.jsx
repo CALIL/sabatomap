@@ -1,4 +1,4 @@
-var Search = React.createClass({
+var Main = React.createClass({
     getInitialState: function () {
         return {query: '', completed: true, offline: false};
     },
@@ -20,6 +20,9 @@ var Search = React.createClass({
     setFloorId: function (id) {
         this.refs.floors.setState({'id': id});
     },
+    onClick: function (e) {
+        locatorClicked();
+    },
     render: function () {
         var cls = '';
         if (this.state.query == '') {
@@ -37,7 +40,7 @@ var Search = React.createClass({
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.props.floors} ref="floors"/>
-                <Locator ref="locator"/>
+                <Locator ref="locator" onClick={this.onClick}/>
                 {offline}
             </div>
         );
@@ -131,7 +134,7 @@ var SearchResult = React.createClass({
                 <div className="books">
                     {books}
                 </div>
-                <p>{this.state.hint}</p>
+                <p className="hint">{this.state.hint}</p>
             </div>
         );
     }
@@ -140,11 +143,11 @@ var SearchResult = React.createClass({
 var Book = React.createClass({
     render: function () {
         return (
-            <div className="book">
-                <img id={'image' + this.props.book.id} className="thumbnail"
-                     src="https://calil.jp/public/img/no-image/medium-noborder.gif"/>
-                <a href={this.props.book.url} target="_blank">{this.props.book.title}</a>
+            <div>
+                <img id={'image' + this.props.book.id}/>
+                <div className="title">{this.props.book.title}<div className="author">{this.props.book.author}</div></div>
                 <div className="stock" id={'stock' + this.props.book.id}></div>
+                <div className="next"><i className="fa fa-play"/></div>
             </div>
         );
     }
@@ -191,9 +194,6 @@ var Locator = React.createClass({
             message: ''
         };
     },
-    onclick: function (e) {
-        locatorClicked();
-    },
     checkMessage: function () {
         this.setState({});
     },
@@ -204,21 +204,21 @@ var Locator = React.createClass({
     },
     render: function () {
         var fade = '';
-        if (this.state.message != '' && new Date() - this.lastAppear < 4000) {
+        if (this.state.message != '' && new Date() - this.lastAppear < 3500) {
             fade = 'visible'
         }
         return (
             <div id="locator">
-                <button className={this.state.mode} onClick={this.onclick}/>
+                <button className={this.state.mode} onClick={this.props.onClick}/>
                 <div className={fade}>{this.state.message}</div>
             </div>
         );
     }
 });
 
-var floors = [{id: "7", label: '1'}, {id: "8", label: '2'}];
-
-var UI = ReactDOM.render(
-    <Search systemid="Fukui_Sabae" floors={floors}/>,
-    document.getElementById('searchBox')
-);
+var InitUI = function (props,element){
+   return ReactDOM.render(
+       React.createElement(Main, props),
+       element
+   )
+};

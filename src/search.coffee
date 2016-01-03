@@ -1,62 +1,50 @@
 class api
   constructor: (systemid, query, callback) ->
+    @callback = callback
+    @systemid = systemid
+    @query = query
     console.log('[API] start session for query -> ' + query)
     @value =
-      completed:false
+      completed: false
       message: ''
       hint: ''
       books: []
-    @bookimages = {}
-    @showImageInstance = null
-    @continue_count = 0
     @killed = false
-    @queue = []
     @session = null
-    @onChange = callback
-    @systemid = systemid
-    @query = query
+    @queue = []
     if @query
-      $.ajax
-        url: 'https://api.calil.jp/search'
-        type: 'GET'
-        data:
-          f: query
-          sysid: @systemid
-        dataType: 'json'
-        success: (data) =>
-          @session = data.session
-          @receive(data)
-        error: () =>
-          @value.completed=true
-          @updateMessage('データ取得に失敗しました。')
+      @continue()
     else
-      @value.completed=true
+      @value.completed = true
     @changed()
 
-  kill: ()->
+  kill: ->
     console.log('[API] session ' + (@session) + ' killed.')
     @killed = true
-    @showImageInstance = null
     @queue.length = 0
 
-  changed: ()->
-    if @onChange
-      @onChange(@value)
+  changed: ->
+    @callback @value
 
-  continue: () ->
+  continue: ->
+    params = {}
+    if @session
+      params = {session: @session}
+    else
+      params = {f: @query, sysid: @systemid}
     $.ajax
       url: 'https://api.calil.jp/search'
       type: 'GET'
-      data:
-        session: @session
+      data: params
       dataType: 'json'
       success: (data) =>
         @receive(data)
       error: () =>
-        @value.completed=true
+        @value.completed = true
         @updateMessage('データ取得に失敗しました。')
 
   receive: (data)->
+    @session = data.session
     if data.continue == 1
       console.log('[API] session continue...')
       if not @killed
@@ -65,7 +53,7 @@ class api
         return
     else
       console.log('[API] session complete.')
-    @value.completed=true
+    @value.completed = true
     resultData = data.results[@systemid]
     if resultData.status == 'Error'
       @updateMessage('検索エラーが発生しました。')
@@ -82,13 +70,13 @@ class api
         @value.books.push({
           id: book.K
           title: book.T
+          author: book.A
           url: book.U
         })
         @queue.push(book.K)
       result = data.results[@systemid]
       @value.count = result.count
-      @value.completed=true
-
+      @value.completed = true
       @value.message = resultData.count + '件見つかりました'
       if resultData.count > 50
         @value.hint = '結果のうち新しい順で50件目までを表示しています。必要に応じてキーワードを絞り込んでください。'
@@ -109,7 +97,7 @@ class api
       k: id
       s: @systemid
       session: @session
-      version: '1.3.0'
+      version: '1.4.0'
     $.ajax
       url: 'https://api.calil.jp/search_warabi_v1'
       type: 'GET'
@@ -122,72 +110,11 @@ class api
         $('#stock' + id).html(data.html)
         if data.isbn and data.isbn != ""
           $image = $('#image' + id)
-          border = $image.css('border')
-          $image.attr('src', 'https://images-na.ssl-images-amazon.com/images/P/' + data.isbn + '.09.MZZZZZZZ.jpg').css('border', 'none')
+          $image.attr('src', 'https://images-na.ssl-images-amazon.com/images/P/' + data.isbn + '.09.MZZZZZZZ.jpg')
           $image.load ->
-            height = $(this).css('height')
-            $(this).css('height', 'auto')
             if this.width == 1
-              this.src = 'https://calil.jp/public/img/no-image/medium-noborder.gif'
-              $(this).css('height', height).css('border', border)
-          @bookimages[data.isbn] = {
-            id: id
-            url: data.url
-          }
+              this.src = ''
+            else
+              this.style.border='1px solid #CCCCCC'
       complete: =>
         @detail()
-
-class ShowGoogleImage
-  show: (bookimages)->
-    log(bookimages)
-    isbns = []
-    for isbn, book of bookimages
-      isbns.push(isbn)
-      $('#image' + book.id).attr('id', 'image' + isbn)
-    params = []
-    for isbn in isbns
-      params.push('isbn:' + isbn)
-    query = params.join('%20OR%20')
-    params = {
-      'q': query
-      'country': 'JP'
-    }
-    $.ajax
-      dataType: 'json'
-      url: 'https://www.googleapis.com/books/v1/volumes'
-      data: decodeURIComponent($.param(params))
-      crossDomain: true
-      success: (gdata) =>
-        new_bookimages = []
-        if gdata.totalItems > 0
-          for item in gdata.items
-            if item.volumeInfo.imageLinks? and item.volumeInfo.industryIdentifiers?
-              for i in item.volumeInfo.industryIdentifiers
-                if i.type == 'ISBN_10'
-                  isbn = i.identifier
-              if item.volumeInfo.imageLinks?.thumbnail?
-                imageurl = @getImageURL(item.volumeInfo.imageLinks.thumbnail)
-                log(isbn)
-                new_bookimages.push({"isbn": isbn, "imageurl": imageurl})
-                $('#image' + isbn).attr('src', imageurl);
-          console.log(new_bookimages)
-      error: (data)=>
-      complete: =>
-        @animateThumb(0)
-
-  getImageURL: (url)->
-    parser = document.createElement('a');
-    parser.href = url
-    parser.protocol = 'https:'
-    parser.hostname = 'encrypted.google.com'
-    return parser.href
-
-  animateThumb: (index)->
-    $obj = $(".thumbnail:eq(" + index + ")")
-    if $obj.length > 0
-      $obj.animate
-        opacity: 1
-      , 500
-    setTimeout(=>
-      @animateThumb(index + 1)
-    , 100)

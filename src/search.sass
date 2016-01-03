@@ -101,7 +101,7 @@ input[type=search]
 
   .results
     -webkit-overflow-scrolling: touch
-    -webkit-uuser-select: none
+    user-select: none
     overflow-y: scroll
     overflow-x: hidden
     position: absolute
@@ -110,11 +110,11 @@ input[type=search]
     bottom: 0
     right: 0
     z-index: 90000
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2)
     background-color: #fff
-    padding: 70px 20px 20px
+    padding: 70px 17px 17px
     transition: opacity 0.6s
     &:before
+      z-index: 10
       content: ''
       position: fixed
       top: 0
@@ -128,12 +128,66 @@ input[type=search]
       width: 10px
     &::-webkit-scrollbar-track
       background: none
+      margin-top: 80px
     &::-webkit-scrollbar-thumb
       background-color: #ddd
     .books
-      padding-top: 20px
+      margin-left: -17px
+      margin-right: -17px
+      > div
+        border-bottom: 1px solid #eee
+        &:first-child
+          border-top: 1px solid #eee
+        position: relative
+        height: 110px
+        transition: background-color 0.2s
+        cursor: pointer
+        overflow: hidden
+        box-shadow: 1px 1px 3px #CACACA
+        margin-top: 10px
+        &:hover
+          background-color: #f2f2f2
+        img
+          position: absolute
+          top: 0
+          bottom: 0
+          right: 32px
+          margin: auto
+          width: 80px
+          opacity: 0.2
+        .title
+          position: absolute
+          font-size: 16px
+          line-height: 1.2em
+          font-weight: 600
+          top: 16px
+          right: 22px
+          left: 17px
+          color: #444444
+          text-decoration: none
+          max-height: 2.4em
+          overflow: hidden
+        .stock
+          position: absolute
+          right: 15px
+          left: 16px
+          bottom: 13px
+        .next
+          position: absolute
+          right: 10px
+          bottom: 45px
+          font-size: 10px
+          color: #DEDEDE
     .ios &
       padding-top: 100px
+    > .hint
+      font-size: 13px
+    > .message
+      font-size: 14px
+      font-weight: 600
+      color: #555
+      margin: 10px 0
+
 
   .empty
     .results
@@ -164,66 +218,26 @@ input[type=search]
       border-top-color: rgba(0, 0, 0, 0.6)
       animation: spinner .6s linear infinite
       -webkit-animation: spinner .6s linear infinite
-
-  .book
-    font-size: 14px
-    line-height: 1.2em
-    border-bottom: 1px solid #EFEFEF
-    padding-bottom: 10px
-    margin-bottom: 16px
-    min-height: 120px
-    .thumbnail
-      float: left
-      height: 100px
-      max-width: 74px
-      margin-right: 10px
-      border: 1px solid #CCCCCC
-    a
-      color: #000000
-      text-decoration: none
-
-  .stock
-    right: 15px
-    width: 100%
-    text-align: right
-    font-size: 20px
-
   .stockbox
-    font-size: 80%
-    border: 2px solid #555
-    border-radius: 10px
-    padding: 10px
-    background-color: #C5E4FF
+    font-size: 14px
+    border-radius: 2px
+    padding: 3px 10px
+    background-color: #08A2E8
+    color: #fff
+    font-weight: 600
     text-align: center
-    margin-left: 10px
-    width: 110px
-    height: 70px
     display: inline-block
-
-  .reserve
-    border: 2px solid #BFBFBF
-    border-radius: 10px
-    padding: 4px
-    background-color: #EFEFEF
-    text-align: center
-    margin-left: 10px
-    width: 120px
-    color: #848484
-    display: inline-block
-    font-size: 12px
-
+    min-width: 60px
   .rental
-    border: 2px solid #BFBFBF
-    border-radius: 10px
-    padding: 4px
-    background-color: #FFF5AC
+    font-size: 14px
+    border-radius: 2px
+    padding: 3px 10px
+    background-color: #969696
+    color: #fff
+    font-weight: 600
     text-align: center
-    margin-left: 10px
-    width: 120px
-    color: #848484
     display: inline-block
-    font-size: 12px
-
+    min-width: 60px
 #floors
   position: absolute
   bottom: 16px
@@ -232,7 +246,6 @@ input[type=search]
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25)
   > div
     display: block
-    -webkit-user-select: none
     user-select: none
     height: 45px
     width: 45px
@@ -268,7 +281,6 @@ input[type=search]
   right: 2px
   top: 70px
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
-  -webkit-user-select: none
   user-select: none
   position: absolute
   border-radius: 50%

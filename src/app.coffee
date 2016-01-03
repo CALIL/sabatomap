@@ -2,18 +2,20 @@
 
 鯖江市図書館マップ「さばとマップ」
 
-Copyright (c) 2015 CALIL Inc.
+Copyright (c) 2016 CALIL Inc.
 This software is released under the MIT License.
 http://opensource.org/licenses/mit-license.php
 
 ###
 
-mapboxToken = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w' # Please change here
-
+# アプリケーション定数
+MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = (180 - 2.5) / 180 * Math.PI
-waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 
+# 現在地ボタンを待っているかどうか（1以上で待っている）
+waitingPosition = 0
+UI = null
 map = null
 kanimarker = null
 kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
@@ -44,13 +46,12 @@ fitRotation = ->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ->
-  if kanilayer.floorId
-    fitRotation()
-    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
-    map.beforeRender(pan)
-    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-    map.beforeRender(zoom)
-    map.getView().fit(homeExtent, map.getSize())
+  fitRotation()
+  pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
+  map.beforeRender(pan)
+  zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+  map.beforeRender(zoom)
+  map.getView().fit(homeExtent, map.getSize())
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -66,6 +67,10 @@ didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
 initializeApp = ->
+  UI = InitUI(
+    {systemid: "Fukui_Sabae", floors: [{id: "7", label: '1'}, {id: "8", label: '2'}]},
+    document.getElementById('searchBox'))
+
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -81,12 +86,9 @@ initializeApp = ->
         heading = heading.magneticHeading + headingDifference
         switch device.platform
           when 'iOS'
-          #noinspection JSUnresolvedVariable
             heading += window.orientation # for iOS8 WKWebView
           when 'Android'
-          #noinspection JSUnresolvedVariable
             heading += screen.orientation.angle # for Android Crosswalk
-
         # 0-360の範囲に収める
         if heading < 0
           heading += 360 # マイナスの値を考慮
@@ -122,7 +124,7 @@ initializeApp = ->
     layers: [
       new ol.layer.Tile(# 世界地図
         source: new ol.source.XYZ(
-          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + mapboxToken
+          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
           maxZoom: 22)
         minResolution: 0.1
         maxResolution: 2000000
@@ -140,8 +142,8 @@ initializeApp = ->
       zoom: 6
     )
   )
-  kanimarker = new Kanimarker(map)
   map.getView().fit(homeExtent, map.getSize()) # 鯖江図書館のサイズに合わせる
+  kanimarker = new Kanimarker(map)
   kanimarker.on 'change:mode', -> invalidateLocator()
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
   kanikama.on 'change:position', (p)->
@@ -157,7 +159,6 @@ initializeApp = ->
         kanimarker.accuracyDuration = 8000
       else
         kanimarker.accuracyDuration = 2500
-
       kanimarker.setPosition(ol.proj.transform([p.latitude, p.longitude], 'EPSG:4326', 'EPSG:3857'), p.accuracy)
       if waitingPosition
         waitingPosition = 0
@@ -178,6 +179,7 @@ initializeApp = ->
     else
       cls.style.transform = "rotate(#{deg}deg)"
       cls.className = ''
+
   document.getElementById('compass').addEventListener 'click', ->
     kanimarker.setMode 'normal'
     rotation = map.getView().getRotation()
@@ -190,6 +192,7 @@ initializeApp = ->
 
   map.getView().on 'change:rotation', -> invalidateCompass(@)
   map.getView().on 'change:resolution', -> invalidateCompass(@)
+
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
@@ -197,8 +200,7 @@ initializeApp = ->
   request.open('GET', 'data/sabae.json', true)
   request.onload = () ->
     if (request.status >= 200 && request.status < 400)
-      data = JSON.parse(request.responseText)
-      kanikama.facilities_ = data
+      kanikama.facilities_ = JSON.parse(request.responseText)
       loadFloor('7')
   request.send()
 
@@ -233,7 +235,6 @@ waitPosition = ->
 
 # モード切り替え
 locatorClicked = ->
-  console.log 'locator clicked.'
   switch kanimarker.mode
     when 'headingup'
       kanimarker.setMode 'centered'
