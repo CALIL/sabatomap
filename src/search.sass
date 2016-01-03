@@ -25,9 +25,11 @@ input[type=search]
   to
     transform: rotate(360deg)
 
-@-webkit-keyframes spinner
-  to
-    -webkit-transform: rotate(360deg)
+@keyframes waiting
+  0%, 40%, 100%
+    background-size: 32px
+  20%
+    background-size: 40px
 
 #searchBox
   height: 100%
@@ -280,29 +282,106 @@ input[type=search]
     top: 80px
 
 #locator
+  > button
+    position: absolute
+    user-select: none
+    user-focus: none
+    height: 36px
+    width: 36px
+    border: none
+    border-radius: 50%
+    pointer-events: auto
+    right: 0
+    bottom: 0
+    margin: 13px
+    box-sizing: content-box
+    padding: 10px
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25)
+    background-size: 32px
+    transition: opacity 0.4s
+    &.disabled
+      background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
+      opacity: 0.5
+    &.normal
+      background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
+    &.centered
+      background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center
+    &.headingup
+      background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center
+    &.waiting
+      background: rgba(255, 255, 255, 0.96) url(../img/target-blue.svg) no-repeat center
+      animation: waiting 3.0s infinite ease-in-out
+    &:focus
+      outline: 0
+  > div
+    transition: opacity 0.5s
+    opacity: 0
+    pointer-events: none
+    border: 2px solid #148cf5
+    user-select: none
+    position: absolute
+    padding: 5px 10px
+    border-radius: 4px
+    background: rgb(255, 255, 255)
+    color: #6B6B6B
+    font-size: 14px
+    line-height: 20px
+    @media (max-width: 374px)
+      bottom: 80px
+      right: 12px
+      &:after, &:before
+        top: 100%
+        right: 26px
+        content: " "
+        height: 0
+        width: 0
+        position: absolute
+        pointer-events: none
+      &:after
+        border: 4px rgba(255, 255, 255, 0) solid
+        border-top-color: #ffffff
+        margin-right: -4px
+      &:before
+        border: 7px rgba(20, 140, 245, 0) solid
+        border-top-color: #148cf5
+        margin-right: -7px
+    @media (min-width: 375px)
+      bottom: 26px
+      right: 80px
+      &:after, &:before
+        left: 100%
+        top: 50%
+        content: " "
+        height: 0
+        width: 0
+        position: absolute
+        pointer-events: none
+      &:after
+        border: 4px rgba(255, 255, 255, 0) solid
+        border-left-color: #ffffff
+        margin-top: -4px
+      &:before
+        border: 7px rgba(20, 140, 245, 0) solid
+        border-left-color: #148cf5
+        margin-top: -7px
+  & .visible
+    opacity: 1
+
+//互換性のために残す
+.offline
+  display: none
+
+#offline
+  //display: none
   position: absolute
-  user-select: none
-  height: 36px
-  width: 36px
-  border: none
-  border-radius: 50%
-  pointer-events: auto
-  right: 0
-  bottom: 0
-  margin: 13px
-  box-sizing: content-box
-  padding: 10px
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25)
-  background-size: 32px
-  transition: opacity 0.4s
-  &.disabled
-    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
-    opacity: 0.5
-  &.normal
-    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
-  &.centered
-    background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center
-  &.headingup
-    background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center
-  &.waiting
-    background: rgba(255, 255, 255, 0.96) url(../img/spinner.svg) no-repeat center
+  top: 0
+  width: 100%
+  text-align: center
+  padding: 25px
+  background: #D9EDF7
+  color: #317095
+  z-index: 2000000
+  @media screen and (orientation: landscape)
+    width: 100%
+  .ios &
+    padding-top: 25px+20px

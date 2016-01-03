@@ -21,14 +21,27 @@ input[type=search] {
   input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration, input[type=search]::-webkit-search-results-button, input[type=search]::-webkit-search-results-decoration {
     -webkit-appearance: none; }
 
+@-webkit-keyframes spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
 @keyframes spinner {
   to {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
 
-@-webkit-keyframes spinner {
-  to {
-    -webkit-transform: rotate(360deg); } }
+@-webkit-keyframes waiting {
+  0%, 40%, 100% {
+    background-size: 32px; }
+  20% {
+    background-size: 40px; } }
+
+@keyframes waiting {
+  0%, 40%, 100% {
+    background-size: 32px; }
+  20% {
+    background-size: 40px; } }
 
 #searchBox {
   height: 100%;
@@ -282,12 +295,13 @@ input[type=search] {
   .ios #compass {
     top: 80px; }
 
-#locator {
+#locator > button {
   position: absolute;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  user-focus: none;
   height: 36px;
   width: 36px;
   border: none;
@@ -302,14 +316,97 @@ input[type=search] {
   background-size: 32px;
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s; }
-  #locator.disabled {
+  #locator > button.disabled {
     background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center;
     opacity: 0.5; }
-  #locator.normal {
+  #locator > button.normal {
     background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center; }
-  #locator.centered {
+  #locator > button.centered {
     background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center; }
-  #locator.headingup {
+  #locator > button.headingup {
     background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center; }
-  #locator.waiting {
-    background: rgba(255, 255, 255, 0.96) url(../img/spinner.svg) no-repeat center; }
+  #locator > button.waiting {
+    background: rgba(255, 255, 255, 0.96) url(../img/target-blue.svg) no-repeat center;
+    -webkit-animation: waiting 3.0s infinite ease-in-out;
+            animation: waiting 3.0s infinite ease-in-out; }
+  #locator > button:focus {
+    outline: 0; }
+
+#locator > div {
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  opacity: 0;
+  pointer-events: none;
+  border: 2px solid #148cf5;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: white;
+  color: #6B6B6B;
+  font-size: 14px;
+  line-height: 20px; }
+  @media (max-width: 374px) {
+    #locator > div {
+      bottom: 80px;
+      right: 12px; }
+      #locator > div:after, #locator > div:before {
+        top: 100%;
+        right: 26px;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none; }
+      #locator > div:after {
+        border: 4px rgba(255, 255, 255, 0) solid;
+        border-top-color: #ffffff;
+        margin-right: -4px; }
+      #locator > div:before {
+        border: 7px rgba(20, 140, 245, 0) solid;
+        border-top-color: #148cf5;
+        margin-right: -7px; } }
+  @media (min-width: 375px) {
+    #locator > div {
+      bottom: 26px;
+      right: 80px; }
+      #locator > div:after, #locator > div:before {
+        left: 100%;
+        top: 50%;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none; }
+      #locator > div:after {
+        border: 4px rgba(255, 255, 255, 0) solid;
+        border-left-color: #ffffff;
+        margin-top: -4px; }
+      #locator > div:before {
+        border: 7px rgba(20, 140, 245, 0) solid;
+        border-left-color: #148cf5;
+        margin-top: -7px; } }
+
+#locator .visible {
+  opacity: 1; }
+
+.offline {
+  display: none; }
+
+#offline {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  padding: 25px;
+  background: #D9EDF7;
+  color: #317095;
+  z-index: 2000000; }
+  @media screen and (orientation: landscape) {
+    #offline {
+      width: 100%; } }
+  .ios #offline {
+    padding-top: 45px; }

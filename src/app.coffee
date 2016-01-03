@@ -44,20 +44,21 @@ fitRotation = ->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ->
-  fitRotation()
-  pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
-  map.beforeRender(pan)
-  zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-  map.beforeRender(zoom)
-  map.getView().fit(homeExtent, map.getSize())
+  if kanilayer.floorId
+    fitRotation()
+    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
+    map.beforeRender(pan)
+    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+    map.beforeRender(zoom)
+    map.getView().fit(homeExtent, map.getSize())
 
 # フロアを読み込む
 # @param id {String} フロアID
 loadFloor = (id)->
   if kanilayer.floorId != id
-    kanimarker.setPosition(null)
-    kanilayer.setFloorId(id)
-    searchbox.refs.floors.setState({'id': id})
+    kanimarker.setPosition null
+    kanilayer.setFloorId id
+    UI.setFloorId id
   setTimeout fitFloor, 100
 
 # ビーコンを処理
@@ -112,10 +113,9 @@ initializeApp = ->
 
     # オフラインメッセージの表示
     if navigator.connection? and navigator.connection.type is 'none'
-      $('.offline').stop().slideDown('fast')
-      document.addEventListener('online', ->
-        $('.offline').stop().slideUp('fast')
-      , false)
+      UI.setState({offline: true})
+      document.addEventListener 'online', ->
+        UI.setState({offline: false})
 
   FastClick.attach(document.body)
   map = new ol.Map(
@@ -141,8 +141,8 @@ initializeApp = ->
     )
   )
   kanimarker = new Kanimarker(map)
-  map.getView().fit(homeExtent, map.getSize())  # 鯖江図書館のサイズに合わせる
-  kanimarker.on 'change:mode', -> invalidatePositionButton()
+  map.getView().fit(homeExtent, map.getSize()) # 鯖江図書館のサイズに合わせる
+  kanimarker.on 'change:mode', -> invalidateLocator()
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
   kanikama.on 'change:position', (p)->
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
@@ -172,12 +172,13 @@ initializeApp = ->
     deg = (view_.getRotation() * 180 / Math.PI) % 360
     if deg < 0
       deg += 360
+    cls = document.getElementById('compass')
     if deg == 0 or 500 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
-      $('#compass').addClass('ol-hidden')
+      cls.className = 'ol-hidden'
     else
-      $('#compass').css('transform', "rotate(#{deg}deg)").removeClass('ol-hidden')
-
-  $('#compass').on 'click', ->
+      cls.style.transform = "rotate(#{deg}deg)"
+      cls.className = ''
+  document.getElementById('compass').addEventListener 'click', ->
     kanimarker.setMode 'normal'
     rotation = map.getView().getRotation()
     while rotation < -Math.PI
@@ -189,42 +190,45 @@ initializeApp = ->
 
   map.getView().on 'change:rotation', -> invalidateCompass(@)
   map.getView().on 'change:resolution', -> invalidateCompass(@)
-  window.addEventListener 'BluetoothStatus.enabled', invalidatePositionButton
-  window.addEventListener 'BluetoothStatus.disabled', invalidatePositionButton
+  window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
+  window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
-  $.getJSON 'data/sabae.json', (data)->
-    kanikama.facilities_ = data
-    loadFloor('7')
-
-showNotify = (message)->
-  $('.notification').html(message).stop().fadeTo('normal', 1).delay(4000).fadeOut(500)
+  request = new XMLHttpRequest()
+  request.open('GET', 'data/sabae.json', true)
+  request.onload = () ->
+    if (request.status >= 200 && request.status < 400)
+      data = JSON.parse(request.responseText)
+      kanikama.facilities_ = data
+      loadFloor('7')
+  request.send()
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
   if floorId != kanilayer.floorId
     loadFloor(floorId)
   kanilayer.setTargetShelves(shelves)
-  searchbox.doClose()
+  UI.doClose()
+
 # マーカーとモード切り替えボタン
-invalidatePositionButton = ->
+invalidateLocator = ->
   if not cordova? or not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE or not cordova.plugins.BluetoothStatus.BTenabled
     kanimarker.setMode 'normal'
-    searchbox.refs.locator.setState({'mode': 'disabled'})
+    UI.setMode 'disabled'
   else if waitingPosition
-    searchbox.refs.locator.setState({'mode': 'waiting'})
+    UI.setMode 'waiting'
   else
-    searchbox.refs.locator.setState({'mode': kanimarker.mode})
+    UI.setMode kanimarker.mode
 
 waitPosition = ->
   waitingPosition++
-  invalidatePositionButton()
+  invalidateLocator()
   setTimeout ->
     if waitingPosition > 0
       waitingPosition--
     if waitingPosition is 0
       if kanikama.currentPosition is null
-        showNotify('現在地が取得できませんでした')
-      invalidatePositionButton()
+        UI.notify '現在地を取得できませんでした'
+      invalidateLocator()
   , 4000
 
 # モード切り替え
@@ -238,21 +242,17 @@ locatorClicked = ->
       kanimarker.setMode 'headingup'
     when 'normal'
       if not cordova? or not cordova.plugins.BluetoothStatus? or not cordova.plugins.BluetoothStatus.hasBTLE
-        showNotify('この機種は現在地を測定できません')
-        if kanilayer.floorId
-          fitFloor()
+        UI.notify 'この機種は現在地を測定できません'
+        fitFloor()
       else if not cordova.plugins.BluetoothStatus.BTenabled
         if device.platform == 'Android'
           cordova.plugins.BluetoothStatus.promptForBT()
         else
-          showNotify('BluetoothをONにしてください')
+          UI.notify 'BluetoothをONにしてください'
       else if kanikama.currentPosition is null
-        # 現在地が不明な場合は待つ
-        waitPosition()
+        waitPosition() # 現在地が不明な場合は待つ
       else if kanikama.currentFloor.id != kanilayer.floorId
-        # フロアが違う場合はフロアを切り替える
-        loadFloor(kanikama.currentFloor.id)
+        loadFloor(kanikama.currentFloor.id) # フロアが違う場合はフロアを切り替える
         waitPosition()
       else
-        # centeredモードに切り替える
-        kanimarker.setMode 'centered'
+        kanimarker.setMode 'centered' # centeredモードに切り替える

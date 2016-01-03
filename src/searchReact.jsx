@@ -1,6 +1,6 @@
 var Search = React.createClass({
     getInitialState: function () {
-        return {query: '', completed: true};
+        return {query: '', completed: true, offline: false};
     },
     doSearch: function (query) {
         this.setState({query: query});
@@ -11,10 +11,25 @@ var Search = React.createClass({
     setCompleted: function (x) {
         this.setState({completed: x});
     },
+    notify: function (message) {
+        this.refs.locator.notify(message);
+    },
+    setMode: function (mode) {
+        this.refs.locator.setState({'mode': mode});
+    },
+    setFloorId: function (id) {
+        this.refs.floors.setState({'id': id});
+    },
     render: function () {
         var cls = '';
         if (this.state.query == '') {
             cls += 'empty';
+        }
+        var offline = '';
+        if (this.state.offline) {
+            offline = (
+                <div id="offline">ネットワークに接続できません</div>
+            )
         }
         return (
             <div className={cls}>
@@ -23,6 +38,7 @@ var Search = React.createClass({
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.props.floors} ref="floors"/>
                 <Locator ref="locator"/>
+                {offline}
             </div>
         );
     }
@@ -142,10 +158,10 @@ var Floors = React.createClass({
         };
     },
     onchange: function (e) {
-        this.setState({id:e.target.value});
-        setTimeout(function(){
+        this.setState({id: e.target.value});
+        setTimeout(function () {
             loadFloor(e.target.value);
-        },10);
+        }, 10);
     },
     render: function () {
         var floors = this.props.floors.map(function (floor) {
@@ -168,6 +184,7 @@ var Floors = React.createClass({
 
 
 var Locator = React.createClass({
+    lastAppear: null,
     getInitialState: function () {
         return {
             mode: 'disabled',
@@ -177,20 +194,31 @@ var Locator = React.createClass({
     onclick: function (e) {
         locatorClicked();
     },
+    checkMessage: function () {
+        this.setState({});
+    },
+    notify: function (message) {
+        this.lastAppear = new Date();
+        this.setState({message: message});
+        setTimeout(this.checkMessage, 4000);
+    },
     render: function () {
-        var cls='normal';
-        if(this.state.mode!=''){
-            cls=this.state.mode;
+        var fade = '';
+        if (this.state.message != '' && new Date() - this.lastAppear < 4000) {
+            fade = 'visible'
         }
         return (
-            <button id="locator" className={cls} onClick={this.onclick}/>
+            <div id="locator">
+                <button className={this.state.mode} onClick={this.onclick}/>
+                <div className={fade}>{this.state.message}</div>
+            </div>
         );
     }
 });
 
 var floors = [{id: "7", label: '1'}, {id: "8", label: '2'}];
 
-var searchbox = ReactDOM.render(
+var UI = ReactDOM.render(
     <Search systemid="Fukui_Sabae" floors={floors}/>,
     document.getElementById('searchBox')
 );
