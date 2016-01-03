@@ -41,6 +41,7 @@ var Main = React.createClass({
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.props.floors} ref="floors"/>
                 <Locator ref="locator" onClick={this.onClick}/>
+                <Detail ref="detail"/>
                 {offline}
             </div>
         );
@@ -125,7 +126,7 @@ var SearchResult = React.createClass({
     render: function () {
         var books = this.state.books.map(function (book) {
             return (
-                <Book key={book.id} book={book}/>
+                <Book {...book} key={book.id}/>
             );
         });
         return (
@@ -141,18 +142,52 @@ var SearchResult = React.createClass({
 });
 
 var Book = React.createClass({
+    open: function () {
+        if (this.props.result.stocks.length > 0 || this.props.result.message != '') {
+            UI.refs.detail.setState({query: UI.state.query, book: this.props});
+            if (this.props.result.stocks.length > 0) {
+                this.navigateShelf(this.props.result.stocks[0]);
+            } else {
+                navigateShelf(null, []);
+                UI.doClose();
+            }
+        }
+    },
+    navigateShelf: function (stock) {
+        if (stock.floor == "1階") {
+            navigateShelf('7', stock.shelves);
+        } else {
+            navigateShelf('8', stock.shelves);
+        }
+        UI.doClose();
+    },
     render: function () {
+        var stocks;
+        if (this.props.result.message != '') {
+            stocks = (
+                <div className="rental">{this.props.result.message}</div>
+            );
+        } else {
+            stocks = this.props.result.stocks.map(function (stock,i) {
+                return (
+                    <div className="stockbox" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}</div>
+                );
+            }, this);
+        }
         return (
-            <div>
-                <img id={'image' + this.props.book.id}/>
-                <div className="title">{this.props.book.title}<div className="author">{this.props.book.author}</div></div>
-                <div className="stock" id={'stock' + this.props.book.id}></div>
+            <div onClick={this.open}>
+                <img src={this.props.result.thumbnail}/>
+                <div className="title">{this.props.title}
+                    <div className="author">{this.props.author}</div>
+                </div>
+                <div className="stock">
+                    {stocks}
+                </div>
                 <div className="next"><i className="fa fa-play"/></div>
-            </div>
+            </div>/**/
         );
     }
 });
-
 
 var Floors = React.createClass({
     getInitialState: function () {
@@ -216,9 +251,68 @@ var Locator = React.createClass({
     }
 });
 
-var InitUI = function (props,element){
-   return ReactDOM.render(
-       React.createElement(Main, props),
-       element
-   )
+var Detail = React.createClass({
+    getInitialState: function () {
+        return {
+            query: ''
+        };
+    },
+    back: function () {
+        this.setState({query: ''});
+        UI.doSearch(this.state.query);
+    },
+    navigateShelf: function (stock) {
+        if (stock.floor == "1階") {
+            navigateShelf('7', stock.shelves);
+        } else {
+            navigateShelf('8', stock.shelves);
+        }
+        UI.doClose();
+    },
+    render: function () {
+        var cls = "";
+        var module = "";
+        if (this.state.query == '') {
+            cls = 'hide';
+        } else {
+            var stocks;
+            if (this.state.book.result.message != '') {
+                stocks = (
+                    <div className="rental">{this.state.book.result.message}</div>
+                );
+            } else {
+                stocks = this.state.book.result.stocks.map(function (stock) {
+                    return (
+                        <div className="stockbox" onClick={this.navigateShelf.bind(this, stock)}>{stock.place} 分類記号[{stock.no}]</div>
+                    );
+                }, this);
+            }
+            module = (
+                <div className="block">
+                    <div className="title">{this.state.book.title}
+                        <div className="author">{this.state.book.author}</div>
+                    </div>
+                    <div className="stock">
+                        {stocks}
+                    </div>
+                    <a href={this.state.book.url} target="_blank"><i className="fa fa-chevron-right"/> 予約・詳細を見る</a>
+                </div>
+            );
+        }
+        return (
+            <div id="detail" className={cls}>
+                <div className="back" onClick={this.back}>
+                    <i className="fa fa-arrow-left"/>
+                </div>
+                {module}
+            </div>
+        );
+    }
+});
+
+var InitUI = function (props, element) {
+    return ReactDOM.render(
+        React.createElement(Main, props),
+        element
+    )
 };

@@ -206,10 +206,12 @@ initializeApp = ->
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
-  if floorId != kanilayer.floorId
-    loadFloor(floorId)
+  if floorId?
+    if floorId != kanilayer.floorId
+      loadFloor(floorId)
   kanilayer.setTargetShelves(shelves)
-  UI.doClose()
+  if shelves is not null
+    map.getView().fit(homeExtent, map.getSize())
 
 # マーカーとモード切り替えボタン
 invalidateLocator = ->

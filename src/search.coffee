@@ -72,6 +72,10 @@ class api
           title: book.T
           author: book.A
           url: book.U
+          result:
+            stocks: []
+            thumbnail: ''
+            message: ''
         })
         @queue.push(book.K)
       result = data.results[@systemid]
@@ -106,15 +110,9 @@ class api
       dataType: 'json'
       timeout: 5000,
       success: (data) =>
-        $('#' + id).closest('.book').attr('data', JSON.stringify(data))
-        $('#stock' + id).html(data.html)
-        if data.isbn and data.isbn != ""
-          $image = $('#image' + id)
-          $image.attr('src', 'https://images-na.ssl-images-amazon.com/images/P/' + data.isbn + '.09.MZZZZZZZ.jpg')
-          $image.load ->
-            if this.width == 1
-              this.src = ''
-            else
-              this.style.border='1px solid #CCCCCC'
+        for book in @value.books
+          if book.id == id
+            book.result = data
+        @changed()
       complete: =>
         @detail()
