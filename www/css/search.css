@@ -232,6 +232,7 @@ input[type=search] {
     animation: spinner .6s linear infinite;
     -webkit-animation: spinner .6s linear infinite; }
   #searchBox .stockbox {
+    margin-right: 5px;
     font-size: 14px;
     border-radius: 2px;
     padding: 3px 10px;
@@ -432,6 +433,10 @@ input[type=search] {
     padding-top: 45px; }
 
 #detail {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -466,8 +471,9 @@ input[type=search] {
     #detail .back:hover {
       background-color: #08A2E8; }
   #detail .title {
-    height: 2.4em;
-    line-height: 1.2em;
+    height: 2.2em;
+    font-weight: 600;
+    line-height: 1.1em;
     overflow: hidden;
     margin-right: 130px; }
   #detail .block {
