@@ -105,7 +105,7 @@ input[type=search]
     overflow-y: scroll
     overflow-x: hidden
     position: absolute
-    top: 0
+    top: 1px
     left: 0
     bottom: 0
     right: 0
@@ -137,13 +137,16 @@ input[type=search]
       > div
         position: relative
         height: 110px
-        transition: background-color 0.2s
+        transition: border-left-color 0.4s
         cursor: pointer
         overflow: hidden
         box-shadow: 1px 1px 10px #CACACA
         margin-top: 10px
+        border-left: 4px solid #fff
         &:hover
-          background-color: #f2f2f2
+          border-left: 4px solid #08A2E8
+        &:hover > .next
+          color: #08A2E8
         img
           position: absolute
           top: 0
@@ -175,6 +178,7 @@ input[type=search]
           bottom: 45px
           font-size: 10px
           color: #DEDEDE
+          transition: color 1s
     .ios &
       padding-top: 100px
     > .hint
@@ -413,11 +417,33 @@ input[type=search]
     top: -170px
   .ios &
     padding-top: 34px
+  .close
+    position: absolute
+    cursor: pointer
+    color: #999999
+    z-index: 2000
+    height: 40px
+    width: 40px
+    padding-left: 0
+    padding-right: 0
+    font-size: 20px
+    top: 0
+    right: 0
+    border: none
+    background: none
+    transition: color 0.4s, right 0.4s, opacity 0.6s
+    &:hover
+      color: rgba(56, 149, 255, 0.85)
+
   .back
+    cursor: pointer
     border-right: 1px solid #DCDCDC
     display: block
+    color: #999999
+    font-size: 20px
     position: absolute
     top: 0
+    transition: color 0.4s
     .ios &
       top: 20px
     bottom: 0
@@ -429,17 +455,17 @@ input[type=search]
       top: 55px
       left: 12px
     &:hover
-      background-color: #08A2E8
+      color: #08A2E8
   .title
     height: 2.2em
     font-weight: 600
     line-height: 1.1em
     overflow: hidden
-    margin-right: 130px
+    margin-right: 40px
   .block
     position: absolute
     left: 55px
-    padding-top: 10px
+    padding-top: 13px
     bottom: 0
     top: 0
     right: 0

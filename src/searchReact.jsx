@@ -270,6 +270,10 @@ var Detail = React.createClass({
         UI.doSearch(this.state.query);
         navigateShelf(null,[]);
     },
+    close: function () {
+        this.setState({query: ''});
+        navigateShelf(null,[]);
+    },
     navigateShelf: function (stock) {
         if (stock.floor == "1階") {
             navigateShelf('7', stock.shelves);
@@ -280,7 +284,6 @@ var Detail = React.createClass({
     },
     render: function () {
         var cls = "";
-        var module = "";
         if (this.state.query == '') {
             cls = 'hide';
         }
@@ -296,23 +299,21 @@ var Detail = React.createClass({
                 );
             }, this);
         }
-        module = (
-            <div className="block">
-                <div className="title">{this.state.book.title}
-                    <div className="author">{this.state.book.author}</div>
-                </div>
-                <div className="stock">
-                    {stocks}
-                </div>
-                <a href={this.state.book.url} target="_blank"><i className="fa fa-chevron-right"/> 予約・詳細を見る</a>
-            </div>
-        );
         return (
             <div id="detail" className={cls}>
                 <div className="back" onClick={this.back}>
                     <i className="fa fa-arrow-left"/>
                 </div>
-                {module}
+                <button className="fa fa-times close" title="結果を閉じる" onClick={this.close}/>
+                <div className="block">
+                    <div className="title">{this.state.book.title}
+                        <div className="author">{this.state.book.author}</div>
+                    </div>
+                    <div className="stock">
+                        {stocks}
+                    </div>
+                    <a href={this.state.book.url} target="_blank"><i className="fa fa-chevron-right"/> 予約・詳細を見る</a>
+                </div>
             </div>
         );
     }
