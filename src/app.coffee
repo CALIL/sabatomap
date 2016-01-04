@@ -210,7 +210,7 @@ navigateShelf = (floorId, shelves)->
     if floorId != kanilayer.floorId
       loadFloor(floorId)
   kanilayer.setTargetShelves(shelves)
-  if shelves is not null
+  if shelves.length>0
     map.getView().fit(homeExtent, map.getSize())
 
 # マーカーとモード切り替えボタン

@@ -416,6 +416,8 @@ input[type=search]
     display: block
     position: absolute
     top: 0
+    .ios &
+      top: 20px
     bottom: 0
     left: 0
     width: 40px
@@ -427,8 +429,8 @@ input[type=search]
     &:hover
       background-color: #08A2E8
   .title
-    height: 4em
-    line-height: 2em
+    height: 2.4em
+    line-height: 1.2em
     overflow: hidden
     margin-right: 130px
   .block
@@ -438,15 +440,17 @@ input[type=search]
     bottom: 0
     top: 0
     right: 0
+    .ios &
+      top: 20px
   .stock
-    margin-top: 10px
+    margin-top: 5px
   img
     position: absolute
     top: 15px
     right: 10px
   a
     position: absolute
-    top: 15px
+    bottom: 10px
     right: 10px
     text-align: center
     vertical-align: middle
