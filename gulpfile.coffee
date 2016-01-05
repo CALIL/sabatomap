@@ -125,6 +125,6 @@ gulp.task 'updater', [], ->
   .pipe concat('update_'+target+'.js')
   .pipe replace('img/flag.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag.png')
   .pipe replace('img/flag2.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag2.png')
-  .pipe replace('__CSS__','https://calil.jp/static/apps/sabatomap/'+target+'/app.css?2')
+  .pipe replace('__CSS__','https://calil.jp/static/apps/sabatomap/'+target+'/app.css?'+Math.random())
   .pipe uglify()
   .pipe gulp.dest 'updater/'

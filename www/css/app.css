@@ -441,7 +441,7 @@ input[type=search] {
           user-select: none;
   overflow: hidden;
   position: absolute;
-  top: 0;
+  top: -170px;
   left: 0;
   right: 0;
   min-height: 100px;
@@ -451,8 +451,8 @@ input[type=search] {
   box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
   -webkit-transition: top 0.5s;
   transition: top 0.5s; }
-  #detail.hide {
-    top: -170px; }
+  #detail.show {
+    top: 0; }
   .ios #detail {
     padding-top: 34px; }
   #detail .close {
