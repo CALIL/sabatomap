@@ -60,18 +60,18 @@ gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastc
     'node_modules/react-dom/dist/react-dom.min.js'
     'node_modules/Kanikama/kanikama.js'
     'node_modules/Kanilayer/kanilayer.js'
-    'node_modules/kanimarker/kanimarker.js'
+    'node_modules/Kanimarker/kanimarker.js'
     'src/compiled/app.js'
     'src/compiled/search.js'
     'src/compiled/searchReact.js'
   ]
   .pipe concat('all.js')
-  .pipe replace('__RULES__',rules)
+  .pipe replace('__RULES__', rules)
   .pipe gulp.dest 'www/js/'
 
 gulp.task 'sass', [], ->
   postcss = require('gulp-postcss');
-  assets  = require('postcss-assets');
+  assets = require('postcss-assets');
   gulp.src('src/app.sass')
   .pipe(sass())
   .pipe(postcss([
@@ -104,7 +104,7 @@ gulp.task 'updater', [], ->
   target = 'v100'
   uglify = require('gulp-uglify')
   postcss = require('gulp-postcss')
-  assets  = require('postcss-assets')
+  assets = require('postcss-assets')
   rename = require("gulp-rename")
   replace = require('gulp-replace')
   gulp.src('src/app.sass')
@@ -116,15 +116,15 @@ gulp.task 'updater', [], ->
       relativeTo: 'www/img/'
     })
   ]))
-  .pipe(gulp.dest('updater/'+target))
-  gulp.src(['www/img/*']).pipe gulp.dest('updater/'+target)
+  .pipe(gulp.dest('updater/' + target))
+  gulp.src(['www/img/*']).pipe gulp.dest('updater/' + target)
   gulp.src [
     'www/js/all.js'
     'src/compiled/patch.js'
   ]
-  .pipe concat('update_'+target+'.js')
-  .pipe replace('img/flag.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag.png')
-  .pipe replace('img/flag2.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag2.png')
-  .pipe replace('__CSS__','https://calil.jp/static/apps/sabatomap/'+target+'/app.css?'+Math.random())
+  .pipe concat('update_' + target + '.js')
+  .pipe replace('img/flag.png', 'https://calil.jp/static/apps/sabatomap/' + target + '/flag.png')
+  .pipe replace('img/flag2.png', 'https://calil.jp/static/apps/sabatomap/' + target + '/flag2.png')
+  .pipe replace('__CSS__', 'https://calil.jp/static/apps/sabatomap/' + target + '/app.css?' + Math.random())
   .pipe uglify()
   .pipe gulp.dest 'updater/'
