@@ -286,10 +286,10 @@ input[type=search]
   user-select: none
   position: absolute
   border-radius: 50%
-  background: url(../img/compass.svg) no-repeat center
+  background: resolve('compass.svg') no-repeat center
   background-size: 30px
   transition: opacity .25s linear, visibility 0.25s linear .25s
-  &.ol-hidden
+  &.hidden
     opacity: 0
     pointer-events: none
   .ios &
@@ -314,16 +314,16 @@ input[type=search]
     background-size: 32px
     transition: opacity 0.4s
     &.disabled
-      background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
+      background: rgba(255, 255, 255, 0.96) resolve('target.svg') no-repeat center
       opacity: 0.5
     &.normal
-      background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center
+      background: rgba(255, 255, 255, 0.96) resolve('target.svg') no-repeat center
     &.centered
-      background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center
+      background: rgba(56, 149, 255, 0.85) resolve('target-white.svg') no-repeat center
     &.headingup
-      background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center
+      background: rgba(56, 149, 255, 0.85) resolve('navigation.svg') no-repeat center
     &.waiting
-      background: rgba(255, 255, 255, 0.96) url(../img/target-blue.svg) no-repeat center
+      background: rgba(255, 255, 255, 0.96) resolve('target-blue.svg') no-repeat center
       animation: waiting 3.0s infinite ease-in-out
     &:focus
       outline: 0

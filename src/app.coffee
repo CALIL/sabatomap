@@ -12,6 +12,7 @@ http://opensource.org/licenses/mit-license.php
 MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
 homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
 homeRotationRadian = (180 - 2.5) / 180 * Math.PI
+RULE_PATH = 'data/sabae.json'
 
 # 現在地ボタンを待っているかどうか（1以上で待っている）
 waitingPosition = 0
@@ -175,7 +176,7 @@ initializeApp = ->
       deg += 360
     cls = document.getElementById('compass')
     if deg == 0 or 500 * pixelPerMeter >= mapSize # 短辺が100m以下の時は表示しない
-      cls.className = 'ol-hidden'
+      cls.className = 'hidden'
     else
       cls.style.transform = "rotate(#{deg}deg)"
       cls.className = ''
@@ -196,13 +197,15 @@ initializeApp = ->
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
-  request = new XMLHttpRequest()
-  request.open('GET', 'data/sabae.json', true)
-  request.onload = () ->
-    if (request.status >= 200 && request.status < 400)
-      kanikama.facilities_ = JSON.parse(request.responseText)
-      loadFloor('7')
-  request.send()
+  kanikama.facilities_ = __RULES__
+  loadFloor('7');
+  #request = new XMLHttpRequest()
+  #request.open('GET', RULE_PATH, true)
+  #request.onload = () ->
+  #  if (request.status >= 200 && request.status < 400)
+  #    kanikama.facilities_ = JSON.parse(request.responseText)
+  #    loadFloor('7')
+  #request.send()
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
@@ -210,7 +213,7 @@ navigateShelf = (floorId, shelves)->
     if floorId != kanilayer.floorId
       loadFloor(floorId)
   kanilayer.setTargetShelves(shelves)
-  if shelves.length>0
+  if shelves.length > 0
     map.getView().fit(homeExtent, map.getSize())
 
 # マーカーとモード切り替えボタン

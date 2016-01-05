@@ -311,11 +311,11 @@ input[type=search] {
           user-select: none;
   position: absolute;
   border-radius: 50%;
-  background: url(../img/compass.svg) no-repeat center;
+  background: url('../img/compass.svg') no-repeat center;
   background-size: 30px;
   -webkit-transition: opacity .25s linear, visibility 0.25s linear .25s;
   transition: opacity .25s linear, visibility 0.25s linear .25s; }
-  #compass.ol-hidden {
+  #compass.hidden {
     opacity: 0;
     pointer-events: none; }
   .ios #compass {
@@ -343,16 +343,16 @@ input[type=search] {
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s; }
   #locator > button.disabled {
-    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center;
+    background: rgba(255, 255, 255, 0.96) url('../img/target.svg') no-repeat center;
     opacity: 0.5; }
   #locator > button.normal {
-    background: rgba(255, 255, 255, 0.96) url(../img/target.svg) no-repeat center; }
+    background: rgba(255, 255, 255, 0.96) url('../img/target.svg') no-repeat center; }
   #locator > button.centered {
-    background: rgba(56, 149, 255, 0.85) url(../img/target-white.svg) no-repeat center; }
+    background: rgba(56, 149, 255, 0.85) url('../img/target-white.svg') no-repeat center; }
   #locator > button.headingup {
-    background: rgba(56, 149, 255, 0.85) url(../img/navigation.svg) no-repeat center; }
+    background: rgba(56, 149, 255, 0.85) url('../img/navigation.svg') no-repeat center; }
   #locator > button.waiting {
-    background: rgba(255, 255, 255, 0.96) url(../img/target-blue.svg) no-repeat center;
+    background: rgba(255, 255, 255, 0.96) url('../img/target-blue.svg') no-repeat center;
     -webkit-animation: waiting 3.0s infinite ease-in-out;
             animation: waiting 3.0s infinite ease-in-out; }
   #locator > button:focus {

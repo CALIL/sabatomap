@@ -1,3 +1,4 @@
+fs = require 'fs'
 gulp = require 'gulp'
 bower = require 'bower'
 del = require 'del'
@@ -39,6 +40,7 @@ gulp.task 'compile_coffee', ->
     'src/load.coffee',
     'src/app.coffee',
     'src/search.coffee',
+    'src/patch.coffee',
   ]).pipe(coffee(bare: true)).pipe gulp.dest('src/compiled')
 
 gulp.task 'compile_jsx', ->
@@ -51,6 +53,8 @@ gulp.task 'compile_jsx', ->
 
 gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastclick', 'copy_font-awesome-css',
   'copy_font-awesome-fonts', 'copy_geolib'], ->
+  replace = require('gulp-replace')
+  rules = fs.readFileSync('src/sabae.json')
   gulp.src [
     'node_modules/react/dist/react.min.js'
     'node_modules/react-dom/dist/react-dom.min.js'
@@ -62,13 +66,21 @@ gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastc
     'src/compiled/searchReact.js'
   ]
   .pipe concat('all.js')
+  .pipe replace('__RULES__',rules)
   .pipe gulp.dest 'www/js/'
 
 gulp.task 'sass', [], ->
   postcss = require('gulp-postcss');
-  gulp.src('src/search.sass')
+  assets  = require('postcss-assets');
+  gulp.src('src/app.sass')
   .pipe(sass())
-  .pipe(postcss([require('autoprefixer')]))
+  .pipe(postcss([
+    require('autoprefixer'),
+    assets({
+      loadPaths: ['www/img/']
+      relativeTo: 'www/css/'
+    })
+  ]))
   .pipe(gulp.dest('www/css'))
 
 
@@ -78,12 +90,37 @@ gulp.task 'copy_load_js', ['compile_coffee'], ->
 gulp.task 'clean', ->
   del(['platforms/ios/www/**'])
 
-gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_files','sass'], ->
+gulp.task 'cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_files', 'sass'], ->
   cdv.prepare()
 
 gulp.task 'watch', ->
-  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat','sass']
+  gulp.watch ['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat', 'sass']
 
 gulp.task 'default', ['cordova_prepare']
 
 gulp.task 'update', ['cordova_prepare']
+
+gulp.task 'updater', [], ->
+  target = 'v100'
+  uglify = require('gulp-uglify')
+  postcss = require('gulp-postcss')
+  assets  = require('postcss-assets')
+  rename = require("gulp-rename")
+  gulp.src('src/app.sass')
+  .pipe(sass())
+  .pipe(postcss([
+    require('autoprefixer'),
+    assets({
+      loadPaths: ['www/img/']
+      relativeTo: 'www/img/'
+    })
+  ]))
+  .pipe(gulp.dest('updater/'+target))
+  gulp.src(['www/img/*']).pipe gulp.dest('updater/'+target)
+  gulp.src [
+    'www/js/all.js'
+    'src/compiled/patch.js'
+  ]
+  .pipe concat('update_'+target+'.js')
+  .pipe uglify()
+  .pipe gulp.dest 'updater/'
