@@ -167,7 +167,7 @@ input[type=search]
           text-decoration: none
           max-height: 2.4em
           overflow: hidden
-        .stock
+        .stocks
           position: absolute
           right: 15px
           left: 16px
@@ -218,7 +218,7 @@ input[type=search]
       border-top-color: rgba(0, 0, 0, 0.6)
       animation: spinner .6s linear infinite
       -webkit-animation: spinner .6s linear infinite
-  .stockbox
+  .stockA
     margin-right: 5px
     font-size: 14px
     border-radius: 2px
@@ -229,7 +229,7 @@ input[type=search]
     text-align: center
     display: inline-block
     min-width: 60px
-  .rental
+  .stockB
     font-size: 14px
     border-radius: 2px
     padding: 3px 10px
@@ -293,7 +293,7 @@ input[type=search]
     opacity: 0
     pointer-events: none
   .ios &
-    top: 80px
+    top: 90px
 
 #locator
   > button
@@ -381,10 +381,6 @@ input[type=search]
   & .visible
     opacity: 1
 
-//互換性のために残す
-.offline
-  display: none
-
 #offline
   //display: none
   position: absolute
@@ -404,7 +400,7 @@ input[type=search]
   user-select: none
   overflow: hidden
   position: absolute
-  top: 0
+  top: -170px
   left: 0
   right: 0
   min-height: 100px
@@ -413,8 +409,8 @@ input[type=search]
   background-color: rgb(251, 251, 251)
   box-shadow: 0 0 12px rgba(78, 78, 78, 0.7)
   transition: top 0.5s
-  &.hide
-    top: -170px
+  &.show
+    top: 0
   .ios &
     padding-top: 34px
   .close
@@ -434,6 +430,8 @@ input[type=search]
     transition: color 0.4s, right 0.4s, opacity 0.6s
     &:hover
       color: rgba(56, 149, 255, 0.85)
+    .ios &
+      top: 20px
 
   .back
     cursor: pointer
@@ -471,7 +469,7 @@ input[type=search]
     right: 0
     .ios &
       top: 20px
-  .stock
+  .stocks
     margin-top: 5px
   img
     position: absolute
@@ -500,3 +498,9 @@ input[type=search]
     &:active
       background: #999999
       background: linear-gradient(to bottom, #999999, #ededed)
+
+//互換性のために残す
+.offline
+  display: none
+#position-mode
+  display: none

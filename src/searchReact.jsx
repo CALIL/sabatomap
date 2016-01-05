@@ -165,12 +165,12 @@ var Book = React.createClass({
         var stocks;
         if (this.props.result.message != '') {
             stocks = (
-                <div className="rental">{this.props.result.message}</div>
+                <div className="stockB">{this.props.result.message}</div>
             );
         } else {
             stocks = this.props.result.stocks.map(function (stock,i) {
                 return (
-                    <div className="stockbox" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}</div>
+                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}</div>
                 );
             }, this);
         }
@@ -180,7 +180,7 @@ var Book = React.createClass({
                 <div className="title">{this.props.title}
                     <div className="author">{this.props.author}</div>
                 </div>
-                <div className="stock">
+                <div className="stocks">
                     {stocks}
                 </div>
                 <div className="next"><i className="fa fa-play"/></div>
@@ -275,27 +275,27 @@ var Detail = React.createClass({
         navigateShelf(null,[]);
     },
     navigateShelf: function (stock) {
-        if (stock.floor == "1階") {
-            navigateShelf('7', stock.shelves);
-        } else {
-            navigateShelf('8', stock.shelves);
-        }
+        navigateShelf(stock.floorId, stock.shelves);
         UI.doClose();
     },
     render: function () {
         var cls = "";
-        if (this.state.query == '') {
-            cls = 'hide';
+        if (this.state.query != '') {
+            cls = 'show';
         }
         var stocks;
         if (this.state.book.result.message != '') {
             stocks = (
-                <div className="rental">{this.state.book.result.message}</div>
+                <div className="stockB">{this.state.book.result.message}</div>
             );
         } else {
             stocks = this.state.book.result.stocks.map(function (stock) {
+                var add="";
+                if(stock.no!=''){
+                    add=' ['+stock.no+']';
+                }
                 return (
-                    <div className="stockbox" onClick={this.navigateShelf.bind(this, stock)}>{stock.place} 分類記号[{stock.no}]</div>
+                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}{add}</div>
                 );
             }, this);
         }
@@ -309,7 +309,7 @@ var Detail = React.createClass({
                     <div className="title">{this.state.book.title}
                         <div className="author">{this.state.book.author}</div>
                     </div>
-                    <div className="stock">
+                    <div className="stocks">
                         {stocks}
                     </div>
                     <a href={this.state.book.url} target="_blank"><i className="fa fa-chevron-right"/> 予約・詳細を見る</a>

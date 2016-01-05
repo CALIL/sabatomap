@@ -106,6 +106,7 @@ gulp.task 'updater', [], ->
   postcss = require('gulp-postcss')
   assets  = require('postcss-assets')
   rename = require("gulp-rename")
+  replace = require('gulp-replace')
   gulp.src('src/app.sass')
   .pipe(sass())
   .pipe(postcss([
@@ -122,5 +123,8 @@ gulp.task 'updater', [], ->
     'src/compiled/patch.js'
   ]
   .pipe concat('update_'+target+'.js')
+  .pipe replace('img/flag.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag.png')
+  .pipe replace('img/flag2.png','https://calil.jp/static/apps/sabatomap/'+target+'/flag2.png')
+  .pipe replace('__CSS__','https://calil.jp/static/apps/sabatomap/'+target+'/app.css?2')
   .pipe uglify()
   .pipe gulp.dest 'updater/'
