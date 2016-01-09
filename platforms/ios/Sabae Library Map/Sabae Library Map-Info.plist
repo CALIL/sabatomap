@@ -29,7 +29,7 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSMainNibFile~ipad</key>
-    <string></string>
+    <string/>
     <key>UIRequiresFullScreen</key>
     <true/>
     <key>WKWebViewPluginEmbeddedServerPort</key>

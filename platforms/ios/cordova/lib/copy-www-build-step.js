@@ -32,6 +32,7 @@ var BUILT_PRODUCTS_DIR = process.env.BUILT_PRODUCTS_DIR,
 var path = require('path'),
     fs = require('fs'),
     shell = require('shelljs'),
+    glob = require('glob'),
     srcDir = 'www',
     dstDir = path.join(BUILT_PRODUCTS_DIR, FULL_PRODUCT_NAME),
     dstWwwDir = path.join(dstDir, 'www');
@@ -45,7 +46,7 @@ try {
     fs.statSync(srcDir);
 } catch (e) {
     console.error('Path does not exist: ' + srcDir);
-    process.exit(2);
+    process.exit(1);
 }
 
 // Code signing files must be removed or else there are
@@ -56,16 +57,11 @@ shell.rm('-rf', path.join(dstDir, 'PkgInfo'));
 shell.rm('-rf', path.join(dstDir, 'embedded.mobileprovision'));
 
 // Copy www dir recursively
-var code;
 if(!!COPY_HIDDEN) {
-    code = shell.exec('rsync -Lra "' + srcDir + '" "' + dstDir + '"').code;
+    shell.mkdir('-p', dstWwwDir);
+    shell.cp('-r', glob.sync(srcDir + '/**', { dot: true }), dstWwwDir);
 } else {
-    code = shell.exec('rsync -Lra --exclude="- .*" "' + srcDir + '" "' + dstDir + '"').code;
-}
-
-if(code !== 0) {
-    console.error('Error occured on copying www. Code: ' + code);
-    process.exit(3);
+    shell.cp('-r', srcDir, dstDir);
 }
 
 // Copy the config.xml file.
