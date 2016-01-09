@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-inappbrowser.inappbrowser", function(require, exports, module) { /*
+cordova.define("cordova-plugin-inappbrowser.inappbrowser", function(require, exports, module) {
+/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +19,12 @@ cordova.define("cordova-plugin-inappbrowser.inappbrowser", function(require, exp
  * under the License.
  *
 */
+
+// special patch to correctly work on Ripple emulator (CB-9760)
+if (window.parent && !!window.parent.ripple) { // https://gist.github.com/triceam/4658021
+    module.exports = window.open.bind(window); // fallback to default window.open behaviour
+    return;
+}
 
 var exec = require('cordova/exec');
 var channel = require('cordova/channel');

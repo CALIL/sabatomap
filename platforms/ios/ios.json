@@ -9,10 +9,6 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
                             "count": 1
                         },
@@ -33,15 +29,19 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"WKWebViewPolyfill\"><param name=\"ios-package\" value=\"WKWebViewPolyfill\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"LocationManager\"><param name=\"ios-package\" value=\"CDVLocationManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"WKWebViewPolyfill\"><param name=\"ios-package\" value=\"WKWebViewPolyfill\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -66,15 +66,18 @@
                             "xml": "<string>This app would like to scan for iBeacons while it is in use.</string>",
                             "count": 1
                         }
+                    ],
+                    "WKWebViewPluginEmbeddedServerPort": [
+                        {
+                            "xml": "<string>12344</string>",
+                            "count": 1
+                        }
                     ]
                 }
             }
         }
     },
     "installed_plugins": {
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -88,10 +91,6 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-device-orientation": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-whitelist": {
@@ -108,19 +107,17 @@
         },
         "cordova-plugin-webserver": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.telerik.plugins.wkwebview": {
+            "WKWEBVIEW_SERVER_PORT": "12344",
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
     "dependent_plugins": {},
     "modules": [
-        {
-            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-            "id": "cordova-plugin-inappbrowser.inappbrowser",
-            "pluginId": "cordova-plugin-inappbrowser",
-            "clobbers": [
-                "cordova.InAppBrowser.open",
-                "window.open"
-            ]
-        },
         {
             "file": "plugins/cordova-plugin-device/www/device.js",
             "id": "cordova-plugin-device.device",
@@ -187,14 +184,6 @@
             ]
         },
         {
-            "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
-            "id": "com.telerik.plugins.wkwebview.wkwebview",
-            "pluginId": "com.telerik.plugins.wkwebview",
-            "clobbers": [
-                "wkwebview"
-            ]
-        },
-        {
             "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
             "id": "cordova-plugin-splashscreen.SplashScreen",
             "pluginId": "cordova-plugin-splashscreen",
@@ -251,6 +240,23 @@
             "id": "com.unarin.cordova.beacon.BeaconRegion",
             "pluginId": "com.unarin.cordova.beacon",
             "runs": true
+        },
+        {
+            "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
+            "id": "com.telerik.plugins.wkwebview.wkwebview",
+            "pluginId": "com.telerik.plugins.wkwebview",
+            "clobbers": [
+                "wkwebview"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "pluginId": "cordova-plugin-inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
         }
     ],
     "plugin_metadata": {

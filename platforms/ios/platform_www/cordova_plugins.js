@@ -1,15 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "pluginId": "cordova-plugin-device",
@@ -75,14 +66,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
-        "id": "com.telerik.plugins.wkwebview.wkwebview",
-        "pluginId": "com.telerik.plugins.wkwebview",
-        "clobbers": [
-            "wkwebview"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
         "id": "cordova-plugin-splashscreen.SplashScreen",
         "pluginId": "cordova-plugin-splashscreen",
@@ -139,23 +122,27 @@ module.exports = [
         "id": "com.unarin.cordova.beacon.BeaconRegion",
         "pluginId": "com.unarin.cordova.beacon",
         "runs": true
+    },
+    {
+        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
+        "id": "com.telerik.plugins.wkwebview.wkwebview",
+        "pluginId": "com.telerik.plugins.wkwebview",
+        "clobbers": [
+            "wkwebview"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
-{
-    "cordova-plugin-inappbrowser": "1.0.1",
-    "cordova-plugin-device": "1.0.1",
-    "com.ionic.keyboard": "1.0.4",
-    "cordova-plugin-network-information": "1.0.2-dev",
-    "cordova-plugin-bluetooth-status": "1.0.3",
-    "cordova-plugin-device-orientation": "1.0.2-dev",
-    "com.telerik.plugins.wkwebview": "0.6.3",
-    "cordova-plugin-whitelist": "1.0.0",
-    "cordova-plugin-splashscreen": "3.0.0-dev",
-    "com.unarin.cordova.beacon": "3.3.0",
-    "cordova-plugin-crosswalk-webview": "1.4.0",
-    "cordova-plugin-webserver": "1.0.3"
-}
+{}
 // BOTTOM OF METADATA
 });

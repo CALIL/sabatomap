@@ -9,10 +9,6 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         },
@@ -62,6 +58,10 @@
                         },
                         {
                             "xml": "<preference default=\"true\" name=\"xwalkMultipleApk\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -135,9 +135,6 @@
         "cordova-plugin-webserver": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -153,10 +150,6 @@
         "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -168,18 +161,17 @@
         },
         "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.telerik.plugins.wkwebview": {
+            "WKWEBVIEW_SERVER_PORT": "12344",
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
     "dependent_plugins": {},
     "modules": [
-        {
-            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-            "id": "cordova-plugin-inappbrowser.inappbrowser",
-            "clobbers": [
-                "cordova.InAppBrowser.open",
-                "window.open"
-            ]
-        },
         {
             "file": "plugins/cordova-plugin-device/www/device.js",
             "id": "cordova-plugin-device.device",
@@ -290,6 +282,14 @@
             "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
             "id": "com.unarin.cordova.beacon.BeaconRegion",
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
         }
     ]
 }

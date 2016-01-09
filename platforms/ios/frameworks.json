@@ -2,7 +2,7 @@
     "SystemConfiguration.framework": 2,
     "CoreBluetooth.framework": 2,
     "CoreLocation.framework": 2,
-    "WebKit.framework": 1,
-    "libz.dylib": 1,
-    "CFNetwork.framework": 1
+    "WebKit.framework": 2,
+    "libz.dylib": 2,
+    "CFNetwork.framework": 2
 }

@@ -54,8 +54,6 @@ NSString* appDataFolder;
                                 cacheAge:30
                       allowRangeRequests:YES];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:ServerCreatedNotificationName object: @[myMainViewController, _webServer]];
-
     [self addHandlerForPath:@"/Library/"];
     [self addHandlerForPath:@"/Documents/"];
     [self addHandlerForPath:@"/tmp/"];
@@ -63,6 +61,7 @@ NSString* appDataFolder;
     // Initialize Server startup
     if (startWebServer) {
       [self startServer];
+      [myMainViewController copyLS:_webServer.port];
     }
 
     // Update Swizzled ViewController with port currently used by local Server
@@ -111,12 +110,20 @@ NSString* appDataFolder;
     // If a fixed port is passed in, use that one, otherwise use 12344.
     // If the port is taken though, look for a free port by adding 1 to the port until we find one.
     int httpPort = 12344;
-  
-    // note that the settings can be in any casing, but they are stored in lowercase
+
+    // first we check any passed-in variable during plugin install (which is copied to plist, see plugin.xml)
+    NSNumber *plistPort = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"WKWebViewPluginEmbeddedServerPort"];
+    if (plistPort != nil) {
+      httpPort = [plistPort intValue];
+    }
+
+    // now check if it was set in config.xml - this one wins if set.
+    // (note that the settings can be in any casing, but they are stored in lowercase)
     if ([self.viewController.settings objectForKey:@"wkwebviewpluginembeddedserverport"]) {
       httpPort = [[self.viewController.settings objectForKey:@"wkwebviewpluginembeddedserverport"] intValue];
     }
 
+    _webServer.delegate = (id<GCDWebServerDelegate>)self;
     do {
         [_webServerOptions setObject:[NSNumber numberWithInteger:httpPort++]
                               forKey:GCDWebServerOption_Port];
@@ -128,6 +135,12 @@ NSString* appDataFolder;
         [GCDWebServer setLogLevel:kGCDWebServerLoggingLevel_Warning];
         NSLog(@"Started http daemon: %@ ", _webServer.serverURL);
     }
+}
+
+//MARK:GCDWebServerDelegate
+- (void)webServerDidStart:(GCDWebServer*)server {
+    [NSNotificationCenter.defaultCenter postNotificationName:ServerCreatedNotificationName
+                                                      object: @[self.viewController, _webServer]];
 }
 
 @end

@@ -2,7 +2,7 @@
 by [Eddy Verbruggen](http://twitter.com/eddyverbruggen) / [Telerik](http://www.telerik.com)
 
 
-_iOS9 warning:_ please test your app on iOS 9 and move to the 0.6.0 release if things are broken!
+__At the moment this plugin is NOT compatible with Cordova-iOS-4, see [#209](https://github.com/Telerik-Verified-Plugins/WKWebView/issues/209) for details.__
 
 
 ## 0. Index
@@ -32,6 +32,7 @@ _BETA_ - things may break, [please post your feedback :)](https://github.com/Edd
 * You can load files from the app's cache folders by using the entire path (/var/.../Library/...) or simply '/Library/..' (or '/Documents/..').
 * This plugin features crash recovery: if the WKWebView crashes, it will auto-restart (otherwise you'd have an app with a blank page as it doesn't crash the app itself). Crash recovery requires a filled `<title>anything</title>` tag in your html files. If you want to disable this feature, set the `config.xml` property `DisableCrashRecovery` to `true`.
 * In order to open links like `tel:` and `mailto:` you need to add `target="_blank"`: `<a href="tel:+31611223344" target="_blank">call!</a>`
+* If you're trying to use `HideFormAccessoryBar` with the `cordova-plugin-keyboard` plugin, please [use version 1.1.3+ of this fork](https://www.npmjs.com/package/cordova-plugin-keyboard) which is compatbile with WKWebView.
 
 ## 2. Screenshot
 This image shows the [SocialSharing plugin](https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin) in action while running [a performance test](https://www.scirra.com/demos/c2/particles/) in an iframe on my iPhone 6 (older devices show an even larger difference).
@@ -43,13 +44,22 @@ It's a screenshot of the [demo app](demo/index.html).
 
 From npm
 ```
-$ cordova plugin add @telerik/cordova-plugin-wkwebview
-$ cordova prepare
+$ cordova plugin add cordova-plugin-wkwebview
+```
+
+Specify a custom port (default 12344), you can omit this if you want to use the default in case you use a recent Cordova CLI version
+```
+$ cordova plugin add cordova-plugin-wkwebview --variable WKWEBVIEW_SERVER_PORT=12344
 ```
 
 No need for anything else - you can now open the project in XCode 6 if you like.
 
 ## 4. Changelog
+ApiAISDKPlugin
+* __0.6.8__  Compatibility with Telerik's LivePatch plugin. See #202. 
+* __0.6.7__  Compatibility with `file://` protocol for usage in plugins like [cordova-hot-code-push](https://github.com/nordnet/cordova-hot-code-push), thanks #195 and #196!
+* __0.6.5__  `KeyboardDisplayRequiresUserAction` works! So set to `false` if you want the keyboard to pop up when programmatically focussing an input field.
+* __0.6.4__  On top of the port preference introduced in 0.6.3 you can now override the default variable when installing this plugin (see 'Installation').
 * __0.6.3__  By default the embedded webserver uses port `12344`, but if you want to you can now override that port by setting f.i. `<preference name="WKWebViewPluginEmbeddedServerPort" value="20000" />` in `config.xml`.
 * __0.6.2__  LocalStorage is copied from UIWebView to WKWebView again (iOS location was recently changed as it appears).
 * __0.6.1__  Allow reading files from /tmp, so the camera plugin file URI's work. Thx #155.
