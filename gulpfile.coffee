@@ -1,6 +1,5 @@
 fs = require 'fs'
 gulp = require 'gulp'
-bower = require 'bower'
 del = require 'del'
 coffee = require 'gulp-coffee'
 download = require 'gulp-download'
