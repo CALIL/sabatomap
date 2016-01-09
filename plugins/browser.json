@@ -24,9 +24,6 @@
         "com.unarin.cordova.beacon": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "com.telerik.plugins.wkwebview": {
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
@@ -53,6 +50,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
