@@ -58,13 +58,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.ionic.keyboard/www/keyboard.js",
-        "id": "com.ionic.keyboard.keyboard",
-        "clobbers": [
-            "cordova.plugins.Keyboard"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "id": "cordova-plugin-network-information.network",
         "clobbers": [

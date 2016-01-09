@@ -76,14 +76,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.ionic.keyboard/www/keyboard.js",
-        "id": "com.ionic.keyboard.keyboard",
-        "pluginId": "com.ionic.keyboard",
-        "clobbers": [
-            "cordova.plugins.Keyboard"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "id": "cordova-plugin-network-information.network",
         "pluginId": "cordova-plugin-network-information",
@@ -143,6 +135,18 @@ module.exports = [
 ];
 module.exports.metadata = 
 // TOP OF METADATA
-{}
+{
+    "cordova-plugin-inappbrowser": "1.0.1",
+    "cordova-plugin-device": "1.0.1",
+    "cordova-plugin-network-information": "1.0.2-dev",
+    "cordova-plugin-bluetooth-status": "1.0.3",
+    "cordova-plugin-device-orientation": "1.0.2-dev",
+    "com.telerik.plugins.wkwebview": "0.6.3",
+    "cordova-plugin-whitelist": "1.0.0",
+    "cordova-plugin-splashscreen": "3.0.0-dev",
+    "com.unarin.cordova.beacon": "3.3.0",
+    "cordova-plugin-crosswalk-webview": "1.4.0",
+    "cordova-plugin-webserver": "1.0.3"
+}
 // BOTTOM OF METADATA
 });

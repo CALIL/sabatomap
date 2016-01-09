@@ -148,9 +148,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "com.ionic.keyboard": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },

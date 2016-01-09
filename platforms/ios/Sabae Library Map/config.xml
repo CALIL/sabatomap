@@ -40,9 +40,6 @@
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
-    <feature name="Keyboard">
-        <param name="ios-package" onload="true" value="IonicKeyboard" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
