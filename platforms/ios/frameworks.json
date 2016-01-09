@@ -4,5 +4,6 @@
     "CoreLocation.framework": 2,
     "WebKit.framework": 2,
     "libz.dylib": 2,
-    "CFNetwork.framework": 2
+    "CFNetwork.framework": 2,
+    "CoreTelephony.framework": 1
 }

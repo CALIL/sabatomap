@@ -18,14 +18,19 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <Cordova/CDVPlugin.h>
-#import <Cordova/CDVWhitelist.h>
+#import "CDVCommandDelegate.h"
 
-@interface CDVNavigationWhitelistPlugin : CDVPlugin {}
+@class CDVViewController;
+@class CDVCommandQueue;
 
-@property (nonatomic, readonly, strong) CDVWhitelist* whitelist; // readonly for public
-
-- (BOOL)shouldAllowNavigationToURL:(NSURL *)url;
-- (BOOL)shouldAllowRequestForURL:(NSURL *)url;
-
+@interface CDVCommandDelegateImpl : NSObject <CDVCommandDelegate>{
+    @private
+    __weak CDVViewController* _viewController;
+    NSRegularExpression* _callbackIdPattern;
+    @protected
+    __weak CDVCommandQueue* _commandQueue;
+    BOOL _delayResponses;
+}
+- (id)initWithViewController:(CDVViewController*)viewController;
+- (void)flushCommandQueueWithDelayedJs;
 @end

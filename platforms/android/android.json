@@ -9,34 +9,6 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
                             "count": 1
                         },
@@ -63,6 +35,34 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -70,6 +70,14 @@
             "AndroidManifest.xml": {
                 "parents": {
                     "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
                             "count": 1
@@ -88,14 +96,6 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
                             "count": 1
                         }
                     ],
@@ -135,6 +135,19 @@
         "cordova-plugin-webserver": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
+        "com.unarin.cordova.beacon": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "com.telerik.plugins.wkwebview": {
+            "WKWEBVIEW_SERVER_PORT": "12344",
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -155,23 +168,60 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
     "dependent_plugins": {},
     "modules": [
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
+            "id": "com.unarin.cordova.beacon.underscorejs",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
+            "id": "com.unarin.cordova.beacon.Q",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
+            "id": "com.unarin.cordova.beacon.LocationManager",
+            "merges": [
+                "cordova.plugins"
+            ]
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
+            "id": "com.unarin.cordova.beacon.Delegate",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
+            "id": "com.unarin.cordova.beacon.Region",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
+            "id": "com.unarin.cordova.beacon.Regions",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
+            "id": "com.unarin.cordova.beacon.CircularRegion",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
+            "id": "com.unarin.cordova.beacon.BeaconRegion",
+            "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
+        },
         {
             "file": "plugins/cordova-plugin-device/www/device.js",
             "id": "cordova-plugin-device.device",
@@ -239,56 +289,6 @@
             "id": "cordova-plugin-splashscreen.SplashScreen",
             "clobbers": [
                 "navigator.splashscreen"
-            ]
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
-            "id": "com.unarin.cordova.beacon.underscorejs",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
-            "id": "com.unarin.cordova.beacon.Q",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
-            "id": "com.unarin.cordova.beacon.LocationManager",
-            "merges": [
-                "cordova.plugins"
-            ]
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
-            "id": "com.unarin.cordova.beacon.Delegate",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
-            "id": "com.unarin.cordova.beacon.Region",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
-            "id": "com.unarin.cordova.beacon.Regions",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
-            "id": "com.unarin.cordova.beacon.CircularRegion",
-            "runs": true
-        },
-        {
-            "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
-            "id": "com.unarin.cordova.beacon.BeaconRegion",
-            "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-            "id": "cordova-plugin-inappbrowser.inappbrowser",
-            "clobbers": [
-                "cordova.InAppBrowser.open",
-                "window.open"
             ]
         }
     ]
