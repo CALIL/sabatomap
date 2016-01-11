@@ -57,6 +57,7 @@ gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastc
   gulp.src [
     'node_modules/react/dist/react.min.js'
     'node_modules/react-dom/dist/react-dom.min.js'
+    'node_modules/geolib/dist/geolib.js'
     'node_modules/Kanikama/kanikama.js'
     'node_modules/Kanilayer/kanilayer.js'
     'node_modules/Kanimarker/kanimarker.js'
