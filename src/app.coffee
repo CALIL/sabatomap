@@ -21,8 +21,6 @@ initialized = false
 kanimarker = null
 kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
 kanikama = new Kanikama()
-window.alert = (s)->
-  console.log s
 
 fitRotation = ->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
