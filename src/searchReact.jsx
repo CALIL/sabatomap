@@ -3,9 +3,12 @@ var Main = React.createClass({
         return {query: '', completed: true, offline: false};
     },
     setFacility: function (facility) {
-        this.refs.detail.setState({query:''});
+        this.refs.detail.setState({query: ''});
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
+    },
+    setFloorId: function (id) {
+        this.refs.floors.setState({'id': id});
     },
     doSearch: function (query) {
         this.setState({query: query});
@@ -21,12 +24,6 @@ var Main = React.createClass({
     },
     setMode: function (mode) {
         this.refs.locator.setState({'mode': mode});
-    },
-    setFloorId: function (id) {
-        this.refs.floors.setState({'id': id});
-    },
-    onClick: function (e) {
-        locatorClicked();
     },
     render: function () {
         var cls = '';
@@ -45,7 +42,7 @@ var Main = React.createClass({
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.props.floors} ref="floors"/>
-                <Locator ref="locator" onClick={this.onClick}/>
+                <Locator ref="locator" onClick={locatorClicked}/>
                 <Detail ref="detail"/>
                 {offline}
             </div>
