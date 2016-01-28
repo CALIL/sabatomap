@@ -45,12 +45,21 @@ fitRotation = ->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ->
-  fitRotation()
-  pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
-  map.beforeRender(pan)
-  zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-  map.beforeRender(zoom)
-  map.getView().fit(homeExtent, map.getSize())
+  c1 = ol.proj.transform(map.getView().getCenter(), map.getView().getProjection(), 'EPSG:4326')
+  c2 = ol.proj.transform([(homeExtent[0] + homeExtent[2]) / 2,
+    (homeExtent[1] + homeExtent[3]) / 2], 'EPSG:3857', 'EPSG:4326');
+  distance = new ol.Sphere(6378137).haversineDistance(c1, c2)
+  # 現在地からの距離が200m以内の場合はアニメーションする
+  if distance < 200
+    fitRotation()
+    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
+    map.beforeRender(pan)
+    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+    map.beforeRender(zoom)
+    map.getView().fit(homeExtent, map.getSize())
+  else
+    map.getView().setRotation(homeRotationRadian)
+    map.getView().fit(homeExtent, map.getSize())
 
 # 施設を読み込む
 # @param id {String} 施設ID
