@@ -79,7 +79,7 @@ didRangeBeaconsInRegion = (beacons)->
 initializeApp = ->
   if initialized
     return
-  UI = InitUI({},document.getElementById('searchBox'))
+  UI = InitUI({}, document.getElementById('searchBox'))
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -102,7 +102,6 @@ initializeApp = ->
         if heading < 0
           heading += 360 # マイナスの値を考慮
         heading %= 360
-
         kanikama.heading = heading
         kanimarker.setHeading(parseInt(heading))
       navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
@@ -142,13 +141,12 @@ initializeApp = ->
     ]
     controls: []
     target: 'map'
-    maxZoom: 26
-    minZoom: 18
     logo: false
     view: new ol.View(
       center: [15139450.747885207, 4163881.1440642904]
       rotation: homeRotationRadian
       zoom: 6
+      minResolution: 0.001
     )
   )
 
@@ -201,7 +199,6 @@ initializeApp = ->
 
   map.getView().on 'change:rotation', -> invalidateCompass(@)
   map.getView().on 'change:resolution', -> invalidateCompass(@)
-
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
