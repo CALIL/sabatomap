@@ -10,8 +10,8 @@ http://opensource.org/licenses/mit-license.php
 
 # アプリケーション定数
 MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
-homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
-homeRotationRadian = (180 - 2.5) / 180 * Math.PI
+homeExtent = null
+homeRotationRadian = 0
 
 # 現在地ボタンを待っているかどうか（1以上で待っている）
 waitingPosition = 0
@@ -138,15 +138,21 @@ initializeApp = ->
         UI.setState({offline: false})
 
   FastClick.attach(document.body)
+  osm = new ol.layer.Tile(# 世界地図
+    source: new ol.source.XYZ(
+      url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
+      maxZoom: 22)
+    minResolution: 0.1
+    visible: false
+    maxResolution: 2000000
+    preload: 3)
+  setTimeout ->
+    osm.setVisible true
+  , 500
+
   map = new ol.Map(
     layers: [
-      new ol.layer.Tile(# 世界地図
-        source: new ol.source.XYZ(
-          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
-          maxZoom: 22)
-        minResolution: 0.1
-        maxResolution: 2000000
-        preload: 3)
+      osm
       kanilayer
     ]
     controls: []
@@ -154,7 +160,6 @@ initializeApp = ->
     logo: false
     view: new ol.View(
       center: [15139450.747885207, 4163881.1440642904]
-      rotation: homeRotationRadian
       zoom: 6
       minResolution: 0.001
     )
