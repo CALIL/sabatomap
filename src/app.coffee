@@ -146,10 +146,6 @@ initializeApp = ->
     visible: false
     maxResolution: 2000000
     preload: 3)
-  setTimeout ->
-    osm.setVisible true
-  , 500
-
   map = new ol.Map(
     layers: [
       osm
@@ -164,7 +160,9 @@ initializeApp = ->
       minResolution: 0.001
     )
   )
-
+  setTimeout ->
+    osm.setVisible true
+  , 500
   kanimarker = new Kanimarker(map)
   kanimarker.on 'change:mode', -> invalidateLocator()
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
