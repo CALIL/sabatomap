@@ -78,6 +78,7 @@ loadFloor = (id)->
   if kanilayer.floorId != id
     kanimarker.setPosition null
     kanilayer.setFloorId id
+    kanilayer.setTargetShelves []
     UI.setFloorId id
   setTimeout fitFloor, 100
 

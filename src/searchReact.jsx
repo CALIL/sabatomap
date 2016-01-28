@@ -3,6 +3,7 @@ var Main = React.createClass({
         return {query: '', completed: true, offline: false};
     },
     setFacility: function (facility) {
+        this.refs.detail.setState({query:''});
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
     },
