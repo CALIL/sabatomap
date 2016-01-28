@@ -1,7 +1,7 @@
 {
-  "name": "sabatomap",
-  "version": "1.4.0-dev",
-  "description": "鯖江市図書館マップアプリ「さばとマップ」",
+  "name": "warabi3",
+  "version": "1.0.0",
+  "description": "カーリル図書館マップ",
   "dependencies": {
     "Kanikama": "git+https://github.com/CALIL/Kanikama.git",
     "Kanilayer": "git+https://github.com/CALIL/Kanilayer.git",

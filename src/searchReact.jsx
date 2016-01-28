@@ -2,6 +2,10 @@ var Main = React.createClass({
     getInitialState: function () {
         return {query: '', completed: true, offline: false};
     },
+    setFacility: function (facility) {
+        this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
+        this.setProps({systemid: facility.systemid, floors: facility.floors});
+    },
     doSearch: function (query) {
         this.setState({query: query});
     },
@@ -95,6 +99,7 @@ var SearchBox = React.createClass({
 var SearchResult = React.createClass({
     api: null,
     query: '',
+    systemid: null,
     getInitialState: function () {
         return {
             books: [],
@@ -107,12 +112,15 @@ var SearchResult = React.createClass({
         this.props.setCompleted(data.completed);
     },
     componentDidMount: function () {
-        if (this.props.query != this.query && this.props.query != '') {
-            if (this.api) {
-                this.api.kill();
+        if (this.props.query != '') {
+            if (this.props.query != this.query || this.props.systemid != this.systemid) {
+                if (this.api) {
+                    this.api.kill();
+                }
+                this.query = this.props.query;
+                this.systemid = this.props.systemid;
+                this.api = new api(this.props.systemid, this.props.query, this.doUpdate);
             }
-            this.query = this.props.query;
-            this.api = new api(this.props.systemid, this.props.query, this.doUpdate);
         }
     },
     componentDidUpdate: function () {
@@ -168,7 +176,7 @@ var Book = React.createClass({
                 <div className="stockB">{this.props.result.message}</div>
             );
         } else {
-            stocks = this.props.result.stocks.map(function (stock,i) {
+            stocks = this.props.result.stocks.map(function (stock, i) {
                 return (
                     <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}</div>
                 );
@@ -202,16 +210,19 @@ var Floors = React.createClass({
         }, 10);
     },
     render: function () {
-        var floors = this.props.floors.map(function (floor) {
-            return (
-                <div className="floor">
-                    <input name="view" type="radio" id={'F'+floor.id} checked={this.state.id === floor.id}
-                           value={floor.id} onChange={this.onchange}/>
-                    <label htmlFor={'F'+floor.id}>{floor.label}</label>
-                </div>
-            );
-        }, this);
-        floors.reverse();
+        var floors;
+        if (this.props.floors) {
+            floors = this.props.floors.map(function (floor) {
+                return (
+                    <div className="floor">
+                        <input name="view" type="radio" id={'F'+floor.id} checked={this.state.id === floor.id}
+                               value={floor.id} onChange={this.onchange}/>
+                        <label htmlFor={'F'+floor.id}>{floor.label}</label>
+                    </div>
+                );
+            }, this);
+            floors.reverse();
+        }
         return (
             <div id="floors">
                 {floors}
@@ -255,12 +266,12 @@ var Detail = React.createClass({
     getInitialState: function () {
         return {
             query: '',
-            book:{
-                title:'',
-                author:'',
-                result:{
-                    stocks:[],
-                    message:''
+            book: {
+                title: '',
+                author: '',
+                result: {
+                    stocks: [],
+                    message: ''
                 }
             }
         };
@@ -268,11 +279,11 @@ var Detail = React.createClass({
     back: function () {
         this.setState({query: ''});
         UI.doSearch(this.state.query);
-        navigateShelf(null,[]);
+        navigateShelf(null, []);
     },
     close: function () {
         this.setState({query: ''});
-        navigateShelf(null,[]);
+        navigateShelf(null, []);
     },
     navigateShelf: function (stock) {
         navigateShelf(stock.floorId, stock.shelves);
@@ -290,9 +301,9 @@ var Detail = React.createClass({
             );
         } else {
             stocks = this.state.book.result.stocks.map(function (stock) {
-                var add="";
-                if(stock.no!=''){
-                    add=' ['+stock.no+']';
+                var add = "";
+                if (stock.no != '') {
+                    add = ' [' + stock.no + ']';
                 }
                 return (
                     <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}{add}</div>

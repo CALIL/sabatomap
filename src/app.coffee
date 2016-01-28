@@ -1,6 +1,6 @@
 ###
 
-鯖江市図書館マップ「さばとマップ」
+カーリル図書館マップ
 
 Copyright (c) 2016 CALIL Inc.
 This software is released under the MIT License.
@@ -52,6 +52,17 @@ fitFloor = ->
   map.beforeRender(zoom)
   map.getView().fit(homeExtent, map.getSize())
 
+# 施設を読み込む
+# @param id {String} 施設ID
+loadFacility = (id)->
+  for f in kanikama.facilities_
+    if f.id == id
+      homeExtent = f.extent
+      homeRotationRadian = f.rotation
+      UI.setFacility f
+      loadFloor f.floors[0].id
+      return
+
 # フロアを読み込む
 # @param id {String} フロアID
 loadFloor = (id)->
@@ -68,10 +79,7 @@ didRangeBeaconsInRegion = (beacons)->
 initializeApp = ->
   if initialized
     return
-  UI = InitUI(
-    {systemid: "Fukui_Sabae", floors: [{id: "7", label: '1'}, {id: "8", label: '2'}]},
-    document.getElementById('searchBox'))
-
+  UI = InitUI({},document.getElementById('searchBox'))
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -143,7 +151,7 @@ initializeApp = ->
       zoom: 6
     )
   )
-  map.getView().fit(homeExtent, map.getSize()) # 鯖江図書館のサイズに合わせる
+
   kanimarker = new Kanimarker(map)
   kanimarker.on 'change:mode', -> invalidateLocator()
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
@@ -198,7 +206,7 @@ initializeApp = ->
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
   kanikama.facilities_ = __RULES__
-  loadFloor '7'
+  loadFacility '7'
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
