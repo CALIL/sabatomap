@@ -45,11 +45,11 @@ fitRotation = ->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ->
+  # 現在地からの距離が200m以内の場合はアニメーションする
   c1 = ol.proj.transform(map.getView().getCenter(), map.getView().getProjection(), 'EPSG:4326')
   c2 = ol.proj.transform([(homeExtent[0] + homeExtent[2]) / 2,
     (homeExtent[1] + homeExtent[3]) / 2], 'EPSG:3857', 'EPSG:4326');
   distance = new ol.Sphere(6378137).haversineDistance(c1, c2)
-  # 現在地からの距離が200m以内の場合はアニメーションする
   if distance < 200
     fitRotation()
     pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
@@ -68,6 +68,7 @@ loadFacility = (id)->
     if f.id == id
       homeExtent = f.extent
       homeRotationRadian = f.rotation
+      kanilayer.setTargetShelves []
       UI.setFacility f
       loadFloor f.floors[0].id
       return
@@ -78,7 +79,6 @@ loadFloor = (id)->
   if kanilayer.floorId != id
     kanimarker.setPosition null
     kanilayer.setFloorId id
-    kanilayer.setTargetShelves []
     UI.setFloorId id
   setTimeout fitFloor, 100
 
