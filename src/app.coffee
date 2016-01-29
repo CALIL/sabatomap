@@ -10,11 +10,10 @@ http://opensource.org/licenses/mit-license.php
 
 # アプリケーション定数
 MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
-homeExtent = [15160175.492232606, 4295344.11748085, 15160265.302530615, 4295432.24882111]
-homeRotationRadian = (180 - 2.5) / 180 * Math.PI
 
-# 現在地ボタンを待っているかどうか（1以上で待っている）
-waitingPosition = 0
+homeExtent = null
+homeRotationRadian = 0
+waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 UI = null
 map = null
 initialized = false
@@ -45,12 +44,32 @@ fitRotation = ->
   map.getView().setRotation(virtualAngle * Math.PI / 180)
 
 fitFloor = ->
-  fitRotation()
-  pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
-  map.beforeRender(pan)
-  zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
-  map.beforeRender(zoom)
+  # 現在地からの距離が200m以内の場合はアニメーションする
+  c1 = ol.proj.transform(map.getView().getCenter(), map.getView().getProjection(), 'EPSG:4326')
+  c2 = ol.proj.transform([(homeExtent[0] + homeExtent[2]) / 2,
+    (homeExtent[1] + homeExtent[3]) / 2], 'EPSG:3857', 'EPSG:4326');
+  distance = new ol.Sphere(6378137).haversineDistance(c1, c2)
+  if distance < 200
+    fitRotation()
+    pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
+    map.beforeRender(pan)
+    zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
+    map.beforeRender(zoom)
+  else
+    map.getView().setRotation(homeRotationRadian)
   map.getView().fit(homeExtent, map.getSize())
+
+# 施設を読み込む
+# @param id {String} 施設ID
+loadFacility = (id)->
+  for f in kanikama.facilities_
+    if f.id == id
+      homeExtent = f.extent
+      homeRotationRadian = f.rotation
+      kanilayer.setTargetShelves []
+      UI.setFacility f
+      loadFloor f.floors[0].id
+      return
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -68,10 +87,7 @@ didRangeBeaconsInRegion = (beacons)->
 initializeApp = ->
   if initialized
     return
-  UI = InitUI(
-    {systemid: "Fukui_Sabae", floors: [{id: "7", label: '1'}, {id: "8", label: '2'}]},
-    document.getElementById('searchBox'))
-
+  UI = InitUI({}, document.getElementById('searchBox'))
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -94,7 +110,6 @@ initializeApp = ->
         if heading < 0
           heading += 360 # マイナスの値を考慮
         heading %= 360
-
         kanikama.heading = heading
         kanimarker.setHeading(parseInt(heading))
       navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
@@ -121,29 +136,31 @@ initializeApp = ->
         UI.setState({offline: false})
 
   FastClick.attach(document.body)
+  osm = new ol.layer.Tile(
+    source: new ol.source.XYZ(
+      url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
+      maxZoom: 22)
+    minResolution: 0.1
+    visible: false
+    maxResolution: 2000000
+    preload: 3)
   map = new ol.Map(
     layers: [
-      new ol.layer.Tile(# 世界地図
-        source: new ol.source.XYZ(
-          url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
-          maxZoom: 22)
-        minResolution: 0.1
-        maxResolution: 2000000
-        preload: 3)
+      osm
       kanilayer
     ]
     controls: []
     target: 'map'
-    maxZoom: 26
-    minZoom: 18
     logo: false
     view: new ol.View(
       center: [15139450.747885207, 4163881.1440642904]
-      rotation: homeRotationRadian
       zoom: 6
+      minResolution: 0.001
     )
   )
-  map.getView().fit(homeExtent, map.getSize()) # 鯖江図書館のサイズに合わせる
+  setTimeout ->
+    osm.setVisible true
+  , 500
   kanimarker = new Kanimarker(map)
   kanimarker.on 'change:mode', -> invalidateLocator()
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
@@ -193,12 +210,11 @@ initializeApp = ->
 
   map.getView().on 'change:rotation', -> invalidateCompass(@)
   map.getView().on 'change:resolution', -> invalidateCompass(@)
-
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
   kanikama.facilities_ = __RULES__
-  loadFloor '7'
+  loadFacility '7'
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
