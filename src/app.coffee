@@ -1,6 +1,6 @@
 ###
 
-鯖江市図書館マップ「さばとマップ」
+カーリル図書館マップ
 
 Copyright (c) 2016 CALIL Inc.
 This software is released under the MIT License.
