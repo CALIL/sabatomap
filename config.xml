@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="10009" id="jp.calil.sabatomap" version="1.4.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Sabae Library Map</name>
-    <description>鯖江図書館マップ</description>
+    <name>Warabi</name>
+    <description>カーリル図書館マップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
     <access origin="*" />
