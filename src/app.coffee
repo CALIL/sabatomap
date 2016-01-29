@@ -255,3 +255,17 @@ locatorClicked = ->
         waitPosition()
       else
         kanimarker.setMode 'centered' # centeredモードに切り替える
+
+# 周辺の情報を表示
+loadNearestInformation = (minor)->
+  $.ajax
+    dataType: 'html'
+    url: "https://calil.jp/warabi/nu/bunrui.php?minor=" + minor + '&new=' + 1
+    cache: false
+    crossDomain: true
+  .done (data)->
+    $("#nu-info").html data
+    $("#nu-info").show()
+  .fail ->
+    $("#nu-info").html '<div>データがありません</div>'
+    $("#nu-info").show()
