@@ -10,11 +10,10 @@ http://opensource.org/licenses/mit-license.php
 
 # アプリケーション定数
 MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
+
 homeExtent = null
 homeRotationRadian = 0
-
-# 現在地ボタンを待っているかどうか（1以上で待っている）
-waitingPosition = 0
+waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 UI = null
 map = null
 initialized = false
@@ -56,10 +55,9 @@ fitFloor = ->
     map.beforeRender(pan)
     zoom = ol.animation.zoom(easing: ol.easing.elastic, duration: 800, resolution: map.getView().getResolution())
     map.beforeRender(zoom)
-    map.getView().fit(homeExtent, map.getSize())
   else
     map.getView().setRotation(homeRotationRadian)
-    map.getView().fit(homeExtent, map.getSize())
+  map.getView().fit(homeExtent, map.getSize())
 
 # 施設を読み込む
 # @param id {String} 施設ID
@@ -138,7 +136,7 @@ initializeApp = ->
         UI.setState({offline: false})
 
   FastClick.attach(document.body)
-  osm = new ol.layer.Tile(# 世界地図
+  osm = new ol.layer.Tile(
     source: new ol.source.XYZ(
       url: 'https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=' + MAPBOX_TOKEN
       maxZoom: 22)

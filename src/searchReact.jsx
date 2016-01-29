@@ -160,11 +160,8 @@ var Book = React.createClass({
         }
     },
     navigateShelf: function (stock) {
-        if (stock.floor == "1階") {
-            navigateShelf('7', stock.shelves);
-        } else {
-            navigateShelf('8', stock.shelves);
-        }
+        var floorid = String(stock.floorId); // fixme 整数型で来てしまっているのでとりあえずキャスト
+        navigateShelf(floorid, stock.shelves);
         UI.doClose();
     },
     render: function () {
