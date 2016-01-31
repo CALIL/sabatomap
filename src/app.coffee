@@ -67,8 +67,7 @@ loadFacility = (id)->
       homeRotationRadian = f.rotation
       kanilayer.setTargetShelves []
       UI.setFacility f
-      loadFloor f.floors[0].id
-      return
+      return loadFloor f.floors[0].id
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -103,10 +102,9 @@ initializeApp = ->
             heading += window.orientation # for iOS8 WKWebView
           when 'Android'
             heading += screen.orientation.angle # for Android Crosswalk
-        # 0-360の範囲に収める
         if heading < 0
           heading += 360 # マイナスの値を考慮
-        heading %= 360
+        heading %= 360 # 0-360の範囲に収める
         kanikama.heading = heading
         kanimarker.setHeading(parseInt(heading))
       navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
@@ -142,10 +140,7 @@ initializeApp = ->
     maxResolution: 2000000
     preload: 3)
   map = new ol.Map(
-    layers: [
-      osm
-      kanilayer
-    ]
+    layers: [osm, kanilayer]
     controls: []
     target: 'map'
     logo: false

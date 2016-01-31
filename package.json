@@ -1,6 +1,6 @@
 {
   "name": "sabatomap",
-  "version": "1.4.0-dev",
+  "version": "1.5.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "dependencies": {
     "Kanikama": "git+https://github.com/CALIL/Kanikama.git",
