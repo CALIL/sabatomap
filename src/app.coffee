@@ -16,7 +16,6 @@ homeRotationRadian = 0
 waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 UI = null
 map = null
-initialized = false
 kanimarker = null
 kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
 kanikama = new Kanikama()
@@ -85,9 +84,7 @@ didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
 initializeApp = ->
-  if initialized
-    return
-  UI = InitUI({}, document.getElementById('searchBox'))
+  UI = InitUI({}, document.getElementById('ui'))
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')

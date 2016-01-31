@@ -43,11 +43,11 @@ input[type=search] {
   20% {
     background-size: 40px; } }
 
-#searchBox {
+#ui {
   height: 100%;
   width: 100%;
   overflow: hidden; }
-  #searchBox .box {
+  #ui .box {
     overflow: hidden;
     position: absolute;
     top: 2px;
@@ -55,9 +55,9 @@ input[type=search] {
     right: 0;
     padding: 14px;
     z-index: 1000000; }
-    .ios #searchBox .box {
+    .ios #ui .box {
       top: 22px; }
-    #searchBox .box input {
+    #ui .box input {
       color: #727171;
       font-family: sans-serif;
       font-size: 100%;
@@ -70,20 +70,20 @@ input[type=search] {
       transition: border 0.9s;
       box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
       border-radius: 4px; }
-      #searchBox .box input::-webkit-search-cancel-button {
+      #ui .box input::-webkit-search-cancel-button {
         -webkit-appearance: none; }
-      #searchBox .box input::-webkit-input-placeholder {
+      #ui .box input::-webkit-input-placeholder {
         -webkit-transition: opacity 0.4s;
         transition: opacity 0.4s; }
-      #searchBox .box input:focus {
+      #ui .box input:focus {
         border: 2px solid rgba(56, 149, 255, 0.85); }
-        #searchBox .box input:focus::-webkit-input-placeholder {
+        #ui .box input:focus::-webkit-input-placeholder {
           opacity: 0; }
-        #searchBox .box input:focus ~ button {
+        #ui .box input:focus ~ button {
           color: rgba(56, 149, 255, 0.85); }
-        #searchBox .box input:focus ~ .clear:after {
+        #ui .box input:focus ~ .clear:after {
           border-left: 1px solid rgba(56, 149, 255, 0.4); }
-    #searchBox .box button {
+    #ui .box button {
       position: absolute;
       cursor: pointer;
       color: #999999;
@@ -100,9 +100,9 @@ input[type=search] {
       background: none;
       -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
       transition: color 0.4s, right 0.4s, opacity 0.6s; }
-      #searchBox .box button:hover {
+      #ui .box button:hover {
         color: rgba(56, 149, 255, 0.85); }
-      #searchBox .box button.clear:after {
+      #ui .box button.clear:after {
         border-left: 1px solid #DADADA;
         content: '';
         position: absolute;
@@ -112,9 +112,9 @@ input[type=search] {
         width: 0;
         -webkit-transition: border-left-color 0.4s;
         transition: border-left-color 0.4s; }
-      #searchBox .box button.search {
+      #ui .box button.search {
         right: 63px; }
-  #searchBox .results {
+  #ui .results {
     -webkit-overflow-scrolling: touch;
     -webkit-user-select: none;
        -moz-user-select: none;
@@ -132,7 +132,7 @@ input[type=search] {
     padding: 70px 17px 17px;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
-    #searchBox .results:before {
+    #ui .results:before {
       z-index: 10;
       content: '';
       position: fixed;
@@ -143,18 +143,18 @@ input[type=search] {
       pointer-events: none;
       background: -webkit-linear-gradient(top, white 0%, rgba(255, 255, 255, 0) 100%);
       background: linear-gradient(to bottom, white 0%, rgba(255, 255, 255, 0) 100%); }
-    #searchBox .results::-webkit-scrollbar {
+    #ui .results::-webkit-scrollbar {
       background-color: #fff;
       width: 10px; }
-    #searchBox .results::-webkit-scrollbar-track {
+    #ui .results::-webkit-scrollbar-track {
       background: none;
       margin-top: 80px; }
-    #searchBox .results::-webkit-scrollbar-thumb {
+    #ui .results::-webkit-scrollbar-thumb {
       background-color: #ddd; }
-    #searchBox .results .books {
+    #ui .results .books {
       margin-left: -17px;
       margin-right: -17px; }
-      #searchBox .results .books > div {
+      #ui .results .books > div {
         position: relative;
         height: 110px;
         -webkit-transition: border-left-color 0.4s;
@@ -164,11 +164,11 @@ input[type=search] {
         box-shadow: 1px 1px 10px #CACACA;
         margin-top: 10px;
         border-left: 4px solid #fff; }
-        #searchBox .results .books > div:hover {
+        #ui .results .books > div:hover {
           border-left: 4px solid #08A2E8; }
-        #searchBox .results .books > div:hover > .next {
+        #ui .results .books > div:hover > .next {
           color: #08A2E8; }
-        #searchBox .results .books > div img {
+        #ui .results .books > div img {
           position: absolute;
           top: 0;
           bottom: 0;
@@ -176,7 +176,7 @@ input[type=search] {
           margin: auto;
           width: 80px;
           opacity: 0.2; }
-        #searchBox .results .books > div .title {
+        #ui .results .books > div .title {
           position: absolute;
           font-size: 16px;
           line-height: 1.2em;
@@ -188,12 +188,12 @@ input[type=search] {
           text-decoration: none;
           max-height: 2.4em;
           overflow: hidden; }
-        #searchBox .results .books > div .stocks {
+        #ui .results .books > div .stocks {
           position: absolute;
           right: 15px;
           left: 16px;
           bottom: 13px; }
-        #searchBox .results .books > div .next {
+        #ui .results .books > div .next {
           position: absolute;
           right: 10px;
           bottom: 45px;
@@ -201,26 +201,26 @@ input[type=search] {
           color: #DEDEDE;
           -webkit-transition: color 1s;
           transition: color 1s; }
-    .ios #searchBox .results {
+    .ios #ui .results {
       padding-top: 100px; }
-    #searchBox .results > .hint {
+    #ui .results > .hint {
       font-size: 13px; }
-    #searchBox .results > .message {
+    #ui .results > .message {
       font-size: 14px;
       font-weight: 600;
       color: #555;
       margin: 10px 0; }
-  #searchBox .empty .results {
+  #ui .empty .results {
     opacity: 0;
     pointer-events: none; }
-  #searchBox .empty .clear {
+  #ui .empty .clear {
     user-focus: none;
     right: -31px !important;
     opacity: 0;
     visibility: hidden; }
-  #searchBox .empty .search {
+  #ui .empty .search {
     right: 16px !important; }
-  #searchBox .loading:before {
+  #ui .loading:before {
     content: '読み込み中';
     position: absolute;
     top: 50%;
@@ -229,14 +229,14 @@ input[type=search] {
     height: 16px;
     margin-top: -10px;
     margin-left: -10px; }
-  #searchBox .loading:not(:required):before {
+  #ui .loading:not(:required):before {
     content: '';
     border-radius: 50%;
     border: 2px solid rgba(0, 0, 0, 0.3);
     border-top-color: rgba(0, 0, 0, 0.6);
     animation: spinner .6s linear infinite;
     -webkit-animation: spinner .6s linear infinite; }
-  #searchBox .stockA {
+  #ui .stockA {
     margin-right: 5px;
     font-size: 14px;
     border-radius: 2px;
@@ -247,7 +247,7 @@ input[type=search] {
     text-align: center;
     display: inline-block;
     min-width: 60px; }
-  #searchBox .stockB {
+  #ui .stockB {
     font-size: 14px;
     border-radius: 2px;
     padding: 3px 10px;
