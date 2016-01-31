@@ -13,11 +13,10 @@ plumber = require('gulp-plumber') # コンパイルエラーによる強制停�
 notify = require('gulp-notify')
 
 gulp.task 'fetch_depends_files', ->
-  depended_libraries = [
+  download([
     'http://lab.calil.jp/ol3custom/v3.10.1/ol.js'
     'http://openlayers.org/en/v3.10.1/css/ol.css'
-  ]
-  download(depended_libraries).pipe gulp.dest('www/vendor')
+  ]).pipe gulp.dest('www/vendor')
 
 gulp.task 'copy_jquery', ->
   gulp.src(['node_modules/jquery/dist/jquery.min.js']).pipe gulp.dest('www/vendor')

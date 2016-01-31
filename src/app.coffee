@@ -21,11 +21,11 @@ kanimarker = null
 kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
 kanikama = new Kanikama()
 
-fitRotation = ->
+fitRotation = (r = homeRotationRadian)->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
   if oldAngle < 0
     oldAngle += 360
-  newAngle = (homeRotationRadian * 180 / Math.PI) % 360
+  newAngle = (r * 180 / Math.PI) % 360
   # アニメーションのための仮想的な角度を計算
   # 左回りの場合はマイナスの値をとる場合がある
   if newAngle > oldAngle
@@ -162,7 +162,7 @@ initializeApp = ->
     osm.setVisible true
   , 500
   kanimarker = new Kanimarker(map)
-  kanimarker.on 'change:mode', -> invalidateLocator()
+  kanimarker.on 'change:mode', invalidateLocator
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
   kanikama.on 'change:position', (p)->
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
@@ -185,7 +185,8 @@ initializeApp = ->
       kanimarker.setPosition(null)
 
   # コンパス関係の処理
-  invalidateCompass = (view_) ->
+  invalidateCompass = ->
+    view_ = map.getView()
     mapSize = Math.min(map.getSize()[0], map.getSize()[1]) # マップの短辺を取得
     pixelPerMeter = (1 / view_.getResolution()) * window.devicePixelRatio # 1メートルのピクセル数
     deg = (view_.getRotation() * 180 / Math.PI) % 360
@@ -200,16 +201,10 @@ initializeApp = ->
 
   document.getElementById('compass').addEventListener 'click', ->
     kanimarker.setMode 'normal'
-    rotation = map.getView().getRotation()
-    while rotation < -Math.PI
-      rotation += 2 * Math.PI
-    while rotation > Math.PI
-      rotation -= 2 * Math.PI
-    map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
-    map.getView().setRotation(0)
+    fitRotation(0)
 
-  map.getView().on 'change:rotation', -> invalidateCompass(@)
-  map.getView().on 'change:resolution', -> invalidateCompass(@)
+  map.getView().on 'change:rotation', invalidateCompass
+  map.getView().on 'change:resolution', invalidateCompass
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
