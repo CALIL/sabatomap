@@ -544,9 +544,3 @@ input[type=search] {
       background: #999999;
       background: -webkit-linear-gradient(top, #999999, #ededed);
       background: linear-gradient(to bottom, #999999, #ededed); }
-
-.offline {
-  display: none; }
-
-#position-mode {
-  display: none; }

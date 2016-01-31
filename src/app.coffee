@@ -158,9 +158,7 @@ initializeApp = ->
       minResolution: 0.001
     )
   )
-  setTimeout ->
-    osm.setVisible true
-  , 500
+  setTimeout (-> osm.setVisible true), 500
   kanimarker = new Kanimarker(map)
   kanimarker.on 'change:mode', invalidateLocator
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
@@ -198,13 +196,12 @@ initializeApp = ->
     else
       cls.style.transform = "rotate(#{deg}deg)"
       cls.className = ''
-
   document.getElementById('compass').addEventListener 'click', ->
     kanimarker.setMode 'normal'
     fitRotation(0)
-
   map.getView().on 'change:rotation', invalidateCompass
   map.getView().on 'change:resolution', invalidateCompass
+
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
