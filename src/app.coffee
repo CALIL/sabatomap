@@ -49,7 +49,7 @@ fitFloor = ->
   c2 = ol.proj.transform([(homeExtent[0] + homeExtent[2]) / 2,
     (homeExtent[1] + homeExtent[3]) / 2], 'EPSG:3857', 'EPSG:4326');
   distance = new ol.Sphere(6378137).haversineDistance(c1, c2)
-  if distance < 200
+  if distance <= 200
     fitRotation()
     pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
     map.beforeRender(pan)
