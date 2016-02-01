@@ -16,16 +16,15 @@ homeRotationRadian = 0
 waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上で待っている）
 UI = null
 map = null
-initialized = false
 kanimarker = null
 kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
 kanikama = new Kanikama()
 
-fitRotation = ->
+fitRotation = (r = homeRotationRadian)->
   oldAngle = (map.getView().getRotation() * 180 / Math.PI ) % 360
   if oldAngle < 0
     oldAngle += 360
-  newAngle = (homeRotationRadian * 180 / Math.PI) % 360
+  newAngle = (r * 180 / Math.PI) % 360
   # アニメーションのための仮想的な角度を計算
   # 左回りの場合はマイナスの値をとる場合がある
   if newAngle > oldAngle
@@ -49,7 +48,7 @@ fitFloor = ->
   c2 = ol.proj.transform([(homeExtent[0] + homeExtent[2]) / 2,
     (homeExtent[1] + homeExtent[3]) / 2], 'EPSG:3857', 'EPSG:4326');
   distance = new ol.Sphere(6378137).haversineDistance(c1, c2)
-  if distance < 200
+  if distance <= 200
     fitRotation()
     pan = ol.animation.pan(easing: ol.easing.elastic, duration: 800, source: map.getView().getCenter())
     map.beforeRender(pan)
@@ -68,8 +67,7 @@ loadFacility = (id)->
       homeRotationRadian = f.rotation
       kanilayer.setTargetShelves []
       UI.setFacility f
-      loadFloor f.floors[0].id
-      return
+      return loadFloor f.floors[0].id
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -85,9 +83,7 @@ didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
 initializeApp = ->
-  if initialized
-    return
-  UI = InitUI({}, document.getElementById('searchBox'))
+  UI = InitUI({}, document.getElementById('ui'))
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -106,10 +102,9 @@ initializeApp = ->
             heading += window.orientation # for iOS8 WKWebView
           when 'Android'
             heading += screen.orientation.angle # for Android Crosswalk
-        # 0-360の範囲に収める
         if heading < 0
           heading += 360 # マイナスの値を考慮
-        heading %= 360
+        heading %= 360 # 0-360の範囲に収める
         kanikama.heading = heading
         kanimarker.setHeading(parseInt(heading))
       navigator.compass.watchHeading(compassSuccess, null, frequency: 100)
@@ -145,10 +140,7 @@ initializeApp = ->
     maxResolution: 2000000
     preload: 3)
   map = new ol.Map(
-    layers: [
-      osm
-      kanilayer
-    ]
+    layers: [osm, kanilayer]
     controls: []
     target: 'map'
     logo: false
@@ -158,11 +150,9 @@ initializeApp = ->
       minResolution: 0.001
     )
   )
-  setTimeout ->
-    osm.setVisible true
-  , 500
+  setTimeout (-> osm.setVisible true), 500
   kanimarker = new Kanimarker(map)
-  kanimarker.on 'change:mode', -> invalidateLocator()
+  kanimarker.on 'change:mode', invalidateLocator
   kanikama.on 'change:floor', (floor)-> loadFloor(floor.id)
   kanikama.on 'change:position', (p)->
     if waitingPosition and kanikama.currentFloor.id isnt kanilayer.floorId
@@ -185,7 +175,8 @@ initializeApp = ->
       kanimarker.setPosition(null)
 
   # コンパス関係の処理
-  invalidateCompass = (view_) ->
+  invalidateCompass = ->
+    view_ = map.getView()
     mapSize = Math.min(map.getSize()[0], map.getSize()[1]) # マップの短辺を取得
     pixelPerMeter = (1 / view_.getResolution()) * window.devicePixelRatio # 1メートルのピクセル数
     deg = (view_.getRotation() * 180 / Math.PI) % 360
@@ -197,19 +188,12 @@ initializeApp = ->
     else
       cls.style.transform = "rotate(#{deg}deg)"
       cls.className = ''
-
   document.getElementById('compass').addEventListener 'click', ->
     kanimarker.setMode 'normal'
-    rotation = map.getView().getRotation()
-    while rotation < -Math.PI
-      rotation += 2 * Math.PI
-    while rotation > Math.PI
-      rotation -= 2 * Math.PI
-    map.beforeRender(ol.animation.rotate(duration: 400, rotation: rotation))
-    map.getView().setRotation(0)
+    fitRotation(0)
+  map.getView().on 'change:rotation', invalidateCompass
+  map.getView().on 'change:resolution', invalidateCompass
 
-  map.getView().on 'change:rotation', -> invalidateCompass(@)
-  map.getView().on 'change:resolution', -> invalidateCompass(@)
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 

@@ -1,23 +1,18 @@
-fs = require 'fs'
 gulp = require 'gulp'
 del = require 'del'
 coffee = require 'gulp-coffee'
 download = require 'gulp-download'
 concat = require 'gulp-concat'
-exec = require 'gulp-exec'
-sass = require('gulp-sass');
-cordova_lib = require('cordova-lib')
+sass = require 'gulp-sass'
+react = require 'gulp-react'
+cordova_lib = require 'cordova-lib'
 cdv = cordova_lib.cordova.raw
-react = require('gulp-react')
-plumber = require('gulp-plumber') # コンパイルエラーによる強制停止を防止する
-notify = require('gulp-notify')
 
 gulp.task 'fetch_depends_files', ->
-  depended_libraries = [
+  download([
     'http://lab.calil.jp/ol3custom/v3.10.1/ol.js'
     'http://openlayers.org/en/v3.10.1/css/ol.css'
-  ]
-  download(depended_libraries).pipe gulp.dest('www/vendor')
+  ]).pipe gulp.dest('www/vendor')
 
 gulp.task 'copy_jquery', ->
   gulp.src(['node_modules/jquery/dist/jquery.min.js']).pipe gulp.dest('www/vendor')
@@ -44,15 +39,13 @@ gulp.task 'compile_coffee', ->
 
 gulp.task 'compile_jsx', ->
   gulp.src('src/searchReact.jsx')
-  .pipe(plumber({
-    errorHandler: notify.onError "Error: <%= error.message %>"
-  }))
   .pipe(react())
   .pipe(gulp.dest('src/compiled'))
 
 gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastclick', 'copy_font-awesome-css',
   'copy_font-awesome-fonts', 'copy_geolib'], ->
-  replace = require('gulp-replace')
+  replace = require 'gulp-replace'
+  fs = require 'fs'
   rules = fs.readFileSync('src/sabae.json')
   gulp.src [
     'node_modules/react/dist/react.min.js'

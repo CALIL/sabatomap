@@ -198,10 +198,10 @@ var Floors = React.createClass({
             id: null
         };
     },
-    onchange: function (e) {
-        this.setState({id: e.target.value});
+    select: function (id) {
+        this.setState({id: id});
         setTimeout(function () {
-            loadFloor(e.target.value);
+            loadFloor(id);
         }, 10);
     },
     render: function () {
@@ -211,7 +211,7 @@ var Floors = React.createClass({
                 return (
                     <div className="floor">
                         <input name="view" type="radio" id={'F'+floor.id} checked={this.state.id === floor.id}
-                               value={floor.id} onChange={this.onchange}/>
+                               value={floor.id} onChange={this.select.bind(this,floor.id)}/>
                         <label htmlFor={'F'+floor.id}>{floor.label}</label>
                     </div>
                 );
