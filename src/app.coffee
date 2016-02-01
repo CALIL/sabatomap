@@ -277,10 +277,13 @@ loadNearestInformation = (minor)->
 # 周辺の情報を探す
 waiting = 0
 waitNearestInformation = (timeoutSec = 10)->
+  console.log 'waitNearestInformation ' + waiting
+
   if kanikama.currentPosition isnt null
     switch kanikama.currentPosition.algorithm
       when 'nearest1'
         loadNearestInformation kanikama.currentPosition.beacon.minor
+        waiting = 0
         return
       else
         # 今は考慮しない
