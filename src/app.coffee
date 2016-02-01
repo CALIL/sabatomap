@@ -258,7 +258,7 @@ locatorClicked = ->
 
 # 周辺の情報を表示
 latestNearestInformationMinor = null
-loadNearestInformation = (minor)->
+loadNearestInformation = (minor, success)->
   latestNearestInformationMinor = minor
   $.ajax
     dataType: 'html'
@@ -270,13 +270,15 @@ loadNearestInformation = (minor)->
       console.log 'loadNearestInformation ' + latestNearestInformationMinor
       $("#nu-info").html data
       $("#nu-info").show()
+      if success isnt null
+        success()
   .fail ->
     $("#nu-info").html '<div>データがありません</div>'
     $("#nu-info").show()
 
 # 周辺の情報を探す
 waitNearestInformationTimer = null
-waitNearestInformation = (timeoutSec = 10)->
+waitNearestInformation = (success)->
   start = new Date()
   cancel = ->
     clearInterval waitNearestInformationTimer
@@ -286,12 +288,11 @@ waitNearestInformation = (timeoutSec = 10)->
       # 名大用なので今は'nearest1'のみ考慮
       switch kanikama.currentPosition.algorithm
         when 'nearest1'
-          console.log start
-          loadNearestInformation kanikama.currentPosition.beacon.minor
+          loadNearestInformation kanikama.currentPosition.beacon.minor, success
           cancel()
           return
     # 10秒以上で終了
-    if new Date() - start >= timeoutSec * 1000
+    if new Date() - start >= 10 * 1000
       cancel()
 
   if waitNearestInformationTimer is null
@@ -300,10 +301,7 @@ waitNearestInformation = (timeoutSec = 10)->
 
 # 周辺の情報を探すのテストコード
 testWaitNearestInformation = ->
-  # 1秒後にビーコン検出
-  setTimeout ->
-    kanikama.push [
-      {uuid: "00000000-71C7-1001-B000-001C4D532518", major: 105, minor: 70, rssi: -100}
-    ]
-  , 1000
-  waitNearestInformation()
+  waitNearestInformation -> console.log 'success'
+  kanikama.push [
+    {uuid: "00000000-71C7-1001-B000-001C4D532518", major: 105, minor: 70, rssi: -100}
+  ]
