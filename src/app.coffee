@@ -275,23 +275,28 @@ loadNearestInformation = (minor)->
     $("#nu-info").show()
 
 # 周辺の情報を探す
-waiting = 0
+waitNearestInformationTimer = null
 waitNearestInformation = (timeoutSec = 10)->
-  console.log 'waitNearestInformation ' + waiting
+  start = new Date()
+  cancel = ->
+    clearInterval waitNearestInformationTimer
+    waitNearestInformationTimer = null
+  onTimer = ->
+    if kanikama.currentPosition isnt null
+      # 名大用なので今は'nearest1'のみ考慮
+      switch kanikama.currentPosition.algorithm
+        when 'nearest1'
+          console.log start
+          loadNearestInformation kanikama.currentPosition.beacon.minor
+          cancel()
+          return
+    # 10秒以上で終了
+    if new Date() - start >= timeoutSec * 1000
+      cancel()
 
-  if kanikama.currentPosition isnt null
-    switch kanikama.currentPosition.algorithm
-      when 'nearest1'
-        loadNearestInformation kanikama.currentPosition.beacon.minor
-        waiting = 0
-        return
-      else
-        # 今は考慮しない
-  # 10秒以上で終了
-  if ++waiting < timeoutSec
-    setTimeout waitNearestInformation, 1000
-  else
-    waiting = 0
+  if waitNearestInformationTimer is null
+    waitNearestInformationTimer = setInterval onTimer, 1000
+    onTimer()
 
 # 周辺の情報を探すのテストコード
 testWaitNearestInformation = ->
