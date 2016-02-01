@@ -295,7 +295,7 @@ waitNearestInformation = (timeoutSec = 10)->
 
 # 周辺の情報を探すのテストコード
 testWaitNearestInformation = ->
-  # 8秒後にビーコン検出
+  # 1秒後にビーコン検出
   setTimeout ->
     kanikama.push [
       {uuid: "00000000-71C7-1001-B000-001C4D532518", major: 105, minor: 70, rssi: -100}
