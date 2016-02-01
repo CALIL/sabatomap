@@ -267,8 +267,35 @@ loadNearestInformation = (minor)->
     crossDomain: true
   .done (data)->
     if latestNearestInformationMinor is minor
+      console.log 'loadNearestInformation ' + latestNearestInformationMinor
       $("#nu-info").html data
       $("#nu-info").show()
   .fail ->
     $("#nu-info").html '<div>データがありません</div>'
     $("#nu-info").show()
+
+# 周辺の情報を探す
+waiting = 0
+waitNearestInformation = (timeoutSec = 10)->
+  if kanikama.currentPosition isnt null
+    switch kanikama.currentPosition.algorithm
+      when 'nearest1'
+        loadNearestInformation kanikama.currentPosition.beacon.minor
+        return
+      else
+        # 今は考慮しない
+  # 10秒以上で終了
+  if ++waiting < timeoutSec
+    setTimeout waitNearestInformation, 1000
+  else
+    waiting = 0
+
+# 周辺の情報を探すのテストコード
+testWaitNearestInformation = ->
+  # 8秒後にビーコン検出
+  setTimeout ->
+    kanikama.push [
+      {uuid: "00000000-71C7-1001-B000-001C4D532518", major: 105, minor: 70, rssi: -100}
+    ]
+  , 1000
+  waitNearestInformation()
