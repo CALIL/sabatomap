@@ -198,7 +198,7 @@ initializeApp = ->
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
   kanikama.facilities_ = __RULES__
-  loadFacility '7'
+  UI.setFacilities kanikama.facilities_
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->

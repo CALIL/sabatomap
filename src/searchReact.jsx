@@ -2,10 +2,16 @@ var Main = React.createClass({
     getInitialState: function () {
         return {query: '', completed: true, offline: false};
     },
+    setFacilities: function (facilities) {
+        this.setProps({facilities: facilities});
+    },
     setFacility: function (facility) {
         this.refs.detail.setState({query: ''});
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
+    },
+    showFacilities: function () {
+        this.refs.facilities.setState({id: null});
     },
     setFloorId: function (id) {
         this.refs.floors.setState({'id': id});
@@ -38,6 +44,7 @@ var Main = React.createClass({
         }
         return (
             <div className={cls}>
+                <Facilities ref='facilities' facilities={this.props.facilities}/>
                 <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
                 <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
@@ -188,6 +195,53 @@ var Book = React.createClass({
                 </div>
                 <div className="next"><i className="fa fa-play"/></div>
             </div>/**/
+        );
+    }
+});
+
+var Facilities = React.createClass({
+    getInitialState: function () {
+        return {id: null};
+    },
+    select: function (id) {
+        this.setState({id: id});
+        setTimeout(function () {
+            loadFacility(id);
+        }, 10);
+    },
+    render: function () {
+        var cls = 'facilities';
+        if (this.state.id != null) {
+            cls += ' hide';
+        }
+        var cards;
+        if (this.props.facilities) {
+            cards = this.props.facilities.map(function (facility) {
+                console.log(facility.name);
+                var mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=%8EI%8D%5D%8Es%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.962012,136.18661&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM';
+                return (
+                    <div className="card" onClick={this.select.bind(this, facility.id)}>
+                        <div className="name">{facility.name}</div>
+                        <div className="name_en">Library dummy text</div>
+                        <img src={mapUrl} alt=""/>
+                        <p>この図書館を選ぶ</p>
+                    </div>
+                );
+            }, this);
+        }
+        return (
+            <div className={cls}>
+                <div className="banner">
+                    <div>図書館マップへようこそ</div>
+                    <p>探した本がどの棚にあるかを</p>
+                    <p>簡単に調べられます。</p>
+                    <p>全国に先駆けて体験してみよう。</p>
+                    <p><b>図書館を選択してください</b></p>
+                </div>
+                <div className="cards">
+                    {cards}
+                </div>
+            </div>
         );
     }
 });
