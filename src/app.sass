@@ -113,8 +113,9 @@ input[type=search]
     z-index: 1000001 // 最前面
     background-color: #00B8F2
     transition: opacity 0.6s
-    &.hide
-      display: none
+    &.selected
+      opacity: 0
+      pointer-events: none
     > .banner
       color: #676767
       padding: 16px
@@ -134,11 +135,16 @@ input[type=search]
       padding: 0 12px 12px 12px
       > .card
         margin-top: 12px
-        border-radius: 6px
-        background-color: #fff
+        border-radius: 4px
         box-shadow: rgba(76, 76, 76, 0.36) 0 2px 2px 0
         padding-top: 16px
         padding-bottom: 1px
+        background-color: #fff
+        transition: background-color 0.2s
+        &:hover
+          background-color: #f7f7f7
+        &:active
+          background-color: #eeeeee
         > .name
           color: #00B8F2
           font-size: 23px

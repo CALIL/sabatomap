@@ -4,14 +4,12 @@ var Main = React.createClass({
     },
     setFacilities: function (facilities) {
         this.setProps({facilities: facilities});
+        this.refs.facilities.setState({id: null});
     },
     setFacility: function (facility) {
         this.refs.detail.setState({query: ''});
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
-    },
-    showFacilities: function () {
-        this.refs.facilities.setState({id: null});
     },
     setFloorId: function (id) {
         this.refs.floors.setState({'id': id});
@@ -212,12 +210,11 @@ var Facilities = React.createClass({
     render: function () {
         var cls = 'facilities';
         if (this.state.id != null) {
-            cls += ' hide';
+            cls += ' selected';
         }
         var cards;
         if (this.props.facilities) {
             cards = this.props.facilities.map(function (facility) {
-                console.log(facility.name);
                 var mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=%8EI%8D%5D%8Es%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.962012,136.18661&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM';
                 return (
                     <div className="card" onClick={this.select.bind(this, facility.id)}>
@@ -279,7 +276,6 @@ var Floors = React.createClass({
         );
     }
 });
-
 
 var Locator = React.createClass({
     lastAppear: null,

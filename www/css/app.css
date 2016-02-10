@@ -131,8 +131,9 @@ input[type=search] {
     background-color: #00B8F2;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
-    #ui .facilities.hide {
-      display: none; }
+    #ui .facilities.selected {
+      opacity: 0;
+      pointer-events: none; }
     #ui .facilities > .banner {
       color: #676767;
       padding: 16px;
@@ -152,11 +153,17 @@ input[type=search] {
       padding: 0 12px 12px 12px; }
       #ui .facilities > .cards > .card {
         margin-top: 12px;
-        border-radius: 6px;
-        background-color: #fff;
+        border-radius: 4px;
         box-shadow: rgba(76, 76, 76, 0.36) 0 2px 2px 0;
         padding-top: 16px;
-        padding-bottom: 1px; }
+        padding-bottom: 1px;
+        background-color: #fff;
+        -webkit-transition: background-color 0.2s;
+        transition: background-color 0.2s; }
+        #ui .facilities > .cards > .card:hover {
+          background-color: #f7f7f7; }
+        #ui .facilities > .cards > .card:active {
+          background-color: #eeeeee; }
         #ui .facilities > .cards > .card > .name {
           color: #00B8F2;
           font-size: 23px;
