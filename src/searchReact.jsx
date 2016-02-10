@@ -2,12 +2,10 @@ var Main = React.createClass({
     getInitialState: function () {
         return {query: '', completed: true, offline: false};
     },
-    setFacilities: function (facilities) {
-        this.setProps({facilities: facilities});
-        this.refs.facilities.setState({id: null});
-    },
     setFacility: function (facility) {
-        this.refs.detail.setState({query: ''});
+        if (this.refs.detail) {
+            this.refs.detail.setSstate({query: ''});
+        }
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
     },
@@ -40,18 +38,26 @@ var Main = React.createClass({
                 <div id="offline">ネットワークに接続できません</div>
             )
         }
-        return (
-            <div className={cls}>
-                <Facilities ref='facilities' facilities={this.props.facilities}/>
-                <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
-                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
-                              setCompleted={this.setCompleted}/>
-                <Floors floors={this.props.floors} ref="floors"/>
-                <Locator ref="locator" onClick={locatorClicked}/>
-                <Detail ref="detail"/>
-                {offline}
-            </div>
-        );
+        if (this.props.systemid == null) {
+            return (
+                <div className={cls}>
+                    <Facilities ref='facilities' facilities={this.props.facilities}/>
+                    {offline}
+                </div>
+            );
+        } else {
+            return (
+                <div className={cls}>
+                    <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
+                    <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
+                                  setCompleted={this.setCompleted}/>
+                    <Floors floors={this.props.floors} ref="floors"/>
+                    <Locator ref="locator" onClick={locatorClicked}/>
+                    <Detail ref="detail"/>
+                    {offline}
+                </div>
+            );
+        }
     }
 });
 
@@ -198,20 +204,12 @@ var Book = React.createClass({
 });
 
 var Facilities = React.createClass({
-    getInitialState: function () {
-        return {id: null};
-    },
     select: function (id) {
-        this.setState({id: id});
         setTimeout(function () {
             loadFacility(id);
         }, 10);
     },
     render: function () {
-        var cls = 'facilities';
-        if (this.state.id != null) {
-            cls += ' selected';
-        }
         var cards;
         if (this.props.facilities) {
             cards = this.props.facilities.map(function (facility) {
@@ -227,7 +225,7 @@ var Facilities = React.createClass({
             }, this);
         }
         return (
-            <div className={cls}>
+            <div className="facilities">
                 <div className="banner">
                     <div>図書館マップへようこそ</div>
                     <p>探した本がどの棚にあるかを</p>
