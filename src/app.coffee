@@ -95,7 +95,6 @@ didRangeBeaconsInRegion = (beacons)->
 
 initializeApp = ->
   rules = __RULES__
-  kanikama.facilities_ = rules
   UI = InitUI({facilities: rules}, document.getElementById('ui'))
 
   if cordova?
@@ -210,6 +209,8 @@ initializeApp = ->
 
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
+
+  kanikama.facilities_ = rules
 
 # 目的地を表示する
 navigateShelf = (floorId, shelves)->
