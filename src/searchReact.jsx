@@ -265,7 +265,6 @@ var Floors = React.createClass({
 });
 
 
-
 var Locator = React.createClass({
     lastAppear: null,
     getInitialState: function () {
