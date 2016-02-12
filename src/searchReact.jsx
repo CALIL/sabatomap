@@ -41,7 +41,7 @@ var Main = React.createClass({
         if (this.props.systemid == null) {
             return (
                 <div className={cls}>
-                    <Facilities ref='facilities' facilities={this.props.facilities}/>
+                    <Facilities facilities={this.props.facilities}/>
                     {offline}
                 </div>
             );
@@ -213,12 +213,11 @@ var Facilities = React.createClass({
         var cards;
         if (this.props.facilities) {
             cards = this.props.facilities.map(function (facility) {
-                var mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=%8EI%8D%5D%8Es%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.962012,136.18661&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM';
                 return (
                     <div className="card" onClick={this.select.bind(this, facility.id)}>
                         <div className="name">{facility.name}</div>
-                        <div className="name_en">Library dummy text</div>
-                        <img src={mapUrl} alt=""/>
+                        <div className="name_en">{facility.name_en}</div>
+                        <img src={facility.image} alt=""/>
                         <p>この図書館を選ぶ</p>
                     </div>
                 );

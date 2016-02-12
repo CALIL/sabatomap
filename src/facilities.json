@@ -2,6 +2,8 @@
   {
     "id": "7",
     "name": "鯖江市図書館",
+    "name_en": "Sabae City Library",
+    "image": "https://maps.googleapis.com/maps/api/staticmap?center=%8EI%8D%5D%8Es%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.962012,136.18661&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM",
     "short": "鯖江市図書館 (SR)",
     "libid": 100622,
     "systemid": "Fukui_Sabae",
@@ -4848,6 +4850,8 @@
   {
     "id": "3",
     "name": "名古屋大学附属図書館中央図書館",
+    "name_en": "Nagoya University Central Library",
+    "image": "https://maps.googleapis.com/maps/api/staticmap?center=%96%BC%8C%C3%89%AE%91%E5%8Aw%95%8D%91%AE%90%7D%8F%91%8A%D9%92%86%89%9B%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.15508,136.963791&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM",
     "short": "名古屋大学・中央 *2015",
     "libid": 105261,
     "systemid": "Univ_Nagoya",
