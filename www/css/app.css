@@ -131,21 +131,6 @@ input[type=search] {
     background-color: #00B8F2;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
-    #ui .facilities > .banner {
-      color: #676767;
-      padding: 16px;
-      background: #FFFFFF url('../img/cloud.png') repeat-x bottom center;
-      background-size: 100% 80%; }
-      #ui .facilities > .banner > div {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold; }
-      #ui .facilities > .banner > p {
-        text-align: center;
-        font-family: 'Open Sans', sans-serif;
-        font-size: 14px;
-        line-height: 22px;
-        margin: 0; }
     #ui .facilities > .cards {
       padding: 0 12px 12px 12px; }
       #ui .facilities > .cards > .card {
