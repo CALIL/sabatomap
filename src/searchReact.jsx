@@ -45,19 +45,18 @@ var Main = React.createClass({
                     {offline}
                 </div>
             );
-        } else {
-            return (
-                <div className={cls}>
-                    <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
-                    <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
-                                  setCompleted={this.setCompleted}/>
-                    <Floors floors={this.props.floors} ref="floors"/>
-                    <Locator ref="locator" onClick={locatorClicked}/>
-                    <Detail ref="detail"/>
-                    {offline}
-                </div>
-            );
         }
+        return (
+            <div className={cls}>
+                <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
+                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
+                              setCompleted={this.setCompleted}/>
+                <Floors floors={this.props.floors} ref="floors"/>
+                <Locator ref="locator" onClick={locatorClicked}/>
+                <Detail ref="detail"/>
+                {offline}
+            </div>
+        );
     }
 });
 
@@ -273,6 +272,7 @@ var Floors = React.createClass({
         );
     }
 });
+
 
 var Locator = React.createClass({
     lastAppear: null,
