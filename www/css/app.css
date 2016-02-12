@@ -114,15 +114,6 @@ input[type=search] {
         transition: border-left-color 0.4s; }
       #ui .box button.search {
         right: 63px; }
-  #ui .facilities {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #fff; }
-    .ios #ui .facilities {
-      padding-top: 22px; }
   #ui .results {
     -webkit-overflow-scrolling: touch;
     -webkit-user-select: none;
