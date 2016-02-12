@@ -4,6 +4,7 @@
     "name": "鯖江市図書館",
     "name_en": "Sabae City Library",
     "image": "https://maps.googleapis.com/maps/api/staticmap?center=%8EI%8D%5D%8Es%90%7D%8F%91%8A%D9&zoom=18&size=300x100&markers=color:red%7Ccolor:red%7Clabel:A%7C35.962012,136.18661&scale=2&sensor=false&key=AIzaSyB7oWTbPHpwLditPKvQgE29BUhmjZ2bPwM",
+    "libid": 100622,
     "short": "鯖江市図書館 (SR)",
     "systemid": "Fukui_Sabae",
     "extent": [
