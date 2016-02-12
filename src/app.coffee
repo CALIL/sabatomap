@@ -58,6 +58,14 @@ fitFloor = ->
     map.getView().setRotation(homeRotationRadian)
   map.getView().fit(homeExtent, map.getSize())
 
+# 施設を未選択にする
+unloadFacility = ->
+  kanilayer.setFloorId null
+  homeExtent = null
+  homeRotationRadian = 0
+  kanimarker.setPosition null
+  UI.setProps({systemid: null, floors: []})
+
 # 施設を読み込む
 # @param id {String} 施設ID
 loadFacility = (id)->
@@ -67,7 +75,10 @@ loadFacility = (id)->
       homeRotationRadian = f.rotation
       kanilayer.setTargetShelves []
       UI.setFacility f
-      return loadFloor f.floors[0].id
+      map.getView().setRotation(homeRotationRadian)
+      map.getView().fit(homeExtent, map.getSize())
+      loadFloor f.floors[0].id
+      return
 
 # フロアを読み込む
 # @param id {String} フロアID
@@ -83,7 +94,9 @@ didRangeBeaconsInRegion = (beacons)->
   kanikama.push(beacons)
 
 initializeApp = ->
-  UI = InitUI({}, document.getElementById('ui'))
+  rules = __RULES__
+  UI = InitUI({facilities: rules}, document.getElementById('ui'))
+
   if cordova?
     if device.platform is 'iOS'
       body = document.getElementsByTagName('body')
@@ -197,7 +210,7 @@ initializeApp = ->
   window.addEventListener 'BluetoothStatus.enabled', invalidateLocator
   window.addEventListener 'BluetoothStatus.disabled', invalidateLocator
 
-  kanikama.facilities_ = __RULES__
+  kanikama.facilities_ = rules
   loadFacility '7'
 
 # 目的地を表示する
