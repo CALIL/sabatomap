@@ -3,7 +3,9 @@ var Main = React.createClass({
         return {query: '', completed: true, offline: false};
     },
     setFacility: function (facility) {
-        this.refs.detail.setState({query: ''});
+        if (this.refs.detail) {
+            this.refs.detail.setSstate({query: ''});
+        }
         this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
         this.setProps({systemid: facility.systemid, floors: facility.floors});
     },
@@ -35,6 +37,14 @@ var Main = React.createClass({
             offline = (
                 <div id="offline">ネットワークに接続できません</div>
             )
+        }
+        if (this.props.systemid == null) {
+            return (
+                <div className={cls}>
+                    <Facilities facilities={this.props.facilities}/>
+                    {offline}
+                </div>
+            );
         }
         return (
             <div className={cls}>
@@ -188,6 +198,34 @@ var Book = React.createClass({
                 </div>
                 <div className="next"><i className="fa fa-play"/></div>
             </div>/**/
+        );
+    }
+});
+
+var Facilities = React.createClass({
+    select: function (id) {
+        setTimeout(function () {
+            loadFacility(id);
+        }, 10);
+    },
+    render: function () {
+        var cards;
+        if (this.props.facilities) {
+            cards = this.props.facilities.map(function (facility) {
+                return (
+                    <div className="card" onClick={this.select.bind(this, facility.id)}>
+                        <div className="name">{facility.name}</div>
+                        <p>この図書館を選ぶ</p>
+                    </div>
+                );
+            }, this);
+        }
+        return (
+            <div className="facilities">
+                <div className="cards">
+                    {cards}
+                </div>
+            </div>
         );
     }
 });

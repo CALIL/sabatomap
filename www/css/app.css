@@ -114,6 +114,49 @@ input[type=search] {
         transition: border-left-color 0.4s; }
       #ui .box button.search {
         right: 63px; }
+  #ui .facilities {
+    -webkit-overflow-scrolling: touch;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1000001;
+    background-color: #00B8F2;
+    -webkit-transition: opacity 0.6s;
+    transition: opacity 0.6s; }
+    #ui .facilities > .cards {
+      padding: 0 12px 12px 12px; }
+      #ui .facilities > .cards > .card {
+        margin: 12px auto;
+        max-width: 420px;
+        border-radius: 4px;
+        box-shadow: rgba(76, 76, 76, 0.36) 0 2px 2px 0;
+        padding-top: 16px;
+        padding-bottom: 1px;
+        background-color: #fff;
+        -webkit-transition: background-color 0.2s;
+        transition: background-color 0.2s; }
+        #ui .facilities > .cards > .card:hover {
+          background-color: #f7f7f7; }
+        #ui .facilities > .cards > .card:active {
+          background-color: #eeeeee; }
+        #ui .facilities > .cards > .card > .name {
+          color: #00B8F2;
+          font-size: 23px;
+          line-height: 23px;
+          margin-left: 16px; }
+        #ui .facilities > .cards > .card > p {
+          color: #00B8F2;
+          font-size: 14px;
+          line-height: 14px;
+          margin: 10px; }
   #ui .results {
     -webkit-overflow-scrolling: touch;
     -webkit-user-select: none;
