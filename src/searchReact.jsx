@@ -215,8 +215,6 @@ var Facilities = React.createClass({
                 return (
                     <div className="card" onClick={this.select.bind(this, facility.id)}>
                         <div className="name">{facility.name}</div>
-                        <div className="name_en">{facility.name_en}</div>
-                        <img src={facility.image} alt=""/>
                         <p>この図書館を選ぶ</p>
                     </div>
                 );
@@ -224,13 +222,6 @@ var Facilities = React.createClass({
         }
         return (
             <div className="facilities">
-                <div className="banner">
-                    <div>図書館マップへようこそ</div>
-                    <p>探した本がどの棚にあるかを</p>
-                    <p>簡単に調べられます。</p>
-                    <p>全国に先駆けて体験してみよう。</p>
-                    <p><b>図書館を選択してください</b></p>
-                </div>
                 <div className="cards">
                     {cards}
                 </div>
