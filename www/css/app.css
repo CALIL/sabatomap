@@ -152,16 +152,6 @@ input[type=search] {
           font-size: 23px;
           line-height: 23px;
           margin-left: 16px; }
-        #ui .facilities > .cards > .card > .name_en {
-          margin-left: 16px;
-          margin-top: 4px;
-          margin-bottom: 4px;
-          font-family: 'Open Sans', sans-serif;
-          color: #858585;
-          font-size: 13px; }
-        #ui .facilities > .cards > .card > img {
-          width: 100%;
-          background-color: #a0a0a0; }
         #ui .facilities > .cards > .card > p {
           color: #00B8F2;
           font-size: 14px;
