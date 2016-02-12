@@ -75,7 +75,10 @@ loadFacility = (id)->
       homeRotationRadian = f.rotation
       kanilayer.setTargetShelves []
       UI.setFacility f
-      return loadFloor f.floors[0].id
+      map.getView().setRotation(homeRotationRadian)
+      map.getView().fit(homeExtent, map.getSize())
+      loadFloor f.floors[0].id
+      return
 
 # フロアを読み込む
 # @param id {String} フロアID
