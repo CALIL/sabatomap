@@ -46,7 +46,7 @@ gulp.task 'concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastc
   'copy_font-awesome-fonts', 'copy_geolib'], ->
   replace = require 'gulp-replace'
   fs = require 'fs'
-  rules = fs.readFileSync('src/facilities.json')
+  rules = fs.readFileSync('src/sabae.json')
   gulp.src [
     'node_modules/react/dist/react.min.js'
     'node_modules/react-dom/dist/react-dom.min.js'
