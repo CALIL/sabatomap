@@ -87,6 +87,11 @@ loadFacility = (id)->
 # @param id {String} フロアID
 loadFloor = (id)->
   if kanilayer.floorId != id
+    for facility in kanikama.facilities_
+      for floor in facility.floors
+        if floor.id is id
+          homeBoundingBox = floor.bbox
+          homeAngle = floor.angle
     kanimarker.setPosition null
     kanilayer.setFloorId id
     UI.setFloorId id
