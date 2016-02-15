@@ -87,8 +87,6 @@ loadFacility = (id)->
 # @param id {String} フロアID
 loadFloor = (id)->
   if kanilayer.floorId != id
-    if homeBoundingBox isnt null
-      kanilayer.tileB.setExtent(ol.proj.transformExtent(homeBoundingBox, 'EPSG:4326', 'EPSG:3857'))
     for facility in kanikama.facilities_
       for floor in facility.floors
         if floor.id is id
@@ -96,7 +94,6 @@ loadFloor = (id)->
           homeAngle = floor.angle
     kanimarker.setPosition null
     kanilayer.setFloorId id
-    kanilayer.tileA.setExtent(ol.proj.transformExtent(homeBoundingBox, 'EPSG:4326', 'EPSG:3857'))
     UI.setFloorId id
   setTimeout fitFloor, 100
 
