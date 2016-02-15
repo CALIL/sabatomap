@@ -70,16 +70,18 @@ unloadFacility = ->
 # 施設を読み込む
 # @param id {String} 施設ID
 loadFacility = (id)->
-  facility = kanikama.facilities_.find((f)-> f.id is id)
-  floor = facility.floors.find((f)-> f.id is facility.entrance)
-
-  homeBoundingBox = floor.bbox
-  homeAngle = floor.angle
-  kanilayer.setTargetShelves []
-  UI.setFacility facility
-  map.getView().setRotation((180 - homeAngle) * Math.PI / 180)
-  map.getView().fit(ol.proj.transformExtent(homeBoundingBox, 'EPSG:4326', 'EPSG:3857'), map.getSize())
-  loadFloor floor.id
+  for facility in kanikama.facilities_
+    if facility.id == id
+      for floor in facility.floors
+        if floor.id is facility.entrance
+          homeBoundingBox = floor.bbox
+          homeAngle = floor.angle
+          kanilayer.setTargetShelves []
+          UI.setFacility facility
+          map.getView().setRotation((180 - homeAngle) * Math.PI / 180)
+          map.getView().fit(ol.proj.transformExtent(homeBoundingBox, 'EPSG:4326', 'EPSG:3857'), map.getSize())
+          loadFloor floor.id
+          return
 
 # フロアを読み込む
 # @param id {String} フロアID
