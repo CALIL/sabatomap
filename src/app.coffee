@@ -10,6 +10,12 @@ http://opensource.org/licenses/mit-license.php
 
 # アプリケーション定数
 MAPBOX_TOKEN = 'pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w'
+SABAE_TILE_EXTENT = ol.proj.transformExtent([
+  136.18617217725753,
+  35.961639755749225,
+  136.18697793129988,
+  35.96227957363341
+], 'EPSG:4326', 'EPSG:3857') # 鯖江市図書館エントランスフロアの範囲だけタイルを表示する(フロア同士の位置がズレる時は調整が必要)
 
 homeBoundingBox = null
 homeAngle = 0
@@ -17,7 +23,7 @@ waitingPosition = 0 # 現在地ボタンを待っているかどうか（1以上
 UI = null
 map = null
 kanimarker = null
-kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png'})
+kanilayer = new Kanilayer({targetImageUrl: 'img/flag.png', targetImageUrl2: 'img/flag2.png', extent: SABAE_TILE_EXTENT})
 kanikama = new Kanikama()
 
 fitRotation = (r)->
