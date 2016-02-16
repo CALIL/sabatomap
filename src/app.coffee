@@ -62,7 +62,6 @@ fitFloor = ->
 # 施設を未選択にする
 unloadFacility = ->
   kanilayer.setFloorId null
-  kanilayer.setExtent [0, 0, 0, 0]
   homeBoundingBox = null
   homeAngle = 0
   kanimarker.setPosition null
@@ -94,8 +93,6 @@ loadFloor = (id)->
           homeBoundingBox = floor.bbox
           homeAngle = floor.angle
           break
-    if homeBoundingBox != null
-      kanilayer.setExtent ol.proj.transformExtent homeBoundingBox, 'EPSG:4326', 'EPSG:3857'
     kanimarker.setPosition null
     kanilayer.setFloorId id
     UI.setFloorId id
