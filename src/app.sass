@@ -8,11 +8,11 @@ html, body, #map
   overflow: hidden
   font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif
 
-body
-  background-color: #0068B1
-
 #map
   background-color: #eeeeee
+  display: none
+  &.visible
+    display: block
 
 // 検索ボタンのリセット(iOS用)
 input[type=search]

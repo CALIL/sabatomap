@@ -9,11 +9,11 @@ html, body, #map {
   overflow: hidden;
   font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif; }
 
-body {
-  background-color: #0068B1; }
-
 #map {
-  background-color: #eeeeee; }
+  background-color: #eeeeee;
+  display: none; }
+  #map.visible {
+    display: block; }
 
 input[type=search] {
   -webkit-appearance: none;

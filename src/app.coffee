@@ -167,6 +167,9 @@ initializeApp = ->
     visible: false
     maxResolution: 2000000
     preload: 3)
+
+  # openlayers初期化には、domが表示されている必要があるのでここで表示
+  document.getElementById('map').classList.add('visible')
   map = new ol.Map(
     layers: [osm, kanilayer]
     controls: []
