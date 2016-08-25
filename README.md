@@ -5,9 +5,6 @@
 
 ![Splash](www/img/splash_for_browser.png)
 
-現在このアプリケーションは開発中です。
-配架図データは整備中のため、最新な情報ではありません。
-
 ## 対象プラットフォーム
 
 - iOS (iOS8.3+)
@@ -16,7 +13,6 @@
 ## ビルド手順
 
 ```bash
-npm install -g bower
 npm install -g cordova
 npm update
 cordova platform update ios
