@@ -6,8 +6,7 @@ general:
     - "platforms/android/build/outputs/apk/android-armv7-debug.apk"
 machine:
   node:
-    version:
-      5.1.0
+    version: 6.3.1
   java:
     version: openjdk7
   environment:
