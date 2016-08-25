@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10007" id="jp.calil.sabatomap" version="1.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10010" id="jp.calil.sabatomap" version="1.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <feature name="LocationManager">
         <param name="android-package" value="com.unarin.cordova.beacon.LocationManager" />
@@ -42,7 +42,7 @@
     <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
     <preference name="BackgroundColor" value="0xFF0068B1" />
     <name>Sabae Library Map</name>
-    <description>鯖江図書館マップ</description>
+    <description>さばとマップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
     <access origin="*" />
