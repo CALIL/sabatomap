@@ -15,7 +15,7 @@ gulp.task('fetch_depends_files', () =>
   ]).pipe(gulp.dest('www/vendor'))
 );
 
-gulp.task('copy_jquery', () => gulp.src(['node_modules/jquery/dist/jquery.min.js']).pipe(gulp.dest('www/vendor'))
+gulp.task('copy_superagent', () => gulp.src(['node_modules/superagent/superagent.js']).pipe(gulp.dest('www/vendor'))
 );
 
 gulp.task('copy_fastclick', () => gulp.src(['node_modules/fastclick/lib/fastclick.js']).pipe(gulp.dest('www/vendor'))
@@ -45,7 +45,7 @@ gulp.task('compile_jsx', () =>
     .pipe(gulp.dest('src/compiled'))
 );
 
-gulp.task('concat', ['compile_coffee', 'compile_jsx', 'copy_jquery', 'copy_fastclick', 'copy_font-awesome-css',
+gulp.task('concat', ['compile_coffee', 'compile_jsx', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
     'copy_font-awesome-fonts', 'copy_geolib'], function () {
     let replace = require('gulp-replace');
     let fs = require('fs');

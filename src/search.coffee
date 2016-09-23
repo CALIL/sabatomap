@@ -32,16 +32,13 @@ class api
       params = {session: @session}
     else
       params = {f: @query, sysid: @systemid}
-    $.ajax
-      url: 'https://api.calil.jp/search'
-      type: 'GET'
-      data: params
-      dataType: 'json'
-      success: (data) =>
-        @receive(data)
-      error: () =>
-        @value.completed = true
-        @updateMessage('データ取得に失敗しました。')
+    superagent.get 'https://api.calil.jp/search', params
+      .end (err, res) =>
+        if err or not res.ok
+          @value.completed = true
+          @updateMessage('データ取得に失敗しました。')
+        else
+          @receive(res.body)
 
   receive: (data)->
     @session = data.session
@@ -102,17 +99,14 @@ class api
       s: @systemid
       session: @session
       version: '1.4.0'
-    $.ajax
-      url: 'https://api.calil.jp/search_warabi_v1'
-      type: 'GET'
-      processData: true
-      data: params
-      dataType: 'json'
-      timeout: 5000,
-      success: (data) =>
-        for book in @value.books
-          if book.id == id
-            book.result = data
-        @changed()
-      complete: =>
+    superagent.get 'https://api.calil.jp/search_warabi_v1', params
+      .timeout 5000
+      .end (err, res) =>
+        if err or not res.ok
+          console.error(err)
+        else
+          for book in @value.books
+            if book.id == id
+              book.result = res.body
+          @changed()
         @detail()

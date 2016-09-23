@@ -2,17 +2,13 @@ load = ->
   script = document.createElement('script')
   script.onload = ->
     initializeApp()
-  $.ajax
-    type: 'GET'
-    url: 'https://calil.jp/static/apps/sabatomap/update_v120.js'
-    cache: false
-    dataType: 'script'
-    timeout: 5000
-    success: (data) ->
-      script.innerHTML = data
-      document.body.appendChild script
-    error: ->
-      script.src = 'js/all.js'
+  superagent.get 'https://calil.jp/static/apps/sabatomap/update_v120.js?_=' + Math.random()
+    .timeout 5000
+    .end (err, res) ->
+      if err or not res.ok
+        script.src = 'js/all.js'
+      else
+        script.innerHTML = res.text
       document.body.appendChild script
 if cordova?
   document.addEventListener 'deviceready', load
