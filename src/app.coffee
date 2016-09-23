@@ -71,7 +71,7 @@ unloadFacility = ->
   homeBoundingBox = null
   homeAngle = 0
   kanimarker.setPosition null
-  UI.setProps({systemid: null, floors: []})
+  UI.setState({systemid: null, floors: []})
 
 # 施設を読み込む
 # @param id {String} 施設ID

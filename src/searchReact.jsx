@@ -6,8 +6,8 @@ var Main = React.createClass({
         if (this.refs.detail) {
             this.refs.detail.setSstate({query: ''});
         }
-        this.setProps({floors: []}); // CSSアニメーション対策のためクリアする
-        this.setProps({systemid: facility.systemid, floors: facility.floors});
+        this.setState({floors: []}); // CSSアニメーション対策のためクリアする
+        this.setState({systemid: facility.systemid, floors: facility.floors});
     },
     setFloorId: function (id) {
         this.refs.floors.setState({'id': id});
@@ -38,7 +38,7 @@ var Main = React.createClass({
                 <div id="offline">ネットワークに接続できません</div>
             )
         }
-        if (this.props.systemid == null) {
+        if (this.state.systemid == null) {
             return (
                 <div className={cls}>
                     <Facilities facilities={this.props.facilities}/>
@@ -49,9 +49,9 @@ var Main = React.createClass({
         return (
             <div className={cls}>
                 <SearchBox onSearch={this.doSearch} placeholder="探したいこと・調べたいこと" completed={this.state.completed}/>
-                <SearchResult systemid={this.props.systemid} query={this.state.query} onClose={this.doClose}
+                <SearchResult systemid={this.state.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
-                <Floors floors={this.props.floors} ref="floors"/>
+                <Floors floors={this.state.floors} ref="floors"/>
                 <Locator ref="locator" onClick={locatorClicked}/>
                 <Detail ref="detail"/>
                 {offline}
