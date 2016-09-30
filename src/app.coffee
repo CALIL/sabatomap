@@ -286,3 +286,31 @@ locatorClicked = ->
         waitPosition()
       else
         kanimarker.setMode 'centered' # centeredモードに切り替える
+
+###
+  ES2015移行のためグローバルで使われるAPIをクラス化
+###
+class App
+    constructor: ->
+        # pass
+
+    initializeApp: =>
+        initializeApp()
+
+    loadFacility: (id)=>
+        loadFacility(id)
+
+    loadFloor: (id)=>
+        loadFloor(id)
+
+    navigateShelf: (floorId, shelves)=>
+        navigateShelf(floorId, shelves)
+
+    locatorClicked: =>
+        locatorClicked()
+
+    getUI: =>
+        return UI
+
+if window
+    window.app = new App()

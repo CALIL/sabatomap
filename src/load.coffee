@@ -1,7 +1,7 @@
 load = ->
   script = document.createElement('script')
   script.onload = ->
-    initializeApp()
+    app.initializeApp()
   superagent.get 'https://calil.jp/static/apps/sabatomap/update_v120.js?_=' + Math.random()
     .timeout 5000
     .end (err, res) ->

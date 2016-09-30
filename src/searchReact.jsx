@@ -57,7 +57,7 @@ var Main = React.createClass({
                 <SearchResult systemid={this.state.systemid} query={this.state.query} onClose={this.doClose}
                               setCompleted={this.setCompleted}/>
                 <Floors floors={this.state.floors} ref="floors"/>
-                <Locator ref="locator" onClick={locatorClicked}/>
+                <Locator ref="locator" onClick={app.locatorClicked}/>
                 <Detail ref="detail"/>
                 {offline}
             </div>
@@ -165,19 +165,19 @@ var SearchResult = React.createClass({
 var Book = React.createClass({
     open: function () {
         if (this.props.result.stocks.length > 0 || this.props.result.message != '') {
-            UI.refs.detail.setState({query: UI.state.query, book: this.props});
+            app.getUI().refs.detail.setState({query: app.getUI().state.query, book: this.props});
             if (this.props.result.stocks.length > 0) {
                 this.navigateShelf(this.props.result.stocks[0]);
             } else {
                 navigateShelf(null, []);
-                UI.doClose();
+                app.getUI().doClose();
             }
         }
     },
     navigateShelf: function (stock) {
         var floorid = String(stock.floorId); // fixme 整数型で来てしまっているのでとりあえずキャスト
         navigateShelf(floorid, stock.shelves);
-        UI.doClose();
+        app.getUI().doClose();
     },
     render: function () {
         var stocks;
@@ -210,7 +210,7 @@ var Book = React.createClass({
 var Facilities = React.createClass({
     select: function (id) {
         setTimeout(function () {
-            loadFacility(id);
+            app.loadFacility(id);
         }, 10);
     },
     render: function () {
@@ -244,7 +244,7 @@ var Floors = React.createClass({
     select: function (id) {
         this.setState({id: id});
         setTimeout(function () {
-            loadFloor(id);
+            app.loadFloor(id);
         }, 10);
     },
     render: function () {
@@ -316,16 +316,16 @@ var Detail = React.createClass({
     },
     back: function () {
         this.setState({query: ''});
-        UI.doSearch(this.state.query);
-        navigateShelf(null, []);
+        app.getUI().doSearch(this.state.query);
+        app.navigateShelf(null, []);
     },
     close: function () {
         this.setState({query: ''});
-        navigateShelf(null, []);
+        app.navigateShelf(null, []);
     },
     navigateShelf: function (stock) {
-        navigateShelf(stock.floorId, stock.shelves);
-        UI.doClose();
+        app.navigateShelf(stock.floorId, stock.shelves);
+        app.getUI().doClose();
     },
     render: function () {
         var cls = "";

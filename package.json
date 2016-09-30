@@ -8,7 +8,6 @@
     "Kanimarker": "git://github.com/CALIL/Kanimarker.git",
     "fastclick": "^1.0.6",
     "font-awesome": "^4.5.0",
-    "geolib": "^2.0.18",
     "superagent": "^2.3.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"

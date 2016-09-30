@@ -6,6 +6,9 @@ import concat from 'gulp-concat';
 import sass from 'gulp-sass';
 import react from 'gulp-react';
 import cordova_lib from 'cordova-lib';
+import browserify from 'browserify'
+import babelify from 'babelify'
+import source from "vinyl-source-stream";
 let cdv = cordova_lib.cordova.raw;
 
 gulp.task('fetch_depends_files', () =>
@@ -27,39 +30,47 @@ gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/cs
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('copy_geolib', () => gulp.src(['node_modules/Geolib/dist/geolib.min.js']).pipe(gulp.dest('www/vendor'))
-);
-
 gulp.task('compile_coffee', () =>
   gulp.src([
     'src/load.coffee',
     'src/app.coffee',
-    'src/search.coffee',
     'src/patch.coffee',
   ]).pipe(coffee({bare: true})).pipe(gulp.dest('src/compiled'))
 );
 
-gulp.task('compile_jsx', () =>
-  gulp.src('src/searchReact.jsx')
-    .pipe(react())
+gulp.task('compile_es2015', () =>
+  browserify('src/searchReact.jsx')
+    .on("error", (err) => console.log("Error : " + err.message))
+    .transform('babelify', {
+      presets: ['es2015', 'react']
+    })
+    .bundle()
+    .pipe(source('searchReact.js'))
     .pipe(gulp.dest('src/compiled'))
 );
 
-gulp.task('concat', ['compile_coffee', 'compile_jsx', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
-    'copy_font-awesome-fonts', 'copy_geolib'], function () {
+gulp.task('compile_kanikama', () =>
+  browserify('node_modules/Kanikama/kanikama.js')
+    .on("error", (err) => console.log("Error : " + err.message))
+    .transform('babelify', {
+      presets: ['es2015', 'react']
+    })
+    .bundle()
+    .pipe(source('kanikama.js'))
+    .pipe(gulp.dest('src/compiled'))
+);
+
+gulp.task('concat', ['compile_coffee', 'compile_es2015', 'compile_kanikama', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
+    'copy_font-awesome-fonts'], function () {
     let replace = require('gulp-replace');
     let fs = require('fs');
     let rules = fs.readFileSync('src/sabae.json');
     return gulp.src([
-      'node_modules/react/dist/react.min.js',
-      'node_modules/react-dom/dist/react-dom.min.js',
-      'node_modules/geolib/dist/geolib.js',
-      'node_modules/Kanikama/kanikama.js',
       'node_modules/Kanilayer/kanilayer.js',
       'node_modules/Kanimarker/kanimarker.js',
+      'src/compiled/kanikama.js',
+      'src/compiled/searchReact.js',
       'src/compiled/app.js',
-      'src/compiled/search.js',
-      'src/compiled/searchReact.js'
     ])
       .pipe(concat('all.js'))
       .pipe(replace('__RULES__', rules))

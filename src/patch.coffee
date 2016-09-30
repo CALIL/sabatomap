@@ -4,4 +4,4 @@ link.setAttribute 'type', 'text/css'
 link.setAttribute 'href', '__CSS__'
 head = document.getElementsByTagName('head')[0]
 head.appendChild link
-initializeApp()
+app.initializeApp()
