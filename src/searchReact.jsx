@@ -176,7 +176,7 @@ var Book = React.createClass({
     },
     navigateShelf: function (stock) {
         var floorid = String(stock.floorId); // fixme 整数型で来てしまっているのでとりあえずキャスト
-        navigateShelf(floorid, stock.shelves);
+        app.navigateShelf(floorid, stock.shelves);
         app.getUI().doClose();
     },
     render: function () {
@@ -368,9 +368,9 @@ var Detail = React.createClass({
     }
 });
 
-window.InitUI = function(props, element) {
+export default function InitUI(props, element) {
     return ReactDOM.render(
         React.createElement(Main, props),
         element
     )
-};
+}

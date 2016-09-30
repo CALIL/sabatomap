@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import del from 'del';
-import coffee from 'gulp-coffee';
 import download from 'gulp-download';
 import concat from 'gulp-concat';
 import sass from 'gulp-sass';
@@ -30,22 +29,14 @@ gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/cs
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('compile_coffee', () =>
-  gulp.src([
-    'src/load.coffee',
-    'src/app.coffee',
-    'src/patch.coffee',
-  ]).pipe(coffee({bare: true})).pipe(gulp.dest('src/compiled'))
-);
-
 gulp.task('compile_es2015', () =>
-  browserify('src/searchReact.jsx')
+  browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))
     .transform('babelify', {
       presets: ['es2015', 'react']
     })
     .bundle()
-    .pipe(source('searchReact.js'))
+    .pipe(source('app.js'))
     .pipe(gulp.dest('src/compiled'))
 );
 
@@ -60,7 +51,7 @@ gulp.task('compile_kanikama', () =>
     .pipe(gulp.dest('src/compiled'))
 );
 
-gulp.task('concat', ['compile_coffee', 'compile_es2015', 'compile_kanikama', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
+gulp.task('concat', ['compile_es2015', 'compile_kanikama', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
     'copy_font-awesome-fonts'], function () {
     let replace = require('gulp-replace');
     let fs = require('fs');
@@ -69,7 +60,6 @@ gulp.task('concat', ['compile_coffee', 'compile_es2015', 'compile_kanikama', 'co
       'node_modules/Kanilayer/kanilayer.js',
       'node_modules/Kanimarker/kanimarker.js',
       'src/compiled/kanikama.js',
-      'src/compiled/searchReact.js',
       'src/compiled/app.js',
     ])
       .pipe(concat('all.js'))
@@ -95,7 +85,7 @@ gulp.task('sass', [], function () {
 );
 
 
-gulp.task('copy_load_js', ['compile_coffee'], () => gulp.src(['src/compiled/load.js']).pipe(gulp.dest('www/js'))
+gulp.task('copy_load_js', () => gulp.src(['src/load.js']).pipe(gulp.dest('www/js'))
 );
 
 gulp.task('clean', () => del(['platforms/ios/www/**'])
@@ -104,7 +94,7 @@ gulp.task('clean', () => del(['platforms/ios/www/**'])
 gulp.task('cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
 );
 
-gulp.task('watch', () => gulp.watch(['src/*.coffee', 'src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat', 'sass'])
+gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat', 'sass'])
 );
 
 gulp.task('default', ['cordova_prepare']);
@@ -131,7 +121,7 @@ gulp.task('updater', [], function () {
     gulp.src(['www/img/*']).pipe(gulp.dest(`updater/${target}`));
     return gulp.src([
       'www/js/all.js',
-      'src/compiled/patch.js'
+      'src/patch.js'
     ])
       .pipe(concat(`update_${target}.js`))
       .pipe(replace('img/flag.png', `https://calil.jp/static/apps/sabatomap/${target}/flag.png`))
