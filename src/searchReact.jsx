@@ -1,3 +1,8 @@
+import React from "react"
+import ReactDOM from "react-dom"
+
+import api from './search.js'
+
 var Main = React.createClass({
     getInitialState: function () {
         return {query: '', completed: true, offline: false};
@@ -363,7 +368,7 @@ var Detail = React.createClass({
     }
 });
 
-var InitUI = function (props, element) {
+window.InitUI = function(props, element) {
     return ReactDOM.render(
         React.createElement(Main, props),
         element
