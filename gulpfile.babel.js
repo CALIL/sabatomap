@@ -3,11 +3,11 @@ import del from 'del';
 import download from 'gulp-download';
 import concat from 'gulp-concat';
 import sass from 'gulp-sass';
-import react from 'gulp-react';
 import cordova_lib from 'cordova-lib';
 import browserify from 'browserify'
-import babelify from 'babelify'
 import source from "vinyl-source-stream";
+import replace from 'gulp-replace';
+import fs from 'fs';
 let cdv = cordova_lib.cordova.raw;
 
 gulp.task('fetch_depends_files', () =>
@@ -29,44 +29,18 @@ gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/cs
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('compile_es2015', () =>
-  browserify('src/app.js')
+gulp.task('compile_es2015', ['copy_superagent', 'copy_fastclick', 'copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
+  const rules = fs.readFileSync('src/sabae.json');
+  return browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))
     .transform('babelify', {
       presets: ['es2015', 'react']
     })
     .bundle()
-    .pipe(source('app.js'))
-    .pipe(gulp.dest('src/compiled'))
-);
-
-gulp.task('compile_kanikama', () =>
-  browserify('node_modules/Kanikama/kanikama.js')
-    .on("error", (err) => console.log("Error : " + err.message))
-    .transform('babelify', {
-      presets: ['es2015', 'react']
-    })
-    .bundle()
-    .pipe(source('kanikama.js'))
-    .pipe(gulp.dest('src/compiled'))
-);
-
-gulp.task('concat', ['compile_es2015', 'compile_kanikama', 'copy_superagent', 'copy_fastclick', 'copy_font-awesome-css',
-    'copy_font-awesome-fonts'], function () {
-    let replace = require('gulp-replace');
-    let fs = require('fs');
-    let rules = fs.readFileSync('src/sabae.json');
-    return gulp.src([
-      'node_modules/Kanilayer/kanilayer.js',
-      'node_modules/Kanimarker/kanimarker.js',
-      'src/compiled/kanikama.js',
-      'src/compiled/app.js',
-    ])
-      .pipe(concat('all.js'))
-      .pipe(replace('__RULES__', rules))
-      .pipe(gulp.dest('www/js/'));
-  }
-);
+    .pipe(source('all.js'))
+    .pipe(replace('__RULES__', rules))
+    .pipe(gulp.dest('www/js/'));
+});
 
 gulp.task('sass', [], function () {
     let postcss = require('gulp-postcss');
@@ -91,10 +65,10 @@ gulp.task('copy_load_js', () => gulp.src(['src/load.js']).pipe(gulp.dest('www/js
 gulp.task('clean', () => del(['platforms/ios/www/**'])
 );
 
-gulp.task('cordova_prepare', ['copy_load_js', 'concat', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
+gulp.task('cordova_prepare', ['copy_load_js', 'compile_es2015', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
 );
 
-gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['concat', 'sass'])
+gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['compile_es2015', 'sass'])
 );
 
 gulp.task('default', ['cordova_prepare']);

@@ -5,7 +5,7 @@
  *  @author ryuuji@calil.jp
  */
 
-class Kanilayer extends ol.layer.Group {
+export default class Kanilayer extends ol.layer.Group {
 
   /**
    * 強調表示する棚IDを指定
@@ -561,10 +561,4 @@ class Kanilayer extends ol.layer.Group {
       return context.restore();
     }
   }
-}
-
-// Deprecated
-// ひとまずこれまで通りグローバルで使えるようにしておく
-if (window) {
-  window.Kanilayer = Kanilayer;
 }

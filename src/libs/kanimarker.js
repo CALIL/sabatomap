@@ -5,7 +5,7 @@
  http://opensource.org/licenses/mit-license.php
  */
 
-class Kanimarker {
+export default class Kanimarker {
   /**
    * マップに現在地マーカーをインストールする
    * @param map {ol.Map} マップオブジェクト
@@ -649,14 +649,4 @@ class Kanimarker {
       })();
     }
   }
-}
-
-if (typeof exports !== "undefined") {
-  module.exports = Kanimarker;
-}
-
-// Deprecated
-// ひとまずこれまで通りグローバルで使えるようにしておく
-if (window) {
-  window.Kanimarker = Kanimarker;
 }

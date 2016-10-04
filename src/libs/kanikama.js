@@ -129,7 +129,7 @@ export class Buffer {
   }
 }
 
-export class Kanikama {
+export default class Kanikama {
   constructor() {
     this.facilities_ = null;
     this.currentFacility = null;  // 現在選択されている施設
@@ -638,10 +638,4 @@ export class Kanikama {
       }
     }
   }
-}
-
-// Deprecated
-// ひとまずこれまで通りグローバルで使えるようにしておく
-if (window) {
-  window.Kanikama = Kanikama;
 }

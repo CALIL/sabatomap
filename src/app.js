@@ -1,4 +1,7 @@
-import InitUI from './searchReact.jsx'
+import Kanikama from './libs/kanikama.js';
+import Kanimarker from './libs/kanimarker.js';
+import Kanilayer from './libs/kanilayer.js';
+import InitUI from './searchReact.jsx';
 
 var MAPBOX_TOKEN = "pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w";
 
