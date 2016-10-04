@@ -169,7 +169,7 @@ var Book = React.createClass({
             if (this.props.result.stocks.length > 0) {
                 this.navigateShelf(this.props.result.stocks[0]);
             } else {
-                navigateShelf(null, []);
+                app.navigateShelf(null, []);
                 app.getUI().doClose();
             }
         }
@@ -218,7 +218,7 @@ var Facilities = React.createClass({
         if (this.props.facilities) {
             cards = this.props.facilities.map(function (facility) {
                 return (
-                    <div className="card" onClick={this.select.bind(this, facility.id)}>
+                    <div key={facility.id} className="card" onClick={this.select.bind(this, facility.id)}>
                         <div className="name">{facility.name}</div>
                         <p>この図書館を選ぶ</p>
                     </div>
@@ -252,7 +252,7 @@ var Floors = React.createClass({
         if (this.props.floors) {
             floors = this.props.floors.map(function (floor) {
                 return (
-                    <div className="floor">
+                    <div key={floor.id} className="floor">
                         <input name="view" type="radio" id={'F'+floor.id} checked={this.state.id === floor.id}
                                value={floor.id} onChange={this.select.bind(this,floor.id)}/>
                         <label htmlFor={'F'+floor.id}>{floor.label}</label>
