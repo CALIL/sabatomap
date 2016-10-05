@@ -20,16 +20,13 @@ gulp.task('fetch_depends_files', () =>
 gulp.task('copy_superagent', () => gulp.src(['node_modules/superagent/superagent.js']).pipe(gulp.dest('www/vendor'))
 );
 
-gulp.task('copy_fastclick', () => gulp.src(['node_modules/fastclick/lib/fastclick.js']).pipe(gulp.dest('www/vendor'))
-);
-
 gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/css/font-awesome.min.css']).pipe(gulp.dest('www/vendor/css'))
 );
 
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('compile_es2015', ['copy_superagent', 'copy_fastclick', 'copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
+gulp.task('compile_es2015', ['copy_superagent', 'copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
   const rules = fs.readFileSync('src/sabae.json');
   return browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))

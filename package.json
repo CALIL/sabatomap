@@ -3,12 +3,12 @@
   "version": "1.5.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "dependencies": {
-    "fastclick": "^1.0.6",
     "font-awesome": "^4.5.0",
-    "superagent": "^2.3.0",
+    "geolib": "^2.0.18",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "geolib": "^2.0.18"
+    "react-fastclick": "^2.1.2",
+    "superagent": "^2.3.0"
   },
   "babel": {
     "presets": [

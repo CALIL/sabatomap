@@ -261,8 +261,6 @@ var initializeApp = function() {
     }
   }
 
-  FastClick.attach(document.body);
-
   var osm = new ol.layer.Tile({
     source: new ol.source.XYZ({
       url: "https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=" + MAPBOX_TOKEN,

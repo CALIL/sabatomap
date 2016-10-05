@@ -1,7 +1,8 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import 'react-fastclick';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import api from './search.js'
+import api from './search.js';
 
 var Main = React.createClass({
     getInitialState: function () {
