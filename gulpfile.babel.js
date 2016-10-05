@@ -17,16 +17,13 @@ gulp.task('fetch_depends_files', () =>
   ]).pipe(gulp.dest('www/vendor'))
 );
 
-gulp.task('copy_superagent', () => gulp.src(['node_modules/superagent/superagent.js']).pipe(gulp.dest('www/vendor'))
-);
-
 gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/css/font-awesome.min.css']).pipe(gulp.dest('www/vendor/css'))
 );
 
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('compile_es2015', ['copy_superagent', 'copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
+gulp.task('compile_es2015', ['copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
   const rules = fs.readFileSync('src/sabae.json');
   return browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))
@@ -38,6 +35,15 @@ gulp.task('compile_es2015', ['copy_superagent', 'copy_font-awesome-css', 'copy_f
     .pipe(replace('__RULES__', rules))
     .pipe(gulp.dest('www/js/'));
 });
+
+gulp.task('compile_load_js', () =>
+  browserify('src/load.js')
+      .on("error", (err) => console.log("Error : " + err.message))
+      .transform('babelify', {presets: 'es2015'})
+      .bundle()
+      .pipe(source('load.js'))
+      .pipe(gulp.dest('www/js/'))
+);
 
 gulp.task('sass', [], function () {
     let postcss = require('gulp-postcss');
@@ -55,14 +61,10 @@ gulp.task('sass', [], function () {
   }
 );
 
-
-gulp.task('copy_load_js', () => gulp.src(['src/load.js']).pipe(gulp.dest('www/js'))
-);
-
 gulp.task('clean', () => del(['platforms/ios/www/**'])
 );
 
-gulp.task('cordova_prepare', ['copy_load_js', 'compile_es2015', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
+gulp.task('cordova_prepare', ['compile_load_js', 'compile_es2015', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
 );
 
 gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['compile_es2015', 'sass'])
