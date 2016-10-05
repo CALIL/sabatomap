@@ -5,6 +5,8 @@
  http://opensource.org/licenses/mit-license.php
  */
 
+import ol from 'openlayers';
+
 export default class Kanimarker {
   /**
    * マップに現在地マーカーをインストールする

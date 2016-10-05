@@ -1,3 +1,5 @@
+import ol from 'openlayers';
+
 import Kanikama from './libs/kanikama.js';
 import Kanimarker from './libs/kanimarker.js';
 import Kanilayer from './libs/kanilayer.js';

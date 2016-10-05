@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import del from 'del';
-import download from 'gulp-download';
 import concat from 'gulp-concat';
 import sass from 'gulp-sass';
 import cordova_lib from 'cordova-lib';
@@ -10,11 +9,7 @@ import replace from 'gulp-replace';
 import fs from 'fs';
 let cdv = cordova_lib.cordova.raw;
 
-gulp.task('fetch_depends_files', () =>
-  download([
-    'http://lab.calil.jp/ol3custom/v3.10.1/ol.js',
-    'http://openlayers.org/en/v3.10.1/css/ol.css'
-  ]).pipe(gulp.dest('www/vendor'))
+gulp.task('copy_openlayers_css', () => gulp.src(['node_modules/openlayers/css/ol.css']).pipe(gulp.dest('www/vendor/css'))
 );
 
 gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/css/font-awesome.min.css']).pipe(gulp.dest('www/vendor/css'))
@@ -23,7 +18,7 @@ gulp.task('copy_font-awesome-css', () => gulp.src(['node_modules/font-awesome/cs
 gulp.task('copy_font-awesome-fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts'))
 );
 
-gulp.task('compile_es2015', ['copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
+gulp.task('compile_es2015', ['copy_openlayers_css', 'copy_font-awesome-css', 'copy_font-awesome-fonts'], function () {
   const rules = fs.readFileSync('src/sabae.json');
   return browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))
@@ -64,7 +59,7 @@ gulp.task('sass', [], function () {
 gulp.task('clean', () => del(['platforms/ios/www/**'])
 );
 
-gulp.task('cordova_prepare', ['compile_load_js', 'compile_es2015', 'clean', 'fetch_depends_files', 'sass'], () => cdv.prepare()
+gulp.task('cordova_prepare', ['compile_load_js', 'compile_es2015', 'clean', 'copy_openlayers_css', 'sass'], () => cdv.prepare()
 );
 
 gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['compile_es2015', 'sass'])

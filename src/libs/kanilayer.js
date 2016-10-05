@@ -1,9 +1,11 @@
-/**
- * 配架図レイヤーを表示するOpenLayers3プラグイン
- *
- *  @author sakai@calil.jp
- *  @author ryuuji@calil.jp
+/*
+ 配架図レイヤーを表示するOpenLayers3プラグイン
+
+ @author sakai@calil.jp
+ @author ryuuji@calil.jp
  */
+
+import ol from 'openlayers';
 
 export default class Kanilayer extends ol.layer.Group {
 

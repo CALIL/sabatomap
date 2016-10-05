@@ -5,6 +5,7 @@
   "dependencies": {
     "font-awesome": "^4.5.0",
     "geolib": "^2.0.18",
+    "openlayers": "^3.18.2",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-fastclick": "^2.1.2",
