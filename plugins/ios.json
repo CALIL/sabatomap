@@ -141,9 +141,6 @@
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-bluetooth-status": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -163,6 +160,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

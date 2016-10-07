@@ -21,6 +21,10 @@ The plugin currently offers the following features:
 
     cordova plugin add cordova-plugin-bluetooth-status
 
+# Usage 
+
+Initialize the plugin with the `cordova.plugins.BluetoothStatus.initPlugin()` method. Otherwise, the BT adapter state may not be correctly populated until the next time adapter is switched off/on. 
+
 # Documentation
 
 This plugin exports its methods and properties on `cordova.plugins.BluetoothStatus`.
@@ -84,6 +88,9 @@ This event is triggered when the Bluetooth adapter gets disabled.
     });
 
 ## Changelog
+
+### v1.0.4: 
+- correct bugs for iOS9+ where initial BT adapter state was not correctly gathered 
 
 ### v1.0.3:
 - correct some build errors for older Android versions

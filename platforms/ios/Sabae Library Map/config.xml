@@ -20,9 +20,6 @@
     <feature name="WKWebViewPolyfill">
         <param name="ios-package" value="WKWebViewPolyfill" />
     </feature>
-    <feature name="BluetoothStatus">
-        <param name="ios-package" value="BluetoothStatus" />
-    </feature>
     <feature name="Compass">
         <param name="ios-package" value="CDVCompass" />
     </feature>
@@ -38,6 +35,9 @@
     </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
+    </feature>
+    <feature name="BluetoothStatus">
+        <param name="ios-package" value="BluetoothStatus" />
     </feature>
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />

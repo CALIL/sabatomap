@@ -17,10 +17,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"ios-package\" value=\"BluetoothStatus\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Compass\"><param name=\"ios-package\" value=\"CDVCompass\" /></feature>",
                             "count": 1
                         },
@@ -38,6 +34,10 @@
                         },
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"ios-package\" value=\"BluetoothStatus\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -84,9 +84,6 @@
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-bluetooth-status": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -106,6 +103,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
@@ -167,14 +167,6 @@
             "pluginId": "com.telerik.plugins.wkwebview",
             "clobbers": [
                 "wkwebview"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
-            "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
-            "pluginId": "cordova-plugin-bluetooth-status",
-            "clobbers": [
-                "cordova.plugins.BluetoothStatus"
             ]
         },
         {
@@ -242,10 +234,17 @@
             "clobbers": [
                 "Connection"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+            "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+            "pluginId": "cordova-plugin-bluetooth-status",
+            "clobbers": [
+                "cordova.plugins.BluetoothStatus"
+            ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-bluetooth-status": "1.0.3",
         "cordova-plugin-device-orientation": "1.0.2-dev",
         "com.telerik.plugins.wkwebview": "0.6.3",
         "cordova-plugin-whitelist": "1.0.0",
@@ -255,6 +254,7 @@
         "cordova-plugin-webserver": "1.0.3",
         "cordova-plugin-inappbrowser": "1.5.0",
         "cordova-plugin-device": "1.1.3",
-        "cordova-plugin-network-information": "1.3.0"
+        "cordova-plugin-network-information": "1.3.0",
+        "cordova-plugin-bluetooth-status": "1.0.4"
     }
 }

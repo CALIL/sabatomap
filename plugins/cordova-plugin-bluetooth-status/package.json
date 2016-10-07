@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-bluetooth-status",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Cordova Bluetooth status plugin",
   "cordova": {
     "id": "cordova-plugin-bluetooth-status",

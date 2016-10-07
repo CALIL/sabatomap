@@ -25,14 +25,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-bluetooth-status": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-bluetooth-status"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-device-orientation": {
         "source": {
             "type": "git",
@@ -87,6 +79,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-network-information"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-bluetooth-status": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-bluetooth-status"
         },
         "is_top_level": true,
         "variables": {}

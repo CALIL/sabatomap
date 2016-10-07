@@ -43,13 +43,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
-        "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
-        "clobbers": [
-            "cordova.plugins.BluetoothStatus"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
         "id": "cordova-plugin-device-orientation.CompassError",
         "clobbers": [
@@ -115,6 +108,14 @@ module.exports = [
         "clobbers": [
             "Connection"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+        "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+        "pluginId": "cordova-plugin-bluetooth-status",
+        "clobbers": [
+            "cordova.plugins.BluetoothStatus"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -122,7 +123,8 @@ module.exports.metadata =
 {
     "cordova-plugin-inappbrowser": "1.5.0",
     "cordova-plugin-device": "1.1.3",
-    "cordova-plugin-network-information": "1.3.0"
+    "cordova-plugin-network-information": "1.3.0",
+    "cordova-plugin-bluetooth-status": "1.0.4"
 }
 // BOTTOM OF METADATA
 });
