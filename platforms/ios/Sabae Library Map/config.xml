@@ -17,10 +17,6 @@
     <feature name="LocationManager">
         <param name="ios-package" value="CDVLocationManager" />
     </feature>
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="InAppBrowser">
         <param name="ios-package" value="CDVInAppBrowser" />
     </feature>
@@ -38,6 +34,10 @@
     </feature>
     <feature name="WKWebViewPolyfill">
         <param name="ios-package" value="WKWebViewPolyfill" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
     </feature>
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />

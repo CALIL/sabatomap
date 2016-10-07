@@ -51,14 +51,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-        "id": "cordova-plugin-splashscreen.SplashScreen",
-        "pluginId": "cordova-plugin-splashscreen",
-        "clobbers": [
-            "navigator.splashscreen"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
         "id": "cordova-plugin-inappbrowser.inappbrowser",
         "pluginId": "cordova-plugin-inappbrowser",
@@ -131,12 +123,19 @@ module.exports = [
         "clobbers": [
             "wkwebview"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "pluginId": "cordova-plugin-splashscreen",
+        "clobbers": [
+            "navigator.splashscreen"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-splashscreen": "3.0.0-dev",
     "com.unarin.cordova.beacon": "3.3.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
     "cordova-plugin-inappbrowser": "1.5.0",
@@ -146,7 +145,8 @@ module.exports.metadata =
     "cordova-plugin-device-orientation": "1.0.4",
     "cordova-plugin-webserver": "1.0.3",
     "com.telerik.plugins.wkwebview": "0.6.9",
-    "cordova-plugin-whitelist": "1.3.0"
+    "cordova-plugin-whitelist": "1.3.0",
+    "cordova-plugin-splashscreen": "4.0.0"
 }
 // BOTTOM OF METADATA
 });

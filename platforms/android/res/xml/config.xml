@@ -4,10 +4,6 @@
     <feature name="LocationManager">
         <param name="android-package" value="com.unarin.cordova.beacon.LocationManager" />
     </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
     <preference default="15+" name="xwalkVersion" />
     <preference default="--disable-pull-to-refresh-effect" name="xwalkCommandLine" />
@@ -30,6 +26,10 @@
     </feature>
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
     <allow-intent href="http://*/*" />
