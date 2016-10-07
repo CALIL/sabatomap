@@ -20,9 +20,6 @@
         "cordova-plugin-crosswalk-webview": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -36,6 +33,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

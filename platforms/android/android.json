@@ -13,10 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
@@ -58,6 +54,10 @@
                         },
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -138,9 +138,6 @@
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -160,6 +157,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
@@ -206,13 +206,6 @@
             "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
             "id": "com.unarin.cordova.beacon.BeaconRegion",
             "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-device/www/device.js",
-            "id": "cordova-plugin-device.device",
-            "clobbers": [
-                "device"
-            ]
         },
         {
             "file": "plugins/cordova-plugin-network-information/www/network.js",
@@ -277,9 +270,18 @@
                 "cordova.InAppBrowser.open",
                 "window.open"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-inappbrowser": "1.5.0"
+        "cordova-plugin-inappbrowser": "1.5.0",
+        "cordova-plugin-device": "1.1.3"
     }
 }
