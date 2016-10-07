@@ -1,5 +1,5 @@
 {
     "ios": "3.9.2",
-    "android": "https://github.com/apache/cordova-android.git",
+    "android": "5.2.2",
     "browser": "4.1.0"
 }

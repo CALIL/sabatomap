@@ -55,6 +55,8 @@ GradleBuilder.prototype.getArgs = function(cmd, opts) {
 
     // 10 seconds -> 6 seconds
     args.push('-Dorg.gradle.daemon=true');
+    // allow NDK to be used - required by Gradle 1.5 plugin
+    args.push('-Pandroid.useDeprecatedNdk=true');
     args.push.apply(args, opts.extraArgs);
     // Shaves another 100ms, but produces a "try at own risk" warning. Not worth it (yet):
     // args.push('-Dorg.gradle.parallel=true');
@@ -159,7 +161,7 @@ GradleBuilder.prototype.prepEnv = function(opts) {
         // For some reason, using ^ and $ don't work.  This does the job, though.
         var distributionUrlRegex = /distributionUrl.*zip/;
         /*jshint -W069 */
-        var distributionUrl = process.env['CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL'] || 'http\\://services.gradle.org/distributions/gradle-2.2.1-all.zip';
+        var distributionUrl = process.env['CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL'] || 'http\\://services.gradle.org/distributions/gradle-2.13-all.zip';
         /*jshint +W069 */
         var gradleWrapperPropertiesPath = path.join(self.root, 'gradle', 'wrapper', 'gradle-wrapper.properties');
         shell.chmod('u+w', gradleWrapperPropertiesPath);
@@ -182,8 +184,34 @@ GradleBuilder.prototype.prepEnv = function(opts) {
 GradleBuilder.prototype.build = function(opts) {
     var wrapper = path.join(this.root, 'gradlew');
     var args = this.getArgs(opts.buildType == 'debug' ? 'debug' : 'release', opts);
-    return Q().then(function() {
-        return spawn(wrapper, args, {stdio: 'inherit'});
+
+    return spawn(wrapper, args, {stdio: 'pipe'})
+    .progress(function (stdio){
+        if (stdio.stderr) {
+            /*
+             * Workaround for the issue with Java printing some unwanted information to 
+             * stderr instead of stdout.
+             * This function suppresses 'Picked up _JAVA_OPTIONS' message from being
+             * printed to stderr. See https://issues.apache.org/jira/browse/CB-9971 for
+             * explanation.
+             */
+            var suppressThisLine = /^Picked up _JAVA_OPTIONS: /i.test(stdio.stderr.toString());
+            if (suppressThisLine) {
+                return;
+            }
+            process.stderr.write(stdio.stderr);
+        } else {
+            process.stdout.write(stdio.stdout);
+        }
+    }).catch(function (error) {
+        if (error.toString().indexOf('failed to find target with hash string') >= 0) {
+            return check_reqs.check_android_target(error).then(function() {
+                // If due to some odd reason - check_android_target succeeds
+                // we should still fail here.
+                return Q.reject(error);
+            });
+        }
+        return Q.reject(error);
     });
 };
 

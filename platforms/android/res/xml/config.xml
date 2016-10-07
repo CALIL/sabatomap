@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="10010" id="jp.calil.sabatomap" version="1.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <preference name="loglevel" value="DEBUG" />
     <feature name="LocationManager">
         <param name="android-package" value="com.unarin.cordova.beacon.LocationManager" />
     </feature>
@@ -27,29 +26,30 @@
         <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
-    <preference name="xwalkVersion" value="15+" />
-    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-    <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
-    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
-    <preference name="xwalkVersion" value="21+" />
-    <preference name="xwalkLiteVersion" value="xwalk_core_library_canary:17+" />
-    <preference name="android-minSdkVersion" value="16" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <preference name="SplashScreen" value="splash" />
-    <icon density="mdpi" src="www/res/icons/android/icon-48-mdpi.png" />
-    <icon density="hdpi" src="www/res/icons/android/icon-72-hdpi.png" />
-    <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
-    <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
-    <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
-    <preference name="BackgroundColor" value="0xFF0068B1" />
     <name>Sabae Library Map</name>
     <description>さばとマップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <icon density="mdpi" src="www/res/icons/android/icon-48-mdpi.png" />
+    <icon density="hdpi" src="www/res/icons/android/icon-72-hdpi.png" />
+    <icon density="xhdpi" src="www/res/icons/android/icon-96-xhdpi.png" />
+    <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
+    <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
+    <preference name="xwalkVersion" value="21+" />
+    <preference name="xwalkLiteVersion" value="xwalk_core_library_canary:17+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="android-minSdkVersion" value="16" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
+    <preference name="SplashScreen" value="splash" />
+    <preference name="BackgroundColor" value="0xFF0068B1" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
 </widget>
