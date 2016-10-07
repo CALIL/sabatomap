@@ -18,6 +18,7 @@
         <icon density="xxhdpi" src="www/res/icons/android/icon-144-xxhdpi.png" />
         <icon density="xxxhdpi" src="www/res/icons/android/icon-192-xxxhdpi.png" />
         <preference name="BackgroundColor" value="0xFF0068B1" />
+        <preference name="ShowSplashScreenSpinner" value="false"/>
     </platform>
     <platform name="ios">
         <preference name="FadeSplashScreen" value="true" />
