@@ -16,9 +16,6 @@
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -36,6 +33,9 @@
         },
         "com.telerik.plugins.wkwebview": {
             "WKWEBVIEW_SERVER_PORT": "12344",
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },

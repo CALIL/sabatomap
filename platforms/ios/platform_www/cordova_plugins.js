@@ -136,7 +136,6 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-whitelist": "1.0.0",
     "cordova-plugin-splashscreen": "3.0.0-dev",
     "com.unarin.cordova.beacon": "3.3.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
@@ -146,7 +145,8 @@ module.exports.metadata =
     "cordova-plugin-bluetooth-status": "1.0.4",
     "cordova-plugin-device-orientation": "1.0.4",
     "cordova-plugin-webserver": "1.0.3",
-    "com.telerik.plugins.wkwebview": "0.6.9"
+    "com.telerik.plugins.wkwebview": "0.6.9",
+    "cordova-plugin-whitelist": "1.3.0"
 }
 // BOTTOM OF METADATA
 });

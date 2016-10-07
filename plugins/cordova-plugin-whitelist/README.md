@@ -1,3 +1,7 @@
+---
+title: Whitelist
+description: Whitelist external content accessible by your app.
+---
 <!--
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -23,6 +27,14 @@ This plugin implements a whitelist policy for navigating the application webview
 
 :warning: Report issues on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Whitelist%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
 
+## Installation
+
+You can install whitelist plugin with Cordova CLI, from npm:
+
+```
+$ cordova plugin add cordova-plugin-whitelist
+$ cordova prepare
+```
 
 ## Supported Cordova Platforms
 
@@ -111,6 +123,9 @@ In `config.xml`, add `<access>` tags, like this:
     <access origin="*" />
 
 Without any `<access>` tags, only requests to `file://` URLs are allowed. However, the default Cordova application includes `<access origin="*">` by default.
+
+
+Note: Whitelist cannot block network redirects from a whitelisted remote website (i.e. http or https) to a non-whitelisted website. Use CSP rules to mitigate redirects to non-whitelisted websites for webviews that support CSP.
 
 Quirk: Android also allows requests to https://ssl.gstatic.com/accessibility/javascript/android/ by default, since this is required for TalkBack to function properly.
 
