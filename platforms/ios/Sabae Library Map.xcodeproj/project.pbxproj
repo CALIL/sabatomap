@@ -35,8 +35,6 @@
 		8539DAA6E1424E618EBC8D49 /* CDVWebViewOperationsDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1C45B80A0C40CF9A03925F /* CDVWebViewOperationsDelegate.m */; };
 		7729228F073145F093B2A718 /* CDVWebViewUIDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AD651E27616145F7B312035A /* CDVWebViewUIDelegate.m */; };
 		FACA40BEFEDC454081A5A8AF /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603BEEF6E448447C8C1F6D41 /* WebKit.framework */; };
-		3E021084C67F434FB8E19DAE /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B3D90D5D313D4540BC326001 /* CDVConnection.m */; };
-		1FC25C43674A4E72969CED02 /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0766FB87D4DC4B34B28077AE /* CDVReachability.m */; };
 		80CE1827248C499B89995ABB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7AD63131634D4ABFD1262A /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5E8CAE4624FC4325AC093639 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17D1D765297F4FAABBCB52FE /* CoreTelephony.framework */; };
 		4723D320405A47A7ADEDBD06 /* BluetoothStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F37FB52B554A4B85FB5516 /* BluetoothStatus.m */; };
@@ -47,6 +45,8 @@
 		FCE5F2AC166C473FAFF1E720 /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 31F41828BA094AE48F420575 /* CDVViewController+SplashScreen.m */; };
 		4CB89167C09149C3AEAD07B7 /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F22EFD68C4E64135AE7E3457 /* CDVInAppBrowser.m */; };
 		653D24F7F5C54ADA92BFE360 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FD5D56D076432CAD231B93 /* CDVDevice.m */; };
+		ECE50F35912A4BDFAFEE9589 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B2AF63211E74DB18CAE4F00 /* CDVConnection.m */; };
+		6262815D9BA04F8581D17A7A /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D292D30858DA4F51B2E75632 /* CDVReachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,10 +115,6 @@
 		71E78D8D3E7F4CB5A8EBFF1D /* CDVWebViewOperationsDelegate.h */ = {isa = PBXFileReference; name = "CDVWebViewOperationsDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewOperationsDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		AF60422BE329462D94DCD2DA /* CDVWebViewUIDelegate.h */ = {isa = PBXFileReference; name = "CDVWebViewUIDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewUIDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		603BEEF6E448447C8C1F6D41 /* WebKit.framework */ = {isa = PBXFileReference; name = "WebKit.framework"; path = "System/Library/Frameworks/WebKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		B3D90D5D313D4540BC326001 /* CDVConnection.m */ = {isa = PBXFileReference; name = "CDVConnection.m"; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		0766FB87D4DC4B34B28077AE /* CDVReachability.m */ = {isa = PBXFileReference; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		EFD791B2201B46FD95A297B8 /* CDVConnection.h */ = {isa = PBXFileReference; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		753D116AFA364D7D921D86D0 /* CDVReachability.h */ = {isa = PBXFileReference; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		5F7AD63131634D4ABFD1262A /* SystemConfiguration.framework */ = {isa = PBXFileReference; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		17D1D765297F4FAABBCB52FE /* CoreTelephony.framework */ = {isa = PBXFileReference; name = "CoreTelephony.framework"; path = "System/Library/Frameworks/CoreTelephony.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		47F37FB52B554A4B85FB5516 /* BluetoothStatus.m */ = {isa = PBXFileReference; name = "BluetoothStatus.m"; path = "cordova-plugin-bluetooth-status/BluetoothStatus.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
@@ -134,6 +130,10 @@
 		C461EE925A214E0DA5E924F9 /* CDVInAppBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVInAppBrowser.h"; path = "cordova-plugin-inappbrowser/CDVInAppBrowser.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		D8FD5D56D076432CAD231B93 /* CDVDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVDevice.m"; path = "cordova-plugin-device/CDVDevice.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		44FDEB43BA804DC8B37DF836 /* CDVDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVDevice.h"; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0B2AF63211E74DB18CAE4F00 /* CDVConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVConnection.m"; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D292D30858DA4F51B2E75632 /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "cordova-plugin-network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		A8C46CC85FF14D15B4E04884 /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "cordova-plugin-network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		A8E32EDA639848FE9EDA6AFF /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "cordova-plugin-network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,10 +278,6 @@
 				5C211DFB41334FEEB5145B5B /* ReroutingUIWebView.h */,
 				71E78D8D3E7F4CB5A8EBFF1D /* CDVWebViewOperationsDelegate.h */,
 				AF60422BE329462D94DCD2DA /* CDVWebViewUIDelegate.h */,
-				B3D90D5D313D4540BC326001 /* CDVConnection.m */,
-				0766FB87D4DC4B34B28077AE /* CDVReachability.m */,
-				EFD791B2201B46FD95A297B8 /* CDVConnection.h */,
-				753D116AFA364D7D921D86D0 /* CDVReachability.h */,
 				47F37FB52B554A4B85FB5516 /* BluetoothStatus.m */,
 				5E329668CC4540CFA45867ED /* CDVCompass.m */,
 				A2FFDA756F754F1FA03F0192 /* CDVCompass.h */,
@@ -293,6 +289,10 @@
 				C461EE925A214E0DA5E924F9 /* CDVInAppBrowser.h */,
 				D8FD5D56D076432CAD231B93 /* CDVDevice.m */,
 				44FDEB43BA804DC8B37DF836 /* CDVDevice.h */,
+				0B2AF63211E74DB18CAE4F00 /* CDVConnection.m */,
+				D292D30858DA4F51B2E75632 /* CDVReachability.m */,
+				A8C46CC85FF14D15B4E04884 /* CDVConnection.h */,
+				A8E32EDA639848FE9EDA6AFF /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "Sabae Library Map/Plugins";
@@ -425,14 +425,14 @@
 				3E0E9D676EBA4B61B3219A19 /* ReroutingUIWebView.m in Sources */,
 				8539DAA6E1424E618EBC8D49 /* CDVWebViewOperationsDelegate.m in Sources */,
 				7729228F073145F093B2A718 /* CDVWebViewUIDelegate.m in Sources */,
-				3E021084C67F434FB8E19DAE /* CDVConnection.m in Sources */,
-				1FC25C43674A4E72969CED02 /* CDVReachability.m in Sources */,
 				4723D320405A47A7ADEDBD06 /* BluetoothStatus.m in Sources */,
 				379879EA01264C798B0F4F33 /* CDVCompass.m in Sources */,
 				29C3C436902B4049BB68DB61 /* CDVSplashScreen.m in Sources */,
 				FCE5F2AC166C473FAFF1E720 /* CDVViewController+SplashScreen.m in Sources */,
 				4CB89167C09149C3AEAD07B7 /* CDVInAppBrowser.m in Sources */,
 				653D24F7F5C54ADA92BFE360 /* CDVDevice.m in Sources */,
+				ECE50F35912A4BDFAFEE9589 /* CDVConnection.m in Sources */,
+				6262815D9BA04F8581D17A7A /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,15 +25,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-network-information": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/apache/cordova-plugin-network-information.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-bluetooth-status": {
         "source": {
             "type": "registry",
@@ -88,6 +79,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-device"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-network-information": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-network-information"
         },
         "is_top_level": true,
         "variables": {}

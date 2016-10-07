@@ -5,5 +5,5 @@
     "WebKit.framework": 2,
     "libz.dylib": 2,
     "CFNetwork.framework": 2,
-    "CoreTelephony.framework": 1
+    "CoreTelephony.framework": 2
 }
