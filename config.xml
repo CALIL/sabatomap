@@ -44,6 +44,18 @@
         <icon width="50" height="50"/>
         <icon width="100" height="100"/>
         <icon width="167" height="167"/>
+        <splash src="www/res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>
+        <splash src="www/res/screen/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
+        <splash src="www/res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
+        <splash src="www/res/screen/ios/Default-portrait@2x~iphone4.png" width="640" height="960"/>
+        <splash src="www/res/screen/ios/Default-portrait@2x~iphone5.png" width="640" height="1136"/>
+        <splash src="www/res/screen/ios/Default-portrait@2x~iphone6.png" width="750" height="1334"/>
+        <splash src="www/res/screen/ios/Default-portrait@3x~iphone6+.png" width="1080" height="1920"/>
+        <splash src="www/res/screen/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
+        <splash src="www/res/screen/ios/Default-portrait~iphone.png" width="320" height="480"/>
+        <!-- 追加しないデフォルトのスプラッシュを除外 -->
+        <splash width="1242" height="2208"/>
+        <splash width="2208" height="1242"/>
     </platform>
     <platform name="windows">
         <preference name="windows-target-version" value="10.0" />
