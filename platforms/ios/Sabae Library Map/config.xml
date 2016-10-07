@@ -20,9 +20,6 @@
     <feature name="WKWebViewPolyfill">
         <param name="ios-package" value="WKWebViewPolyfill" />
     </feature>
-    <feature name="InAppBrowser">
-        <param name="ios-package" value="CDVInAppBrowser" />
-    </feature>
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
@@ -38,6 +35,9 @@
     <feature name="SplashScreen">
         <param name="ios-package" value="CDVSplashScreen" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
     </feature>
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />

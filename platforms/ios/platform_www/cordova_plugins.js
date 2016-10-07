@@ -59,15 +59,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-device/www/device.js",
         "id": "cordova-plugin-device.device",
         "pluginId": "cordova-plugin-device",
@@ -131,12 +122,20 @@ module.exports = [
         "clobbers": [
             "navigator.splashscreen"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-inappbrowser": "1.0.1",
     "cordova-plugin-device": "1.0.1",
     "cordova-plugin-network-information": "1.0.2-dev",
     "cordova-plugin-bluetooth-status": "1.0.3",
@@ -146,7 +145,8 @@ module.exports.metadata =
     "cordova-plugin-splashscreen": "3.0.0-dev",
     "com.unarin.cordova.beacon": "3.3.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
-    "cordova-plugin-webserver": "1.0.3"
+    "cordova-plugin-webserver": "1.0.3",
+    "cordova-plugin-inappbrowser": "1.5.0"
 }
 // BOTTOM OF METADATA
 });

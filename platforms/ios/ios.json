@@ -17,10 +17,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
                             "count": 1
                         },
@@ -38,6 +34,10 @@
                         },
                         {
                             "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -84,9 +84,6 @@
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -106,6 +103,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
@@ -167,15 +167,6 @@
             "pluginId": "com.telerik.plugins.wkwebview",
             "clobbers": [
                 "wkwebview"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-            "id": "cordova-plugin-inappbrowser.inappbrowser",
-            "pluginId": "cordova-plugin-inappbrowser",
-            "clobbers": [
-                "cordova.InAppBrowser.open",
-                "window.open"
             ]
         },
         {
@@ -242,10 +233,18 @@
             "clobbers": [
                 "navigator.splashscreen"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "pluginId": "cordova-plugin-inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-inappbrowser": "1.0.1",
         "cordova-plugin-device": "1.0.1",
         "cordova-plugin-network-information": "1.0.2-dev",
         "cordova-plugin-bluetooth-status": "1.0.3",
@@ -255,6 +254,7 @@
         "cordova-plugin-splashscreen": "3.0.0-dev",
         "com.unarin.cordova.beacon": "3.3.0",
         "cordova-plugin-crosswalk-webview": "1.4.0",
-        "cordova-plugin-webserver": "1.0.3"
+        "cordova-plugin-webserver": "1.0.3",
+        "cordova-plugin-inappbrowser": "1.5.0"
     }
 }

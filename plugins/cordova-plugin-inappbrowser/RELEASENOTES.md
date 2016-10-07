@@ -20,15 +20,71 @@
 -->
 # Release Notes
 
+### 1.5.0 (Sep 08, 2016)
+* [CB-11795](https://issues.apache.org/jira/browse/CB-11795) Add 'protective' entry to cordovaDependencies
+* Add intent scheme to be handled by OS
+* Plugin uses `Android Log class` and not `Cordova LOG class`
+* Adding links to guide content and reference content at the top of the readme file Github: close #163
+* [CB-10973](https://issues.apache.org/jira/browse/CB-10973) **Browser**: wrong height of webview with `location=yes`
+* Size and position in browser platform
+* [CB-10973](https://issues.apache.org/jira/browse/CB-10973) **Windows**: wrong height of webview with `location=yes`
+* [CB-11013](https://issues.apache.org/jira/browse/CB-11013) IAB enabling background play of YouTube videos?
+* [CB-10467](https://issues.apache.org/jira/browse/CB-10467) Hardware back button, while `InAppBrowser` is opened, closes the app too in addition to closing `InAppBrowser`
+* [CB-11178](https://issues.apache.org/jira/browse/CB-11178) allow to open other apps on **iOS 9**
+* fix some calls which used api level 16
+* [CB-5402](https://issues.apache.org/jira/browse/CB-5402) added extra content from wiki page
+* [CB-2063](https://issues.apache.org/jira/browse/CB-2063) (**ios**) Fixed presentation style
+* [CB-11012](https://issues.apache.org/jira/browse/CB-11012) added some clarifications about `InAppBrowser` object
+* [CB-3360](https://issues.apache.org/jira/browse/CB-3360) Set custom `inappbrowser` user agent for **ios**
+* Add badges for paramedic builds on Jenkins
+* [CB-11381](https://issues.apache.org/jira/browse/CB-11381) android: Does not pass sonarqube scan
+* Add pull request template.
+* [CB-10866](https://issues.apache.org/jira/browse/CB-10866) Adding engine requirements to `package.json`
+* [CB-110003](https://issues.apache.org/jira/browse/CB-110003) Adding samples to Readme.
+* [CB-10996](https://issues.apache.org/jira/browse/CB-10996) Adding front matter to README.md
+
+### 1.4.0 (Apr 15, 2016)
+* [CB-7679](https://issues.apache.org/jira/browse/CB-7679) add fix for **iOS** upload.
+* [CB-10944](https://issues.apache.org/jira/browse/CB-10944) `NoSuchMethodError` in `InAppBrowser` plugin
+* [CB-10937](https://issues.apache.org/jira/browse/CB-10937) fix stretched icons
+* [CB-10760](https://issues.apache.org/jira/browse/CB-10760) Fixing README for display on Cordova website
+* [CB-10636](https://issues.apache.org/jira/browse/CB-10636) Add `JSHint` for plugins
+
+### 1.3.0 (Feb 09, 2016)
+* [CB-3360](https://issues.apache.org/jira/browse/CB-3360) Set custom inappbrowser user agent for android
+* [CB-10538](https://issues.apache.org/jira/browse/CB-10538) cordova-plugin-inappbrowser timeout issue
+* [CB-10395](https://issues.apache.org/jira/browse/CB-10395) InAppBrowser's WebView not storing cookies reliable on Android
+* Edit package.json license to match SPDX id
+* [CB-10305](https://issues.apache.org/jira/browse/CB-10305) Gray bar appears in the wrong place on iOS
+* [CB-7786](https://issues.apache.org/jira/browse/CB-7786) Support mediaPlaybackRequiresUserAction on Android
+* [CB-7500](https://issues.apache.org/jira/browse/CB-7500) executeScript with callback kills/blurs inAppBrowser window on Android
+
+### 1.2.1 (Feb 02, 2016)
+* [CB-10407](https://issues.apache.org/jira/browse/CB-10407) InAppBrowser not firing loadstart event on android
+* [CB-10428](https://issues.apache.org/jira/browse/CB-10428) Fix syntax error when browserifying inAppBrowser plugin
+* handle app store urls in system browser
+* [CB-6702](https://issues.apache.org/jira/browse/CB-6702) InAppBrowser hangs when opening more than one instance
+* [CB-10456](https://issues.apache.org/jira/browse/CB-10456) InAppBrowser is not closed if I close it programmatically on Android
+* [CB-10451](https://issues.apache.org/jira/browse/CB-10451) InAppBrowser: loadstart event is not triggered on Windows
+* [CB-10452](https://issues.apache.org/jira/browse/CB-10452) InAppBrowser: 'exit' event is not triggered on Windows
+* [CB-10454](https://issues.apache.org/jira/browse/CB-10454) InAppBrowser: 'loaderror' event does not have code and message on Windows
+* [CB-10450](https://issues.apache.org/jira/browse/CB-10450) InAppBrowser: Unable to get property 'canGoBack' of undefined on Windows
+* [CB-10441](https://issues.apache.org/jira/browse/CB-10441) Add auto tests for InAppBrowser plugin
+
+### 1.2.0 (Jan 15, 2016)
+* [CB-8180](https://issues.apache.org/jira/browse/CB-8180) Changing methods of interception in `WebViewClient` class
+* [CB-10009](https://issues.apache.org/jira/browse/CB-10009) Improve `InAppBrowser` toolbar look and feel on **Windows**
+* Open a new window on the **Browser** platform
+
 ### 1.1.1 (Dec 10, 2015)
 
-* CB-9445 Improves executeScript callbacks on iOS
-* CB-10035 Incremented plugin version.
-* CB-10040 - re-fix: backwards compatible with cordova-ios < 4.0
-* CB-8534: Allow plugins to respond to onReceivedHttpAuthRequest. This closes #82
-* CB-3750: Fixes spinner on iOS. This closes #89
-* CB-7696 Document target=_self behavior for Windows
-* CB-10040 - Compile Error in InAppBrowser Plugin for iOS - No known instance method for selector 'URLIsWhitelisted:'
+* [CB-9445](https://issues.apache.org/jira/browse/CB-9445) Improves executeScript callbacks on iOS
+* [CB-10035](https://issues.apache.org/jira/browse/CB-10035) Incremented plugin version.
+* [CB-10040](https://issues.apache.org/jira/browse/CB-10040) - re-fix: backwards compatible with cordova-ios < 4.0
+* [CB-8534](https://issues.apache.org/jira/browse/CB-8534) Allow plugins to respond to onReceivedHttpAuthRequest. This closes #82
+* [CB-3750](https://issues.apache.org/jira/browse/CB-3750) Fixes spinner on iOS. This closes #89
+* [CB-7696](https://issues.apache.org/jira/browse/CB-7696) Document target=_self behavior for Windows
+* [CB-10040](https://issues.apache.org/jira/browse/CB-10040) - Compile Error in InAppBrowser Plugin for iOS - No known instance method for selector 'URLIsWhitelisted:'
 
 ### 1.1.0 (Nov 18, 2015)
 * [CB-10035](https://issues.apache.org/jira/browse/CB-10035) Updated `RELEASENOTES` to be newest to oldest
