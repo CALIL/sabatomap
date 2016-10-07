@@ -51,14 +51,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
-        "id": "com.telerik.plugins.wkwebview.wkwebview",
-        "pluginId": "com.telerik.plugins.wkwebview",
-        "clobbers": [
-            "wkwebview"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
         "id": "cordova-plugin-splashscreen.SplashScreen",
         "pluginId": "cordova-plugin-splashscreen",
@@ -131,22 +123,30 @@ module.exports = [
         "clobbers": [
             "navigator.compass"
         ]
+    },
+    {
+        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
+        "id": "com.telerik.plugins.wkwebview.wkwebview",
+        "pluginId": "com.telerik.plugins.wkwebview",
+        "clobbers": [
+            "wkwebview"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "com.telerik.plugins.wkwebview": "0.6.3",
     "cordova-plugin-whitelist": "1.0.0",
     "cordova-plugin-splashscreen": "3.0.0-dev",
     "com.unarin.cordova.beacon": "3.3.0",
     "cordova-plugin-crosswalk-webview": "1.4.0",
-    "cordova-plugin-webserver": "1.0.3",
     "cordova-plugin-inappbrowser": "1.5.0",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-network-information": "1.3.0",
     "cordova-plugin-bluetooth-status": "1.0.4",
-    "cordova-plugin-device-orientation": "1.0.4"
+    "cordova-plugin-device-orientation": "1.0.4",
+    "cordova-plugin-webserver": "1.0.3",
+    "com.telerik.plugins.wkwebview": "0.6.9"
 }
 // BOTTOM OF METADATA
 });

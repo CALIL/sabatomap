@@ -128,7 +128,8 @@ module.exports.metadata =
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-network-information": "1.3.0",
     "cordova-plugin-bluetooth-status": "1.0.4",
-    "cordova-plugin-device-orientation": "1.0.4"
+    "cordova-plugin-device-orientation": "1.0.4",
+    "com.telerik.plugins.wkwebview": "0.6.9"
 }
 // BOTTOM OF METADATA
 });

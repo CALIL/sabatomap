@@ -2,7 +2,9 @@
 by [Eddy Verbruggen](http://twitter.com/eddyverbruggen) / [Telerik](http://www.telerik.com)
 
 
-__At the moment this plugin is NOT compatible with Cordova-iOS-4, see [#209](https://github.com/Telerik-Verified-Plugins/WKWebView/issues/209) for details.__
+__[Jan 17, 2016] iOS 9.3 BETA seems to require you to set the minimum deployment target to 8.0, otherwise you may see a hanging splashscreen or white startup page. I hope that's fixed in later BETA's, otherwise it may be wise to drop iOS 7 support in your app.__
+
+__[Jan 10, 2016] At the moment this plugin is NOT compatible with Cordova-iOS-4 (so use 3.x), see [#209](https://github.com/Telerik-Verified-Plugins/WKWebView/issues/209) for details.__
 
 
 ## 0. Index
@@ -55,8 +57,8 @@ $ cordova plugin add cordova-plugin-wkwebview --variable WKWEBVIEW_SERVER_PORT=1
 No need for anything else - you can now open the project in XCode 6 if you like.
 
 ## 4. Changelog
-ApiAISDKPlugin
-* __0.6.8__  Compatibility with Telerik's LivePatch plugin. See #202. 
+* __0.6.9__  Don't start a new webserver after a crash if one is still running. See #223.
+* __0.6.8__  Compatibility with Telerik's LivePatch plugin. See #202.
 * __0.6.7__  Compatibility with `file://` protocol for usage in plugins like [cordova-hot-code-push](https://github.com/nordnet/cordova-hot-code-push), thanks #195 and #196!
 * __0.6.5__  `KeyboardDisplayRequiresUserAction` works! So set to `false` if you want the keyboard to pop up when programmatically focussing an input field.
 * __0.6.4__  On top of the port preference introduced in 0.6.3 you can now override the default variable when installing this plugin (see 'Installation').
