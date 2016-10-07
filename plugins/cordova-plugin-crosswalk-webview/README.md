@@ -43,7 +43,9 @@ For example, building android with Crosswalk generates:
 /path/to/hello/platforms/android/build/outputs/apk/hello-armv7-debug.apk
 ```
 
-Note that it is also possible to publish a multi-APK application on the Play Store that uses Crosswalk for Pre-L devices, and the (updatable) system webview for L+:
+Note that you might have to run `cordova clean` before building, if you previously built the app without cordova-plugin-crosswalk-webview. Also, manually uninstall the app from the device/emulator before attempting to install the crosswalk-enabled version.
+
+Also note that it is also possible to publish a multi-APK application on the Play Store that uses Crosswalk for Pre-L devices, and the (updatable) system webview for L+:
 
 To build Crosswalk-enabled apks, add this plugin and run:
 
@@ -84,10 +86,17 @@ You can use the Crosswalk [shared mode](https://crosswalk-project.org/documentat
     <!-- These are all equivalent -->
     cordova plugin add cordova-plugin-crosswalk-webview  --variable XWALK_MODE="shared"
     <preference name="xwalkMode" value="shared" />
-Note that if you want to specify the Crosswalk version when using shared mode, you need to use the shared version of the library, e.g.: 
+
+You can also use a Crosswalk beta version on shared mode, e.g.:
 
     <!-- Using a Crosswalk shared mode beta version -->
     cordova plugin add cordova-plugin-crosswalk-webview --variable XWALK_VERSION="org.xwalk:xwalk_shared_library_beta:14+"
+
+You can use the Crosswalk [lite mode](https://crosswalk-project.org/documentation/crosswalk_lite.html) which is the Crosswalk runtime designed to be as small as possible by removing less common libraries and features and compressing the APK.
+
+    <!-- These are all equivalent -->
+    cordova plugin add cordova-plugin-crosswalk-webview  --variable XWALK_MODE="lite"
+    <preference name="xwalkMode" value="lite" />
 
 You can set background color with the preference of BackgroundColor.
 
@@ -99,6 +108,33 @@ You can also set user agent with the preference of xwalkUserAgent.
     <preference name="xwalkUserAgent" value="customer UA" />
 
 ### Release Notes
+
+#### 2.1.0 (September 9, 2016)
+* Uses the latest Crosswalk 21 stable version by default
+* Keep compatible for Cordova-android 6.0 with evaluating Javascript bridge
+
+#### 2.0.0 (August 17, 2016)
+* Uses the latest Crosswalk 20 stable version by default
+* Discontinue support for Android 4.0 (ICS) in Crosswalk starting with version 20
+
+#### 1.8.0 (June 30, 2016)
+* Uses the latest Crosswalk 19 stable version by default
+
+#### 1.7.0 (May 4, 2016)
+* Uses the latest Crosswalk 18 stable version by default
+* Support to use [Crosswalk Lite](https://crosswalk-project.org/documentation/crosswalk_lite.html), It's possible to specify lite value with the variable of XWALK_MODE at install plugin time.
+* [Cordova screenshot plugin](https://github.com/gitawego/cordova-screenshot.git) can capture the visible content of web page with Crosswalk library.
+* Doesn't work with Crosswalk 17 and earlier
+
+#### 1.6.0 (March 11, 2016)
+* Uses the latest Crosswalk 17 stable version by default
+* Support to [package apps for 64-bit devices](https://crosswalk-project.org/documentation/android/android_64bit.html), it's possible to specify 64-bit targets using the `--xwalk64bit` option in the build command:
+
+        cordova build android --xwalk64bit
+
+#### 1.5.0 (January 18, 2016)
+* Uses the latest Crosswalk 16 stable version by default
+* The message of xwalk's ready can be listened
 
 #### 1.4.0 (November 5, 2015)
 * Uses the latest Crosswalk 15 stable version by default

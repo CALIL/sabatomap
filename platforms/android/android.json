@@ -13,26 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference default=\"15+\" name=\"xwalkVersion\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference default=\"--disable-pull-to-refresh-effect\" name=\"xwalkCommandLine\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference default=\"embedded\" name=\"xwalkMode\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference default=\"true\" name=\"xwalkMultipleApk\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         },
@@ -59,6 +39,34 @@
                         {
                             "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"xwalkVersion\" value=\"21+\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"xwalkLiteVersion\" value=\"xwalk_core_library_canary:17+\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"xwalkCommandLine\" value=\"--disable-pull-to-refresh-effect\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"xwalkMode\" value=\"embedded\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"xwalkMultipleApk\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"android-minSdkVersion\" value=\"16\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -66,14 +74,6 @@
             "AndroidManifest.xml": {
                 "parents": {
                     "/*": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
                             "count": 1
@@ -92,6 +92,14 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
                             "count": 1
                         }
                     ],
@@ -134,9 +142,6 @@
         "com.unarin.cordova.beacon": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -160,6 +165,14 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "XWALK_VERSION": "21+",
+            "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
+            "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
+            "XWALK_MODE": "embedded",
+            "XWALK_MULTIPLEAPK": "true",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
@@ -290,6 +303,7 @@
         "cordova-plugin-device-orientation": "1.0.4",
         "com.telerik.plugins.wkwebview": "0.6.9",
         "cordova-plugin-whitelist": "1.3.0",
-        "cordova-plugin-splashscreen": "4.0.0"
+        "cordova-plugin-splashscreen": "4.0.0",
+        "cordova-plugin-crosswalk-webview": "2.1.0"
     }
 }

@@ -4,11 +4,6 @@
     <feature name="LocationManager">
         <param name="android-package" value="com.unarin.cordova.beacon.LocationManager" />
     </feature>
-    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
-    <preference default="15+" name="xwalkVersion" />
-    <preference default="--disable-pull-to-refresh-effect" name="xwalkCommandLine" />
-    <preference default="embedded" name="xwalkMode" />
-    <preference default="true" name="xwalkMultipleApk" />
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
@@ -32,6 +27,14 @@
         <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
+    <preference name="xwalkVersion" value="15+" />
+    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+    <preference name="xwalkMode" value="embedded" />
+    <preference name="xwalkMultipleApk" value="true" />
+    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
+    <preference name="xwalkVersion" value="21+" />
+    <preference name="xwalkLiteVersion" value="xwalk_core_library_canary:17+" />
+    <preference name="android-minSdkVersion" value="16" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <preference name="SplashScreen" value="splash" />
@@ -49,8 +52,4 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
-    <preference name="xwalkVersion" value="15+" />
-    <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
-    <preference name="xwalkMode" value="embedded" />
-    <preference name="xwalkMultipleApk" value="true" />
 </widget>

@@ -127,7 +127,8 @@ module.exports.metadata =
     "cordova-plugin-device-orientation": "1.0.4",
     "com.telerik.plugins.wkwebview": "0.6.9",
     "cordova-plugin-whitelist": "1.3.0",
-    "cordova-plugin-splashscreen": "4.0.0"
+    "cordova-plugin-splashscreen": "4.0.0",
+    "cordova-plugin-crosswalk-webview": "2.1.0"
 }
 // BOTTOM OF METADATA
 });

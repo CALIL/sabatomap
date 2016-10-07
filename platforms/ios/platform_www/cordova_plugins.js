@@ -137,7 +137,6 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "com.unarin.cordova.beacon": "3.3.0",
-    "cordova-plugin-crosswalk-webview": "1.4.0",
     "cordova-plugin-inappbrowser": "1.5.0",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-network-information": "1.3.0",
@@ -146,7 +145,8 @@ module.exports.metadata =
     "cordova-plugin-webserver": "1.0.3",
     "com.telerik.plugins.wkwebview": "0.6.9",
     "cordova-plugin-whitelist": "1.3.0",
-    "cordova-plugin-splashscreen": "4.0.0"
+    "cordova-plugin-splashscreen": "4.0.0",
+    "cordova-plugin-crosswalk-webview": "2.1.0"
 }
 // BOTTOM OF METADATA
 });
