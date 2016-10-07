@@ -43,27 +43,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
-        "id": "cordova-plugin-device-orientation.CompassError",
-        "clobbers": [
-            "CompassError"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
-        "id": "cordova-plugin-device-orientation.CompassHeading",
-        "clobbers": [
-            "CompassHeading"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
-        "id": "cordova-plugin-device-orientation.compass",
-        "clobbers": [
-            "navigator.compass"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-whitelist/whitelist.js",
         "id": "cordova-plugin-whitelist.whitelist",
         "runs": true
@@ -116,6 +95,30 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.BluetoothStatus"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
+        "id": "cordova-plugin-device-orientation.CompassError",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "CompassError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
+        "id": "cordova-plugin-device-orientation.CompassHeading",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "CompassHeading"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
+        "id": "cordova-plugin-device-orientation.compass",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "navigator.compass"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -124,7 +127,8 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.5.0",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-network-information": "1.3.0",
-    "cordova-plugin-bluetooth-status": "1.0.4"
+    "cordova-plugin-bluetooth-status": "1.0.4",
+    "cordova-plugin-device-orientation": "1.0.4"
 }
 // BOTTOM OF METADATA
 });

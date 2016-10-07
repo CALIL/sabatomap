@@ -13,10 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -59,6 +55,10 @@
                         {
                             "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -66,14 +66,6 @@
             "AndroidManifest.xml": {
                 "parents": {
                     "/*": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-                            "count": 1
-                        },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
                             "count": 1
@@ -92,6 +84,14 @@
                         },
                         {
                             "xml": "<uses-feature android:name=\"android.hardware.bluetooth_le\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
                             "count": 1
                         }
                     ],
@@ -138,9 +138,6 @@
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
-        "cordova-plugin-device-orientation": {
-            "PACKAGE_NAME": "jp.calil.sabatomap"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
@@ -160,6 +157,9 @@
             "PACKAGE_NAME": "jp.calil.sabatomap"
         },
         "cordova-plugin-bluetooth-status": {
+            "PACKAGE_NAME": "jp.calil.sabatomap"
+        },
+        "cordova-plugin-device-orientation": {
             "PACKAGE_NAME": "jp.calil.sabatomap"
         }
     },
@@ -206,27 +206,6 @@
             "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
             "id": "com.unarin.cordova.beacon.BeaconRegion",
             "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
-            "id": "cordova-plugin-device-orientation.CompassError",
-            "clobbers": [
-                "CompassError"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
-            "id": "cordova-plugin-device-orientation.CompassHeading",
-            "clobbers": [
-                "CompassHeading"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
-            "id": "cordova-plugin-device-orientation.compass",
-            "clobbers": [
-                "navigator.compass"
-            ]
         },
         {
             "file": "plugins/cordova-plugin-whitelist/whitelist.js",
@@ -281,12 +260,37 @@
             "clobbers": [
                 "cordova.plugins.BluetoothStatus"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
+            "id": "cordova-plugin-device-orientation.CompassError",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "CompassError"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
+            "id": "cordova-plugin-device-orientation.CompassHeading",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "CompassHeading"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
+            "id": "cordova-plugin-device-orientation.compass",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "navigator.compass"
+            ]
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-inappbrowser": "1.5.0",
         "cordova-plugin-device": "1.1.3",
         "cordova-plugin-network-information": "1.3.0",
-        "cordova-plugin-bluetooth-status": "1.0.4"
+        "cordova-plugin-bluetooth-status": "1.0.4",
+        "cordova-plugin-device-orientation": "1.0.4"
     }
 }

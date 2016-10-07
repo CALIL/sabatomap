@@ -59,30 +59,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
-        "id": "cordova-plugin-device-orientation.CompassError",
-        "pluginId": "cordova-plugin-device-orientation",
-        "clobbers": [
-            "CompassError"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
-        "id": "cordova-plugin-device-orientation.CompassHeading",
-        "pluginId": "cordova-plugin-device-orientation",
-        "clobbers": [
-            "CompassHeading"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
-        "id": "cordova-plugin-device-orientation.compass",
-        "pluginId": "cordova-plugin-device-orientation",
-        "clobbers": [
-            "navigator.compass"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
         "id": "cordova-plugin-splashscreen.SplashScreen",
         "pluginId": "cordova-plugin-splashscreen",
@@ -131,12 +107,35 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.BluetoothStatus"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
+        "id": "cordova-plugin-device-orientation.CompassError",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "CompassError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
+        "id": "cordova-plugin-device-orientation.CompassHeading",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "CompassHeading"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
+        "id": "cordova-plugin-device-orientation.compass",
+        "pluginId": "cordova-plugin-device-orientation",
+        "clobbers": [
+            "navigator.compass"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-device-orientation": "1.0.2-dev",
     "com.telerik.plugins.wkwebview": "0.6.3",
     "cordova-plugin-whitelist": "1.0.0",
     "cordova-plugin-splashscreen": "3.0.0-dev",
@@ -146,7 +145,8 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.5.0",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-network-information": "1.3.0",
-    "cordova-plugin-bluetooth-status": "1.0.4"
+    "cordova-plugin-bluetooth-status": "1.0.4",
+    "cordova-plugin-device-orientation": "1.0.4"
 }
 // BOTTOM OF METADATA
 });
