@@ -4,10 +4,9 @@
  This software is released under the MIT License.
  http://opensource.org/licenses/mit-license.php
  */
-
 import ol from 'openlayers';
 
-export default class Kanimarker {
+class Kanimarker {
   /**
    * マップに現在地マーカーをインストールする
    * @param map {ol.Map} マップオブジェクト
@@ -115,8 +114,18 @@ export default class Kanimarker {
           } else {
             d = 300;
           }
+          animated = true;
+          this.map.getView().animate({
+            duration: d,
+            rotation: -(this.direction / 180 * Math.PI),
+            easing: ol.easing.easeOut
+          })
+          console.log(this.direction);
 
-          if (from - to !== 0) {
+          //if (from - to !== 0) {
+            
+
+            /*
             animated = true;
             this.animations.moveMode = null;
 
@@ -132,7 +141,8 @@ export default class Kanimarker {
                 return time <= 1;
               }
             };
-          }
+            */
+         // }
         }
 
         if (!animated) {
@@ -145,7 +155,12 @@ export default class Kanimarker {
             if (this.animations.moveMode != null && this.animations.moveMode.animate(new Date())) {
               froms = [animations.current[0], animations.moveMode.current[1]];
             }
-
+            this.map.getView().animate({
+              duration: 800,
+              center: to,
+              easing: ol.easing.easeOut,
+            })
+            /*
             this.animations.moveMode = {
               start: new Date(),
               from: froms,
@@ -163,6 +178,7 @@ export default class Kanimarker {
                 return time <= 1;
               }
             };
+            */
           }
         }
 
@@ -170,7 +186,7 @@ export default class Kanimarker {
       }
 
       if (mode === "headingup") {
-        this.map.getView().setRotation(-(this.direction / 180 * Math.PI));
+        //this.map.getView().setRotation(-(this.direction / 180 * Math.PI));
       } else {
         this.map.render();
       }
@@ -367,9 +383,14 @@ export default class Kanimarker {
     this.direction = direction;
 
     if (this.mode === "headingup") {
-      return this.map.getView().setRotation(-(this.direction / 180 * Math.PI));
+      this.map.getView().animate({
+        duration: 500,
+        rotation: -(this.direction / 180 * Math.PI),
+        easing: ol.easing.easeOut
+      })
+      //return this.map.getView().setRotation(-(this.direction / 180 * Math.PI));
     } else if (!silent) {
-      return this.map.render();
+      this.map.render();
     }
   }
 
@@ -445,43 +466,29 @@ export default class Kanimarker {
         if (accuracySize * pixelRatio > maxSize * 0.2) {
           diff = accuracySize * pixelRatio - maxSize * 0.2;
           opacity_ = opacity_ * (1 - diff / (maxSize * 0.4));
-
           if (opacity_ < 0) {
             opacity_ = 0;
           }
         }
 
         if (opacity_ > 0) {
-          circleStyle = new ol.style.Circle({
-            snapToPixel: false,
-            radius: accuracySize * pixelRatio,
-
-            fill: new ol.style.Fill({
-              color: ("rgba(56, 149, 255, " + (opacity_) + ")")
-            })
-          });
-
-          vectorContext.setImageStyle(circleStyle);
-          vectorContext.drawPointGeometry(new ol.geom.Point(position), null);
+          vectorContext.setStyle(new ol.style.Style({
+            fill: new ol.style.Fill({color:[56, 149, 255,opacity_]})
+          }));
+          vectorContext.drawCircle(new ol.geom.Circle(position, accuracySize * pixelRatio * frameState.viewState.resolution/2));
         }
       }
 
-      iconStyle = new ol.style.Circle({
-        radius: 8 * pixelRatio,
-        snapToPixel: false,
-
+      vectorContext.setStyle(new ol.style.Style({
         fill: new ol.style.Fill({
-          color: ("rgba(0, 160, 233, " + (opacity) + ")")
+          color: [0,160,233,opacity]
         }),
-
         stroke: new ol.style.Stroke({
-          color: ("rgba(255, 255, 255, " + (opacity) + ")"),
-          width: 3 * pixelRatio
+          color: [255, 255, 255,opacity],
+          width: 1.5 * pixelRatio
         })
-      });
-
-      vectorContext.setImageStyle(iconStyle);
-      vectorContext.drawPointGeometry(new ol.geom.Point(position), null);
+      }));
+      vectorContext.drawCircle(new ol.geom.Circle(position, 4 * pixelRatio * frameState.viewState.resolution));
       context.save();
 
       if (this.mode !== "normal") {
@@ -537,11 +544,11 @@ export default class Kanimarker {
       if (this.animations.fade != null) {
         txt += " [Fadein/Out]";
       }
-
+/*
       if (this.animations.rotationMode != null) {
         txt += " [HeadingRotation]" + this.animations.rotationMode.current;
       }
-
+*/
       context.save();
       context.fillStyle = "rgba(255, 255, 255, 0.6)";
       context.fillRect(0, context.canvas.height - 20, context.canvas.width, 20);
@@ -560,6 +567,7 @@ export default class Kanimarker {
     var direction;
     var position;
     var frameState;
+    console.log(event);
 
     if (this.position !== null && this.mode !== "normal") {
       frameState = event.frameState;
@@ -597,7 +605,7 @@ export default class Kanimarker {
             this.animations.heading = null;
           }
         }
-
+        /*
         diff = 0;
 
         if (this.animations.rotationMode != null) {
@@ -608,8 +616,8 @@ export default class Kanimarker {
             this.animations.rotationMode = null;
           }
         }
-
-        return frameState.viewState.rotation = -((direction - diff) / 180 * Math.PI);
+        frameState.viewState.rotation = -((direction - diff) / 180 * Math.PI);
+        */
       }
     }
   }
@@ -651,4 +659,14 @@ export default class Kanimarker {
       })();
     }
   }
+}
+
+if (typeof exports !== "undefined") {
+  module.exports = Kanimarker;
+}
+
+// Deprecated
+// ひとまずこれまで通りグローバルで使えるようにしておく
+if (window) {
+  window.Kanimarker = Kanimarker;
 }

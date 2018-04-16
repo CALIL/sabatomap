@@ -6,7 +6,7 @@ function load() {
     window.app.initializeApp();
   };
 
-  request.get('https://calil.jp/static/apps/sabatomap/update_v120.js?_=' + Math.random())
+  request.get('https://calil.jp/static/apps/sabatomap/update_v160.js?_=' + Math.random())
     .timeout(5000)
     .end(function (err, res) {
       if (err || !res.ok) {

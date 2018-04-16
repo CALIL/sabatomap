@@ -63,52 +63,29 @@ var fitRotation = function(r) {
     }
   }
 
-  map.beforeRender(ol.animation.rotate({
-    duration: 400,
-    rotation: oldAngle * Math.PI / 180
-  }));
-
-  return map.getView().setRotation(virtualAngle * Math.PI / 180);
+  return map.getView().animate({rotation: virtualAngle * Math.PI / 180,duration:400,easing:ol.easing.easeOut});
 };
 
 var fitFloor = function() {
-  var zoom;
-  var pan;
   var c1 = ol.proj.transform(map.getView().getCenter(), map.getView().getProjection(), "EPSG:4326");
-
   var c2 = [
     (homeBoundingBox[0] + homeBoundingBox[2]) / 2,
     (homeBoundingBox[1] + homeBoundingBox[3]) / 2
   ];
-
   var distance = new ol.Sphere(6378137).haversineDistance(c1, c2);
-
+  var _duration;
   if (distance <= 200) {
     fitRotation();
-
-    pan = ol.animation.pan({
-      easing: ol.easing.elastic,
-      duration: 800,
-      source: map.getView().getCenter()
-    });
-
-    map.beforeRender(pan);
-
-    zoom = ol.animation.zoom({
-      easing: ol.easing.elastic,
-      duration: 800,
-      resolution: map.getView().getResolution()
-    });
-
-    map.beforeRender(zoom);
+    _duration = 800;
   } else {
     map.getView().setRotation((180 - homeAngle) * Math.PI / 180);
+    _duration = 0;
   }
-
-  return map.getView().fit(
-    ol.proj.transformExtent(homeBoundingBox, "EPSG:4326", "EPSG:3857"),
-    map.getSize()
-  );
+  return map.getView().fit(ol.proj.transformExtent(homeBoundingBox, "EPSG:4326", "EPSG:3857"),{
+    duration: _duration,
+    constrainResolution: false,
+    easing: ol.easing.elastic
+  });
 };
 
 var unloadFacility = function() {
@@ -406,6 +383,9 @@ var waitPosition = function() {
     if (waitingPosition === 0) {
       if (kanikama.currentPosition === null) {
         UI.notify("現在地を取得できませんでした");
+      }
+      if (kanikama.currentPosition && kanikama.accuracy>10){
+        UI.notify("棚の中に入ると正確な位置がわかります");
       }
 
       return invalidateLocator();

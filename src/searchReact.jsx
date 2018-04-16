@@ -158,6 +158,8 @@ var SearchResult = React.createClass({
                     {books}
                 </div>
                 <p className="hint">{this.state.hint}</p>
+                <p className="sabato"><a href={'https://sabae.calil.jp/?q='+encodeURIComponent(this.props.query)} target="_blank">さばサーチで近隣の図書館を検索</a></p>
+                
             </div>
         );
     }
@@ -189,7 +191,7 @@ var Book = React.createClass({
         } else {
             stocks = this.props.result.stocks.map(function (stock, i) {
                 return (
-                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}</div>
+                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)} key={i}>{stock.place}</div>
                 );
             }, this);
         }
@@ -339,13 +341,13 @@ var Detail = React.createClass({
                 <div className="stockB">{this.state.book.result.message}</div>
             );
         } else {
-            stocks = this.state.book.result.stocks.map(function (stock) {
+            stocks = this.state.book.result.stocks.map(function (stock,i) {
                 var add = "";
                 if (stock.no != '') {
                     add = ' [' + stock.no + ']';
                 }
                 return (
-                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)}>{stock.place}{add}</div>
+                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)} key={i}>{stock.place}{add}</div>
                 );
             }, this);
         }

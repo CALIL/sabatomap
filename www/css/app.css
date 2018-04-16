@@ -71,7 +71,8 @@ input[type=search] {
       -webkit-user-select: text;
       -webkit-transition: border 0.9s;
       transition: border 0.9s;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+      -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+              box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
       border-radius: 4px; }
       #ui .box input::-webkit-search-cancel-button {
         -webkit-appearance: none; }
@@ -135,6 +136,22 @@ input[type=search] {
     padding: 70px 17px 17px;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
+    #ui .results .sabato {
+      padding: 12px;
+      margin-top: 50px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      background-color: #69947a;
+      width: 80%;
+      -webkit-box-shadow: 1px 3px 1px 1px #eee;
+              box-shadow: 1px 3px 1px 1px #eee;
+      font-size: 110%;
+      border-radius: 4px; }
+      #ui .results .sabato a {
+        text-decoration: none;
+        color: #fff; }
     #ui .results:before {
       z-index: 10;
       content: '';
@@ -144,7 +161,7 @@ input[type=search] {
       left: 0;
       right: 16px;
       pointer-events: none;
-      background: -webkit-linear-gradient(top, white 0%, rgba(255, 255, 255, 0) 100%);
+      background: -webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255, 255, 255, 0)));
       background: linear-gradient(to bottom, white 0%, rgba(255, 255, 255, 0) 100%); }
     #ui .results::-webkit-scrollbar {
       background-color: #fff;
@@ -164,7 +181,8 @@ input[type=search] {
         transition: border-left-color 0.4s;
         cursor: pointer;
         overflow: hidden;
-        box-shadow: 1px 1px 10px #CACACA;
+        -webkit-box-shadow: 1px 1px 10px #CACACA;
+                box-shadow: 1px 1px 10px #CACACA;
         margin-top: 10px;
         border-left: 4px solid #fff; }
         #ui .results .books > div:hover {
@@ -178,14 +196,17 @@ input[type=search] {
           right: 32px;
           margin: auto;
           width: 80px;
-          opacity: 0.2; }
+          z-index: 1;
+          -webkit-box-shadow: 1px 0px 1px 0 #999;
+                  box-shadow: 1px 0px 1px 0 #999;
+          background-color: #fff; }
         #ui .results .books > div .title {
           position: absolute;
           font-size: 16px;
           line-height: 1.2em;
           font-weight: 600;
           top: 16px;
-          right: 22px;
+          right: 110px;
           left: 17px;
           color: #444444;
           text-decoration: none;
@@ -266,7 +287,8 @@ input[type=search] {
   bottom: 16px;
   left: 14px;
   border-radius: 2px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25); }
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.25); }
   #floors > div {
     display: block;
     -webkit-user-select: none;
@@ -304,7 +326,8 @@ input[type=search] {
   height: 40px;
   width: 40px;
   padding: 10px;
-  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   right: 2px;
   top: 70px;
   -webkit-tap-highlight-color: transparent;
@@ -339,9 +362,11 @@ input[type=search] {
   right: 0;
   bottom: 0;
   margin: 13px;
-  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   padding: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   background-size: 32px;
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s; }
@@ -451,7 +476,8 @@ input[type=search] {
   padding: 14px;
   z-index: 1200000;
   background-color: #fbfbfb;
-  box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
+  -webkit-box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
+          box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
   -webkit-transition: top 0.5s;
   transition: top 0.5s; }
   #detail.show {
@@ -531,7 +557,7 @@ input[type=search] {
     border: 1px solid #bfbfbf;
     border-radius: 5px;
     background: #ffffff;
-    background: -webkit-linear-gradient(top, #ffffff, #ededed);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ededed));
     background: linear-gradient(to bottom, #ffffff, #ededed);
     font: normal normal normal 12px trebuchet ms;
     color: #6b6b6b;
@@ -539,11 +565,11 @@ input[type=search] {
     #detail a:hover, #detail a:focus {
       border: 1px solid #dcdcdc;
       background: #ffffff;
-      background: -webkit-linear-gradient(top, #ffffff, #ffffff);
+      background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
       background: linear-gradient(to bottom, #ffffff, #ffffff);
       color: #6b6b6b;
       text-decoration: none; }
     #detail a:active {
       background: #999999;
-      background: -webkit-linear-gradient(top, #999999, #ededed);
+      background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#ededed));
       background: linear-gradient(to bottom, #999999, #ededed); }
