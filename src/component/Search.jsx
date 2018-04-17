@@ -20,52 +20,17 @@ export default class Search extends Component {
             hideResult: false,
         };
     }
-    onSearch(query) {
-        this.setState({ query: query });
-    }
-    onClose() {
-        this.setState({ query: '' });
-        this.refs.query.value = '';
-        var check = document.querySelectorAll(".ios");
-        if (check.length == 0) {
-            setTimeout(() => {
-                this.refs.query.focus();
-            }, 100);
-        }
-    }
-    onFocus(e) {
-        e.preventDefault();
-        if (this.refs.query.value != '') {
-            this.refs.query.select();
-        }
-    }
-    onSubmit(e) {
-        e.preventDefault();
-        this.setState({ query: this.refs.query.value });
-        this.refs.query.blur(); //フォーカスを外す
-    }
 
-    setCurrentBook(book) {
-        this.setState({ currentBook: book });
-        if (book) this.hideResult(true);
-    }
-    hideResult(hideResult) {
-        this.setState({ hideResult: hideResult });
-    }
-
-    onUpdate(data) {
-        this.setState({books: data.books});
-        this.setState({ completed: !data.running });
-    }
     componentDidMount() {
-        if (this.state.query != '') {
-            if (this.state.query != this.prevQuery) {
-                if (this.api) {
-                    this.api.kill();
-                }
-                this.prevQuery = this.state.query;
-                this.api = new api({free: this.state.query, region: this.props.region}, this.onUpdate.bind(this));
+        if (this.state.query != '' && this.state.query != this.prevQuery) {
+            if (this.api) {
+                this.api.kill();
             }
+            this.prevQuery = this.state.query;
+            this.api = new api({free: this.state.query, region: this.props.region}, (data) => {
+                this.setState({books: data.books});
+                this.setState({ completed: !data.running });
+            });
         }
     }
     componentDidUpdate() {
@@ -75,6 +40,36 @@ export default class Search extends Component {
         if (this.api) {
             this.api.kill();
         }
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        this.onSearch(this.refs.query.value);
+        this.refs.query.blur();
+    }
+    onFocus(e) {
+        e.preventDefault();
+        if (this.refs.query.value != '') {
+            this.refs.query.select();
+        }
+    }
+    onClose() {
+        this.setState({ query: '' });
+        this.refs.query.value = '';
+        setTimeout(() => {
+            this.refs.query.focus();
+        }, 100);
+    }
+    onSearch(query) {
+        this.setState({ query: query });
+    }
+
+    setCurrentBook(book) {
+        this.setState({ currentBook: book });
+        if (book) this.hideResult(true);
+    }
+    hideResult(hideResult) {
+        this.setState({ hideResult: hideResult });
     }
 
     render() {
@@ -104,7 +99,7 @@ export default class Search extends Component {
                     <Detail ref="detail"
                         book={this.state.currentBook}
                         setCurrentBook={this.setCurrentBook.bind(this)} hideResult={this.hideResult.bind(this)}
-                        onSearch={this.onSearch.bind(this)} onClose={this.onClose.bind(this)} />
+                        onClose={this.onClose.bind(this)} />
                 ) : null}
             </div>
         );
