@@ -16,7 +16,6 @@ export default class Detail extends Component {
         this.props.onClose();
     }
     render() {
-        console.log(this.props.book)
         var stocks;
         if (this.props.book.detail.message != '') {
             stocks = (

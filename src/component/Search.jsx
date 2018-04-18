@@ -83,8 +83,6 @@ export default class Search extends Component {
                     <p className="message">{this.state.message}</p>
                     <div className="books">
                         {this.state.books.map((book) => {
-                            // Todo: テスト用 のちほど削除
-                            book.detail = {"url": "https://www.lib100.nexs-service.jp/sabae/webopac/searchdetail.do?biblioid=1046049", "message": "", "stocks": [{"shelves": [{"id": 320, "side": "a"}], "floor": "1階", "floorId": 7, "place": "1階 一般総記", "no": "020シ", "message": "020シ/320【a面】 "}], "isbn": "4766416716", "thumbnail": "https://cover.openbd.jp/9784766416718.jpg"}
                             return (
                                 <Book book={book} key={book.id} setCurrentBook={this.setCurrentBook.bind(this)} onClose={this.onClose.bind(this)} />
                             );

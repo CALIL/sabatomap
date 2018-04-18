@@ -81,7 +81,7 @@ export class api {
     }
   }
 
-  receive(data: UnitradResult) {
+  async receive(data: UnitradResult) {
     if (!this.killed) {
       if (data.books_diff) {
         Array.prototype.push.apply(this.data.books, data.books_diff.insert);
@@ -110,6 +110,17 @@ export class api {
       } else {
         this.data = data;
       }
+      this.data.books.forEach((book, i) => {
+        if(!book.detail) book.detail = {"url": "", "message": "", "stocks": [], "isbn": "", "thumbnail": ""};
+        if(book.detail.url!=='') return false;
+        //   uuid: this.data.uuid,
+        //   id: book.id,
+        const url = 'https://api.calil.jp/search_warabi_v1?k=Fukui_Sabae_1007542&s=Fukui_Sabae&session=2e7b7f626efddc50ed7c2534d4dccbe2&version=1.4.0'
+        fetch(url).then((r) => r.json()).then((r) => {
+          book.detail = r;
+        })
+        this.callback(this.data);
+      });
       this.callback(this.data);
       if (data.running === true) {
         console.log('[Unitrad] continue...');
@@ -119,6 +130,7 @@ export class api {
       }
     }
   }
+
 }
 
 
