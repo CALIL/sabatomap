@@ -54,8 +54,6 @@ export default class Search extends Component {
         }
     }
     onClose() {
-        this.setState({ query: '' });
-        this.refs.query.value = '';
         setTimeout(() => {
             this.refs.query.focus();
         }, 100);
@@ -93,7 +91,9 @@ export default class Search extends Component {
                         })}
                     </div>
                     <p className="hint">{this.state.hint}</p>
-                    <p className="sabato"><a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.props.query)} target="_blank">さばサーチで近隣の図書館を検索</a></p>
+                    {this.state.query!=='' ? (
+                        <p className="sabato"><a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">さばサーチで近隣の図書館を検索</a></p>
+                    ) : null}
                 </div>
                 {this.state.currentBook ? (
                     <Detail ref="detail"
