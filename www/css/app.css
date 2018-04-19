@@ -216,7 +216,11 @@ input[type=search] {
           position: absolute;
           right: 15px;
           left: 16px;
-          bottom: 13px; }
+          bottom: 13px;
+          -webkit-transition: opacity 0.4s;
+          transition: opacity 0.4s; }
+          #ui .results .books > div .stocks.notfetch {
+            opacity: 0; }
         #ui .results .books > div .next {
           position: absolute;
           right: 10px;

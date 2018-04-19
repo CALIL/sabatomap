@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Book from './Book';
-import Detail from './Detail';
+import Book from './Book.jsx';
+import Detail from './Detail.jsx';
 
-import {api} from '../api';
+import {api} from '../api.js';
 
 export default class Search extends Component {
     constructor() {
