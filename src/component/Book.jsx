@@ -24,16 +24,18 @@ export default class Book extends Component {
     }
     render() {
         var stocks;
-        if (this.props.book.detail.message != '') {
-            stocks = (
-                <div className="stockB">{this.props.book.detail.message}</div>
-            );
-        } else {
-            stocks = this.props.book.detail.stocks.map(function (stock, i) {
-                return (
-                    <div className="stockA" onClick={this.navigateShelf.bind(this, stock)} key={i}>{stock.place}</div>
+        if (this.props.book.detail) {
+            if (this.props.book.detail.message != '') {
+                stocks = (
+                    <div className="stockB">{this.props.book.detail.message}</div>
                 );
-            }, this);
+            } else {
+                stocks = this.props.book.detail.stocks.map(function (stock, i) {
+                    return (
+                        <div className="stockA" onClick={this.navigateShelf.bind(this, stock)} key={i}>{stock.place}</div>
+                    );
+                }, this);
+            }
         }
         let isbn;
         if (this.props.book.isbn) {
@@ -47,9 +49,11 @@ export default class Book extends Component {
                 <div className="title">{this.props.book.title}
                     <div className="author">{this.props.book.author}</div>
                 </div>
-                <div className={'stocks' + (this.props.book.detail.url==='' ? ' notfetch' : '')}>
-                    {stocks}
-                </div>
+                {this.props.book.detail ? (
+                    <div className={'stocks' + (this.props.book.detail.url==='' ? ' notfetch' : '')}>
+                        {stocks}
+                    </div>
+                ) : null}
                 <div className="next"><i className="fa fa-play" /></div>
             </div>
         );
