@@ -7,7 +7,7 @@ export default class Book extends Component {
         };
     }
     open() {
-        if (this.props.book.detail && this.props.book.detail.stocks.length > 0 || this.props.book.detail.message != '') {
+        if (this.props.book.detail && (this.props.book.detail.stocks.length > 0 || this.props.book.detail.message != '')) {
             this.props.setCurrentBook(this.props.book);
             if (this.props.book.detail.stocks.length > 0) {
                 this.navigateShelf(this.props.book.detail.stocks[0]);
