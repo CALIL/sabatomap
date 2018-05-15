@@ -110,16 +110,11 @@ export class api {
       } else {
         this.data = data;
       }
-      // this.data.books.map((book) => {
-      //   if(!book.detail) book.detail = {"url": "", "message": "", "stocks": [], "isbn": "", "thumbnail": ""};
-      // });
       this.data.books.map((book) => {
-        // if(book.detail.url!=='') return false;
-        //   uuid: this.data.uuid,
-        //   id: book.id,
-        const url = 'https://api.calil.jp/search_warabi_v1?k=Fukui_Sabae_1007542&s=Fukui_Sabae&session=2e7b7f626efddc50ed7c2534d4dccbe2&version=1.4.0'
+        const url = `https://sabatomap-mapper.calil.jp/get?uuid=${this.data.uuid}&id=${book.id}`
+        console.log(url);
         fetch(url).then((r) => r.json()).then((r) => {
-          book.detail = r;
+          book.detail = r.data;
           this.callback(this.data);
         })
       });
