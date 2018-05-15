@@ -17,87 +17,139 @@
        under the License.
 */
 
-/*jshint node: true*/
+var Q = require('q');
+var path = require('path');
+var iossim = require('ios-sim');
+var build = require('./build');
+var spawn = require('./spawn');
+var check_reqs = require('./check_reqs');
 
-var Q = require('q'),
-    nopt  = require('nopt'),
-    path  = require('path'),
-    build = require('./build'),
-    spawn = require('./spawn'),
-    check_reqs = require('./check_reqs');
+var events = require('cordova-common').events;
 
 var cordovaPath = path.join(__dirname, '..');
 var projectPath = path.join(__dirname, '..', '..');
 
-module.exports.run = function (argv) {
-
-    // parse args here
-    // --debug and --release args not parsed here
-    // but still valid since they can be passed down to build command 
-    var args  = nopt({
-        // "archs": String,     // TODO: add support for building different archs
-        'list': Boolean,
-        'nobuild': Boolean,
-        'device': Boolean, 'emulator': Boolean, 'target': String
-    }, {}, argv);
+module.exports.run = function (runOptions) {
 
     // Validate args
-    if (args.device && args.emulator) {
+    if (runOptions.device && runOptions.emulator) {
         return Q.reject('Only one of "device"/"emulator" options should be specified');
     }
 
-    // validate target device for ios-sim
-    // Valid values for "--target" (case sensitive):
-    var validTargets = ['iPhone-4s', 'iPhone-5', 'iPhone-5s', 'iPhone-6-Plus', 'iPhone-6',
-        'iPad-2', 'iPad-Retina', 'iPad-Air', 'Resizable-iPhone', 'Resizable-iPad'];
-    if (!(args.device) && args.target && validTargets.indexOf(args.target.split(',')[0]) < 0 ) {
-        return Q.reject(args.target + ' is not a valid target for emulator');
-    }
-
     // support for CB-8168 `cordova/run --list`
-    if (args.list) {
-        if (args.device) return listDevices();
-        if (args.emulator) return listEmulators();
+    if (runOptions.list) {
+        if (runOptions.device) return module.exports.listDevices();
+        if (runOptions.emulator) return module.exports.listEmulators();
         // if no --device or --emulator flag is specified, list both devices and emulators
-        return listDevices().then(function () {
-            return listEmulators();
+        return module.exports.listDevices().then(function () {
+            return module.exports.listEmulators();
         });
     }
 
-    // check for either ios-sim or ios-deploy is available
-    // depending on arguments provided
-    var checkTools = args.device ? check_reqs.check_ios_deploy() : check_reqs.check_ios_sim();
+    var useDevice = !!runOptions.device;
 
-    return checkTools.then(function () {
-        // if --nobuild isn't specified then build app first
-        if (!args.nobuild) {
-            return build.run(argv);
-        }
-    }).then(function () {
-        return build.findXCodeProjectIn(projectPath);
-    }).then(function (projectName) {
-        var appPath = path.join(projectPath, 'build', (args.device ? 'device' : 'emulator'), projectName + '.app');
-        // select command to run and arguments depending whether
-        // we're running on device/emulator
-        if (args.device) {
-            return checkDeviceConnected().then(function () {
-                return deployToDevice(appPath);
-            }, function () {
-                // if device connection check failed use emulator then
-                return deployToSim(appPath, args.target);
-            });
-        } else {
-            return deployToSim(appPath, args.target);
-        }
-    });
+    return require('./list-devices').run()
+        .then(function (devices) {
+            if (devices.length > 0 && !(runOptions.emulator)) {
+                useDevice = true;
+                // we also explicitly set device flag in options as we pass
+                // those parameters to other api (build as an example)
+                runOptions.device = true;
+                return check_reqs.check_ios_deploy();
+            }
+        }).then(function () {
+            if (!runOptions.nobuild) {
+                return build.run(runOptions);
+            } else {
+                return Q.resolve();
+            }
+        }).then(function () {
+            return build.findXCodeProjectIn(projectPath);
+        }).then(function (projectName) {
+            var appPath = path.join(projectPath, 'build', 'emulator', projectName + '.app');
+            var buildOutputDir = path.join(projectPath, 'build', 'device');
+
+            // select command to run and arguments depending whether
+            // we're running on device/emulator
+            if (useDevice) {
+                return module.exports.checkDeviceConnected()
+                    .then(function () {
+                        // Unpack IPA
+                        var ipafile = path.join(buildOutputDir, projectName + '.ipa');
+
+                        // unpack the existing platform/ios/build/device/appname.ipa (zipfile), will create a Payload folder
+                        return spawn('unzip', [ '-o', '-qq', ipafile ], buildOutputDir);
+                    })
+                    .then(function () {
+                        // Uncompress IPA (zip file)
+                        var appFileInflated = path.join(buildOutputDir, 'Payload', projectName + '.app');
+                        var appFile = path.join(buildOutputDir, projectName + '.app');
+                        var payloadFolder = path.join(buildOutputDir, 'Payload');
+
+                        // delete the existing platform/ios/build/device/appname.app
+                        return spawn('rm', [ '-rf', appFile ], buildOutputDir)
+                            .then(function () {
+                                // move the platform/ios/build/device/Payload/appname.app to parent
+                                return spawn('mv', [ '-f', appFileInflated, buildOutputDir ], buildOutputDir);
+                            })
+                            .then(function () {
+                                // delete the platform/ios/build/device/Payload folder
+                                return spawn('rm', [ '-rf', payloadFolder ], buildOutputDir);
+                            });
+                    })
+                    .then(function () {
+                        appPath = path.join(projectPath, 'build', 'device', projectName + '.app');
+                        var extraArgs = [];
+                        if (runOptions.argv) {
+                            // argv.slice(2) removes node and run.js, filterSupportedArgs removes the run.js args
+                            extraArgs = module.exports.filterSupportedArgs(runOptions.argv.slice(2));
+                        }
+                        return module.exports.deployToDevice(appPath, runOptions.target, extraArgs);
+                    }, function () {
+                        // if device connection check failed use emulator then
+                        return module.exports.deployToSim(appPath, runOptions.target);
+                    });
+            } else {
+                return module.exports.deployToSim(appPath, runOptions.target);
+            }
+        });
 };
+
+module.exports.filterSupportedArgs = filterSupportedArgs;
+module.exports.checkDeviceConnected = checkDeviceConnected;
+module.exports.deployToDevice = deployToDevice;
+module.exports.deployToSim = deployToSim;
+module.exports.startSim = startSim;
+module.exports.listDevices = listDevices;
+module.exports.listEmulators = listEmulators;
+
+/**
+ * Filters the args array and removes supported args for the 'run' command.
+ *
+ * @return {Array} array with unsupported args for the 'run' command
+ */
+function filterSupportedArgs (args) {
+    var filtered = [];
+    var sargs = ['--device', '--emulator', '--nobuild', '--list', '--target', '--debug', '--release'];
+    var re = new RegExp(sargs.join('|'));
+
+    args.forEach(function (element) {
+        // supported args not found, we add
+        // we do a regex search because --target can be "--target=XXX"
+        if (element.search(re) === -1) {
+            filtered.push(element);
+        }
+    }, this);
+
+    return filtered;
+}
 
 /**
  * Checks if any iOS device is connected
  * @return {Promise} Fullfilled when any device is connected, rejected otherwise
  */
-function checkDeviceConnected() {
-    return spawn('ios-deploy', ['-c']);
+function checkDeviceConnected () {
+    return spawn('ios-deploy', ['-c', '-t', '1']);
 }
 
 /**
@@ -106,9 +158,13 @@ function checkDeviceConnected() {
  * @param  {String} appPath Path to application package
  * @return {Promise}        Resolves when deploy succeeds otherwise rejects
  */
-function deployToDevice(appPath) {
+function deployToDevice (appPath, target, extraArgs) {
     // Deploying to device...
-    return spawn('ios-deploy', ['-d', '-b', appPath]);
+    if (target) {
+        return spawn('ios-deploy', ['--justlaunch', '-d', '-b', appPath, '-i', target].concat(extraArgs));
+    } else {
+        return spawn('ios-deploy', ['--justlaunch', '--no-wifi', '-d', '-b', appPath].concat(extraArgs));
+    }
 }
 
 /**
@@ -117,40 +173,51 @@ function deployToDevice(appPath) {
  * @param  {String} target  Target device type
  * @return {Promise}        Resolves when deploy succeeds otherwise rejects
  */
-function deployToSim(appPath, target) {
-    // Select target device for emulator. Default is 'iPhone-6' 
+function deployToSim (appPath, target) {
+    // Select target device for emulator. Default is 'iPhone-6'
     if (!target) {
-        target = 'iPhone-6';
-        console.log('No target specified for emulator. Deploying to ' + target + ' simulator');
+        return require('./list-emulator-images').run()
+            .then(function (emulators) {
+                if (emulators.length > 0) {
+                    target = emulators[0];
+                }
+                emulators.forEach(function (emulator) {
+                    if (emulator.indexOf('iPhone') === 0) {
+                        target = emulator;
+                    }
+                });
+                events.emit('log', 'No target specified for emulator. Deploying to ' + target + ' simulator');
+                return startSim(appPath, target);
+            });
+    } else {
+        return startSim(appPath, target);
     }
+}
+
+function startSim (appPath, target) {
     var logPath = path.join(cordovaPath, 'console.log');
-    var simArgs = ['launch', appPath,
-        '--devicetypeid', 'com.apple.CoreSimulator.SimDeviceType.' + target,
-        // We need to redirect simulator output here to use cordova/log command
-        // TODO: Is there any other way to get emulator's output to use in log command?
-        '--stderr', logPath, '--stdout', logPath,
-        '--exit'];
-    return spawn('ios-sim', simArgs);
+
+    return iossim.launch(appPath, 'com.apple.CoreSimulator.SimDeviceType.' + target, logPath, '--exit');
 }
 
-function listDevices() {
+function listDevices () {
     return require('./list-devices').run()
-    .then(function (devices) {
-        console.log('Available iOS Devices:');
-        devices.forEach(function (device) {
-            console.log('\t' + device);
+        .then(function (devices) {
+            events.emit('log', 'Available iOS Devices:');
+            devices.forEach(function (device) {
+                events.emit('log', '\t' + device);
+            });
         });
-    });
 }
 
-function listEmulators() {
+function listEmulators () {
     return require('./list-emulator-images').run()
-    .then(function (emulators) {
-        console.log('Available iOS Virtual Devices:');
-        emulators.forEach(function (emulator) {
-            console.log('\t' + emulator);
+        .then(function (emulators) {
+            events.emit('log', 'Available iOS Simulators:');
+            emulators.forEach(function (emulator) {
+                events.emit('log', '\t' + emulator);
+            });
         });
-    });
 }
 
 module.exports.help = function () {
@@ -169,7 +236,7 @@ module.exports.help = function () {
     console.log('Examples:');
     console.log('    run');
     console.log('    run --device');
-    console.log('    run --emulator --target=\"iPhone-6-Plus\"');
+    console.log('    run --emulator --target=\"iPhone-6-Plus\"'); /* eslint no-useless-escape : 0 */
     console.log('    run --device --release');
     console.log('    run --emulator --debug');
     console.log('');

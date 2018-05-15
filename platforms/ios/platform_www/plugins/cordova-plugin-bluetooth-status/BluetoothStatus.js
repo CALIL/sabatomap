@@ -1,4 +1,5 @@
-cordova.define("cordova-plugin-bluetooth-status.BluetoothStatus", function(require, exports, module) { var exec = require('cordova/exec');
+cordova.define("cordova-plugin-bluetooth-status.BluetoothStatus", function(require, exports, module) {
+var exec = require('cordova/exec');
 
 var BluetoothStatus = function() {
 };
