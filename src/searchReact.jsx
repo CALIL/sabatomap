@@ -63,10 +63,7 @@ export class Main extends Component {
 
 
 export default function InitUI(props, element) {
-    return ReactDOM.render(
-        React.createElement(Main, props),
-        element
-    )
+    return ReactDOM.render(<Main facilities={props.facilities} />, element)
 }
 
 

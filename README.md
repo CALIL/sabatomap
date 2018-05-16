@@ -18,6 +18,7 @@ npm update
 cordova platform update ios
 cordova platform update android
 gulp
+cordova run browser
 ```
 
 ## 更新履歴
