@@ -89,8 +89,12 @@ export default class Search extends Component {
                         })}
                     </div>
                     <p className="hint">{this.state.hint}</p>
-                    {this.state.query!=='' ? (
-                        <p className="sabato"><a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">さばサーチで近隣の図書館を検索</a></p>
+                    {this.state.query!=='' && this.state.completed  ? (
+                        <p className="sabato">
+                            <a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">
+                                さばサーチで近隣の図書館を検索
+                            </a>
+                        </p>
                     ) : null}
                 </div>
                 {this.state.currentBook ? (
