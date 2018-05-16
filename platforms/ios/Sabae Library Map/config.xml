@@ -19,9 +19,6 @@
         <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="WKWebViewPolyfill">
-        <param name="ios-package" value="WKWebViewPolyfill" />
-    </feature>
     <feature name="LocationManager">
         <param name="ios-package" value="CDVLocationManager" />
     </feature>

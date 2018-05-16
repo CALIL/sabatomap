@@ -48,6 +48,9 @@
         <preference name="SplashScreenWidth" value="428" />
         <preference name="SplashScreenHeight" value="154" />
     </platform>
+    <engine name="android" spec="~6.2.3" />
+    <engine name="browser" spec="^5.0.3" />
+    <engine name="ios" spec="^4.5.4" />
     <plugin name="com.unarin.cordova.beacon" spec="git+https://github.com/petermetz/cordova-plugin-ibeacon.git" />
     <plugin name="cordova-plugin-bluetooth-status" spec="~1.0.4" />
     <plugin name="cordova-plugin-webserver" spec="~1.0.3" />
@@ -64,8 +67,4 @@
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
     <plugin name="cordova-plugin-network-information" spec="^1.3.3" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="com.telerik.plugins.wkwebview" spec="~0.6.9" />
-    <engine name="android" spec="~6.2.3" />
-    <engine name="browser" spec="^5.0.3" />
-    <engine name="ios" spec="^4.5.4" />
 </widget>

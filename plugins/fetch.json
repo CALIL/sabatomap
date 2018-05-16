@@ -56,14 +56,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.telerik.plugins.wkwebview": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-wkwebview"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
