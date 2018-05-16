@@ -4,7 +4,6 @@
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "com.telerik.plugins.wkwebview": "~0.6.9",
     "com.unarin.cordova.beacon": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
     "cordova-android": "~6.2.3",
     "cordova-browser": "^5.0.3",
@@ -80,8 +79,7 @@
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-splashscreen": {},
-      "com.telerik.plugins.wkwebview": {}
+      "cordova-plugin-splashscreen": {}
     }
   }
 }

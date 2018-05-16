@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
-    "id": "com.telerik.plugins.wkwebview.wkwebview",
-    "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
-    "pluginId": "com.telerik.plugins.wkwebview",
-    "clobbers": [
-      "wkwebview"
-    ]
-  },
-  {
     "id": "com.unarin.cordova.beacon.underscorejs",
     "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
     "pluginId": "com.unarin.cordova.beacon",
@@ -136,8 +128,6 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "cordova-plugin-webserver": "1.0.3",
-  "com.telerik.plugins.wkwebview": "0.6.9",
   "com.unarin.cordova.beacon": "3.3.0",
   "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-crosswalk-webview": "2.1.0",
@@ -146,6 +136,7 @@ module.exports.metadata =
   "cordova-plugin-inappbrowser": "1.5.0",
   "cordova-plugin-network-information": "1.3.0",
   "cordova-plugin-splashscreen": "4.0.0",
+  "cordova-plugin-webserver": "1.0.3",
   "cordova-plugin-whitelist": "1.3.0"
 };
 // BOTTOM OF METADATA
