@@ -27,9 +27,14 @@ export default class Search extends Component {
                 this.api.kill();
             }
             this.prevQuery = this.state.query;
+            this.setState({
+                completed: false,
+            });
             this.api = new api({free: this.state.query, region: this.props.region}, (data) => {
-                this.setState({books: data.books});
-                this.setState({ completed: !data.running });
+                this.setState({
+                    books: data.books,
+                    completed: !data.running,
+                });
             });
         }
     }

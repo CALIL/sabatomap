@@ -49,11 +49,11 @@ export default class Book extends Component {
                 <div className="title">{this.props.book.title}
                     <div className="author">{this.props.book.author}</div>
                 </div>
+                <div className={'stocks' + (!this.props.book.detail ? ' notfetch' : '')}>
                 {this.props.book.detail ? (
-                    <div className={'stocks' + (this.props.book.detail.url==='' ? ' notfetch' : '')}>
-                        {stocks}
-                    </div>
+                    stocks
                 ) : null}
+                </div>
                 <div className="next"><i className="fa fa-play" /></div>
             </div>
         );
