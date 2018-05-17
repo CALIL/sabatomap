@@ -41,8 +41,6 @@ export class api {
     this.callback = callback;
     this.killed = false;
     this.search(query);
-    this.fetchMapStart = false;
-    this.fetchedIds = {};
   }
 
   /**
@@ -54,7 +52,6 @@ export class api {
 
   search(query: UnitradQuery) {
     if (!this.killed) {
-      this.fetchMapStart = false;
       _request('search').query(stripQuery(query)).end((err, res) => {
         if (!err) {
           this.receive(res.body);
@@ -113,10 +110,7 @@ export class api {
       } else {
         this.data = data;
       }
-      if (this.fetchMapStart===false) {
-        this.fetchMapStart = true;
-        setTimeout(() => this.getMap(), 1000);
-      }
+      this.getMap();
       console.log(this.data);
       this.callback(this.data);
       if (data.running === true) {
@@ -131,20 +125,19 @@ export class api {
     if (!this.killed) {
       let fetchCount = 0;
       this.data.books.forEach((book) => {
-        if (this.fetchedIds[book.id]) book.detail = this.fetchedIds[book.id];
-        if (book.detail || fetchCount >= 3) return;
+        if (book.detail || !book.holdings.includes(100622)) return;
+        if (fetchCount >= 3) return;
         const url = `https://sabatomap-mapper.calil.jp/get?uuid=${this.data.uuid}&id=${book.id}`
         console.log(url);
         fetchCount += 1;
         fetch(url).then((r) => r.json()).then((r) => {
           book.detail = r.data;
-          this.fetchedIds[book.id] = r.data;
           this.callback(this.data);
         });
+        if (fetchCount >= 3) {
+          setTimeout(() => this.getMap(), 3000);
+        }
       });
-      if (fetchCount >= 3) {
-        setTimeout(this.getMap.bind(this), 3000);
-      }
     }
   }
 }
