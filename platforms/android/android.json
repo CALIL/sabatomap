@@ -170,6 +170,9 @@
       "XWALK_MODE": "embedded",
       "XWALK_MULTIPLEAPK": "true",
       "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
   "dependent_plugins": {},
@@ -299,6 +302,7 @@
     "cordova-plugin-device-orientation": "1.0.4",
     "cordova-plugin-whitelist": "1.3.0",
     "cordova-plugin-splashscreen": "4.0.0",
-    "cordova-plugin-crosswalk-webview": "2.1.0"
+    "cordova-plugin-crosswalk-webview": "2.1.0",
+    "cordova-plugin-wkwebview-engine": "1.1.4"
   }
 }

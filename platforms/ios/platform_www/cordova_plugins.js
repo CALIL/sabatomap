@@ -123,6 +123,22 @@ module.exports = [
     "clobbers": [
       "navigator.splashscreen"
     ]
+  },
+  {
+    "id": "cordova-plugin-wkwebview-engine.ios-wkwebview-exec",
+    "file": "plugins/cordova-plugin-wkwebview-engine/src/www/ios/ios-wkwebview-exec.js",
+    "pluginId": "cordova-plugin-wkwebview-engine",
+    "clobbers": [
+      "cordova.exec"
+    ]
+  },
+  {
+    "id": "cordova-plugin-wkwebview-engine.ios-wkwebview",
+    "file": "plugins/cordova-plugin-wkwebview-engine/src/www/ios/ios-wkwebview.js",
+    "pluginId": "cordova-plugin-wkwebview-engine",
+    "clobbers": [
+      "window.WkWebView"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -137,7 +153,8 @@ module.exports.metadata =
   "cordova-plugin-network-information": "1.3.0",
   "cordova-plugin-splashscreen": "4.0.0",
   "cordova-plugin-webserver": "1.0.3",
-  "cordova-plugin-whitelist": "1.3.0"
+  "cordova-plugin-whitelist": "1.3.0",
+  "cordova-plugin-wkwebview-engine": "1.1.4"
 };
 // BOTTOM OF METADATA
 });

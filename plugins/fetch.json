@@ -1,83 +1,91 @@
 {
-    "cordova-plugin-webserver": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-webserver"
-        },
-        "is_top_level": false,
-        "variables": {}
+  "cordova-plugin-webserver": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-webserver"
     },
-    "com.unarin.cordova.beacon": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/CALIL/cordova-plugin-ibeacon.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": false,
+    "variables": {}
+  },
+  "com.unarin.cordova.beacon": {
+    "source": {
+      "type": "git",
+      "url": "https://github.com/CALIL/cordova-plugin-ibeacon.git",
+      "subdir": "."
     },
-    "cordova-plugin-inappbrowser": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-inappbrowser"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser"
     },
-    "cordova-plugin-device": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-device"
     },
-    "cordova-plugin-network-information": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-network-information"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-network-information": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-network-information"
     },
-    "cordova-plugin-bluetooth-status": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-bluetooth-status"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-bluetooth-status": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-bluetooth-status"
     },
-    "cordova-plugin-device-orientation": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device-orientation"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device-orientation": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-device-orientation"
     },
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist"
     },
-    "cordova-plugin-splashscreen": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-splashscreen"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen"
     },
-    "cordova-plugin-crosswalk-webview": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-crosswalk-webview"
-        },
-        "is_top_level": true,
-        "variables": {}
-    }
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-crosswalk-webview": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-crosswalk-webview"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-wkwebview-engine": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-wkwebview-engine"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

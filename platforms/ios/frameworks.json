@@ -4,5 +4,6 @@
     "SystemConfiguration.framework": 2,
     "CoreTelephony.framework": 1,
     "libz.dylib": 1,
-    "CFNetwork.framework": 1
+    "CFNetwork.framework": 1,
+    "WebKit.framework": 1
 }
