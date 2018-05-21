@@ -13,29 +13,66 @@ export default class Search extends Component {
         this.state = {
             query: '',
             completed: true,
+            uuid: null,
             currentBook: null,
             books: [],
             message: '',
             hint: '',
             hideResult: false,
         };
+        this.cacheDetail = {};
+        this.queueDetail = [];
+        setInterval(this.fetchDetail.bind(this), 1000);
     }
 
     componentDidMount() {
+        if (this.state.query==='') {
+            this.queueDetail = [];
+        }
         if (this.state.query != '' && this.state.query != this.prevQuery) {
             if (this.api) {
                 this.api.kill();
             }
+            this.queueDetail = [];
             this.prevQuery = this.state.query;
             this.setState({
                 completed: false,
             });
             this.api = new api({free: this.state.query, region: this.props.region}, (data) => {
                 this.setState({
+                    uuid: data.uuid,
                     books: data.books,
                     completed: !data.running,
                 });
+                data.books.forEach((book) => {
+                    if (this.cacheDetail[data.uuid+book.id]) {
+                        book.detail = this.cacheDetail[data.uuid+book.id];
+                    }
+                    if (book.detail || !book.holdings.includes(100622)) return;
+                    this.queueDetail.push({
+                        uuid: data.uuid,
+                        book: book,
+                    });
+                });
             });
+        }
+    }
+    fetchDetail() {
+        if (this.queueDetail.length>0) {
+            const data = this.queueDetail[0];
+            if (this.state.uuid===data.uuid) {
+                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
+                fetch(url).then((r) => r.json()).then((r) => {
+                    this.state.books.map((book) => {
+                        if (book.id===data.book.id) {
+                            book.detail = r.data;
+                        }
+                    });
+                    this.setState({});
+                    this.cacheDetail[data.uuid+data.book.id] = r.data;
+                });
+            }
+            this.queueDetail.shift();
         }
     }
     componentDidUpdate() {
