@@ -4,6 +4,7 @@ import Book from './Book.jsx';
 import Stocks from './Stocks.jsx';
 
 import { api } from '../api.js';
+import { deflateRawSync } from 'zlib';
 
 export default class Search extends Component {
     constructor() {
@@ -20,14 +21,60 @@ export default class Search extends Component {
         };
         this.cacheDetail = {};
         this.queueDetail = [];
+        this.startTime = null;
     }
 
+    componentDidMount() {
+        this.intervalId = setInterval(this.fetchDetail.bind(this), 1000);
+    }
+    componentDidUpdate() {
+    }
+    componentWillUnmount() {
+        if (this.api) this.api.kill();
+        clearInterval(this.intervalId);
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        this.refs.query.blur();
+        this.setState({ query: this.refs.query.value }, () => {
+            if (this.state.query != '' && this.state.query != this.prevQuery) {
+                this.startTime = new Date().getTime();
+                if (this.api) {
+                    this.api.kill();
+                }
+                this.queueDetail = [];
+                this.prevQuery = this.state.query;
+                this.setState({
+                    loading: true,
+                    visible: true,
+                });
+                this.api = new api({ free: this.state.query, region: this.props.region }, (data) => {
+                    this.setState({
+                        uuid: data.uuid,
+                        books: data.books,
+                        loading: data.running,
+                    });
+                    data.books.forEach((book) => {
+                        if (this.cacheDetail[book.id]) {
+                            book.detail = this.cacheDetail[book.id];
+                        }
+                        if (book.detail || !book.holdings.includes(100622)) return;
+                        this.queueDetail.push({
+                            uuid: data.uuid,
+                            book: book,
+                        });
+                    });
+                });
+            }
+        });
+    }
     fetchDetail() {
         if (this.state.query === '') {
             this.queueDetail = [];
         }
         if (this.queueDetail.length > 0) {
             const data = this.queueDetail[0];
+            if (this.cacheDetail[data.book.id]) return;
             if (this.state.uuid === data.uuid) {
                 const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
                 fetch(url).then((r) => r.json()).then((r) => {
@@ -46,56 +93,14 @@ export default class Search extends Component {
             this.queueDetail.shift();
         }
     }
-    componentDidMount() {
-        this.intervalId = setInterval(this.fetchDetail.bind(this), 1000);
-    }
-    componentDidUpdate() {
-    }
-    componentWillUnmount() {
-        if (this.api) this.api.kill();
-        clearInterval(this.intervalId);
-    }
-    onSubmit(e) {
-        e.preventDefault();
-        this.setState({ query: this.refs.query.value });
-        this.refs.query.blur();
-        if (this.state.query != '' && this.state.query != this.prevQuery) {
-            if (this.api) {
-                this.api.kill();
-            }
-            this.queueDetail = [];
-            this.prevQuery = this.state.query;
-            this.setState({
-                loading: true,
-            });
-            this.api = new api({ free: this.state.query, region: this.props.region }, (data) => {
-                this.setState({
-                    uuid: data.uuid,
-                    books: data.books,
-                    loading: data.running,
-                    visible: true,
-                });
-                data.books.forEach((book) => {
-                    if (this.cacheDetail[book.id]) {
-                        book.detail = this.cacheDetail[book.id];
-                    }
-                    if (book.detail || !book.holdings.includes(100622)) return;
-                    this.queueDetail.push({
-                        uuid: data.uuid,
-                        book: book,
-                    });
-                });
-            });
-        }
-    }
     hideList() {
-        this.setState({visible: false});
+        this.setState({ visible: false });
     }
     backToList() {
         this.setState({ currentBook: null });
         app.navigateShelf(null, []);
     }
-    selectBook(book, stockIndex=0) {
+    selectBook(book, stockIndex = 0) {
         this.setState({ currentBook: book });
         if (book.detail && book.detail.stocks.length > 0) {
             // fixme 整数型で来てしまっているのでとりあえずキャスト
@@ -116,10 +121,11 @@ export default class Search extends Component {
                 </form>
                 <div className="results">
                     <div className="books">
-                        {this.state.books.map((book) => {
+                        {this.state.books.map((book, i) => {
                             return (
                                 <Book book={book} key={book.id}
                                     selectBook={this.selectBook.bind(this)}
+                                    showCover={(i < Math.floor((new Date().getTime() - this.startTime) / 1000))}
                                 />
                             );
                         })}
@@ -143,7 +149,7 @@ export default class Search extends Component {
                                 <div className="author">{this.state.currentBook.author}</div>
                             </div>
                             <Stocks detail={this.state.currentBook.detail}
-                             selectStock={(stockIndex) => this.selectBook(this.state.currentBook, stockIndex)}
+                                selectStock={(stockIndex) => this.selectBook(this.state.currentBook, stockIndex)}
                             />
                             {(() => {
                                 for (let url of Object.values(this.state.currentBook.url)) {

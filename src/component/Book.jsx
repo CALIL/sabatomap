@@ -4,7 +4,7 @@ import Stocks from './Stocks.jsx';
 export default (props) => {
     return (
         <div onClick={() => props.selectBook(props.book)}>
-            {props.book.isbn ? (
+            {props.book.isbn && props.showCover ? (
                 <img src={`https://asia-northeast1-libmuteki2.cloudfunctions.net/openbd_cover?isbn=${props.book.isbn}`}
                 onError={(e)=>{e.target.style.display='none'}}
                 />
