@@ -2,6 +2,9 @@
   "name": "sabatomap",
   "version": "1.6.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
+  "scripts": {
+    "start": "gulp && cordova run browser"
+  },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "com.unarin.cordova.beacon": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
