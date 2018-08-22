@@ -39,9 +39,7 @@ export default class Search extends Component {
             console.log('callback')
             if (this.state.query != '') {
                 this.startTime = new Date().getTime();
-                if (this.api) {
-                    this.api.kill();
-                }
+                if (this.api) this.api.kill();
                 this.queueDetail = [];
                 this.setState({
                     loading: true,
