@@ -567,7 +567,7 @@ class Kanimarker {
     var direction;
     var position;
     var frameState;
-    console.log(event);
+    // console.log(event);
 
     if (this.position !== null && this.mode !== "normal") {
       frameState = event.frameState;
