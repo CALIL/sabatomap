@@ -6,11 +6,11 @@ const Fragment = React.Fragment;
 
 const REGION = 'sabae';
 
-import Facilities from './component/Facilities.jsx';
+import Facilities from './Facilities.jsx';
 
-import Search from './component/Search.jsx';
-import Floors from './component/Floors.jsx';
-import Locator from './component/Locator.jsx';
+import Search from './Search.jsx';
+import Floors from './Floors.jsx';
+import Locator from './Locator.jsx';
 
 export class Main extends Component {
     constructor() {
