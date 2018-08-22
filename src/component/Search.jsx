@@ -78,16 +78,14 @@ export default class Search extends Component {
         this.componentDidMount();
     }
     componentWillUnmount() {
-        if (this.api) {
-            this.api.kill();
-        }
+        if (this.api) this.api.kill();
     }
     onSubmit(e) {
         e.preventDefault();
         this.setState({ query: this.refs.query.value });
         this.refs.query.blur();
     }
-    onClose() {
+    hideList() {
         this.setState({visible: false});
     }
     backToList() {
@@ -111,7 +109,7 @@ export default class Search extends Component {
                     <input type="search" ref="query" placeholder={this.props.placeholder} />
                     <button type="submit" className="search fa fa-search" title="検索する" />
                     <button className={"clear fa fa-times" + (this.state.loading ? " loading" : "")}
-                        title="検索結果を閉じる" onClick={this.onClose.bind(this)} />
+                        title="検索結果を閉じる" onClick={this.hideList.bind(this)} />
                 </form>
                 <div className="results">
                     <div className="books">
