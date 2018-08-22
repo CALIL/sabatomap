@@ -20,13 +20,45 @@ export default class Search extends Component {
         };
         this.cacheDetail = {};
         this.queueDetail = [];
-        setInterval(this.fetchDetail.bind(this), 1000);
     }
 
-    componentDidMount() {
+    fetchDetail() {
         if (this.state.query === '') {
             this.queueDetail = [];
         }
+        if (this.queueDetail.length > 0) {
+            const data = this.queueDetail[0];
+            if (this.state.uuid === data.uuid) {
+                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
+                fetch(url).then((r) => r.json()).then((r) => {
+                    this.state.books.map((book) => {
+                        if (book.id === data.book.id) {
+                            book.detail = r.data;
+                        }
+                    });
+                    if (this.state.currentBook && this.state.currentBook.id === data.book.id) {
+                        this.selectBook(this.state.currentBook);
+                    }
+                    this.setState({});
+                    this.cacheDetail[data.book.id] = r.data;
+                });
+            }
+            this.queueDetail.shift();
+        }
+    }
+    componentDidMount() {
+        this.intervalId = setInterval(this.fetchDetail.bind(this), 1000);
+    }
+    componentDidUpdate() {
+    }
+    componentWillUnmount() {
+        if (this.api) this.api.kill();
+        clearInterval(this.intervalId);
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        this.setState({ query: this.refs.query.value });
+        this.refs.query.blur();
         if (this.state.query != '' && this.state.query != this.prevQuery) {
             if (this.api) {
                 this.api.kill();
@@ -56,35 +88,6 @@ export default class Search extends Component {
             });
         }
     }
-    fetchDetail() {
-        if (this.queueDetail.length > 0) {
-            const data = this.queueDetail[0];
-            if (this.state.uuid === data.uuid) {
-                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
-                fetch(url).then((r) => r.json()).then((r) => {
-                    this.state.books.map((book) => {
-                        if (book.id === data.book.id) {
-                            book.detail = r.data;
-                        }
-                    });
-                    this.setState({});
-                    this.cacheDetail[data.book.id] = r.data;
-                });
-            }
-            this.queueDetail.shift();
-        }
-    }
-    componentDidUpdate() {
-        this.componentDidMount();
-    }
-    componentWillUnmount() {
-        if (this.api) this.api.kill();
-    }
-    onSubmit(e) {
-        e.preventDefault();
-        this.setState({ query: this.refs.query.value });
-        this.refs.query.blur();
-    }
     hideList() {
         this.setState({visible: false});
     }
@@ -92,11 +95,11 @@ export default class Search extends Component {
         this.setState({ currentBook: null });
         app.navigateShelf(null, []);
     }
-    showDetail(book) {
+    selectBook(book, stockIndex=0) {
         this.setState({ currentBook: book });
         if (book.detail && book.detail.stocks.length > 0) {
             // fixme 整数型で来てしまっているのでとりあえずキャスト
-            app.navigateShelf(String(book.detail.stocks[0].floorId), book.detail.stocks[0].shelves);
+            app.navigateShelf(String(book.detail.stocks[stockIndex].floorId), book.detail.stocks[stockIndex].shelves);
         } else {
             app.navigateShelf(null, []);
         }
@@ -116,17 +119,17 @@ export default class Search extends Component {
                         {this.state.books.map((book) => {
                             return (
                                 <Book book={book} key={book.id}
-                                    onClick={this.showDetail.bind(this, book)}
+                                    selectBook={this.selectBook.bind(this)}
                                 />
                             );
                         })}
                     </div>
                     {this.state.query !== '' && this.state.loading === false ? (
-                        <p className="sabato">
-                            <a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">
+                        <a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">
+                            <p className="sabato">
                                 さばサーチで近隣の図書館を検索
-                            </a>
-                        </p>
+                            </p>
+                        </a>
                     ) : null}
                 </div>
                 {this.state.currentBook ? (
@@ -139,7 +142,9 @@ export default class Search extends Component {
                             <div className="title">{this.state.currentBook.title}
                                 <div className="author">{this.state.currentBook.author}</div>
                             </div>
-                            <Stocks detail={this.state.currentBook.detail} />
+                            <Stocks detail={this.state.currentBook.detail}
+                             selectStock={(stockIndex) => this.selectBook(this.state.currentBook, stockIndex)}
+                            />
                             {(() => {
                                 for (let url of Object.values(this.state.currentBook.url)) {
                                     return <a href={url} target="_blank"><i className="fa fa-chevron-right" /> 予約・詳細を見る</a>

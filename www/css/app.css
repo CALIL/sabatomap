@@ -136,7 +136,10 @@ input[type=search] {
     padding: 70px 17px 17px;
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s; }
+    #ui .results a {
+      text-decoration: none; }
     #ui .results .sabato {
+      color: #fff;
       padding: 12px;
       margin-top: 50px;
       display: block;
@@ -149,9 +152,6 @@ input[type=search] {
               box-shadow: 1px 3px 1px 1px #eee;
       font-size: 110%;
       border-radius: 4px; }
-      #ui .results .sabato a {
-        text-decoration: none;
-        color: #fff; }
     #ui .results:before {
       z-index: 10;
       content: '';

@@ -1,11 +1,5 @@
 import React from 'react';
 
-const navigateShelf = (stock) => {
-    // fixme 整数型で来てしまっているのでとりあえずキャスト
-    app.navigateShelf(String(stock.floorId), stock.shelves);
-}
-
-
 export default (props) => {
     return <div className={'stocks' + (!props.detail ? ' notfetch' : '')}>
         {(() => {
@@ -15,7 +9,7 @@ export default (props) => {
                 } else {
                     return props.detail.stocks.map((stock, i) => {
                         return (
-                            <div className="stockA" onClick={navigateShelf(stock)} key={i}>
+                            <div className="stockA" onClick={() => props.selectStock(i)} key={i}>
                                 {stock.place}{stock.no != '' ? ' [' + stock.no + ']' : ''}
                             </div>
                         );
