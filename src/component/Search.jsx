@@ -16,9 +16,7 @@ export default class Search extends Component {
             uuid: null, // Unitrad APIのUUID
             currentBook: null, // 現在選択されている本
             books: [],
-            message: '',
-            hint: '',
-            visible: false,
+            visible: false, // 検索結果の表示・非表示
         };
         this.cacheDetail = {};
         this.queueDetail = [];
@@ -84,69 +82,47 @@ export default class Search extends Component {
             this.api.kill();
         }
     }
-
     onSubmit(e) {
         e.preventDefault();
-        this.onSearch(this.refs.query.value);
+        this.setState({ query: this.refs.query.value });
         this.refs.query.blur();
-    }
-    onFocus(e) {
-        e.preventDefault();
-        if (this.refs.query.value != '') {
-            this.refs.query.select();
-        }
     }
     onClose() {
         this.setState({visible: false});
     }
-    onSearch(query) {
-        this.setState({ query: query });
-    }
-
-    setCurrentBook(book) {
-        this.setState({ currentBook: book });
-    }
     backToList() {
-        this.setCurrentBook(null);
+        this.setState({ currentBook: null });
         app.navigateShelf(null, []);
     }
     showDetail(book) {
-        this.setCurrentBook(book);
+        this.setState({ currentBook: book });
         if (book.detail && book.detail.stocks.length > 0) {
-            this.navigateShelf(book.detail.stocks[0]);
+            // fixme 整数型で来てしまっているのでとりあえずキャスト
+            app.navigateShelf(String(book.detail.stocks[0].floorId), book.detail.stocks[0].shelves);
         } else {
             app.navigateShelf(null, []);
         }
     }
-    navigateShelf(stock) {
-        // fixme 整数型で来てしまっているのでとりあえずキャスト
-        app.navigateShelf(String(stock.floorId), stock.shelves);
-    }
-
 
     render() {
         return (
             <div className={!this.state.visible || this.state.currentBook ? 'empty' : null}>
                 <form className="box" action="#" onSubmit={this.onSubmit.bind(this)}>
-                    <input type="search" ref="query" placeholder={this.props.placeholder} onFocus={this.onFocus.bind(this)} />
+                    <input type="search" ref="query" placeholder={this.props.placeholder} />
                     <button type="submit" className="search fa fa-search" title="検索する" />
                     <button className={"clear fa fa-times" + (this.state.loading ? " loading" : "")}
                         title="検索結果を閉じる" onClick={this.onClose.bind(this)} />
                 </form>
                 <div className="results">
-                    <p className="message">{this.state.message}</p>
                     <div className="books">
                         {this.state.books.map((book) => {
                             return (
                                 <Book book={book} key={book.id}
-                                    setCurrentBook={this.setCurrentBook.bind(this)}
-                                    navigateShelf={this.navigateShelf.bind(this)}
                                     onClick={this.showDetail.bind(this, book)}
                                 />
                             );
                         })}
                     </div>
-                    <p className="hint">{this.state.hint}</p>
                     {this.state.query !== '' && this.state.loading === false ? (
                         <p className="sabato">
                             <a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">
@@ -165,7 +141,7 @@ export default class Search extends Component {
                             <div className="title">{this.state.currentBook.title}
                                 <div className="author">{this.state.currentBook.author}</div>
                             </div>
-                            <Stocks detail={this.state.currentBook.detail} navigateShelf={this.navigateShelf.bind(this)} />
+                            <Stocks detail={this.state.currentBook.detail} />
                             {(() => {
                                 for (let url of Object.values(this.state.currentBook.url)) {
                                     return <a href={url} target="_blank"><i className="fa fa-chevron-right" /> 予約・詳細を見る</a>

@@ -10,7 +10,7 @@ export default (props) => {
             <div className="title">{props.book.title}
                 <div className="author">{props.book.author}</div>
             </div>
-            <Stocks detail={props.book.detail} navigateShelf={props.navigateShelf} />
+            <Stocks detail={props.book.detail} />
             <div className="next"><i className="fa fa-play" /></div>
         </div>
     );
