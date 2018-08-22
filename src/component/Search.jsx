@@ -12,13 +12,13 @@ export default class Search extends Component {
         this.prevQuery = '';
         this.state = {
             query: '',
-            completed: true,
-            uuid: null,
-            currentBook: null,
+            loading: false, // Unitrad APIのポーリング中
+            uuid: null, // Unitrad APIのUUID
+            currentBook: null, // 現在選択されている本
             books: [],
             message: '',
             hint: '',
-            hideResult: false,
+            visible: false,
         };
         this.cacheDetail = {};
         this.queueDetail = [];
@@ -36,17 +36,18 @@ export default class Search extends Component {
             this.queueDetail = [];
             this.prevQuery = this.state.query;
             this.setState({
-                completed: false,
+                loading: true,
             });
             this.api = new api({ free: this.state.query, region: this.props.region }, (data) => {
                 this.setState({
                     uuid: data.uuid,
                     books: data.books,
-                    completed: !data.running,
+                    loading: data.running,
+                    visible: true,
                 });
                 data.books.forEach((book) => {
-                    if (this.cacheDetail[data.uuid + book.id]) {
-                        book.detail = this.cacheDetail[data.uuid + book.id];
+                    if (this.cacheDetail[book.id]) {
+                        book.detail = this.cacheDetail[book.id];
                     }
                     if (book.detail || !book.holdings.includes(100622)) return;
                     this.queueDetail.push({
@@ -69,7 +70,7 @@ export default class Search extends Component {
                         }
                     });
                     this.setState({});
-                    this.cacheDetail[data.uuid + data.book.id] = r.data;
+                    this.cacheDetail[data.book.id] = r.data;
                 });
             }
             this.queueDetail.shift();
@@ -96,7 +97,7 @@ export default class Search extends Component {
         }
     }
     onClose() {
-        this.setState({hideResult: true});
+        this.setState({visible: false});
     }
     onSearch(query) {
         this.setState({ query: query });
@@ -104,41 +105,32 @@ export default class Search extends Component {
 
     setCurrentBook(book) {
         this.setState({ currentBook: book });
-        if (book) this.hideResult(true);
-    }
-    hideResult(hideResult) {
-        this.setState({ hideResult: hideResult });
     }
     backToList() {
         this.setCurrentBook(null);
-        this.hideResult(false);
         app.navigateShelf(null, []);
     }
-    open(book) {
-        if (book.detail && (book.detail.stocks.length > 0 || book.detail.message != '')) {
-            this.setCurrentBook(book);
-            if (book.detail.stocks.length > 0) {
-                this.navigateShelf(book.detail.stocks[0]);
-            } else {
-                app.navigateShelf(null, []);
-                this.onClose();
-            }
+    showDetail(book) {
+        this.setCurrentBook(book);
+        if (book.detail && book.detail.stocks.length > 0) {
+            this.navigateShelf(book.detail.stocks[0]);
+        } else {
+            app.navigateShelf(null, []);
         }
     }
     navigateShelf(stock) {
         // fixme 整数型で来てしまっているのでとりあえずキャスト
         app.navigateShelf(String(stock.floorId), stock.shelves);
-        this.onClose();
     }
 
 
     render() {
         return (
-            <div className={this.state.hideResult ? 'empty' : null}>
+            <div className={!this.state.visible || this.state.currentBook ? 'empty' : null}>
                 <form className="box" action="#" onSubmit={this.onSubmit.bind(this)}>
                     <input type="search" ref="query" placeholder={this.props.placeholder} onFocus={this.onFocus.bind(this)} />
                     <button type="submit" className="search fa fa-search" title="検索する" />
-                    <button className={"clear fa fa-times" + (this.state.completed == false ? " loading" : "")}
+                    <button className={"clear fa fa-times" + (this.state.loading ? " loading" : "")}
                         title="検索結果を閉じる" onClick={this.onClose.bind(this)} />
                 </form>
                 <div className="results">
@@ -149,13 +141,13 @@ export default class Search extends Component {
                                 <Book book={book} key={book.id}
                                     setCurrentBook={this.setCurrentBook.bind(this)}
                                     navigateShelf={this.navigateShelf.bind(this)}
-                                    onClick={this.open.bind(this, book)}
+                                    onClick={this.showDetail.bind(this, book)}
                                 />
                             );
                         })}
                     </div>
                     <p className="hint">{this.state.hint}</p>
-                    {this.state.query !== '' && this.state.completed ? (
+                    {this.state.query !== '' && this.state.loading === false ? (
                         <p className="sabato">
                             <a href={'https://sabae.calil.jp/?q=' + encodeURIComponent(this.state.query)} target="_blank">
                                 さばサーチで近隣の図書館を検索
