@@ -51,16 +51,20 @@ export default class Search extends Component {
                         books: data.books,
                         loading: data.running,
                     });
+                    console.log(data.books)
                     data.books.forEach((book) => {
                         if (this.cacheDetail[book.id]) {
                             book.detail = this.cacheDetail[book.id];
                         }
-                        if (book.detail || !book.holdings.includes(100622)) return;
+                        // if (book.detail || !book.holdings.includes(100622)) return;
+                        if (book.detail) return;
                         this.queueDetail.push({
                             uuid: data.uuid,
                             book: book,
                         });
                     });
+                    console.log('this.queueDetail');
+                    console.log(this.queueDetail);
                 });
             }
         });
