@@ -10,7 +10,6 @@ export default class Search extends Component {
     constructor() {
         super();
         this.api = null;
-        this.prevQuery = '';
         this.state = {
             query: '',
             loading: false, // Unitrad APIのポーリング中
@@ -37,13 +36,13 @@ export default class Search extends Component {
         e.preventDefault();
         this.refs.query.blur();
         this.setState({ query: this.refs.query.value }, () => {
-            if (this.state.query != '' && this.state.query != this.prevQuery) {
+            console.log('callback')
+            if (this.state.query != '') {
                 this.startTime = new Date().getTime();
                 if (this.api) {
                     this.api.kill();
                 }
                 this.queueDetail = [];
-                this.prevQuery = this.state.query;
                 this.setState({
                     loading: true,
                     visible: true,
