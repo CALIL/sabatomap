@@ -62,7 +62,8 @@
   "cordova": {
     "platforms": [
       "browser",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "com.unarin.cordova.beacon": {},
