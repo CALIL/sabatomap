@@ -21,10 +21,10 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-device-orientation"
-    version="1.0.4">
+    version="2.0.1">
 
     <name>Device Orientation</name>
-    <description>Cordova Device Orientation Plugin</description>
+    <description>[DEPRECATED] Cordova Device Orientation Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,device,orientation</keywords>
     <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-device-orientation.git</repo>
@@ -42,14 +42,19 @@
         <clobbers target="navigator.compass" />
     </js-module>
 
+    <info>
+        [DEPRECATED] - cordova-plugin-device-orientation
+        With the W3C Device Motion and Orientation API now being supported on iOS, Android and Windows devices, this plugin is not needed any more. Read more about the API at https://www.w3.org/TR/2016/CR-orientation-event-20160818/ 
+    </info>
+
     <!-- firefoxos -->
     <platform name="firefoxos">
         <config-file target="config.xml" parent="/*">
             <feature name="Compass">
                 <param name="firefoxos-package" value="Compass" />
             </feature>
-        </config-file>                                         
-        
+        </config-file>
+
         <js-module src="src/firefoxos/compass.js" name="compass-impl">
           <runs />
         </js-module>
@@ -86,7 +91,7 @@
 
 	    <source-file src="src/android/CompassListener.java" target-dir="src/org/apache/cordova/deviceorientation" />
     </platform>
-    
+
     <!-- ubuntu -->
     <platform name="ubuntu">
         <header-file src="src/ubuntu/compass.h" />
@@ -153,7 +158,7 @@
         <!-- windows -->
     <platform name="windows">
         <js-module src="src/windows/CompassProxy.js" name="CompassProxy">
-            <merges target="" />
+            <runs />
         </js-module>
     </platform>
 

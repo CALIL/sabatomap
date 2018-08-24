@@ -1,7 +1,35 @@
 {
-  "name": "cordova-plugin-device-orientation",
-  "version": "1.0.4",
-  "description": "Cordova Device Orientation Plugin",
+  "_from": "cordova-plugin-device-orientation@2.0.1",
+  "_id": "cordova-plugin-device-orientation@2.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-FJ1RJQ3vwwnw0D0wb+KOiYgbqE0=",
+  "_location": "/cordova-plugin-device-orientation",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-device-orientation@2.0.1",
+    "name": "cordova-plugin-device-orientation",
+    "escapedName": "cordova-plugin-device-orientation",
+    "rawSpec": "2.0.1",
+    "saveSpec": null,
+    "fetchSpec": "2.0.1"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-device-orientation/-/cordova-plugin-device-orientation-2.0.1.tgz",
+  "_shasum": "149d51250defc309f0d03d306fe28e89881ba84d",
+  "_spec": "cordova-plugin-device-orientation@2.0.1",
+  "_where": "Z:\\sabatomap",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-device-orientation",
     "platforms": [
@@ -18,10 +46,19 @@
       "browser"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-device-orientation"
+  "deprecated": false,
+  "description": "[DEPRECATED] Cordova Device Orientation Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "3.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-device-orientation#readme",
   "keywords": [
     "cordova",
     "device",
@@ -39,20 +76,16 @@
     "cordova-tizen",
     "cordova-browser"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
-    }
+  "name": "cordova-plugin-device-orientation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-device-orientation.git"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "scripts": {
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
+    "test": "npm run jshint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "2.0.1"
 }

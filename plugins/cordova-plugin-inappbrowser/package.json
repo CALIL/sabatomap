@@ -1,25 +1,67 @@
 {
-  "name": "cordova-plugin-inappbrowser",
-  "version": "1.5.0",
-  "description": "Cordova InAppBrowser Plugin",
+  "_from": "cordova-plugin-inappbrowser@2.0.2",
+  "_id": "cordova-plugin-inappbrowser@2.0.2",
+  "_inBundle": false,
+  "_integrity": "sha1-pEj8vpdMprQpiL00VRCdkj1sl2k=",
+  "_location": "/cordova-plugin-inappbrowser",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-inappbrowser@2.0.2",
+    "name": "cordova-plugin-inappbrowser",
+    "escapedName": "cordova-plugin-inappbrowser",
+    "rawSpec": "2.0.2",
+    "saveSpec": null,
+    "fetchSpec": "2.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-2.0.2.tgz",
+  "_shasum": "a448fcbe974ca6b42988bd3455109d923d6c9769",
+  "_spec": "cordova-plugin-inappbrowser@2.0.2",
+  "_where": "Z:\\sabatomap",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-inappbrowser",
     "platforms": [
       "android",
-      "amazon-fireos",
-      "ubuntu",
+      "browser",
       "ios",
-      "wp7",
-      "wp8",
-      "windows8",
-      "windows",
-      "firefoxos"
+      "osx",
+      "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-inappbrowser"
+  "deprecated": false,
+  "description": "Cordova InAppBrowser Plugin",
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   },
+  "engines": {
+    "cordovaDependencies": {
+      "0.2.3": {
+        "cordova": ">=3.1.0"
+      },
+      "3.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-inappbrowser#readme",
   "keywords": [
     "cordova",
     "in",
@@ -28,32 +70,21 @@
     "inappbrowser",
     "ecosystem:cordova",
     "cordova-android",
-    "cordova-amazon-fireos",
-    "cordova-ubuntu",
+    "cordova-browser",
     "cordova-ios",
-    "cordova-wp7",
-    "cordova-wp8",
-    "cordova-windows8",
-    "cordova-windows",
-    "cordova-firefoxos"
+    "cordova-osx",
+    "cordova-windows"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
-  },
-  "engines": {
-    "cordovaDependencies": {
-      "0.2.3": {
-        "cordova": ">=3.1.0"
-      },
-      "2.0.0": {
-        "cordova": ">100"
-      }
-    }
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "name": "cordova-plugin-inappbrowser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-inappbrowser.git"
+  },
+  "scripts": {
+    "eslint": "node node_modules/eslint/bin/eslint www && node node_modules/eslint/bin/eslint src && node node_modules/eslint/bin/eslint tests",
+    "test": "npm run eslint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "2.0.2"
 }

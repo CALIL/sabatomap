@@ -17,30 +17,14 @@
  under the License.
  */
 
-#import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-typedef struct {
-    BOOL iPhone;
-    BOOL iPad;
-    BOOL iPhone4;
-    BOOL iPhone5;
-    BOOL iPhone6;
-    BOOL iPhone6Plus;
-    BOOL retina;
-    BOOL iPhoneX;
-    
-} CDV_iOSDevice;
-
-@interface CDVSplashScreen : CDVPlugin {
-    UIActivityIndicatorView* _activityView;
-    UIImageView* _imageView;
-    NSString* _curImageName;
-    BOOL _visible;
-    BOOL _destroyed;
+@interface CDVInAppBrowser : CDVPlugin {
 }
 
-- (void)show:(CDVInvokedUrlCommand*)command;
-- (void)hide:(CDVInvokedUrlCommand*)command;
+@property (nonatomic, copy) NSString* callbackId;
+
+- (void)open:(CDVInvokedUrlCommand*)command;
 
 @end
+

@@ -7,14 +7,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-inappbrowser": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-inappbrowser"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
@@ -23,34 +15,10 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-network-information": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-network-information"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-bluetooth-status": {
     "source": {
       "type": "registry",
       "id": "cordova-plugin-bluetooth-status"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-device-orientation": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-device-orientation"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-splashscreen": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-splashscreen"
     },
     "is_top_level": true,
     "variables": {}
@@ -67,6 +35,38 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-whitelist@1.3.3"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device-orientation": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-device-orientation@2.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser@2.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-network-information": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-network-information@2.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@5.0.2"
     },
     "is_top_level": true,
     "variables": {}

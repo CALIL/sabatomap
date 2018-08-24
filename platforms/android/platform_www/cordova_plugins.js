@@ -131,12 +131,12 @@ module.exports.metadata =
   "com.unarin.cordova.beacon": "3.3.0",
   "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-device": "1.1.3",
-  "cordova-plugin-device-orientation": "1.0.4",
-  "cordova-plugin-inappbrowser": "1.5.0",
-  "cordova-plugin-network-information": "1.3.0",
-  "cordova-plugin-splashscreen": "4.0.0",
   "cordova-plugin-wkwebview-engine": "1.1.4",
-  "cordova-plugin-whitelist": "1.3.3"
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-plugin-device-orientation": "2.0.1",
+  "cordova-plugin-inappbrowser": "2.0.2",
+  "cordova-plugin-network-information": "2.0.1",
+  "cordova-plugin-splashscreen": "5.0.2"
 };
 // BOTTOM OF METADATA
 });
