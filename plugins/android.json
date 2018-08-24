@@ -4,172 +4,37 @@
     "uninstalled": []
   },
   "config_munge": {
-    "files": {
-      "res/xml/config.xml": {
-        "parents": {
-          "/*": [
-            {
-              "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
-              "count": 1
-            },
-            {
-              "xml": "<preference default=\"15+\" name=\"xwalkVersion\" />",
-              "count": 1
-            },
-            {
-              "xml": "<preference default=\"--disable-pull-to-refresh-effect\" name=\"xwalkCommandLine\" />",
-              "count": 1
-            },
-            {
-              "xml": "<preference default=\"embedded\" name=\"xwalkMode\" />",
-              "count": 1
-            },
-            {
-              "xml": "<preference default=\"true\" name=\"xwalkMultipleApk\" />",
-              "count": 1
-            }
-          ]
-        }
-      },
-      "AndroidManifest.xml": {
-        "parents": {
-          "/manifest": [
-            {
-              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
-              "count": 1
-            }
-          ],
-          "/manifest/application": [
-            {
-              "xml": "<receiver android:name=\"org.altbeacon.beacon.startup.StartupBroadcastReceiver\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><action android:name=\"android.intent.action.ACTION_POWER_CONNECTED\" /><action android:name=\"android.intent.action.ACTION_POWER_DISCONNECTED\" /></intent-filter></receiver>",
-              "count": 1
-            },
-            {
-              "xml": "<service android:enabled=\"true\" android:exported=\"true\" android:isolatedProcess=\"false\" android:label=\"iBeacon\" android:name=\"org.altbeacon.beacon.service.BeaconService\"></service>",
-              "count": 1
-            },
-            {
-              "xml": "<service android:enabled=\"true\" android:name=\"org.altbeacon.beacon.BeaconIntentProcessor\"><meta-data android:name=\"background\" android:value=\"true\" /><intent-filter android:priority=\"1\"><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_RANGING\" /><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_MONITORING\" /></intent-filter></service>",
-              "count": 1
-            }
-          ],
-          "/*": [
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-              "count": 2
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-feature android:name=\"android.hardware.bluetooth_le\" android:required=\"false\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-              "count": 1
-            },
-            {
-              "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
-              "count": 1
-            }
-          ]
-        }
-      }
-    }
+    "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-webserver": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
     "com.unarin.cordova.beacon": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-network-information": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
     "cordova-plugin-device-orientation": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
+    "cordova-plugin-network-information": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-crosswalk-webview": {
-      "XWALK_VERSION": "21+",
-      "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
-      "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-      "XWALK_MODE": "embedded",
-      "XWALK_MULTIPLEAPK": "true",
+    "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-wkwebview-engine": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+  }
 }

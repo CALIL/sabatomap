@@ -1,0 +1,14 @@
+repositories{
+    jcenter()
+}
+
+dependencies {
+    compile 'org.altbeacon:android-beacon-library:2.14'
+}
+
+android {
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+}

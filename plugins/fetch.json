@@ -1,17 +1,8 @@
 {
-  "cordova-plugin-webserver": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-webserver"
-    },
-    "is_top_level": false,
-    "variables": {}
-  },
   "com.unarin.cordova.beacon": {
     "source": {
-      "type": "git",
-      "url": "https://github.com/CALIL/cordova-plugin-ibeacon.git",
-      "subdir": "."
+      "type": "registry",
+      "id": "https://github.com/petermetz/cordova-plugin-ibeacon.git"
     },
     "is_top_level": true,
     "variables": {}
@@ -56,14 +47,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-whitelist": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-whitelist"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-splashscreen": {
     "source": {
       "type": "registry",
@@ -72,18 +55,18 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-crosswalk-webview": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-crosswalk-webview"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-wkwebview-engine": {
     "source": {
       "type": "registry",
       "id": "cordova-plugin-wkwebview-engine"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1.3.3"
     },
     "is_top_level": true,
     "variables": {}

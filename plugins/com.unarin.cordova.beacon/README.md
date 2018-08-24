@@ -1,6 +1,3 @@
-このリポジトリは、Android向けのAltBeaconライブラリを最新版にアップデートするために作成したものです。
-
-
 <!---
  license: Licensed to the Apache Software Foundation (ASF) under one
          or more contributor license agreements.  See the NOTICE file
@@ -20,6 +17,7 @@
          under the License.
 -->
 
+
 ## ![iBeacon Cordova Plugin](http://icons.iconarchive.com/icons/artua/mac/128/Bluetooth-icon.png) Cordova / Phonegap iBeacon plugin
 
 ### Features
@@ -28,7 +26,7 @@
 
  * Ranging
  * Monitoring
- 
+
 #### Features exclusive to iOS
 
  * Region Monitoring (or geo fencing), works in all app states. 
@@ -54,7 +52,9 @@ Since version 3.2 the Klass dependency has been removed and therefore means crea
 
 On iOS 8, you have to request permissions from the user of your app explicitly. You can do this through the plugin's API.
 See the [LocationManager](https://github.com/petermetz/cordova-plugin-ibeacon/blob/master/www/LocationManager.js)'s 
-related methods: ```requestWhenInUseAuthorization``` and ```requestWhenInUseAuthorization``` for further details.
+related methods: ```requestWhenInUseAuthorization``` and ```requestAlwaysAuthorization``` for further details.
+
+In order to use Advertising (e.g ```startAdvertising```), the iOS-Capability "Location updates" is required. (set in Xcode -> [your Target] -> Capabilities -> Background Modes -> Location updates)
 
 #### Standard [CLLocationManager](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/CLLocationManager/CLLocationManager.html) functions
 
@@ -69,7 +69,7 @@ related methods: ```requestWhenInUseAuthorization``` and ```requestWhenInUseAuth
  */
 function createBeacon() {
 
-    var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9'; // mandatory
+    var uuid = '00000000-0000-0000-0000-000000000000'; // mandatory
     var identifier = 'beaconAtTheMacBooks'; // mandatory
     var minor = 1000; // optional, defaults to wildcard if left empty
     var major = 5; // optional, defaults to wildcard if left empty
@@ -116,7 +116,7 @@ delegate.didRangeBeaconsInRegion = function (pluginResult) {
     logToDom('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
 };
 
-var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9';
+var uuid = '00000000-0000-0000-0000-000000000000';
 var identifier = 'beaconOnTheMacBooksShelf';
 var minor = 1000;
 var major = 5;
@@ -129,7 +129,7 @@ cordova.plugins.locationManager.requestWhenInUseAuthorization();
 // or cordova.plugins.locationManager.requestAlwaysAuthorization()
 
 cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
-	.fail(console.error)
+	.fail(function(e) { console.error(e); })
 	.done();
 
 ```
@@ -137,14 +137,14 @@ cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
 
 ##### Stop monitoring a single iBeacon
 ```
-var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9';
+var uuid = '00000000-0000-0000-0000-000000000000';
 var identifier = 'beaconOnTheMacBooksShelf';
 var minor = 1000;
 var major = 5;
 var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
 
 cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion)
-	.fail(console.error)
+	.fail(function(e) { console.error(e); })
 	.done();
 
 ```
@@ -185,9 +185,7 @@ delegate.didRangeBeaconsInRegion = function (pluginResult) {
     logToDom('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
 };
 
-
-
-var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9';
+var uuid = '00000000-0000-0000-0000-000000000000';
 var identifier = 'beaconOnTheMacBooksShelf';
 var minor = 1000;
 var major = 5;
@@ -200,21 +198,21 @@ cordova.plugins.locationManager.requestWhenInUseAuthorization();
 // or cordova.plugins.locationManager.requestAlwaysAuthorization()
 
 cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
-	.fail(console.error)
+	.fail(function(e) { console.error(e); })
 	.done();
 
 ```
  
 ##### Stop ranging a single iBeacon
 ```
-var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9';
+var uuid = '00000000-0000-0000-0000-000000000000';
 var identifier = 'beaconOnTheMacBooksShelf';
 var minor = 1000;
 var major = 5;
 var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
 
 cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion)
-	.fail(console.error)
+	.fail(function(e) { console.error(e); })
 	.done();
 
 ```
@@ -226,7 +224,7 @@ cordova.plugins.locationManager.isAdvertisingAvailable()
     .then(function(isSupported){
         console.log("isSupported: " + isSupported);
     })
-    .fail(console.error)
+    .fail(function(e) { console.error(e); })
     .done();
 
 ```
@@ -238,14 +236,14 @@ cordova.plugins.locationManager.isAdvertising()
     .then(function(isAdvertising){
         console.log("isAdvertising: " + isAdvertising);
     })
-    .fail(console.error)
+    .fail(function(e) { console.error(e); })
     .done();
 
 ```
 
 ##### Start advertising device as an iBeacon (iOS only)
 ```
-var uuid = 'DA5336AE-2042-453A-A57F-F80DD34DFCD9';
+var uuid = '00000000-0000-0000-0000-000000000000';
 var identifier = 'advertisedBeacon';
 var minor = 2000;
 var major = 5;
@@ -273,13 +271,13 @@ cordova.plugins.locationManager.isAdvertisingAvailable()
 
         if (isSupported) {
             cordova.plugins.locationManager.startAdvertising(beaconRegion)
-                .fail(conole.error)
+                .fail(console.error)
                 .done();
         } else {
             console.log("Advertising not supported");
         }
     })
-    .fail(console.error)
+    .fail(function(e) { console.error(e); })
     .done();
 
 ```
@@ -287,7 +285,7 @@ cordova.plugins.locationManager.isAdvertisingAvailable()
 ##### Stopping the advertising (iOS only)
 ```
 cordova.plugins.locationManager.stopAdvertising()
-    .fail(console.error)
+    .fail(function(e) { console.error(e); })
     .done();
 
 ```
@@ -304,8 +302,49 @@ cordova.plugins.locationManager.isBluetoothEnabled()
             cordova.plugins.locationManager.enableBluetooth();        
         }
     })
-    .fail(console.error)
+    .fail(function(e) { console.error(e); })
     .done();
+
+```
+
+##### Specify wildcard UUID (Android only)
+
+```javascript
+var uuid = cordova.plugins.locationManager.BeaconRegion.WILDCARD_UUID; //wildcard
+var identifier = 'SomeIdentifier';
+var major = undefined;
+var minor = undefined;
+var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
+
+var logToDom = function (message) {
+	console.warn(message);
+};
+
+var delegate = new cordova.plugins.locationManager.Delegate();
+
+delegate.didDetermineStateForRegion = function (pluginResult) {
+
+    logToDom('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+
+    cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
+        + JSON.stringify(pluginResult));
+};
+
+delegate.didStartMonitoringForRegion = function (pluginResult) {
+    console.log('didStartMonitoringForRegion:', pluginResult);
+
+    logToDom('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+};
+
+delegate.didRangeBeaconsInRegion = function (pluginResult) {
+    logToDom('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+};
+
+cordova.plugins.locationManager.setDelegate(delegate);
+
+cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
+	.fail(function(e) { console.error(e); })
+	.done();
 
 ```
 
@@ -313,7 +352,7 @@ cordova.plugins.locationManager.isBluetoothEnabled()
 
 > Contributions are welcome at all times, please make sure that the tests are running without errors
 > before submitting a pull request. The current development branch that you should submit your pull requests against is
-> "master" branch.
+> "v3.x" branch.
 
 ### How to execute the tests - OS X
 

@@ -25,22 +25,16 @@
     "cordova-plugin-device-orientation": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-crosswalk-webview": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {
-    "cordova-plugin-webserver": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    }
   }
 }

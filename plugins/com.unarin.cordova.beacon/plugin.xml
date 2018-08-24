@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com.unarin.cordova.beacon" version="3.3.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="com.unarin.cordova.beacon" version="3.6.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <name>Proximity Beacon Plugin</name>
     <description>Proximity Beacon Monitoring and Transmission Plugin (supporting iBeacons)</description>
@@ -7,15 +7,20 @@
     <keywords>cordova,ibeacon,beacon,bluetooth,le</keywords>
     <repo>https://github.com/petermetz/cordova-plugin-ibeacon.git</repo>
 
+    <!-- Version is set to anything because the only feature we use is the device.platform property which was available
+    since forever. The added benefit is that we don't force the consumers of this plugin to use a certain version of
+    the device plugin. -->
+    <dependency id="cordova-plugin-device" version="*" />
+
     <!-- Third party libraries -->
     <js-module name="underscorejs" src="www/lib/underscore-min-1.6.js">
         <runs/>
     </js-module>
-  
+
     <js-module name="Q" src="www/lib/q.min.js">
         <runs/>
     </js-module>
-    
+
     <!-- Plugin source code: Core -->
     <js-module name="LocationManager" src="www/LocationManager.js">
         <!-- see http://cordova.apache.org/docs/en/3.0.0/plugin_ref_spec.md#Plugin%20Specification_js_module_element -->
@@ -46,20 +51,25 @@
 
 
     <platform name="ios">
-        
+
         <config-file parent="/*" target="config.xml">
             <feature name="LocationManager">
                 <param name="ios-package" value="CDVLocationManager"/>
             </feature>
         </config-file>
-        
+
         <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
             <string>This app would like to scan for iBeacons even when in the background.</string>
         </config-file>
         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
             <string>This app would like to scan for iBeacons while it is in use.</string>
         </config-file>
-         
+        <config-file target="*-Info.plist" parent="NSBluetoothPeripheralUsageDescription">
+            <string>This app would like to scan for iBeacons.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>This app would like to scan for iBeacons both while in use and while in the background.</string>
+        </config-file>
 
         <header-file src="src/ios/CDVLocationManager.h"/>
         <source-file src="src/ios/CDVLocationManager.m"/>
@@ -83,41 +93,16 @@
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest">
-			<uses-permission android:name="android.permission.BLUETOOTH" />
-            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<receiver android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver" >
-				<intent-filter>
-					<action android:name="android.intent.action.BOOT_COMPLETED" />
-					<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-					<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-				</intent-filter>
-			</receiver>
-            <service android:enabled="true"
-                     android:exported="true"
-                     android:isolatedProcess="false"
-                     android:label="iBeacon"
-                     android:name="org.altbeacon.beacon.service.BeaconService">
-            </service>
-            <service android:enabled="true"
-                     android:name="org.altbeacon.beacon.BeaconIntentProcessor">
-                <meta-data android:name="background" android:value="true" />
-                <intent-filter android:priority="1" >
-                    <action android:name="com.unarin.cordova.beacon.IBeaconPlugin.DID_RANGING" />
-                    <action android:name="com.unarin.cordova.beacon.IBeaconPlugin.DID_MONITORING" />
-                </intent-filter>
-            </service>
-        </config-file>
-		
         <source-file src="src/android/LocationManager.java" target-dir="src/com/unarin/cordova/beacon" />
         <source-file src="src/android/IBeaconServiceNotifier.java" target-dir="src/com/unarin/cordova/beacon" />
         <source-file src="src/android/ILocationManagerCommand.java" target-dir="src/com/unarin/cordova/beacon" />
         <source-file src="src/android/PausableThreadPoolExecutor.java" target-dir="src/com/unarin/cordova/beacon" />
 
-		<source-file src="libs/android/altbeacon.jar" target-dir="libs" framework="true" />
+        <framework src="src/android/cordova-plugin-ibeacon.gradle" custom="true" type="gradleReference" />
+        <framework src="com.android.support:support-core-utils:26+" />
     </platform>
 
 </plugin>
