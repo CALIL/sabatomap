@@ -32,9 +32,9 @@
 		D8CCBB6707B545C88EA33B2D /* CDVWKWebViewUIDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F616FF937D594CC19DD55DC2 /* CDVWKWebViewUIDelegate.m */; };
 		2DDC5B69897C40EBA99B91CF /* CDVWKProcessPoolFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 2831024203A8463FB1019E83 /* CDVWKProcessPoolFactory.m */; };
 		FFB00F3E73C34DCCA5E51BC0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D062C5D931D4220BD71DFCB /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		AC97B93885D14B6F9F09B34C /* CDVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0659903E77A54F028DAA1DF8 /* CDVLocationManager.m */; };
-		90D0404683204E71945EAEAD /* AppDelegate+CDVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3138E2F160E1492B9A1B97F1 /* AppDelegate+CDVLocationManager.m */; };
-		3F289B8BF1654E9DAA1FC880 /* LMLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B6CC5DBA06451AA60C4F13 /* LMLogger.m */; };
+		ED2279E8973345DA9CEB045F /* CDVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA484682603D4063BB4F474F /* CDVLocationManager.m */; };
+		457778DDEE754964B2A2B63C /* AppDelegate+CDVLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BDC23919A494A628D763CAF /* AppDelegate+CDVLocationManager.m */; };
+		F9032CC4746147B7A42A2F66 /* LMLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2351F8C0771146A3AC868029 /* LMLogger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,12 +101,12 @@
 		D13379AA170E4D27A54D5100 /* CDVWKWebViewUIDelegate.h */ = {isa = PBXFileReference; name = "CDVWKWebViewUIDelegate.h"; path = "cordova-plugin-wkwebview-engine/CDVWKWebViewUIDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		A9B7459DDE7C40B8BA6CEC09 /* CDVWKProcessPoolFactory.h */ = {isa = PBXFileReference; name = "CDVWKProcessPoolFactory.h"; path = "cordova-plugin-wkwebview-engine/CDVWKProcessPoolFactory.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		7D062C5D931D4220BD71DFCB /* WebKit.framework */ = {isa = PBXFileReference; name = "WebKit.framework"; path = "System/Library/Frameworks/WebKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
-		0659903E77A54F028DAA1DF8 /* CDVLocationManager.m */ = {isa = PBXFileReference; name = "CDVLocationManager.m"; path = "com.unarin.cordova.beacon/CDVLocationManager.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		3138E2F160E1492B9A1B97F1 /* AppDelegate+CDVLocationManager.m */ = {isa = PBXFileReference; name = "AppDelegate+CDVLocationManager.m"; path = "com.unarin.cordova.beacon/AppDelegate+CDVLocationManager.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		B7B6CC5DBA06451AA60C4F13 /* LMLogger.m */ = {isa = PBXFileReference; name = "LMLogger.m"; path = "com.unarin.cordova.beacon/LMLogger.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		6A7ACA2676074D23A1D94299 /* CDVLocationManager.h */ = {isa = PBXFileReference; name = "CDVLocationManager.h"; path = "com.unarin.cordova.beacon/CDVLocationManager.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		791736E7BE694DAA9AF55498 /* AppDelegate+CDVLocationManager.h */ = {isa = PBXFileReference; name = "AppDelegate+CDVLocationManager.h"; path = "com.unarin.cordova.beacon/AppDelegate+CDVLocationManager.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		29C7D9D7956C482DA90CAFE1 /* LMLogger.h */ = {isa = PBXFileReference; name = "LMLogger.h"; path = "com.unarin.cordova.beacon/LMLogger.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		FA484682603D4063BB4F474F /* CDVLocationManager.m */ = {isa = PBXFileReference; name = "CDVLocationManager.m"; path = "com.unarin.cordova.beacon/CDVLocationManager.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		2BDC23919A494A628D763CAF /* AppDelegate+CDVLocationManager.m */ = {isa = PBXFileReference; name = "AppDelegate+CDVLocationManager.m"; path = "com.unarin.cordova.beacon/AppDelegate+CDVLocationManager.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		2351F8C0771146A3AC868029 /* LMLogger.m */ = {isa = PBXFileReference; name = "LMLogger.m"; path = "com.unarin.cordova.beacon/LMLogger.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		97A98A703EB5436AB8C4FCBB /* CDVLocationManager.h */ = {isa = PBXFileReference; name = "CDVLocationManager.h"; path = "com.unarin.cordova.beacon/CDVLocationManager.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		EFE9EBDC953D4D4AB3565248 /* AppDelegate+CDVLocationManager.h */ = {isa = PBXFileReference; name = "AppDelegate+CDVLocationManager.h"; path = "com.unarin.cordova.beacon/AppDelegate+CDVLocationManager.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		3025A4F80A034AFE8D2FB2E4 /* LMLogger.h */ = {isa = PBXFileReference; name = "LMLogger.h"; path = "com.unarin.cordova.beacon/LMLogger.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,12 +241,12 @@
 				5C33D710941E4172B3D674AD /* CDVWKWebViewEngine.h */,
 				D13379AA170E4D27A54D5100 /* CDVWKWebViewUIDelegate.h */,
 				A9B7459DDE7C40B8BA6CEC09 /* CDVWKProcessPoolFactory.h */,
-				0659903E77A54F028DAA1DF8 /* CDVLocationManager.m */,
-				3138E2F160E1492B9A1B97F1 /* AppDelegate+CDVLocationManager.m */,
-				B7B6CC5DBA06451AA60C4F13 /* LMLogger.m */,
-				6A7ACA2676074D23A1D94299 /* CDVLocationManager.h */,
-				791736E7BE694DAA9AF55498 /* AppDelegate+CDVLocationManager.h */,
-				29C7D9D7956C482DA90CAFE1 /* LMLogger.h */,
+				FA484682603D4063BB4F474F /* CDVLocationManager.m */,
+				2BDC23919A494A628D763CAF /* AppDelegate+CDVLocationManager.m */,
+				2351F8C0771146A3AC868029 /* LMLogger.m */,
+				97A98A703EB5436AB8C4FCBB /* CDVLocationManager.h */,
+				EFE9EBDC953D4D4AB3565248 /* AppDelegate+CDVLocationManager.h */,
+				3025A4F80A034AFE8D2FB2E4 /* LMLogger.h */,
 			);
 			name = Plugins;
 			path = "Sabae Library Map/Plugins";
@@ -370,9 +370,9 @@
 				EC2C79AACCB34C11935475F1 /* CDVWKWebViewEngine.m in Sources */,
 				D8CCBB6707B545C88EA33B2D /* CDVWKWebViewUIDelegate.m in Sources */,
 				2DDC5B69897C40EBA99B91CF /* CDVWKProcessPoolFactory.m in Sources */,
-				AC97B93885D14B6F9F09B34C /* CDVLocationManager.m in Sources */,
-				90D0404683204E71945EAEAD /* AppDelegate+CDVLocationManager.m in Sources */,
-				3F289B8BF1654E9DAA1FC880 /* LMLogger.m in Sources */,
+				ED2279E8973345DA9CEB045F /* CDVLocationManager.m in Sources */,
+				457778DDEE754964B2A2B63C /* AppDelegate+CDVLocationManager.m in Sources */,
+				F9032CC4746147B7A42A2F66 /* LMLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

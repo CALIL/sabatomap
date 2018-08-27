@@ -129,7 +129,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
   "cordova-plugin-device": "1.1.3",
-  "com.unarin.cordova.beacon": "3.6.1",
+  "com.unarin.cordova.beacon": "3.7.0",
   "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-device-orientation": "2.0.1",
   "cordova-plugin-inappbrowser": "2.0.2",

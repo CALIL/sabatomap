@@ -152,7 +152,7 @@ module.exports.metadata =
   "cordova-plugin-splashscreen": "5.0.2",
   "cordova-plugin-whitelist": "1.3.3",
   "cordova-plugin-wkwebview-engine": "1.1.4",
-  "com.unarin.cordova.beacon": "3.6.1"
+  "com.unarin.cordova.beacon": "3.7.0"
 };
 // BOTTOM OF METADATA
 });

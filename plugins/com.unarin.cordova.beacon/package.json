@@ -1,23 +1,27 @@
 {
-  "_from": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
-  "_id": "com.unarin.cordova.beacon@3.6.1",
+  "_from": "com.unarin.cordova.beacon@3.7.0",
+  "_id": "com.unarin.cordova.beacon@3.7.0",
   "_inBundle": false,
+  "_integrity": "sha512-JdQCAkyXIt986beMsLE33ooDmD9JM0Kdz25Ce4OqsiOe35pOW6G+3hR9EkHU4V1QfnOthpn9b3ohGgwuE4Ou1w==",
   "_location": "/com.unarin.cordova.beacon",
   "_phantomChildren": {},
   "_requested": {
-    "type": "git",
-    "raw": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "rawSpec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "saveSpec": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "fetchSpec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "gitCommittish": null
+    "type": "version",
+    "registry": true,
+    "raw": "com.unarin.cordova.beacon@3.7.0",
+    "name": "com.unarin.cordova.beacon",
+    "escapedName": "com.unarin.cordova.beacon",
+    "rawSpec": "3.7.0",
+    "saveSpec": null,
+    "fetchSpec": "3.7.0"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git#3d94fc73001e46388b8159bf86c1d8347ff530bb",
-  "_spec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
+  "_resolved": "https://registry.npmjs.org/com.unarin.cordova.beacon/-/com.unarin.cordova.beacon-3.7.0.tgz",
+  "_shasum": "4eb1466e68a1439e48323af15bb2085265368198",
+  "_spec": "com.unarin.cordova.beacon@3.7.0",
   "_where": "Z:\\sabatomap",
   "author": {
     "name": "Peter Metz",
@@ -28,11 +32,6 @@
     "url": "https://github.com/petermetz/cordova-plugin-ibeacon/issues"
   },
   "bundleDependencies": false,
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "cordova": {
     "id": "com.unarin.cordova.beacon",
     "platforms": [
@@ -42,10 +41,6 @@
   },
   "deprecated": false,
   "description": "Proximity Beacon Monitoring and Transmission Plugin (supporting iBeacons)",
-  "devDependencies": {
-    "@commitlint/cli": "^7.0.0",
-    "@commitlint/config-conventional": "^7.0.1"
-  },
   "homepage": "https://github.com/petermetz/cordova-plugin-ibeacon",
   "keywords": [
     "cordova",
@@ -63,5 +58,5 @@
     "type": "git",
     "url": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git"
   },
-  "version": "3.6.1"
+  "version": "3.7.0"
 }

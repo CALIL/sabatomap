@@ -1,3 +1,12 @@
+# 3.7.0
+
+## Android
+* Permission fixes for Android 8.
+* Upgrades AltBeacon to 2.14
+
+## iOS
+- No changes.
+
 # 3.6.1
 
 * Fixes: https://github.com/petermetz/cordova-plugin-ibeacon/issues/259
