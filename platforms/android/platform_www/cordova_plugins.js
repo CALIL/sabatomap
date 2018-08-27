@@ -1,6 +1,14 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
+    "id": "cordova-plugin-device.device",
+    "file": "plugins/cordova-plugin-device/www/device.js",
+    "pluginId": "cordova-plugin-device",
+    "clobbers": [
+      "device"
+    ]
+  },
+  {
     "id": "com.unarin.cordova.beacon.underscorejs",
     "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
     "pluginId": "com.unarin.cordova.beacon",
@@ -56,14 +64,6 @@ module.exports = [
     "pluginId": "cordova-plugin-bluetooth-status",
     "clobbers": [
       "cordova.plugins.BluetoothStatus"
-    ]
-  },
-  {
-    "id": "cordova-plugin-device.device",
-    "file": "plugins/cordova-plugin-device/www/device.js",
-    "pluginId": "cordova-plugin-device",
-    "clobbers": [
-      "device"
     ]
   },
   {
@@ -128,15 +128,15 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "com.unarin.cordova.beacon": "3.3.0",
-  "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-device": "1.1.3",
-  "cordova-plugin-wkwebview-engine": "1.1.4",
-  "cordova-plugin-whitelist": "1.3.3",
+  "com.unarin.cordova.beacon": "3.6.1",
+  "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-device-orientation": "2.0.1",
   "cordova-plugin-inappbrowser": "2.0.2",
   "cordova-plugin-network-information": "2.0.1",
-  "cordova-plugin-splashscreen": "5.0.2"
+  "cordova-plugin-splashscreen": "5.0.2",
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-plugin-wkwebview-engine": "1.1.4"
 };
 // BOTTOM OF METADATA
 });

@@ -208,9 +208,7 @@ var initializeApp = function() {
 
     if ((((ref = cordova.plugins) != null ? ref.locationManager : void 0)) != null) {
       locationManager = cordova.plugins.locationManager;
-      if (device.platform === 'iOS') {
-        locationManager.requestWhenInUseAuthorization();
-      }
+      locationManager.requestWhenInUseAuthorization();
       delegate = new locationManager.Delegate();
 
       delegate.didRangeBeaconsInRegion = function(

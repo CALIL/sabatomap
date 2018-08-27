@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "com.unarin.cordova.beacon": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
@@ -32,6 +29,9 @@
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },

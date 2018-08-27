@@ -49,6 +49,10 @@ Delegate.didDetermineStateForRegion = function(pluginResult) {
 	pluginResult.region = Regions.fromJson(pluginResult.region);
 };
 
+Delegate.monitoringDidFailForRegionWithError = function (pluginResult) {
+	pluginResult.region = Regions.fromJson(pluginResult.region);
+};
+
 Delegate.didStartMonitoringForRegion = function(pluginResult) {
 	pluginResult.region = Regions.fromJson(pluginResult.region);
 };
@@ -95,6 +99,10 @@ Delegate.safeTraceLogging = function(message) {
 
 Delegate.prototype.didDetermineStateForRegion = function() {
 	Delegate.safeTraceLogging('DEFAULT didDetermineStateForRegion()');
+};
+
+Delegate.prototype.monitoringDidFailForRegionWithError = function () {
+	Delegate.safeTraceLogging('DEFAULT monitoringDidFailForRegionWithError()');
 };
 
 Delegate.prototype.didStartMonitoringForRegion = function() {

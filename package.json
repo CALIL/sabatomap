@@ -63,11 +63,10 @@
   "cordova": {
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
-      "com.unarin.cordova.beacon": {},
       "cordova-plugin-bluetooth-status": {},
       "cordova-plugin-device": {},
       "cordova-plugin-wkwebview-engine": {},
@@ -75,7 +74,8 @@
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-splashscreen": {},
+      "com.unarin.cordova.beacon": {}
     }
   }
 }
