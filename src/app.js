@@ -208,7 +208,7 @@ var initializeApp = function() {
 
     if ((((ref = cordova.plugins) != null ? ref.locationManager : void 0)) != null) {
       locationManager = cordova.plugins.locationManager;
-      if (cordova.platformId === 'ios') {
+      if (device.platform === 'iOS') {
         locationManager.requestWhenInUseAuthorization();
       }
       delegate = new locationManager.Delegate();
