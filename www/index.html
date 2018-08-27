@@ -17,6 +17,9 @@
 <div id="compass" class="hidden"></div>
 <div id="ui"></div>
 <script src="cordova.js"></script>
-<script src="js/load.js"></script>
+<script src="js/all.js"></script>
+<script>
+      document.addEventListener('deviceready', () => window.app.initializeApp());
+</script>
 </body>
 </html>

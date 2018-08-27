@@ -31,14 +31,6 @@ gulp.task('compile_es2015', ['copy_openlayers_css', 'copy_font-awesome-css', 'co
     .pipe(gulp.dest('www/js/'));
 });
 
-gulp.task('compile_load_js', () =>
-  browserify('src/load.js')
-      .on("error", (err) => console.log("Error : " + err.message))
-      .transform('babelify', {presets: 'es2015'})
-      .bundle()
-      .pipe(source('load.js'))
-      .pipe(gulp.dest('www/js/'))
-);
 
 gulp.task('sass', [], function () {
     let postcss = require('gulp-postcss');
@@ -59,7 +51,7 @@ gulp.task('sass', [], function () {
 gulp.task('clean', () => del(['platforms/ios/www/**'])
 );
 
-gulp.task('cordova_prepare', ['compile_load_js', 'compile_es2015', 'clean', 'copy_openlayers_css', 'sass'], () => cdv.prepare()
+gulp.task('cordova_prepare', ['compile_es2015', 'clean', 'copy_openlayers_css', 'sass'], () => cdv.prepare()
 );
 
 gulp.task('watch', () => gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['compile_es2015', 'sass'])
