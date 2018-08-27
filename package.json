@@ -3,7 +3,8 @@
   "version": "1.6.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "scripts": {
-    "start": "gulp && cordova run browser"
+    "start": "gulp && cordova run browser",
+    "build": "gulp && cordova run android"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

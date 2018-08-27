@@ -76,6 +76,7 @@
     </platform>
     <engine name="browser" spec="^5.0.3" />
     <engine name="android" spec="^6.3.0" />
+    <engine name="ios" spec="^4.5.5" />
     <plugin name="com.unarin.cordova.beacon" spec="git+https://github.com/petermetz/cordova-plugin-ibeacon.git" />
     <plugin name="cordova-plugin-bluetooth-status" spec="~1.0.4" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
@@ -85,5 +86,4 @@
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <engine name="ios" spec="~4.5.5" />
 </widget>
