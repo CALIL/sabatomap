@@ -74,9 +74,9 @@
         <preference name="SplashScreenWidth" value="428" />
         <preference name="SplashScreenHeight" value="154" />
     </platform>
-    <engine name="browser" spec="^5.0.3" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^6.3.0" />
+    <engine name="browser" spec="^5.0.4" />
     <plugin name="cordova-plugin-bluetooth-status" spec="~1.0.4" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />

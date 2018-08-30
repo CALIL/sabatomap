@@ -104,6 +104,8 @@ input[type=search] {
       background: none;
       -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
       transition: color 0.4s, right 0.4s, opacity 0.6s; }
+      #ui .box button:focus {
+        outline: 0; }
       #ui .box button:hover {
         color: rgba(56, 149, 255, 0.85); }
       #ui .box button.clear:after {
@@ -150,7 +152,7 @@ input[type=search] {
       width: 80%;
       -webkit-box-shadow: 1px 3px 1px 1px #eee;
               box-shadow: 1px 3px 1px 1px #eee;
-      font-size: 110%;
+      font-size: 4.5vw;
       border-radius: 4px; }
     #ui .results:before {
       z-index: 10;

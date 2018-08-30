@@ -7,16 +7,13 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-bluetooth-status": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "cordova-plugin-wkwebview-engine": {
+    "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-bluetooth-status": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-device": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-device-orientation": {
@@ -31,7 +28,10 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "com.unarin.cordova.beacon": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },

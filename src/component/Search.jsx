@@ -4,7 +4,6 @@ import Book from './Book.jsx';
 import Stocks from './Stocks.jsx';
 
 import { api } from '../api.js';
-import { deflateRawSync } from 'zlib';
 
 export default class Search extends Component {
     constructor() {
@@ -21,10 +20,47 @@ export default class Search extends Component {
         this.cacheDetail = {};
         this.queueDetail = [];
         this.startTime = null;
+        this.intervalCount = 0;
     }
 
     componentDidMount() {
-        this.intervalId = setInterval(this.fetchDetail.bind(this), 1000);
+        document.addEventListener('backbutton', this.hideList.bind(this), false);
+        this.intervalId = setInterval(() => {
+            this.fetchDetail();
+            // 最初の5個以降
+            if (this.intervalCount>6) {
+                clearInterval(this.intervalId);
+                this.intervalId = setInterval(() => {
+                    this.fetchDetail();
+                }, 1000);
+            }
+        }, 100);
+    }
+    fetchDetail() {
+        this.intervalCount += 1;
+        if (this.state.query === '') {
+            this.queueDetail = [];
+        }
+        if (this.queueDetail.length > 0) {
+            const data = this.queueDetail[0];
+            if (this.cacheDetail[data.book.id]) return;
+            if (this.state.uuid === data.uuid) {
+                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
+                fetch(url).then((r) => r.json()).then((r) => {
+                    this.state.books.map((book) => {
+                        if (book.id === data.book.id) {
+                            book.detail = r.data;
+                        }
+                    });
+                    if (this.state.currentBook && this.state.currentBook.id === data.book.id) {
+                        this.selectBook(this.state.currentBook);
+                    }
+                    if(this.api) this.setState({});
+                    this.cacheDetail[data.book.id] = r.data;
+                });
+            }
+            this.queueDetail.shift();
+        }
     }
     componentDidUpdate() {
     }
@@ -69,33 +105,19 @@ export default class Search extends Component {
             }
         });
     }
-    fetchDetail() {
-        if (this.state.query === '') {
-            this.queueDetail = [];
-        }
-        if (this.queueDetail.length > 0) {
-            const data = this.queueDetail[0];
-            if (this.cacheDetail[data.book.id]) return;
-            if (this.state.uuid === data.uuid) {
-                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
-                fetch(url).then((r) => r.json()).then((r) => {
-                    this.state.books.map((book) => {
-                        if (book.id === data.book.id) {
-                            book.detail = r.data;
-                        }
-                    });
-                    if (this.state.currentBook && this.state.currentBook.id === data.book.id) {
-                        this.selectBook(this.state.currentBook);
-                    }
-                    this.setState({});
-                    this.cacheDetail[data.book.id] = r.data;
-                });
-            }
-            this.queueDetail.shift();
-        }
-    }
     hideList() {
-        this.setState({ visible: false });
+        this.api.kill();
+        this.api = null;
+        this.queueDetail = [];
+        this.refs.query.value = '';
+        this.setState({
+            query: '',
+            loading: false, // Unitrad APIのポーリング中
+            uuid: null, // Unitrad APIのUUID
+            currentBook: null, // 現在選択されている本
+            books: [],
+            visible: false, // 検索結果の表示・非表示
+        });
     }
     backToList() {
         this.setState({ currentBook: null });

@@ -10,7 +10,7 @@
     "babel-polyfill": "^6.26.0",
     "com.unarin.cordova.beacon": "^3.7.0",
     "cordova-android": "^6.3.0",
-    "cordova-browser": "^5.0.3",
+    "cordova-browser": "^5.0.4",
     "cordova-ios": "^4.5.5",
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-device": "^1.1.6",
@@ -62,9 +62,9 @@
   "license": "MIT",
   "cordova": {
     "platforms": [
-      "browser",
       "ios",
-      "android"
+      "android",
+      "browser"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
