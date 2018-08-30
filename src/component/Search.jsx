@@ -80,6 +80,9 @@ export default class Search extends Component {
                 this.setState({
                     loading: true,
                     visible: true,
+                    uuid: null,
+                    currentBook: null,
+                    books: [],
                 });
                 this.api = new api({ free: this.state.query, region: this.props.region }, (data) => {
                     this.setState({
