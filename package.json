@@ -63,8 +63,8 @@
   "cordova": {
     "platforms": [
       "ios",
-      "android",
-      "browser"
+      "browser",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
