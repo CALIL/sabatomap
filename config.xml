@@ -29,6 +29,9 @@
         <preference name="BackgroundColor" value="0xFF0068B1" />
     </platform>
     <platform name="ios">
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
+        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="FadeSplashScreen" value="true" />

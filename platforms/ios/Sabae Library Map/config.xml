@@ -55,6 +55,9 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
+    </edit-config>
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <icon height="57" platform="ios" src="www/res/icons/ios/icon.png" width="57" />
