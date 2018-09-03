@@ -62,9 +62,9 @@
   "license": "MIT",
   "cordova": {
     "platforms": [
-      "ios",
       "browser",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},

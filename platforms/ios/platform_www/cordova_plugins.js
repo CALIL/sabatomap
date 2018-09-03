@@ -9,6 +9,56 @@ module.exports = [
     ]
   },
   {
+    "id": "com.unarin.cordova.beacon.underscorejs",
+    "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.Q",
+    "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.LocationManager",
+    "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "merges": [
+      "cordova.plugins"
+    ]
+  },
+  {
+    "id": "com.unarin.cordova.beacon.Delegate",
+    "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.Region",
+    "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.Regions",
+    "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.CircularRegion",
+    "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
+    "id": "com.unarin.cordova.beacon.BeaconRegion",
+    "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
+    "pluginId": "com.unarin.cordova.beacon",
+    "runs": true
+  },
+  {
     "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
     "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
     "pluginId": "cordova-plugin-bluetooth-status",
@@ -89,70 +139,20 @@ module.exports = [
     "clobbers": [
       "window.WkWebView"
     ]
-  },
-  {
-    "id": "com.unarin.cordova.beacon.underscorejs",
-    "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.Q",
-    "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.LocationManager",
-    "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "merges": [
-      "cordova.plugins"
-    ]
-  },
-  {
-    "id": "com.unarin.cordova.beacon.Delegate",
-    "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.Region",
-    "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.Regions",
-    "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.CircularRegion",
-    "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
-  },
-  {
-    "id": "com.unarin.cordova.beacon.BeaconRegion",
-    "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
-    "pluginId": "com.unarin.cordova.beacon",
-    "runs": true
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
   "cordova-plugin-device": "1.1.3",
+  "com.unarin.cordova.beacon": "3.7.0",
   "cordova-plugin-bluetooth-status": "1.0.4",
   "cordova-plugin-device-orientation": "2.0.1",
   "cordova-plugin-inappbrowser": "2.0.2",
   "cordova-plugin-network-information": "2.0.1",
   "cordova-plugin-splashscreen": "5.0.2",
   "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-wkwebview-engine": "1.1.4",
-  "com.unarin.cordova.beacon": "3.7.0"
+  "cordova-plugin-wkwebview-engine": "1.1.4"
 };
 // BOTTOM OF METADATA
 });

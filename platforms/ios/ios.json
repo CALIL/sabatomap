@@ -13,6 +13,10 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"LocationManager\"><param name=\"ios-package\" value=\"CDVLocationManager\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"BluetoothStatus\"><param name=\"ios-package\" value=\"BluetoothStatus\" /></feature>",
               "count": 1
             },
@@ -38,10 +42,6 @@
             },
             {
               "xml": "<preference name=\"CordovaWebViewEngine\" value=\"CDVWKWebViewEngine\" />",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"LocationManager\"><param name=\"ios-package\" value=\"CDVLocationManager\" /></feature>",
               "count": 1
             }
           ]
@@ -81,6 +81,9 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
+    "com.unarin.cordova.beacon": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
@@ -101,9 +104,6 @@
     },
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
-    "com.unarin.cordova.beacon": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
   "dependent_plugins": {},
@@ -115,6 +115,56 @@
       "clobbers": [
         "device"
       ]
+    },
+    {
+      "id": "com.unarin.cordova.beacon.underscorejs",
+      "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.Q",
+      "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.LocationManager",
+      "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "merges": [
+        "cordova.plugins"
+      ]
+    },
+    {
+      "id": "com.unarin.cordova.beacon.Delegate",
+      "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.Region",
+      "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.Regions",
+      "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.CircularRegion",
+      "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
+    },
+    {
+      "id": "com.unarin.cordova.beacon.BeaconRegion",
+      "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
+      "pluginId": "com.unarin.cordova.beacon",
+      "runs": true
     },
     {
       "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
@@ -197,67 +247,17 @@
       "clobbers": [
         "window.WkWebView"
       ]
-    },
-    {
-      "id": "com.unarin.cordova.beacon.underscorejs",
-      "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.Q",
-      "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.LocationManager",
-      "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "merges": [
-        "cordova.plugins"
-      ]
-    },
-    {
-      "id": "com.unarin.cordova.beacon.Delegate",
-      "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.Region",
-      "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.Regions",
-      "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.CircularRegion",
-      "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
-    },
-    {
-      "id": "com.unarin.cordova.beacon.BeaconRegion",
-      "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
-      "pluginId": "com.unarin.cordova.beacon",
-      "runs": true
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-device": "1.1.3",
+    "com.unarin.cordova.beacon": "3.7.0",
     "cordova-plugin-bluetooth-status": "1.0.4",
     "cordova-plugin-device-orientation": "2.0.1",
     "cordova-plugin-inappbrowser": "2.0.2",
     "cordova-plugin-network-information": "2.0.1",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-plugin-wkwebview-engine": "1.1.4",
-    "com.unarin.cordova.beacon": "3.7.0"
+    "cordova-plugin-wkwebview-engine": "1.1.4"
   }
 }

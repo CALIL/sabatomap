@@ -22,6 +22,9 @@
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
     </feature>
+    <feature name="LocationManager">
+        <param name="ios-package" value="CDVLocationManager" />
+    </feature>
     <feature name="BluetoothStatus">
         <param name="ios-package" value="BluetoothStatus" />
     </feature>
@@ -40,9 +43,6 @@
     </feature>
     <feature name="CDVWKWebViewEngine">
         <param name="ios-package" value="CDVWKWebViewEngine" />
-    </feature>
-    <feature name="LocationManager">
-        <param name="ios-package" value="CDVLocationManager" />
     </feature>
     <name>Sabae Library Map</name>
     <description>さばとマップ</description>
