@@ -42,6 +42,8 @@ platforms/android/CordovaLib/ant-gen
 platforms/android/CordovaLib/bin
 platforms/android/CordovaLib/gen
 platforms/android/CordovaLib/local.properties
+calil.keystore
+android-release.apk
 
 platforms/browser
 
