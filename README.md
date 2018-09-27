@@ -21,6 +21,10 @@ gulp
 cordova run browser
 ```
 
+## Windowsでnode-sassのビルドに失敗する場合
+
+npm install --global --production windows-build-tools
+
 ## 更新履歴
 
 - 2015/11/6 オープンソースとして公開
