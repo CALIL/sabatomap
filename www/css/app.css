@@ -336,7 +336,7 @@ input[type=search] {
           box-sizing: content-box;
   right: 2px;
   top: 70px;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
