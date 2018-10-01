@@ -4,6 +4,7 @@ import concat from 'gulp-concat';
 import sass from 'gulp-sass';
 import cordova_lib from 'cordova-lib';
 import browserify from 'browserify'
+import babelify from "babelify";
 import source from "vinyl-source-stream";
 import replace from 'gulp-replace';
 import fs from 'fs';
@@ -22,9 +23,7 @@ gulp.task('compile_es2015', ['copy_openlayers_css', 'copy_font-awesome-css', 'co
   const rules = fs.readFileSync('src/sabae.json');
   return browserify('src/app.js')
     .on("error", (err) => console.log("Error : " + err.message))
-    .transform('babelify', {
-      presets: ['es2015', 'react']
-    })
+    .transform(babelify)
     .bundle()
     .pipe(source('all.js'))
     .pipe(replace('__RULES__', rules))
