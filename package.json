@@ -24,7 +24,7 @@
     "es6-object-assign": "^1.1.0",
     "font-awesome": "^4.7.0",
     "geolib": "^2.0.22",
-    "openlayers": "^4.2.0",
+    "openlayers": "^4.6.5",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-fastclick": "^3.0.2",
