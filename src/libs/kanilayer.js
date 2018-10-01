@@ -240,20 +240,19 @@ export default class Kanilayer extends ol.layer.Group {
                 }
               }));
 
-              size = (1 / resolution) * window.devicePixelRatio;
-
-              if (size >= 1) {
-                if (size > 20 * window.devicePixelRatio) {
+              var mapResolution = (1 / resolution) * window.devicePixelRatio;
+              // おそらく地図の表示段階によって、アイコンを表示するかどうかの判定
+              if (mapResolution >= 1) {
+                // 旗と、レサ太郎の切り替え判定
+                if (mapResolution > (20 * window.devicePixelRatio)) {
                   url = this.targetImageUrl;
                   message = this.targetMessage;
-                  size = Math.max(size, 45 * window.devicePixelRatio);
+                  var imageScale = 0.3;
                 } else {
                   url = this.targetImageUrl2;
                   message = this.targetMessage2;
-                  size = Math.max(size, 40 * window.devicePixelRatio);
+                  var imageScale = 0.28;
                 }
-
-                console.log(url, size);
 
                 styles.push(new ol.style.Style({
                   text: new ol.style.Text({
@@ -279,7 +278,7 @@ export default class Kanilayer extends ol.layer.Group {
 
                   image: new ol.style.Icon({
                     anchor: [0.5, 1],
-                    scale: size / 233,
+                    scale: imageScale,
                     anchorXUnits: "fraction",
                     anchorYUnits: "fraction",
                     opacity: 1,
