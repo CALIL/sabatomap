@@ -5,7 +5,8 @@
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
     "start": "gulp && cordova run browser",
-    "build": "gulp && cordova run android"
+    "build": "gulp && cordova run android",
+    "build_ios": "gulp && cordova run ios"
   },
   "dependencies": {
     "com.unarin.cordova.beacon": "^3.7.0",
@@ -61,8 +62,8 @@
   "cordova": {
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
@@ -71,9 +72,9 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-network-information": {},
       "cordova-plugin-splashscreen": {},
-      "com.unarin.cordova.beacon": {}
+      "com.unarin.cordova.beacon": {},
+      "cordova-plugin-network-information": {}
     }
   }
 }

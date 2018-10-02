@@ -50,7 +50,7 @@
   "cordova-plugin-network-information": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-network-information@2.0.1"
+      "id": "cordova-plugin-network-information@^2.0.1"
     },
     "is_top_level": true,
     "variables": {}

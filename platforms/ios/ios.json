@@ -7,7 +7,7 @@
     "files": {
       "*-Info.plist": {
         "parents": {
-          "NSCameraUsageDescription": [
+          "NSLocationWhenInUseUsageDescription": [
             {
               "xml": "<string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>",
               "count": 1,
@@ -19,14 +19,6 @@
             {
               "xml": "<string>This app would like to scan for iBeacons even when in the background.</string>",
               "count": 1
-            }
-          ],
-          "NSLocationWhenInUseUsageDescription": [
-            {
-              "xml": "<string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>",
-              "count": 1,
-              "mode": "merge",
-              "id": "config.xml"
             }
           ],
           "NSBluetoothPeripheralUsageDescription": [

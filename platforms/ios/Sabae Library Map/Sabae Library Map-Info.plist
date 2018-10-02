@@ -29,7 +29,9 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSMainNibFile</key>
-    <string>NSMainNibFile~ipad</string>
+    <string/>
+    <key>NSMainNibFile~ipad</key>
+    <string/>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
@@ -61,8 +63,6 @@
     <string>This app would like to scan for iBeacons.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app would like to scan for iBeacons both while in use and while in the background.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
   </dict>
