@@ -300,6 +300,11 @@
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = NZ237E3B2Y;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
