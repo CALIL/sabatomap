@@ -1,7 +1,0 @@
-{
-    "CoreBluetooth.framework": 2,
-    "CoreLocation.framework": 2,
-    "SystemConfiguration.framework": 1,
-    "CoreTelephony.framework": 1,
-    "WebKit.framework": 1
-}
