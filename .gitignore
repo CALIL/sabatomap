@@ -1,13 +1,4 @@
-﻿# Mac
-/src/compiled/*.js
-/www/js/all.js
-/www/js/load.js
-/www/vendor/*.js
-/www/vendor/*.css
-/www/vendor/*/*
-
-
-.DS_Store
+﻿.DS_Store
 
 # PyCharm
 .idea
@@ -16,10 +7,10 @@
 npm-debug.log
 node_modules
 
+
+www/
+
 # iOS
-platforms/ios/build/
-platforms/ios/www/
-platforms/ios/cordova/console.log
 
 # android
 platforms/android/**/*.iml
@@ -43,8 +34,7 @@ platforms/android/CordovaLib/local.properties
 calil.keystore
 android-release.apk
 
+# browser
 platforms/browser
 
-/info.txt
-bower_components
 updater/
