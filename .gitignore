@@ -11,6 +11,9 @@ node_modules
 www/
 
 # iOS
+platforms/ios/build/
+platforms/ios/www/
+platforms/ios/cordova/console.log
 
 # android
 platforms/android/**/*.iml
