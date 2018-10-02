@@ -9,6 +9,10 @@
         "parents": {
           "NSLocationWhenInUseUsageDescription": [
             {
+              "xml": "<string>This app would like to scan for iBeacons while it is in use.</string>",
+              "count": 1
+            },
+            {
               "xml": "<string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>",
               "count": 1,
               "mode": "merge",

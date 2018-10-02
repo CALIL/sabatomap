@@ -20,7 +20,6 @@ node_modules
 platforms/ios/build/
 platforms/ios/www/
 platforms/ios/cordova/console.log
-*.xcuserdatad
 
 # android
 platforms/android/**/*.iml
