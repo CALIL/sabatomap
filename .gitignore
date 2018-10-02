@@ -11,10 +11,10 @@ node_modules
 www/
 
 # iOS
-platforms/ios/
+platforms/ios
 
 # android
-platforms/android/
+platforms/android
 calil.keystore
 android-release.apk
 
