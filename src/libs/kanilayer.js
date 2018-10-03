@@ -116,14 +116,14 @@ export default class Kanilayer extends ol.layer.Group {
     });
 
     var styleFunction = (feature, resolution) => {
-      console.log(resolution)
+
       var message;
       var url;
       var size;
       var side;
       var index_;
       var index;
-      var text = 'test';
+      var text;
       var styles = [];
 
       if (resolution >= 1) return styles;
@@ -219,7 +219,6 @@ export default class Kanilayer extends ol.layer.Group {
                   var c = feature.getGeometry().getCoordinates()[0][2];
                   var d = feature.getGeometry().getCoordinates()[0][3];
                   var size = (1 / resolution) * window.devicePixelRatio;
-                  console.log(size);
 
                   if (side === "a" && size >= 20 * window.devicePixelRatio) {
                     c_ = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
@@ -310,21 +309,20 @@ export default class Kanilayer extends ol.layer.Group {
               }
             }
           } else {
-            // console.log(text)
-            // text = feature.get("label") != null ? feature.get("label") : "";
-            // if (resolution < 0.28) {
-            //   text = feature.get("label") != null ? feature.get("label") : "";
-            // } else {
-            //   text = "";
-            // }
+
+            if (resolution < 0.28) {
+              text = feature.get("label") != null ? feature.get("label") : "";
+            } else {
+              text = "";
+            }
 
             styles.push(new ol.style.Style({
               text: new ol.style.Text({
                 textAlign: "center",
                 textBaseline: "hanging",
                 font: "Arial",
-                text: feature.get("label") != null ? feature.get("label") : "",
-
+                text: text,
+                overflow: true,
                 fill: new ol.style.Fill({
                   color: [0, 0, 0, 1]
                 }),
