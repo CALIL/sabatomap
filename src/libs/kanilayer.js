@@ -309,35 +309,36 @@ export default class Kanilayer extends ol.layer.Group {
               }
             }
           } else {
-
+            // consoe.log(resolution)
             if (resolution < 0.28) {
               text = feature.get("label") != null ? feature.get("label") : "";
             } else {
               text = "";
             }
-
-            styles.push(new ol.style.Style({
-              text: new ol.style.Text({
-                textAlign: "center",
-                textBaseline: "hanging",
-                font: "Arial",
-                text: text,
-                overflow: true,
-                fill: new ol.style.Fill({
-                  color: [0, 0, 0, 1]
-                }),
-
-                stroke: new ol.style.Stroke({
-                  color: [255, 255, 255, 1],
-                  width: 1.5
-                }),
-
-                scale: 1.5,
-                offsetX: 0,
-                offsetY: 0,
-                rotation: 0
-              })
-            }));
+            if (text!=="") {
+              styles.push(new ol.style.Style({
+                text: new ol.style.Text({
+                  textAlign: "center",
+                  textBaseline: "hanging",
+                  font: "Arial",
+                  text: text,
+                  overflow: true,
+                  fill: new ol.style.Fill({
+                    color: [0, 0, 0, 1]
+                  }),
+  
+                  stroke: new ol.style.Stroke({
+                    color: [255, 255, 255, 1],
+                    width: 1.5
+                  }),
+  
+                  scale: 1.5,
+                  offsetX: 0,
+                  offsetY: 0,
+                  rotation: 0
+                })
+              }));
+            }
           }
       } else if (feature.get("type") === "beacon") {
           if (this.debug_ === true) {
