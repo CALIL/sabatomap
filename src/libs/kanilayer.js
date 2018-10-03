@@ -123,7 +123,6 @@ export default class Kanilayer extends ol.layer.Group {
       var side;
       var index_;
       var index;
-      var text;
       var styles = [];
 
       if (resolution >= 1) return styles;
@@ -310,18 +309,13 @@ export default class Kanilayer extends ol.layer.Group {
             }
           } else {
             // consoe.log(resolution)
-            if (resolution < 0.28) {
-              text = feature.get("label") != null ? feature.get("label") : "";
-            } else {
-              text = "";
-            }
-            if (text!=="") {
+            if (resolution < 0.28 && feature.get("label") != null) {
               styles.push(new ol.style.Style({
                 text: new ol.style.Text({
                   textAlign: "center",
                   textBaseline: "hanging",
                   font: "Arial",
-                  text: text,
+                  text: feature.get("label"),
                   overflow: true,
                   fill: new ol.style.Fill({
                     color: [0, 0, 0, 1]
