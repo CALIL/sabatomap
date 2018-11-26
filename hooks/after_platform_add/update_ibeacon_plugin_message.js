@@ -7,7 +7,7 @@ var platform = process.env.CORDOVA_PLATFORMS;
 
 if (platform === 'android') {
     var fs = require('fs');
-    var filepath = rootdir + '/platforms/android/src/com/unarin/cordova/beacon/LocationManager.java';
+    var filepath = './platforms/android/src/com/unarin/cordova/beacon/LocationManager.java';
     fs.readFile(filepath, 'utf8', function (err,data) {
       if (err) {
         return console.log(err);
