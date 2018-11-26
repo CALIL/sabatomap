@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20001" id="jp.calil.sabatomap" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Sabae Library Map</name>
+<widget android-versionCode="20003" id="jp.calil.sabatomap" version="2.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>さばとマップ</name>
     <description>さばとマップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
@@ -79,8 +79,8 @@
         <preference name="SplashScreenHeight" value="154" />
     </platform>
     <engine name="browser" spec="^5.0.4" />
-    <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^6.3.0" />
+    <engine name="ios" spec="^4.5.5" />
     <plugin name="cordova-plugin-bluetooth-status" spec="~1.0.4" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />

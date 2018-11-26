@@ -5,6 +5,7 @@
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
     "start": "gulp && cordova run browser",
+    "release": "gulp && cordova run browser",
     "build": "gulp && cordova run android",
     "build_ios": "gulp && cordova run ios"
   },
@@ -62,8 +63,8 @@
   "cordova": {
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
