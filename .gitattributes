@@ -29,3 +29,5 @@
 
 # Omit specific test files from being modified
 /tests/files/text.txt binary
+
+.vscode
