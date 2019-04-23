@@ -1,13 +1,14 @@
 {
   "name": "sabatomap",
-  "version": "1.6.0-dev",
+  "version": "1.7.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
-    "start": "gulp && cordova run browser",
+    "start": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js && cordova prepare && cordova run browser",
     "release": "gulp && cordova run browser",
     "build": "gulp && cordova run android",
-    "build_ios": "gulp && cordova run ios"
+    "build_ios": "gulp && cordova run ios",
+    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
   },
   "dependencies": {
     "com.unarin.cordova.beacon": "^3.7.0",
@@ -26,7 +27,7 @@
     "es6-object-assign": "^1.1.0",
     "font-awesome": "^4.7.0",
     "geolib": "^2.0.22",
-    "openlayers": "^4.6.5",
+    "ol": "^5.3.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-fastclick": "^3.0.2",
@@ -43,13 +44,12 @@
     "@babel/register": "^7.4.0",
     "autoprefixer": "^9.5.1",
     "babelify": "^10.0.0",
-    "browserify": "^16.1.0",
-    "cordova-lib": "^7.0.1",
+    "browserify": "^16.2.2",
+    "cordova-lib": "^9.0.1",
     "core-js": "^2.6.5",
     "del": "^3.0.0",
-    "gulp": "^3.9.0",
+    "gulp": "^4.0.1",
     "gulp-concat": "^2.6.0",
-    "gulp-download": "0.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
@@ -57,6 +57,7 @@
     "natives": "^1.1.6",
     "postcss": "^7.0.14",
     "postcss-assets": "^5.0.0",
+    "uglifyify": "^5.0.1",
     "vinyl-source-stream": "^1.1.0"
   },
   "author": "CALIL Inc.",

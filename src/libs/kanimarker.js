@@ -4,7 +4,11 @@
  This software is released under the MIT License.
  http://opensource.org/licenses/mit-license.php
  */
-import ol from 'openlayers';
+import {easeOut,linear,inAndOut} from 'ol/easing';
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Circle from 'ol/geom/Circle';
+import Stroke from 'ol/style/Stroke';
 
 class Kanimarker {
   /**
@@ -36,14 +40,19 @@ class Kanimarker {
     // [Number] 計測精度のアニメーション時間(ms)
     this.accuracyDuration = 2000;
 
-    this.animations = {};  // アニメーション用の内部ステート
+    this.animations = {
+      move: null,
+      moveMode: null,
+      fade: null,
+      accuracy: null
+    };  // アニメーション用の内部ステート
     this.debug_ = false;  // デバッグ表示の有無(内部ステート)
     this.callbacks = {};  // コールバック用変数
 
     if (this.map != null) {
-      this.map.on("postcompose", this.postcompose_, this);
-      this.map.on("precompose", this.precompose_, this);
-      this.map.on("pointerdrag", this.pointerdrag_, this);
+      this.map.on("postcompose", this.postcompose_.bind(this));
+      this.map.on("precompose", this.precompose_.bind(this));
+      this.map.on("pointerdrag", this.pointerdrag_.bind(this));
     }
   }
 
@@ -51,7 +60,12 @@ class Kanimarker {
    * 現在進行中のアニメーションをキャンセルする
    */
   cancelAnimation() {
-    return this.animations = {};
+    return this.animations = {
+      move: null,
+      moveMode: null,
+      fade: null,
+      accuracy: null
+    };
   }
 
   /**
@@ -69,7 +83,7 @@ class Kanimarker {
    * @returns {boolean} 切り替えが成功したか
    */
   setMode(mode) {
-    var froms;
+    // var froms;
     var d;
     var diff;
     var to;
@@ -118,9 +132,8 @@ class Kanimarker {
           this.map.getView().animate({
             duration: d,
             rotation: -(this.direction / 180 * Math.PI),
-            easing: ol.easing.easeOut
+            easing: easeOut
           })
-          console.log(this.direction);
 
           //if (from - to !== 0) {
             
@@ -150,15 +163,14 @@ class Kanimarker {
           to = this.position;
 
           if (from[0] - to[0] !== 0 || from[1] - to[1] !== 0) {
-            froms = [from[0] - to[0], from[1] - to[1]];
-
-            if (this.animations.moveMode != null && this.animations.moveMode.animate(new Date())) {
-              froms = [animations.current[0], animations.moveMode.current[1]];
-            }
+            //froms = [from[0] - to[0], from[1] - to[1]];
+            //if (this.animations.moveMode != null && this.animations.moveMode.animate(new Date())) {
+            //  froms = [animations.current[0], animations.moveMode.current[1]];
+            //}
             this.map.getView().animate({
               duration: 800,
               center: to,
-              easing: ol.easing.easeOut,
+              easing: easeOut,
             })
             /*
             this.animations.moveMode = {
@@ -242,11 +254,11 @@ class Kanimarker {
           var time = (frameStateTime - this.start) / this.duration;
 
           if (this.duration > 8000) {
-            easing = ol.easing.linear(time);
+            easing = linear(time);
           } else if (this.duration > 2000) {
-            easing = ol.easing.inAndOut(time);
+            easing = inAndOut(time);
           } else {
-            easing = ol.easing.easeOut(time);
+            easing = easeOut(time);
           }
 
           this.current = [
@@ -337,7 +349,7 @@ class Kanimarker {
 
       animate: function (frameStateTime) {
         var time = (frameStateTime - this.start) / this.duration;
-        this.current = this.from + ((this.to - this.from) * ol.easing.easeOut(time));
+        this.current = this.from + ((this.to - this.from) * easeOut(time));
         return time <= 1;
       }
     };
@@ -375,7 +387,7 @@ class Kanimarker {
 
       animate: function (frameStateTime) {
         var time = (frameStateTime - this.start) / 500;
-        this.current = this.from + ((this.to - this.from) * ol.easing.easeOut(time));
+        this.current = this.from + ((this.to - this.from) * easeOut(time));
         return time <= 1;
       }
     };
@@ -386,7 +398,7 @@ class Kanimarker {
       this.map.getView().animate({
         duration: 500,
         rotation: -(this.direction / 180 * Math.PI),
-        easing: ol.easing.easeOut
+        easing: easeOut
       })
       //return this.map.getView().setRotation(-(this.direction / 180 * Math.PI));
     } else if (!silent) {
@@ -400,8 +412,6 @@ class Kanimarker {
   postcompose_(event) {
     var txt;
     var pixel;
-    var iconStyle;
-    var circleStyle;
     var diff;
     var opacity_;
     var maxSize;
@@ -472,23 +482,23 @@ class Kanimarker {
         }
 
         if (opacity_ > 0) {
-          vectorContext.setStyle(new ol.style.Style({
-            fill: new ol.style.Fill({color:[56, 149, 255,opacity_]})
+          vectorContext.setStyle(new Style({
+            fill: new Fill({color:[56, 149, 255,opacity_]})
           }));
-          vectorContext.drawCircle(new ol.geom.Circle(position, accuracySize * pixelRatio * frameState.viewState.resolution/2));
+          vectorContext.drawCircle(new Circle(position, accuracySize * pixelRatio * frameState.viewState.resolution/2));
         }
       }
 
-      vectorContext.setStyle(new ol.style.Style({
-        fill: new ol.style.Fill({
+      vectorContext.setStyle(new Style({
+        fill: new Fill({
           color: [0,160,233,opacity]
         }),
-        stroke: new ol.style.Stroke({
+        stroke: new Stroke({
           color: [255, 255, 255,opacity],
           width: 1.5 * pixelRatio
         })
       }));
-      vectorContext.drawCircle(new ol.geom.Circle(position, 4 * pixelRatio * frameState.viewState.resolution));
+      vectorContext.drawCircle(new Circle(position, 4 * pixelRatio * frameState.viewState.resolution));
       context.save();
 
       if (this.mode !== "normal") {
@@ -563,11 +573,9 @@ class Kanimarker {
    * nodoc マップ描画前の処理
    */
   precompose_(event) {
-    var diff;
-    var direction;
+    // var direction;
     var position;
     var frameState;
-    // console.log(event);
 
     if (this.position !== null && this.mode !== "normal") {
       frameState = event.frameState;
@@ -596,11 +604,11 @@ class Kanimarker {
       frameState.viewState.center[1] = position[1];
 
       if (this.mode === "headingup") {
-        direction = this.direction;
+        //direction = this.direction;
 
         if (this.animations.heading != null) {
           if (this.animations.heading.animate(frameState.time)) {
-            direction = this.animations.heading.current;
+            //direction = this.animations.heading.current;
           } else {
             this.animations.heading = null;
           }

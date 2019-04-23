@@ -91,7 +91,7 @@ export class Buffer {
         }
       }
       const t = this.timeout;
-      this.ranged = this.ranged.filter(function(c) {
+      this.ranged = this.ranged.filter(function (c) {
         return new Date() - c.lastAppear < t;
       });
     }
@@ -360,7 +360,7 @@ export default class Kanikama {
     beacons.sort((a, b) => b.rssi - a.rssi);
 
     if (filter_near > 0 && beacons.length > 1 && beacons[0].rssi - beacons[1].rssi <= filter_near) {
-        return null;
+      return null;
     }
 
     for (let p of this.currentFloor.nearest1) {
@@ -407,11 +407,11 @@ export default class Kanikama {
       return null;
     }
 
-    beacons = beacons.filter(function(_b) {
+    beacons = beacons.filter(function (_b) {
       return _b.rssi !== 0;
     });
 
-    beacons.sort(function(_a, _b) {
+    beacons.sort(function (_a, _b) {
       return _b.rssi - _a.rssi;
     });
 
@@ -474,11 +474,11 @@ export default class Kanikama {
       return null;
     }
 
-    beacons = beacons.filter(function(_item) {
+    beacons = beacons.filter(function (_item) {
       return _item.rssi !== 0;
     });
 
-    beacons.sort(function(x, y) {
+    beacons.sort(function (x, y) {
       return y.rssi - x.rssi;
     });
 
@@ -499,7 +499,7 @@ export default class Kanikama {
       return null;
     }
 
-    candidate.sort(function(x, y) {
+    candidate.sort(function (x, y) {
       return y.rssi - x.rssi;
     });
 

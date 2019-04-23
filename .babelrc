@@ -6,7 +6,11 @@
     "presets": [
         ["@babel/preset-env", {
             "useBuiltIns": "usage",
-            "corejs":2 
+            "corejs":2,
+            "targets": {
+                "browsers": ["last 2 versions", "safari >= 7"]
+            },
+            "include": ["es6.set", "es6.map"]
         }],
         "@babel/preset-react"
     ]

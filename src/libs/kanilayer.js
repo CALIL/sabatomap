@@ -5,9 +5,22 @@
  @author ryuuji@calil.jp
  */
 
-import ol from 'openlayers';
+import LayerGroup from 'ol/layer/Group';
+import XYZ from 'ol/source/xyz';
+import VectorSource from 'ol/source/Vector';
+import TileLayer from 'ol/layer/Tile';
+import Style from 'ol/style/Style';
+import VectorLayer from 'ol/layer/Vector';
+import Text from 'ol/style/Text';
+import Stroke from 'ol/style/Stroke';
+import Fill from 'ol/style/Fill';
+import {GeoJSON} from 'ol/format';
+import Polygon from 'ol/geom/Polygon';
+import Icon from 'ol/style/Icon';
+import Point from 'ol/geom/Point';
+import CircleStyle from 'ol/style/Circle';
 
-export default class Kanilayer extends ol.layer.Group {
+export default class Kanilayer extends LayerGroup {
 
   /**
    * 強調表示する棚IDを指定
@@ -41,7 +54,7 @@ export default class Kanilayer extends ol.layer.Group {
   getHaikaTileSource_(id) {
     var xid = ("0000000000" + parseInt(id)).slice(-10);
 
-    return new ol.source.XYZ({
+    return new XYZ({
       url: "https://tiles.haika.io/" + xid + "/{z}/{x}/{y}.png",
       maxZoom: 24
     });
@@ -54,9 +67,9 @@ export default class Kanilayer extends ol.layer.Group {
    * @private
    */
   getHaikaVectorSource_(id) {
-    return new ol.source.Vector({
+    return new VectorSource({
       url: ("https://app.haika.io/api/facility/2/" + (id) + ".geojson"),
-      format: new ol.format.GeoJSON()
+      format: new GeoJSON()
     });
   }
 
@@ -102,13 +115,13 @@ export default class Kanilayer extends ol.layer.Group {
       preThis.targetImageUrl2 = options_.targetImageUrl2;
     }
 
-    preThis.tileA = new ol.layer.Tile({
+    preThis.tileA = new TileLayer({
       source: null,
       opacity: 1,
       preload: 3
     });
 
-    preThis.tileB = new ol.layer.Tile({
+    preThis.tileB = new TileLayer({
       source: null,
       opacity: 0,
       visible: false,
@@ -161,13 +174,13 @@ export default class Kanilayer extends ol.layer.Group {
             this.targetPosition = feature;
 
             if (index >= 1) {
-              styles.push(new ol.style.Style({
-                stroke: new ol.style.Stroke({
+              styles.push(new Style({
+                stroke: new Stroke({
                   color: "#9E7E49",
                   width: 2
                 }),
 
-                fill: new ol.style.Fill({
+                fill: new Fill({
                   color: "#FFBE4D"
                 }),
 
@@ -185,26 +198,26 @@ export default class Kanilayer extends ol.layer.Group {
                   if (side === "a" && size >= 20 * window.devicePixelRatio) {
                     c_ = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
                     d_ = [(a[0] + d[0]) / 2, (a[1] + d[1]) / 2];
-                    return new ol.geom.Polygon([[a, b, c_, d_, a]]);
+                    return new Polygon([[a, b, c_, d_, a]]);
                   } else if (side === "b" && size >= 20 * window.devicePixelRatio) {
                     b_ = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
                     a_ = [(a[0] + d[0]) / 2, (a[1] + d[1]) / 2];
-                    return new ol.geom.Polygon([[a_, b_, c, d, a_]]);
+                    return new Polygon([[a_, b_, c, d, a_]]);
                   } else {
-                    return new ol.geom.Polygon([[a, b, c, d, a]]);
+                    return new Polygon([[a, b, c, d, a]]);
                   }
                 }
               }));
             } else {
-              styles.push(new ol.style.Style({
+              styles.push(new Style({
                 zIndex: 9998,
 
-                stroke: new ol.style.Stroke({
+                stroke: new Stroke({
                   color: "#9E7E49",
                   width: 2
                 }),
 
-                fill: new ol.style.Fill({
+                fill: new Fill({
                   color: "#FFBE4D"
                 }),
 
@@ -222,13 +235,13 @@ export default class Kanilayer extends ol.layer.Group {
                   if (side === "a" && size >= 20 * window.devicePixelRatio) {
                     c_ = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
                     d_ = [(a[0] + d[0]) / 2, (a[1] + d[1]) / 2];
-                    return new ol.geom.Polygon([[a, b, c_, d_, a]]);
+                    return new Polygon([[a, b, c_, d_, a]]);
                   } else if (side === "b" && size >= 20 * window.devicePixelRatio) {
                     b_ = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
                     a_ = [(a[0] + d[0]) / 2, (a[1] + d[1]) / 2];
-                    return new ol.geom.Polygon([[a_, b_, c, d, a_]]);
+                    return new Polygon([[a_, b_, c, d, a_]]);
                   } else {
-                    return new ol.geom.Polygon([[a, b, c, d, a]]);
+                    return new Polygon([[a, b, c, d, a]]);
                   }
                 }
               }));
@@ -247,18 +260,18 @@ export default class Kanilayer extends ol.layer.Group {
                   var imageScale = 0.28;
                 }
 
-                styles.push(new ol.style.Style({
-                  text: new ol.style.Text({
+                styles.push(new Style({
+                  text: new Text({
                     textAlign: "left",
                     textBaseline: "hanging",
                     font: "Arial bold",
                     text: message,
 
-                    fill: new ol.style.Fill({
+                    fill: new Fill({
                       color: "#D95C02"
                     }),
 
-                    stroke: new ol.style.Stroke({
+                    stroke: new Stroke({
                       color: [255, 255, 255, 1],
                       width: 3
                     }),
@@ -269,7 +282,7 @@ export default class Kanilayer extends ol.layer.Group {
                     rotation: 0
                   }),
 
-                  image: new ol.style.Icon({
+                  image: new Icon({
                     anchor: [0.5, 1],
                     scale: imageScale,
                     anchorXUnits: "fraction",
@@ -292,14 +305,14 @@ export default class Kanilayer extends ol.layer.Group {
                     if (side === "a" && size >= 20 * window.devicePixelRatio) {
                       diff_ad = [(d[0] - a[0]) / 2, (d[1] - a[1]) / 2];
                       ab = [(a[0] + b[0]) / 2 - diff_ad[0] * 2, (a[1] + b[1]) / 2 - diff_ad[1] * 2];
-                      return new ol.geom.Point(ab);
+                      return new Point(ab);
                     } else if (side === "b" && size >= 20 * window.devicePixelRatio) {
                       diff_ad = [(d[0] - a[0]) / 2, (d[1] - a[1]) / 2];
                       cd = [(c[0] + d[0]) / 2 + diff_ad[0] * 1.5, (c[1] + d[1]) / 2 + diff_ad[1] * 1.5];
-                      return new ol.geom.Point(cd);
+                      return new Point(cd);
                     } else {
                       abcd = [(a[0] + b[0] + c[0] + d[0]) / 4, (a[1] + b[1] + c[1] + d[1]) / 4];
-                      return new ol.geom.Point(abcd);
+                      return new Point(abcd);
                     }
                   },
 
@@ -310,18 +323,18 @@ export default class Kanilayer extends ol.layer.Group {
           } else {
             // consoe.log(resolution)
             if (resolution < 0.28 && feature.get("label") != null) {
-              styles.push(new ol.style.Style({
-                text: new ol.style.Text({
+              styles.push(new Style({
+                text: new Text({
                   textAlign: "center",
                   textBaseline: "hanging",
                   font: "Arial",
                   text: feature.get("label"),
                   overflow: true,
-                  fill: new ol.style.Fill({
+                  fill: new Fill({
                     color: [0, 0, 0, 1]
                   }),
   
-                  stroke: new ol.style.Stroke({
+                  stroke: new Stroke({
                     color: [255, 255, 255, 1],
                     width: 1.5
                   }),
@@ -336,27 +349,27 @@ export default class Kanilayer extends ol.layer.Group {
           }
       } else if (feature.get("type") === "beacon") {
           if (this.debug_ === true) {
-            styles.push(new ol.style.Style({
-              image: new ol.style.Circle({
+            styles.push(new Style({
+              image: new CircleStyle({
                 radius: 5,
                 fill: null,
 
-                stroke: new ol.style.Stroke({
+                stroke: new Stroke({
                   color: "#000000"
                 })
               }),
 
-              text: new ol.style.Text({
+              text: new Text({
                 textAlign: "left",
                 textBaseline: "middle",
                 font: "Arial 12px",
                 text: feature.get("minor") + " (" + feature.get("lane") + ")",
 
-                fill: new ol.style.Fill({
+                fill: new Fill({
                   color: [0, 0, 0, 1]
                 }),
 
-                stroke: new ol.style.Stroke({
+                stroke: new Stroke({
                   color: [255, 255, 255, 1],
                   width: 1.5
                 }),
@@ -372,7 +385,7 @@ export default class Kanilayer extends ol.layer.Group {
       return styles;
     };
 
-    preThis.vector = new ol.layer.Vector({
+    preThis.vector = new VectorLayer({
       source: null,
       style: styleFunction,
       opacity: 1
@@ -392,8 +405,8 @@ export default class Kanilayer extends ol.layer.Group {
     this.targetPosition = null;
     this.targetImageUrl = preThis.targetImageUrl;
     this.targetImageUrl2 = preThis.targetImageUrl2;
-    this.vector.on("postcompose", this.postcompose_, this);
-    this.tileA.on("precompose", this.precompose_, this);
+    this.vector.on("postcompose", this.postcompose_.bind(this));
+    this.tileA.on("precompose", this.precompose_.bind(this));
 
     if (options_.kFloor != null) {
       this.setFloorId(options_.kFloor, false);
