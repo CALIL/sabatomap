@@ -15,8 +15,8 @@
 ```bash
 npm install -g cordova
 npm update
-cordova platform update ios
-cordova platform update android
+cordova platform add ios
+cordova platform add android
 gulp
 cordova run browser
 ```
