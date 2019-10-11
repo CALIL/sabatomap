@@ -21,6 +21,12 @@ gulp
 cordova run browser
 ```
 
+## Windowsでgradleへのパスが見つからない場合
+
+https://gradle.org/  
+Gradleのバイナリーを解凍してbinフォルダへPathを通す  
+例) set PATH=%PATH%;C:\Users\User\Desktop\gradle-5.6.2\bin\
+
 ## Windowsでnode-sassのビルドに失敗する場合
 
 npm install --global --production windows-build-tools
