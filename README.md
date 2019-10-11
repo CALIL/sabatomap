@@ -31,6 +31,10 @@ Gradleのバイナリーを解凍してbinフォルダへPathを通す
 
 npm install --global --production windows-build-tools
 
+## Android版ストアへ公開
+1passwordから、さばとマップのkeystoreをダウンロード  
+android_build.bat
+
 ## 更新履歴
 
 - 2015/11/6 オープンソースとして公開
