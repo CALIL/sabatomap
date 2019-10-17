@@ -32,7 +32,7 @@ npm install --global --production windows-build-tools
 
 ## Android版ストアへ公開
 npm run release  
-1passwordから、さばとマップのkeystoreをダウンロード  
+1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
 android_build.bat
 
 ## 更新履歴
