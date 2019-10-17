@@ -24,7 +24,7 @@ npm start
 
 https://gradle.org/  
 Gradleのバイナリーを解凍してbinフォルダへPathを通す  
-例) set PATH=%PATH%;C:\Users\User\Desktop\gradle-5.6.2\bin\
+例) set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
 
 ## Windowsでnode-sassのビルドに失敗する場合
 
