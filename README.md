@@ -17,8 +17,7 @@ npm install -g cordova
 npm update
 cordova platform add ios
 cordova platform add android
-gulp
-cordova run browser
+npm start
 ```
 
 ## Windowsでgradleへのパスが見つからない場合

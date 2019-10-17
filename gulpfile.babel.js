@@ -10,19 +10,19 @@ import fs from 'fs';
 gulp.task('copy_css', () => gulp.src(['node_modules/ol/ol.css','node_modules/font-awesome/css/font-awesome.min.css']).pipe(gulp.dest('www/vendor/css')));
 gulp.task('copy_fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts')));
 
-gulp.task('buildjs', gulp.series( gulp.parallel('copy_css', 'copy_fonts'), () => {
-  const rules = fs.readFileSync('src/sabae.json');
-  var options = {
-        entries: "./src/app.js",   // Entry point
-        extensions: [".js"],            // consider files with these extensions as modules 
-        debug: false,  // add resource map at the end of the file or not
-        paths: ["./src/"]           // This allows relative imports in require, with './scripts/' as root
-  };
-  return browserify(options).transform(babelify).bundle()
-    .pipe(source('all.js'))
-    .pipe(replace('__RULES__', rules))
-    .pipe(gulp.dest('www/js/'));
-}));
+// gulp.task('buildjs', gulp.series( gulp.parallel('copy_css', 'copy_fonts'), () => {
+//   const rules = fs.readFileSync('src/sabae.json');
+//   var options = {
+//         entries: "./src/app.js",   // Entry point
+//         extensions: [".js"],            // consider files with these extensions as modules 
+//         debug: false,  // add resource map at the end of the file or not
+//         paths: ["./src/"]           // This allows relative imports in require, with './scripts/' as root
+//   };
+//   return browserify(options).transform(babelify).bundle()
+//     .pipe(source('all.js'))
+//     .pipe(replace('__RULES__', rules))
+//     .pipe(gulp.dest('www/js/'));
+// }));
 
 
 gulp.task('sass', function () {
