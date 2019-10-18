@@ -30,6 +30,11 @@ Gradleのバイナリーを解凍してbinフォルダへPathを通す
 
 npm install --global --production windows-build-tools
 
+## Android版で最初の位置情報の許可についてのメッセージが英語になる場合
+
+\hooks\after_platform_add\update_ibeacon_plugin_message.js  
+が正常に動いているか確かめる
+
 ## Android版ストアへ公開
 npm run release  
 1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
