@@ -54,6 +54,7 @@
     "gulp-postcss": "^8.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
+    "node-sass": "^4.13.0",
     "gulp-uglify": "^3.0.2",
     "natives": "^1.1.6",
     "postcss": "^7.0.18",
