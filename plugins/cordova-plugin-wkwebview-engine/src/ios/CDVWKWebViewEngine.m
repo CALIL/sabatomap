@@ -276,6 +276,7 @@ static void * KVOContext = &KVOContext;
     }
 
     wkWebView.allowsBackForwardNavigationGestures = [settings cordovaBoolSettingForKey:@"AllowBackForwardNavigationGestures" defaultValue:NO];
+    wkWebView.allowsLinkPreview = [settings cordovaBoolSettingForKey:@"Allow3DTouchLinkPreview" defaultValue:YES];
 }
 
 - (void)updateWithInfo:(NSDictionary*)info

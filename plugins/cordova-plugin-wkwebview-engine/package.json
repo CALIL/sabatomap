@@ -1,8 +1,8 @@
 {
   "_from": "cordova-plugin-wkwebview-engine",
-  "_id": "cordova-plugin-wkwebview-engine@1.1.4",
+  "_id": "cordova-plugin-wkwebview-engine@1.2.1",
   "_inBundle": false,
-  "_integrity": "sha1-EbnPoRTsBSXFxj5nok6rQVcDQGA=",
+  "_integrity": "sha512-usp6pu+tJ1y0btVAXOjE5+tMjbvTY6hsiLfHJPMdyzkgHvxoNSePZ/NavTGj4CBJJlUjnMsN3TUq25+SeTZCow==",
   "_location": "/cordova-plugin-wkwebview-engine",
   "_phantomChildren": {},
   "_requested": {
@@ -19,15 +19,15 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-wkwebview-engine/-/cordova-plugin-wkwebview-engine-1.1.4.tgz",
-  "_shasum": "11b9cfa114ec0525c5c63e67a24eab4157034060",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-wkwebview-engine/-/cordova-plugin-wkwebview-engine-1.2.1.tgz",
+  "_shasum": "f8972282969355d2d2f3458b23f604210e45eaf3",
   "_spec": "cordova-plugin-wkwebview-engine",
   "_where": "/Users/deguchi/apps/sabatomap",
   "author": {
-    "name": "Apache Cordova"
+    "name": "Apache Software Foundation"
   },
   "bugs": {
-    "url": "https://issues.apache.org/jira/browse/CB"
+    "url": "https://github.com/apache/cordova-plugin-wkwebview-engine/issues"
   },
   "bundleDependencies": false,
   "deprecated": false,
@@ -51,7 +51,9 @@
   "homepage": "https://github.com/apache/cordova-plugin-wkwebview-engine#readme",
   "keywords": [
     "cordova",
-    "wkwebview"
+    "wkwebview",
+    "cordova-ios",
+    "ecosystem:cordova"
   ],
   "license": "Apache-2.0",
   "main": "index.js",
@@ -66,5 +68,5 @@
     "preobjc-tests": "cd tests/ios && npm install",
     "test": "npm run eslint && npm run objc-tests"
   },
-  "version": "1.1.4"
+  "version": "1.2.1"
 }

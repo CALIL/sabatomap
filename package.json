@@ -73,13 +73,13 @@
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-splashscreen": {},
       "com.unarin.cordova.beacon": {},
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-wkwebview-engine": {}
     }
   }
 }
