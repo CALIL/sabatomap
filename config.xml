@@ -32,6 +32,9 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
         </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAlwaysUsageDescription">
+            <string>館内マップの表示にBluetoothを使います。Bluetoothへのアクセスを許可してください。</string>
+        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="FadeSplashScreen" value="true" />
@@ -57,6 +60,8 @@
         <icon height="1024" platform="ios" src="www/res/icons/ios/icon-1024.png" width="1024" />
         <splash height="1136" platform="ios" src="www/res/screens/ios/Default-568h@2x~iphone.png" width="640" />
         <splash height="1334" platform="ios" src="www/res/screens/ios/Default-667h.png" width="750" />
+        <splash height="2436" platform="ios" src="www/res/screens/ios/Default-736h.png" width="1125" />
+        <splash  height="1125" platform="ios" src="www/res/screens/ios/Default-736h.png" width="2436"/>
         <splash height="2208" platform="ios" src="www/res/screens/ios/Default-736h.png" width="1242" />
         <splash height="1242" platform="ios" src="www/res/screens/ios/Default-Landscape-736h.png" width="2208" />
         <splash height="1536" platform="ios" src="www/res/screens/ios/Default-Landscape@2x~ipad.png" width="2048" />

@@ -8,31 +8,31 @@
   },
   "installed_plugins": {
     "com.unarin.cordova.beacon": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-bluetooth-status": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-device": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-device-orientation": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
     "cordova-plugin-wkwebview-engine": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
   "dependent_plugins": {}
