@@ -68,7 +68,8 @@ export default class Kanilayer extends LayerGroup {
    */
   getHaikaVectorSource_(id) {
     return new VectorSource({
-      url: ("https://app.haika.io/api/facility/2/" + (id) + ".geojson"),
+      // url: ("https://app.haika.io/api/facility/2/" + (id) + ".geojson"),
+      url: "/json/" + id + ".json",
       format: new GeoJSON()
     });
   }

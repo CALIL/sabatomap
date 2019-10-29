@@ -5,7 +5,7 @@
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
     "start": "npm run copy && browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js && cordova prepare && cordova run browser",
-    "copy": "gulp sass && gulp copy_css && gulp copy_fonts",
+    "copy": "gulp sass && gulp copy_css && gulp copy_fonts && gulp copy_jsons",
     "release": "npm run copy && cordova run android --release",
     "build": "npm run copy && cordova run android",
     "build_ios": "npm run copy && cordova run ios --target=iPhone-8",
