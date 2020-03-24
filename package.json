@@ -9,13 +9,14 @@
     "release": "npm run copy && cordova run android --release",
     "build": "npm run copy && cordova run android",
     "build_ios": "npm run copy && cordova run ios --target=iPhone-8",
-    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
+    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "com.unarin.cordova.beacon": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^5.0.4",
-    "cordova-ios": "^5.0.1",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-device": "^1.1.6",
     "cordova-plugin-device-orientation": "^2.0.1",
@@ -29,35 +30,35 @@
     "font-awesome": "^4.7.0",
     "geolib": "^2.0.22",
     "ol": "^5.3.3",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-fastclick": "^3.0.2",
     "superagent": "^3.8.3",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-transform-flow-strip-types": "^7.6.3",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-react": "^7.6.3",
-    "@babel/register": "^7.6.2",
-    "autoprefixer": "^9.6.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.1",
+    "@babel/register": "^7.9.0",
+    "autoprefixer": "^9.7.5",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "cordova-lib": "^9.0.1",
-    "core-js": "^2.6.9",
+    "core-js": "^2.6.11",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.0",
     "gulp-postcss": "^8.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
-    "node-sass": "^4.13.0",
     "gulp-uglify": "^3.0.2",
     "natives": "^1.1.6",
-    "postcss": "^7.0.18",
+    "node-sass": "^4.13.1",
+    "postcss": "^7.0.27",
     "postcss-assets": "^5.0.0",
     "uglifyify": "^5.0.2",
     "vinyl-source-stream": "^1.1.0"
@@ -81,5 +82,8 @@
       "cordova-plugin-wkwebview-engine": {},
       "com.unarin.cordova.beacon": {}
     }
+  },
+  "resolutions": {
+    "minimist": "^1.2.5"
   }
 }
