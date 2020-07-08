@@ -5099,7 +5099,7 @@ var initializeApp = function () {
 
   var osm = new Tile({
     source: new XYZ({
-      url: "https://api.tiles.mapbox.com/v4/caliljp.ihofg5ie/{z}/{x}/{y}.png?access_token=" + MAPBOX_TOKEN,
+      url: "https://api.mapbox.com/styles/v1/caliljp/ckcconbmi0enu1job3l0ucbje/tiles/{z}/{x}/{y}?access_token=" + MAPBOX_TOKEN,
       maxZoom: 22
     }),
 
