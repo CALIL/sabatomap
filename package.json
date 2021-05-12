@@ -58,7 +58,7 @@
     "gulp-uglify": "^3.0.2",
     "natives": "^1.1.6",
     "node-sass": "^4.14.1",
-    "postcss": "^7.0.32",
+    "postcss": "^8.2.10",
     "postcss-assets": "^5.0.0",
     "uglifyify": "^5.0.2",
     "vinyl-source-stream": "^1.1.0"
