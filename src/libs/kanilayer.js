@@ -55,7 +55,8 @@ export default class Kanilayer extends LayerGroup {
     var xid = ("0000000000" + parseInt(id)).slice(-10);
 
     return new XYZ({
-      url: "https://tiles.haika.io/" + xid + "/{z}/{x}/{y}.png",
+      // url: "https://tiles.haika.io/" + xid + "/{z}/{x}/{y}.png",
+      url: "https://lab.calil.jp/sabatomap/tiles/" + xid + "/{z}/{x}/{y}.png",
       maxZoom: 24
     });
   }
