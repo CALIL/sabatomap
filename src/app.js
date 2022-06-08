@@ -5020,7 +5020,7 @@ var initializeApp = function () {
     facilities: rules
   }, document.getElementById("ui"));
 
-  if (typeof cordova !== "undefined" && cordova !== null) {
+  if (typeof cordova !== "undefined" && cordova !== null && cordova.platformId !== "browser") {
     if (device.platform === "iOS") {
       body = document.getElementsByTagName("body");
       body[0].classList.add("ios");
