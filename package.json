@@ -54,11 +54,12 @@
     "gulp-concat": "^2.6.0",
     "gulp-postcss": "^8.0.0",
     "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
     "natives": "^1.1.6",
     "postcss": "^7.0.36",
     "postcss-assets": "^5.0.0",
+    "sass": "^1.52.2",
     "uglifyify": "^5.0.2",
     "vinyl-source-stream": "^1.1.0"
   },
