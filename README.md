@@ -36,9 +36,11 @@ npm install --global --production windows-build-tools
 が正常に動いているか確かめる
 
 ## Android版ストアへ公開
+config.xmlのandroid-versionCodeとversionをあげる 
 npm run release  
 1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
-android_build.bat
+android_build.batの内容を1行ずつコマンドラインで実行する 
+keystoreのパスワードは、1Passwordのラベルに保存してある
 
 ## 更新履歴
 
