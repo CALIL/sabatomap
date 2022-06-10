@@ -15,14 +15,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-whitelist": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-whitelist@1.3.3"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device-orientation": {
     "source": {
       "type": "registry",

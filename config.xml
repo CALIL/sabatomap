@@ -17,6 +17,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="7000" />
     <platform name="android">
+        <preference name="android-targetSdkVersion" value="30" />
         <allow-intent href="market:*" />
         <preference name="SplashScreen" value="splash" />
         <preference name="SplashMaintainAspectRatio" value="true" />
