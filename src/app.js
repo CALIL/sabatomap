@@ -5020,13 +5020,13 @@ var initializeApp = function () {
     facilities: rules
   }, document.getElementById("ui"));
 
-  if (typeof cordova !== "undefined" && cordova !== null && device.platform !== "browser") {
-    if (device.platform === "iOS") {
+  if (typeof cordova !== "undefined" && cordova !== null && cordova.platformId !== "browser") {
+    if (cordova.platformId === "ios") {
       body = document.getElementsByTagName("body");
       body[0].classList.add("ios");
     }
 
-    if (device.platform === "Android") {
+    if (cordova.platformId === "android") {
       kanikama.setTimeout(5000);
     }
 
@@ -5041,11 +5041,11 @@ var initializeApp = function () {
         var headingDifference = 7.38;
         heading = heading.magneticHeading + headingDifference;
 
-        switch (device.platform) {
-          case "iOS":
+        switch (cordova.platformId) {
+          case "ios":
             heading += window.orientation;
             break;
-          case "Android":
+          case "android":
             heading += screen.orientation.angle;
         }
 
@@ -5262,7 +5262,7 @@ var locatorClicked = function () {
         UI.notify("この機種は現在地を測定できません");
         return fitFloor();
       } else if (!cordova.plugins.BluetoothStatus.BTenabled) {
-        if (device.platform === "Android") {
+        if (cordova.platformId === "android") {
           return cordova.plugins.BluetoothStatus.promptForBT();
         } else {
           return UI.notify("BluetoothをONにしてください");
