@@ -1,39 +1,7 @@
 {
-  "_from": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
-  "_id": "com.unarin.cordova.beacon@3.8.1",
-  "_inBundle": false,
-  "_integrity": "",
-  "_location": "/com.unarin.cordova.beacon",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "git",
-    "raw": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "rawSpec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "saveSpec": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "fetchSpec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-    "gitCommittish": null
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git#270ffbbc12159861a16e5e81481103c1e09139cb",
-  "_spec": "https://github.com/petermetz/cordova-plugin-ibeacon.git",
-  "_where": "/Users/deguchi/apps/sabatomap",
-  "author": {
-    "name": "Peter Metz",
-    "email": "peter.metz@unarin.com",
-    "url": "Somogyvari"
-  },
-  "bugs": {
-    "url": "https://github.com/petermetz/cordova-plugin-ibeacon/issues"
-  },
-  "bundleDependencies": false,
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
+  "name": "com.unarin.cordova.beacon",
+  "version": "3.8.1",
+  "description": "Proximity Beacon Monitoring and Transmission Plugin (supporting iBeacons)",
   "cordova": {
     "id": "com.unarin.cordova.beacon",
     "platforms": [
@@ -41,18 +9,9 @@
       "android"
     ]
   },
-  "deprecated": false,
-  "description": "Proximity Beacon Monitoring and Transmission Plugin (supporting iBeacons)",
-  "devDependencies": {
-    "@commitlint/cli": "^7.6.1",
-    "@commitlint/config-conventional": "^7.0.1",
-    "husky": "^2.2.0"
-  },
-  "homepage": "https://github.com/petermetz/cordova-plugin-ibeacon",
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petermetz/cordova-plugin-ibeacon.git"
   },
   "keywords": [
     "cordova",
@@ -64,11 +23,25 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "license": "Apache 2.0",
-  "name": "com.unarin.cordova.beacon",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git"
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
-  "version": "3.8.1"
+  "author": "Peter Metz (Somogyvari) <peter.metz@unarin.com>",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/petermetz/cordova-plugin-ibeacon/issues"
+  },
+  "homepage": "https://github.com/petermetz/cordova-plugin-ibeacon",
+  "devDependencies": {
+    "@commitlint/cli": "^7.6.1",
+    "@commitlint/config-conventional": "^7.0.1",
+    "husky": "^2.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }  
+  }
 }

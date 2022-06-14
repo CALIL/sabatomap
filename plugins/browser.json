@@ -10,9 +10,6 @@
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "cordova-plugin-device-orientation": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },

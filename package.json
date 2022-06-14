@@ -14,11 +14,9 @@
     "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
-    "com.unarin.cordova.beacon": "git+https://github.com/petermetz/cordova-plugin-ibeacon.git",
     "cordova-browser": "^5.0.4",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-bluetooth-status": "~1.0.4",
-    "cordova-plugin-device": "^1.1.6",
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
@@ -46,6 +44,7 @@
     "autoprefixer": "^9.8.4",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
+    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
     "cordova": "^11.0.0",
     "cordova-android": "^10.1.2",
     "cordova-lib": "^9.0.1",
@@ -74,7 +73,6 @@
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
-      "cordova-plugin-device": {},
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-splashscreen": {},
