@@ -38,7 +38,7 @@ npm install --global --production windows-build-tools
 ## Android版ストアへ公開
 config.xmlのandroid-versionCodeとversionをあげる 
 
-https://developer.android.com/studio/publish/app-signing#sign_release
+https://developer.android.com/studio/publish/app-signing#sign_release  
 ↑のやり方で署名する  
 1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
 keystoreのパスワードは、1Passwordのラベルに保存してある  
