@@ -11,6 +11,7 @@
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target=iPhone-8",
     "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "cordova-browser": "^6.0.0",
@@ -79,5 +80,6 @@
       "cordova-plugin-wkwebview-engine": {},
       "com.unarin.cordova.beacon": {}
     }
-  }
+  },
+  "resolutions": {}
 }
