@@ -9,13 +9,12 @@
     "copy": "npm run compile && gulp sass && gulp copy_css && gulp copy_fonts && gulp copy_jsons",
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
-    "build_ios": "npm run copy && npx cordova run ios --target=iPhone-8",
+    "build_ios": "npm run copy && npx cordova run ios --target='iPhone- 14'",
     "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
     "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.1.1",
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-inappbrowser": "^3.1.0",
@@ -47,6 +46,7 @@
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
     "cordova": "^11.0.0",
     "cordova-android": "^10.1.2",
+    "cordova-ios": "^5.1.1",
     "cordova-lib": "^9.0.1",
     "core-js": "^2.6.11",
     "del": "^3.0.0",
