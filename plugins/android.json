@@ -21,6 +21,9 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
+    "cordova-plugin-device-orientation": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
   "dependent_plugins": {}
