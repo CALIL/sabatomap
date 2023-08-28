@@ -20,6 +20,12 @@ cordova platform add android
 npm start
 ```
 
+## 変更の反映
+
+```bash
+cordova prepare
+```
+
 ## Windowsでgradleへのパスが見つからない場合
 
 https://gradle.org/  

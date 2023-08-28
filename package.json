@@ -9,19 +9,15 @@
     "copy": "npm run compile && gulp sass && gulp copy_css && gulp copy_fonts && gulp copy_jsons",
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
-    "build_ios": "npm run copy && npx cordova run ios --target='iPhone- 14'",
+    "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
     "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
     "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "cordova-browser": "^6.0.0",
     "cordova-plugin-bluetooth-status": "~1.0.4",
-    "cordova-plugin-device-orientation": "^2.0.1",
-    "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
-    "cordova-plugin-splashscreen": "^5.0.4",
     "cordova-plugin-wkwebview": "^0.6.10",
-    "cordova-plugin-wkwebview-engine": "^1.2.1",
     "es6-object-assign": "^1.1.0",
     "font-awesome": "^4.7.0",
     "geolib": "^2.0.22",
@@ -46,8 +42,10 @@
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
     "cordova": "^11.0.0",
     "cordova-android": "^10.1.2",
-    "cordova-ios": "^5.1.1",
+    "cordova-ios": "^7.0.0",
     "cordova-lib": "^9.0.1",
+    "cordova-plugin-inappbrowser": "^5.0.0",
+    "cordova-plugin-splashscreen": "^6.0.2",
     "core-js": "^2.6.11",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
@@ -68,17 +66,15 @@
   "cordova": {
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
-      "cordova-plugin-device-orientation": {},
-      "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-splashscreen": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-wkwebview-engine": {},
-      "com.unarin.cordova.beacon": {}
+      "com.unarin.cordova.beacon": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-splashscreen": {}
     }
   },
   "resolutions": {}

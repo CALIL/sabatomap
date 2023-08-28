@@ -5036,34 +5036,52 @@ var initializeApp = function () {
 
     window.open = cordova.InAppBrowser.open;
 
-    if (navigator.compass != null) {
-      compassSuccess = function (heading) {
-        var headingDifference = 7.38;
-        heading = heading.magneticHeading + headingDifference;
+    // if (navigator.compass != null) {
+    //   compassSuccess = function (heading) {
+    //     var headingDifference = 7.38;
+    //     heading = heading.magneticHeading + headingDifference;
 
-        switch (cordova.platformId) {
-          case "ios":
-            heading += window.orientation;
-            break;
-          case "android":
-            heading += screen.orientation.angle;
-        }
+    //     switch (cordova.platformId) {
+    //       case "ios":
+    //         heading += window.orientation;
+    //         break;
+    //       case "android":
+    //         heading += screen.orientation.angle;
+    //     }
 
-        if (heading < 0) {
-          heading += 360;
-        }
+    //     if (heading < 0) {
+    //       heading += 360;
+    //     }
 
-        heading %= 360;
-        kanikama.heading = heading;
-        return kanimarker.setHeading(parseInt(heading));
+    //     heading %= 360;
+    //     kanikama.heading = heading;
+    //     return kanimarker.setHeading(parseInt(heading));
+    //   };
+
+    //   navigator.compass.watchHeading(compassSuccess, null, {
+    //     frequency: 100
+    //   }); // 100ms
+    // }
+
+    if (window.DeviceOrientationEvent) {
+      var handleOrientation = function(event) {
+          var heading = event.alpha;
+          if (typeof heading === 'number') {
+              var headingDifference = 7.38;
+              heading += headingDifference;
+              heading += screen.orientation.angle;
+              if (heading < 0) {
+                  heading += 360;
+              }
+              heading %= 360;
+              kanikama.heading = heading;
+              return kanimarker.setHeading(parseInt(heading));
+          }
       };
+      window.addEventListener('deviceorientation', handleOrientation, true);
+  }  
 
-      navigator.compass.watchHeading(compassSuccess, null, {
-        frequency: 100
-      });
-    }
-
-    if ((((ref = cordova.plugins) != null ? ref.locationManager : void 0)) != null) {
+  if ((((ref = cordova.plugins) != null ? ref.locationManager : void 0)) != null) {
       locationManager = cordova.plugins.locationManager;
       locationManager.requestWhenInUseAuthorization();
       delegate = new locationManager.Delegate();

@@ -7,22 +7,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-device-orientation": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-device-orientation@2.0.1"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-inappbrowser": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-inappbrowser@2.0.2"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-network-information": {
     "source": {
       "type": "registry",
@@ -31,26 +15,26 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-splashscreen": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-splashscreen@5.0.2"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-wkwebview-engine": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-wkwebview-engine@^1.2.1"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "com.unarin.cordova.beacon": {
     "source": {
       "type": "registry",
       "id": "https://github.com/CALIL/cordova-plugin-ibeacon"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-inappbrowser@5.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@6.0.2"
     },
     "is_top_level": true,
     "variables": {}
