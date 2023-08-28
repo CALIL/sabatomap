@@ -5079,7 +5079,7 @@ var initializeApp = function () {
           }
       };
       window.addEventListener('deviceorientation', handleOrientation, true);
-  }  
+  }
 
   if ((((ref = cordova.plugins) != null ? ref.locationManager : void 0)) != null) {
       locationManager = cordova.plugins.locationManager;
