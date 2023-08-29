@@ -26,6 +26,25 @@ npm start
 cordova prepare
 ```
 
+## デバッグ
+
+ブラウザの開発コンソールでエラーを見る
+
+### iOS
+
+Safari → 開発　→ シミュレーターもしくは実機
+
+## Anadroid
+
+ChromeのURLに以下を入力
+
+```
+chrome://inspect/
+```
+
+端末をinspect
+
+
 ## Windowsでgradleへのパスが見つからない場合
 
 https://gradle.org/  
