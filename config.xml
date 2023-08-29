@@ -28,7 +28,7 @@
         <icon density="xxhdpi" src="res/icons/android/icon-144-xxhdpi.png" />
         <icon density="xxxhdpi" src="res/icons/android/icon-192-xxxhdpi.png" />
         <preference name="BackgroundColor" value="0xFF0068B1" />
-        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/" />
+        <!-- <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/" /> -->
     </platform>
     <platform name="ios">
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
