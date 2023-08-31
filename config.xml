@@ -28,12 +28,6 @@
         <preference name="BackgroundColor" value="0xFF0068B1" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splashscreen.xml" />
         <preference name="AndroidWindowSplashScreenBackground" value="#06cdf7" />
-        <config-file target="AndroidManifest.xml" parent="/manifest">
-            <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <service android:name="org.altbeacon.beacon.service.BeaconService" android:foregroundServiceType="location" />
-        </config-file>
     </platform>
     <platform name="ios">
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
