@@ -170,6 +170,7 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
            
         if(requestPermission)
               tryToRequestMarshmallowLocationPermission();
+              tryToRequestLocationPermission();
     }
 
     /**
@@ -346,6 +347,81 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
             Log.w(TAG, "IllegalAccessException while checking for ACCESS_COARSE_LOCATION:", e);
         } catch (final InvocationTargetException e) {
             Log.w(TAG, "InvocationTargetException while checking for ACCESS_COARSE_LOCATION:", e);
+        }
+    }
+
+    @TargetApi(31)
+    private void tryToRequestLocationPermission() {
+
+        if (Build.VERSION.SDK_INT < BUILD_VERSION_CODES_M) {
+            Log.i(TAG, "tryToRequestMarshmallowLocationPermission() skipping because API code is " +
+                    "below criteria: " + String.valueOf(31));
+            return;
+        }
+
+        final Activity activity = cordova.getActivity();
+
+        final Method checkSelfPermissionMethod = getCheckSelfPermissionMethod();
+
+        if (checkSelfPermissionMethod == null) {
+            Log.e(TAG, "Could not obtain the method Activity.checkSelfPermission method. Will " +
+                    "not check for BLUETOOTH_SCAN even though we seem to be on a " +
+                    "supported version of Android.");
+            return;
+        }
+
+        try {
+
+            final Integer permissionCheckResult = (Integer) checkSelfPermissionMethod.invoke(
+                    activity, Manifest.permission.BLUETOOTH_SCAN);
+
+            Log.i(TAG, "Permission check result for BLUETOOTH_SCAN: " +
+                    String.valueOf(permissionCheckResult));
+
+            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "Permission for BLUETOOTH_SCAN has already been granted.");
+                return;
+            }
+
+            final Method requestPermissionsMethod = getRequestPermissionsMethod();
+
+            if (requestPermissionsMethod == null) {
+                Log.e(TAG, "Could not obtain the method Activity.requestPermissions. Will " +
+                        "not ask for BLUETOOTH_SCAN even though we seem to be on a " +
+                        "supported version of Android.");
+                return;
+            }
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("さばとマップへようこそ");
+            builder.setMessage("館内マップの表示にBluetoothを使います。Bluetoothへのアクセスを許可してください。");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @SuppressLint("NewApi")
+                @Override
+                public void onDismiss(final DialogInterface dialog) {
+
+                    try {
+                        requestPermissionsMethod.invoke(activity,
+                                new String[]{Manifest.permission.BLUETOOTH_SCAN},
+                                PERMISSION_REQUEST_COARSE_LOCATION
+                        );
+                    } catch (IllegalAccessException e) {
+                        Log.e(TAG, "IllegalAccessException while requesting permission for " +
+                                "BLUETOOTH_SCAN:", e);
+                    } catch (InvocationTargetException e) {
+                        Log.e(TAG, "InvocationTargetException while requesting permission for " +
+                                "BLUETOOTH_SCAN:", e);
+                    }
+                }
+            });
+
+            builder.show();
+
+        } catch (final IllegalAccessException e) {
+            Log.w(TAG, "IllegalAccessException while checking for BLUETOOTH_SCAN:", e);
+        } catch (final InvocationTargetException e) {
+            Log.w(TAG, "InvocationTargetException while checking for BLUETOOTH_SCAN:", e);
         }
     }
 
@@ -1447,9 +1523,10 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     private boolean hasBlueToothPermission() {
         Context context = cordova.getActivity();
         int access = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH);
+        int scanAccess = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH_SCAN);
         int adminAccess = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH_ADMIN);
 
-        return (access == PackageManager.PERMISSION_GRANTED) && (adminAccess == PackageManager.PERMISSION_GRANTED);
+        return (access == PackageManager.PERMISSION_GRANTED) && (scanAccess == PackageManager.PERMISSION_GRANTED) && (adminAccess == PackageManager.PERMISSION_GRANTED);
     }
 
     //////// Async Task Handling ////////////////////////////////
