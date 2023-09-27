@@ -28,6 +28,7 @@
         <preference name="BackgroundColor" value="0xFF0068B1" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splashscreen.xml" />
         <preference name="AndroidWindowSplashScreenBackground" value="#06cdf7" />
+        <framework src="android.gradle" custom="true" />
     </platform>
     <platform name="ios">
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
