@@ -3,7 +3,7 @@ repositories{
 }
 
 dependencies {
-    implementation 'org.altbeacon:android-beacon-library:2.19.1'
+    implementation 'org.altbeacon:android-beacon-library:2.19.6'
 }
 
 android {

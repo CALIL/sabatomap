@@ -81,7 +81,7 @@ BeaconRegion.isValidUuid = function (uuid) {
 
     // https://github.com/petermetz/cordova-plugin-ibeacon/issues/328
     // If we are on Android, then allow the UUID to be specified as a wild-card (omitted)
-    var isAndroid = cordova && cordova.platformId === "android";
+    var isAndroid = device && device.platform === "Android";
     if (uuid === BeaconRegion.WILDCARD_UUID && isAndroid) {
         return true;
     }

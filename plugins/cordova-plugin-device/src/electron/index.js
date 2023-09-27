@@ -19,19 +19,24 @@
  *
  */
 
-var Compass = {
-    getHeading: function (success, error) {
-        var orient = {};
-        var heading = Math.round(Math.random() * 360 * 100) / 100;
+const { system, osInfo } = require('systeminformation');
 
-        orient.trueHeading = heading;
-        orient.magneticHeading = heading;
-        orient.headingAccuracy = 0;
-        orient.timestamp = new Date().getTime();
+module.exports = {
+    getDeviceInfo: async () => {
+        try {
+            const { manufacturer, model, uuid } = await system();
+            const { platform, distro, codename, build: version } = await osInfo();
 
-        success(orient);
+            return {
+                manufacturer,
+                model,
+                platform: platform === 'darwin' ? codename : distro,
+                version,
+                uuid,
+                isVirtual: false
+            };
+        } catch (e) {
+            console.log(e);
+        }
     }
 };
-
-module.exports = Compass;
-require('cordova/exec/proxy').add('Compass', Compass);

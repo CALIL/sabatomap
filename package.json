@@ -10,8 +10,7 @@
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
-    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
-    "preinstall": "npx npm-force-resolutions"
+    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
   },
   "dependencies": {
     "cordova-browser": "^6.0.0",
@@ -39,11 +38,12 @@
     "autoprefixer": "^9.8.4",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
-    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
+    "com.unarin.cordova.beacon": "github:makoto-ikarashi/cordova-plugin-ibeacon",
     "cordova": "^12.0.0",
     "cordova-android": "^12.0.1",
     "cordova-ios": "^7.0.0",
     "cordova-lib": "^9.0.1",
+    "cordova-plugin-device": "^2.1.0",
     "cordova-plugin-device-orientation": "github:mgurzixo/cordova-plugin-device-orientation",
     "cordova-plugin-inappbrowser": "^5.0.0",
     "cordova-plugin-splashscreen": "^6.0.2",
@@ -73,11 +73,10 @@
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
       "cordova-plugin-network-information": {},
-      "com.unarin.cordova.beacon": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-device-orientation": {}
+      "cordova-plugin-device-orientation": {},
+      "com.unarin.cordova.beacon": {}
     }
-  },
-  "resolutions": {}
+  }
 }

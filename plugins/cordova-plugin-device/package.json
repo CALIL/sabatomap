@@ -1,28 +1,31 @@
 {
-  "name": "cordova-plugin-device-orientation",
-  "version": "3.0.0-dev",
-  "description": "Cordova Device Orientation Plugin",
+  "name": "cordova-plugin-device",
+  "version": "2.1.0",
+  "description": "Cordova Device Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
-    "id": "cordova-plugin-device-orientation",
+    "id": "cordova-plugin-device",
     "platforms": [
       "android",
+      "electron",
       "ios",
       "windows",
-      "browser"
+      "browser",
+      "osx"
     ]
   },
-  "repository": "github:apache/cordova-plugin-device-orientation",
-  "bugs": "https://github.com/apache/cordova-plugin-device-orientation/issues",
+  "repository": "github:apache/cordova-plugin-device",
+  "bugs": "https://github.com/apache/cordova-plugin-device/issues",
   "keywords": [
     "cordova",
     "device",
-    "orientation",
     "ecosystem:cordova",
     "cordova-android",
+    "cordova-electron",
     "cordova-ios",
     "cordova-windows",
-    "cordova-browser"
+    "cordova-browser",
+    "cordova-osx"
   ],
   "scripts": {
     "test": "npm run lint",
@@ -33,7 +36,8 @@
   "engines": {
     "cordovaDependencies": {
       "3.0.0": {
-        "cordova": ">100"
+        "cordova": ">100",
+        "cordova-electron": ">=3.0.0"
       }
     }
   },

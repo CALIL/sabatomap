@@ -68,15 +68,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.InvalidKeyException;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class LocationManager extends CordovaPlugin implements BeaconConsumer {
 
     public static final String TAG = "com.unarin.beacon";
-    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST = 1;
     private static final String FOREGROUND_BETWEEN_SCAN_PERIOD_NAME = "com.unarin.cordova.beacon.android.altbeacon.ForegroundBetweenScanPeriod";
     private static final String FOREGROUND_SCAN_PERIOD_NAME = "com.unarin.cordova.beacon.android.altbeacon.ForegroundScanPeriod";
     private static final int DEFAULT_FOREGROUND_BETWEEN_SCAN_PERIOD = 0;
@@ -89,6 +91,7 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     private static final int DEFAULT_FOREGROUND_SCAN_PERIOD = 1100;
     private static int CDV_LOCATION_MANAGER_DOM_DELEGATE_TIMEOUT = 30;
     private static final int BUILD_VERSION_CODES_M = 23;
+    private static final int BUILD_VERSION_CODES_S = 31;
 
     private BeaconTransmitter beaconTransmitter;
     private BeaconManager iBeaconManager;
@@ -102,6 +105,10 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     private BroadcastReceiver broadcastReceiver;
     private BluetoothAdapter bluetoothAdapter;
 
+    private enum LocationType {
+        COARSE,
+        FINE
+    } 
 
     /**
      * Constructor.
@@ -168,9 +175,9 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
         final boolean requestPermission = this.preferences.getBoolean(
                 REQUEST_BT_PERMISSION_NAME, DEFAULT_REQUEST_BT_PERMISSION);
            
-        if(requestPermission)
-              tryToRequestMarshmallowLocationPermission();
-              tryToRequestLocationPermission();
+        if (requestPermission) {
+            tryToRequestPermission();
+        }
     }
 
     /**
@@ -276,12 +283,18 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     }
 
     @TargetApi(BUILD_VERSION_CODES_M)
-    private void tryToRequestMarshmallowLocationPermission() {
+    private void tryToRequestPermission() {
 
+        List<String> manifestPermissionTypes = new ArrayList<>();
+        
         if (Build.VERSION.SDK_INT < BUILD_VERSION_CODES_M) {
-            Log.i(TAG, "tryToRequestMarshmallowLocationPermission() skipping because API code is " +
+            Log.i(TAG, "tryToRequestPermission() skipping because API code is " +
                     "below criteria: " + String.valueOf(Build.VERSION.SDK_INT));
-            return;
+        } else if  (Build.VERSION.SDK_INT < BUILD_VERSION_CODES_S) {
+            manifestPermissionTypes.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        } else {
+            manifestPermissionTypes.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            manifestPermissionTypes.add(Manifest.permission.BLUETOOTH_SCAN); 
         }
 
         final Activity activity = cordova.getActivity();
@@ -290,21 +303,32 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
 
         if (checkSelfPermissionMethod == null) {
             Log.e(TAG, "Could not obtain the method Activity.checkSelfPermission method. Will " +
-                    "not check for ACCESS_COARSE_LOCATION even though we seem to be on a " +
+                    "not check even though we seem to be on a " +
                     "supported version of Android.");
             return;
         }
 
         try {
 
-            final Integer permissionCheckResult = (Integer) checkSelfPermissionMethod.invoke(
-                    activity, Manifest.permission.ACCESS_COARSE_LOCATION);
+            List<String> grantedTypes = new ArrayList<>();
+            for (String manifestPermissionType : manifestPermissionTypes) {
+                final Integer permissionCheckResult = (Integer) checkSelfPermissionMethod.invoke(
+                        activity, manifestPermissionType);
+                        Log.i(TAG, "Permission check result for " + manifestPermissionType + ": " +
+                        String.valueOf(permissionCheckResult));
 
-            Log.i(TAG, "Permission check result for ACCESS_COARSE_LOCATION: " +
-                    String.valueOf(permissionCheckResult));
+                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Permission for " + manifestPermissionType + " has already been granted.");
+                    grantedTypes.add(manifestPermissionType);        
+                }
+            }
 
-            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "Permission for ACCESS_COARSE_LOCATION has already been granted.");
+            for (String grantedType : grantedTypes) {
+                manifestPermissionTypes.remove(grantedType);
+            }
+
+            if (manifestPermissionTypes.size() == 0) {
+                Log.i(TAG, "Permission for All has already been granted.");
                 return;
             }
 
@@ -312,116 +336,32 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
 
             if (requestPermissionsMethod == null) {
                 Log.e(TAG, "Could not obtain the method Activity.requestPermissions. Will " +
-                        "not ask for ACCESS_COARSE_LOCATION even though we seem to be on a " +
+                        "not ask  even though we seem to be on a " +
                         "supported version of Android.");
                 return;
             }
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("さばとマップへようこそ");
-            builder.setMessage("館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @SuppressLint("NewApi")
-                @Override
-                public void onDismiss(final DialogInterface dialog) {
-
-                    try {
-                        requestPermissionsMethod.invoke(activity,
-                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                                PERMISSION_REQUEST_COARSE_LOCATION
-                        );
-                    } catch (IllegalAccessException e) {
-                        Log.e(TAG, "IllegalAccessException while requesting permission for " +
-                                "ACCESS_COARSE_LOCATION:", e);
-                    } catch (InvocationTargetException e) {
-                        Log.e(TAG, "InvocationTargetException while requesting permission for " +
-                                "ACCESS_COARSE_LOCATION:", e);
-                    }
+            try {
+                final int size = manifestPermissionTypes.size();
+                String[] permissions = new String[size];
+                for (int i = 0; i < size; i++) {
+                    permissions[i] = manifestPermissionTypes.get(i);
                 }
-            });
 
-            builder.show();
-
-        } catch (final IllegalAccessException e) {
-            Log.w(TAG, "IllegalAccessException while checking for ACCESS_COARSE_LOCATION:", e);
-        } catch (final InvocationTargetException e) {
-            Log.w(TAG, "InvocationTargetException while checking for ACCESS_COARSE_LOCATION:", e);
-        }
-    }
-
-    @TargetApi(31)
-    private void tryToRequestLocationPermission() {
-
-        if (Build.VERSION.SDK_INT < BUILD_VERSION_CODES_M) {
-            Log.i(TAG, "tryToRequestMarshmallowLocationPermission() skipping because API code is " +
-                    "below criteria: " + String.valueOf(31));
-            return;
-        }
-
-        final Activity activity = cordova.getActivity();
-
-        final Method checkSelfPermissionMethod = getCheckSelfPermissionMethod();
-
-        if (checkSelfPermissionMethod == null) {
-            Log.e(TAG, "Could not obtain the method Activity.checkSelfPermission method. Will " +
-                    "not check for BLUETOOTH_SCAN even though we seem to be on a " +
-                    "supported version of Android.");
-            return;
-        }
-
-        try {
-
-            final Integer permissionCheckResult = (Integer) checkSelfPermissionMethod.invoke(
-                    activity, Manifest.permission.BLUETOOTH_SCAN);
-
-            Log.i(TAG, "Permission check result for BLUETOOTH_SCAN: " +
-                    String.valueOf(permissionCheckResult));
-
-            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "Permission for BLUETOOTH_SCAN has already been granted.");
-                return;
+                requestPermissionsMethod.invoke(activity,
+                        permissions,
+                        PERMISSION_REQUEST
+                );
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, "IllegalAccessException while requesting permission:", e);
+            } catch (InvocationTargetException e) {
+                Log.e(TAG, "InvocationTargetException while requesting permission:", e);
             }
 
-            final Method requestPermissionsMethod = getRequestPermissionsMethod();
-
-            if (requestPermissionsMethod == null) {
-                Log.e(TAG, "Could not obtain the method Activity.requestPermissions. Will " +
-                        "not ask for BLUETOOTH_SCAN even though we seem to be on a " +
-                        "supported version of Android.");
-                return;
-            }
-
-            final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("さばとマップへようこそ");
-            builder.setMessage("館内マップの表示にBluetoothを使います。Bluetoothへのアクセスを許可してください。");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @SuppressLint("NewApi")
-                @Override
-                public void onDismiss(final DialogInterface dialog) {
-
-                    try {
-                        requestPermissionsMethod.invoke(activity,
-                                new String[]{Manifest.permission.BLUETOOTH_SCAN},
-                                PERMISSION_REQUEST_COARSE_LOCATION
-                        );
-                    } catch (IllegalAccessException e) {
-                        Log.e(TAG, "IllegalAccessException while requesting permission for " +
-                                "BLUETOOTH_SCAN:", e);
-                    } catch (InvocationTargetException e) {
-                        Log.e(TAG, "InvocationTargetException while requesting permission for " +
-                                "BLUETOOTH_SCAN:", e);
-                    }
-                }
-            });
-
-            builder.show();
-
         } catch (final IllegalAccessException e) {
-            Log.w(TAG, "IllegalAccessException while checking for BLUETOOTH_SCAN:", e);
+            Log.w(TAG, "IllegalAccessException while checking:", e);
         } catch (final InvocationTargetException e) {
-            Log.w(TAG, "InvocationTargetException while checking for BLUETOOTH_SCAN:", e);
+            Log.w(TAG, "InvocationTargetException while checking:", e);
         }
     }
 
@@ -1523,10 +1463,9 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     private boolean hasBlueToothPermission() {
         Context context = cordova.getActivity();
         int access = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH);
-        int scanAccess = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH_SCAN);
         int adminAccess = context.checkCallingOrSelfPermission(Manifest.permission.BLUETOOTH_ADMIN);
 
-        return (access == PackageManager.PERMISSION_GRANTED) && (scanAccess == PackageManager.PERMISSION_GRANTED) && (adminAccess == PackageManager.PERMISSION_GRANTED);
+        return (access == PackageManager.PERMISSION_GRANTED) && (adminAccess == PackageManager.PERMISSION_GRANTED);
     }
 
     //////// Async Task Handling ////////////////////////////////

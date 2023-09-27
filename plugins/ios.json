@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "com.unarin.cordova.beacon": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    },
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
@@ -24,7 +21,14 @@
     },
     "cordova-plugin-device-orientation": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
+    "com.unarin.cordova.beacon": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
+    }
+  }
 }
