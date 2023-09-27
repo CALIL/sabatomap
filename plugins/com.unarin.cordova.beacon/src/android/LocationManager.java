@@ -294,6 +294,7 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
             manifestPermissionTypes.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         } else {
             manifestPermissionTypes.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            manifestPermissionTypes.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             manifestPermissionTypes.add(Manifest.permission.BLUETOOTH_SCAN); 
         }
 

@@ -38,7 +38,7 @@
     "autoprefixer": "^9.8.4",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
-    "com.unarin.cordova.beacon": "github:makoto-ikarashi/cordova-plugin-ibeacon",
+    "com.unarin.cordova.beacon": "github:calil/cordova-plugin-ibeacon",
     "cordova": "^12.0.0",
     "cordova-android": "^12.0.1",
     "cordova-ios": "^7.0.0",

@@ -39,20 +39,20 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com.unarin.cordova.beacon": {
-    "source": {
-      "type": "registry",
-      "id": "https://github.com/makoto-ikarashi/cordova-plugin-ibeacon"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
       "id": "cordova-plugin-device@*"
     },
     "is_top_level": false,
+    "variables": {}
+  },
+  "com.unarin.cordova.beacon": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/calil/cordova-plugin-ibeacon/"
+    },
+    "is_top_level": true,
     "variables": {}
   }
 }
