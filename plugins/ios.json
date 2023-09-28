@@ -19,10 +19,10 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-device-orientation": {
+    "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "com.unarin.cordova.beacon": {
+    "cordova-plugin-device-orientation": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },

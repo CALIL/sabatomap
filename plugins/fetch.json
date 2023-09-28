@@ -31,14 +31,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-device-orientation": {
-    "source": {
-      "type": "registry",
-      "id": "https://github.com/mgurzixo/cordova-plugin-device-orientation"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
@@ -51,6 +43,14 @@
     "source": {
       "type": "registry",
       "id": "https://github.com/calil/cordova-plugin-ibeacon/"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-device-orientation": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/CALIL/cordova-plugin-device-orientation"
     },
     "is_top_level": true,
     "variables": {}
