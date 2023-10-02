@@ -19,6 +19,9 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "jp.calil.sabatomap"
+    },
     "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
@@ -26,9 +29,5 @@
       "PACKAGE_NAME": "jp.calil.sabatomap"
     }
   },
-  "dependent_plugins": {
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "jp.calil.sabatomap"
-    }
-  }
+  "dependent_plugins": {}
 }

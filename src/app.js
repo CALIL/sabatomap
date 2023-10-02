@@ -5262,11 +5262,7 @@ var locatorClicked = function () {
         UI.notify("この機種は現在地を測定できません");
         return fitFloor();
       } else if (!cordova.plugins.BluetoothStatus.BTenabled) {
-        if (cordova.platformId === "android") {
-          return cordova.plugins.BluetoothStatus.promptForBT();
-        } else {
-          return UI.notify("BluetoothをONにしてください");
-        }
+        return UI.notify("BluetoothをONにしてください");
       } else if (kanikama.currentPosition === null) {
         return waitPosition();
       } else if (kanikama.currentFloor.id !== kanilayer.floorId) {

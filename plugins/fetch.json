@@ -34,15 +34,15 @@
   "cordova-plugin-device": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-device@*"
+      "id": "cordova-plugin-device"
     },
-    "is_top_level": false,
+    "is_top_level": true,
     "variables": {}
   },
   "com.unarin.cordova.beacon": {
     "source": {
       "type": "registry",
-      "id": "https://github.com/calil/cordova-plugin-ibeacon/"
+      "id": "https://github.com/calil/cordova-plugin-ibeacon"
     },
     "is_top_level": true,
     "variables": {}
