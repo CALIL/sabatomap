@@ -1,7 +1,5 @@
 # 鯖江市図書館マップ「さばとマップ」
 
-[<img src="https://dply.me/a231vi/button/small" alt="Download to device">](https://dply.me/a231vi#install)
-
 ![Splash](www/img/splash_for_browser.png)
 
 ## 対象プラットフォーム
