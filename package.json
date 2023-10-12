@@ -13,7 +13,7 @@
     "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
   },
   "dependencies": {
-    "cordova-browser": "^6.0.0",
+    "cordova-browser": "^7.0.0",
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-wkwebview": "^0.6.10",
