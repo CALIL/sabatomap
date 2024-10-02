@@ -50,6 +50,12 @@ https://gradle.org/releases/
 Gradleのバイナリーを解凍してbinフォルダへPathを通す
 例) set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
 
+```powershell
+$PATH = [Environment]::GetEnvironmentVariable("PATH")
+$gradle_path = "C:\Users\deguc\Desktop\gradle-8.10.2\bin\"
+[Environment]::SetEnvironmentVariable("PATH", "$PATH;$gradle_path")
+```
+
 ## Windowsでnode-sassのビルドに失敗する場合
 
 npm install --global --production windows-build-tools
