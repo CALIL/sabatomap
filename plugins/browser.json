@@ -19,9 +19,6 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
@@ -29,5 +26,9 @@
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    }
+  }
 }

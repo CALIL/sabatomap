@@ -43,7 +43,7 @@
     "cordova-android": "^13.0.0",
     "cordova-ios": "^7.0.0",
     "cordova-lib": "^12.0.1",
-    "cordova-plugin-device": "2.1.0",
+    "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation",
     "cordova-plugin-inappbrowser": "^5.0.0",
     "cordova-plugin-splashscreen": "^6.0.2",
@@ -67,14 +67,14 @@
   "cordova": {
     "platforms": [
       "browser",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-device": {},
       "com.unarin.cordova.beacon": {},
       "cordova-plugin-device-orientation": {}
     }
