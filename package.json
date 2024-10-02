@@ -10,7 +10,7 @@
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
-    "bb": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
+    "build_browser": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
   },
   "dependencies": {
     "cordova-browser": "^7.0.0",
@@ -40,7 +40,7 @@
     "browserify": "^16.5.1",
     "com.unarin.cordova.beacon": "github:calil/cordova-plugin-ibeacon",
     "cordova": "^12.0.0",
-    "cordova-android": "^12.0.1",
+    "cordova-android": "^13.0.0",
     "cordova-ios": "^7.0.0",
     "cordova-lib": "^12.0.1",
     "cordova-plugin-device": "2.1.0",
@@ -67,8 +67,7 @@
   "cordova": {
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-bluetooth-status": {},

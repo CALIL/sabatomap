@@ -15,8 +15,8 @@ npm update
 cordova platform add ios
 cordova platform add android
 npm start
-cordova run ios
-cordova run android
+npm run build
+npm run build_ios
 ```
 
 ## 変更の反映
