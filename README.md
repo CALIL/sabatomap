@@ -47,8 +47,12 @@ chrome://inspect/
 ## Windowsでgradleへのパスが見つからない場合
 
 https://gradle.org/releases/
-Gradleのバイナリーを解凍してbinフォルダへPathを通す
-例) set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
+
+Gradleのバイナリーを解凍してbinフォルダへPathを通す<br>
+
+```cmd
+set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
+```
 
 ```powershell
 $PATH = [Environment]::GetEnvironmentVariable("PATH")
