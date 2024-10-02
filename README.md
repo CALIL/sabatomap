@@ -60,6 +60,17 @@ $gradle_path = "C:\Users\deguc\Desktop\gradle-8.10.2\bin\"
 [Environment]::SetEnvironmentVariable("PATH", "$PATH;$gradle_path")
 ```
 
+## cordova platform add でエラーが出る場合
+
+プラグインを入れなおしてみる
+
+```powershell
+cordova plugin rm cordova-plugin-ibeacon
+cordova plugin add https://github.com/CALIL/cordova-plugin-ibeacon
+cordova plugin rm cordova-plugin-device-orientation
+cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
+```
+
 ## Windowsでnode-sassのビルドに失敗する場合
 
 npm install --global --production windows-build-tools
