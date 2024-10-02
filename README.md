@@ -31,7 +31,7 @@ cordova prepare
 
 Safari → 開発　→ シミュレーターもしくは実機
 
-## Anadroid
+## Android
 
 ChromeのURLに以下を入力
 
@@ -44,8 +44,8 @@ chrome://inspect/
 
 ## Windowsでgradleへのパスが見つからない場合
 
-https://gradle.org/  
-Gradleのバイナリーを解凍してbinフォルダへPathを通す  
+https://gradle.org/
+Gradleのバイナリーを解凍してbinフォルダへPathを通す
 例) set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
 
 ## Windowsでnode-sassのビルドに失敗する場合
@@ -54,23 +54,23 @@ npm install --global --production windows-build-tools
 
 ## Android版で最初の位置情報の許可についてのメッセージが英語になる場合
 
-\hooks\after_platform_add\update_ibeacon_plugin_message.js  
+\hooks\after_platform_add\update_ibeacon_plugin_message.js
 が正常に動いているか確かめる
 
 ## Android版ストアへ公開
-config.xmlのandroid-versionCodeとversionをあげる 
+config.xmlのandroid-versionCodeとversionをあげる
 
-https://developer.android.com/studio/publish/app-signing#sign_release  
-↑のやり方で署名する  
-1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
-keystoreのパスワードは、1Passwordのラベルに保存してある  
-keyAliasはcalil  
-keyPasswordはkeystoreと同じ 
+https://developer.android.com/studio/publish/app-signing#sign_release
+↑のやり方で署名する
+1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存
+keystoreのパスワードは、1Passwordのラベルに保存してある
+keyAliasはcalil
+keyPasswordはkeystoreと同じ
 
-以下、古いやり方  
-npm run release  
-1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存  
-android_build.batの内容を1行ずつコマンドラインで実行する  
+以下、古いやり方
+npm run release
+1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存
+android_build.batの内容を1行ずつコマンドラインで実行する
 keystoreのパスワードは、1Passwordのラベルに保存してある
 
 ## 更新履歴
