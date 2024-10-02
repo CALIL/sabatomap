@@ -15,6 +15,8 @@ npm update
 cordova platform add ios
 cordova platform add android
 npm start
+cordova run ios
+cordova run android
 ```
 
 ## 変更の反映
@@ -44,7 +46,7 @@ chrome://inspect/
 
 ## Windowsでgradleへのパスが見つからない場合
 
-https://gradle.org/
+https://gradle.org/releases/
 Gradleのバイナリーを解凍してbinフォルダへPathを通す
 例) set PATH=%PATH%;C:\Users\deguc\Desktop\gradle-5.6.2\bin\
 
