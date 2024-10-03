@@ -9,15 +9,15 @@ import source from "vinyl-source-stream";
 import replace from 'gulp-replace';
 import fs from 'fs';
 
-gulp.task('copy_css', () => gulp.src(['node_modules/ol/ol.css','node_modules/font-awesome/css/font-awesome.min.css']).pipe(gulp.dest('www/vendor/css')));
-gulp.task('copy_fonts', () => gulp.src(['node_modules/font-awesome/fonts/*']).pipe(gulp.dest('www/vendor/fonts')));
+gulp.task('copy_css', () => gulp.src(['node_modules/ol/ol.css', 'fontawesome-free-5.15.4-web/css/fontawesome.css']).pipe(gulp.dest('www/vendor/css')));
+gulp.task('copy_fonts', () => gulp.src(['fontawesome-free-5.15.4-web/webfonts/*']).pipe(gulp.dest('www/vendor/webfonts')));
 gulp.task('copy_jsons', () => gulp.src(['src/json/*']).pipe(gulp.dest('www/json/')));
 
 // gulp.task('buildjs', gulp.series( gulp.parallel('copy_css', 'copy_fonts'), () => {
 //   const rules = fs.readFileSync('src/sabae.json');
 //   var options = {
 //         entries: "./src/app.js",   // Entry point
-//         extensions: [".js"],            // consider files with these extensions as modules 
+//         extensions: [".js"],            // consider files with these extensions as modules
 //         debug: false,  // add resource map at the end of the file or not
 //         paths: ["./src/"]           // This allows relative imports in require, with './scripts/' as root
 //   };

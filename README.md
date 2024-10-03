@@ -71,6 +71,17 @@ cordova plugin rm cordova-plugin-device-orientation
 cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 ```
 
+## Androidでfontawesomeが表示されない場合
+
+https://fontawesome.com/v5/download
+
+```
+fontawesome-free-5.15.4-web
+```
+
+ダウンロードして↑に保存<br>
+gulpでコピーするように変更
+
 ## Windowsでnode-sassのビルドに失敗する場合
 
 npm install --global --production windows-build-tools
