@@ -10,10 +10,10 @@
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-inappbrowser": {
+    "cordova-plugin-network-information": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
-    "cordova-plugin-network-information": {
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "jp.calil.sabatomap"
     },
     "com.unarin.cordova.beacon": {

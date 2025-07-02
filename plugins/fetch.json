@@ -2,7 +2,7 @@
   "cordova-plugin-bluetooth-status": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-bluetooth-status"
+      "id": "cordova-plugin-bluetooth-status@~1.0.4"
     },
     "is_top_level": true,
     "variables": {}
@@ -10,7 +10,7 @@
   "cordova-plugin-network-information": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-network-information@^2.0.1"
+      "id": "cordova-plugin-network-information@^2.0.2"
     },
     "is_top_level": true,
     "variables": {}
@@ -18,15 +18,15 @@
   "cordova-plugin-inappbrowser": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-inappbrowser@5.0.0"
+      "id": "cordova-plugin-inappbrowser@^5.0.0"
     },
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-splashscreen": {
+  "com.unarin.cordova.beacon": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-splashscreen@6.0.2"
+      "id": "github:CALIL/cordova-plugin-ibeacon"
     },
     "is_top_level": true,
     "variables": {}
@@ -39,18 +39,10 @@
     "is_top_level": false,
     "variables": {}
   },
-  "com.unarin.cordova.beacon": {
-    "source": {
-      "type": "registry",
-      "id": "github:calil/cordova-plugin-ibeacon"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-device-orientation": {
     "source": {
       "type": "registry",
-      "id": "https://github.com/CALIL/cordova-plugin-device-orientation"
+      "id": "github:CALIL/cordova-plugin-device-orientation"
     },
     "is_top_level": true,
     "variables": {}

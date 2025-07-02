@@ -17,7 +17,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="7000" />
     <platform name="android">
-        <preference name="android-targetSdkVersion" value="34" />
+        <preference name="android-targetSdkVersion" value="35" />
         <allow-intent href="market:*" />
         <preference name="SplashShowOnlyFirstTime" value="true" />
         <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />

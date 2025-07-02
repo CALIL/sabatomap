@@ -31,7 +31,7 @@ cordova prepare
 
 ### iOS
 
-Safari → 開発　→ シミュレーターもしくは実機
+Safari → 開発 → シミュレーターもしくは実機
 
 ## Android
 

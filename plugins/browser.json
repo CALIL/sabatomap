@@ -16,9 +16,6 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
