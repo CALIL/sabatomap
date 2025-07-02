@@ -9,6 +9,7 @@ export default class Search extends Component {
     constructor() {
         super();
         this.api = null;
+        this.queryRef = React.createRef();
         this.state = {
             query: '',
             loading: false, // Unitrad APIのポーリング中
@@ -70,10 +71,11 @@ export default class Search extends Component {
     }
     onSubmit(e) {
         e.preventDefault();
-        this.refs.query.blur();
-        this.setState({ query: this.refs.query.value }, () => {
-            console.log('callback')
-            if (this.state.query != '') {
+        if (this.queryRef.current) {
+            this.queryRef.current.blur();
+            this.setState({ query: this.queryRef.current.value }, () => {
+                console.log('callback')
+                if (this.state.query != '') {
                 this.startTime = new Date().getTime();
                 if (this.api) this.api.kill();
                 this.queueDetail = [];
@@ -105,14 +107,17 @@ export default class Search extends Component {
                     // console.log('this.queueDetail');
                     // console.log(this.queueDetail);
                 });
-            }
-        });
+                }
+            });
+        }
     }
     hideList() {
         this.api.kill();
         this.api = null;
         this.queueDetail = [];
-        this.refs.query.value = '';
+        if (this.queryRef.current) {
+            this.queryRef.current.value = '';
+        }
         this.setState({
             query: '',
             loading: false, // Unitrad APIのポーリング中
@@ -140,7 +145,7 @@ export default class Search extends Component {
         return (
             <div className={!this.state.visible || this.state.currentBook ? 'empty' : null}>
                 <form className="box" action="#" onSubmit={this.onSubmit.bind(this)}>
-                    <input type="search" ref="query" placeholder={this.props.placeholder} />
+                    <input type="search" ref={this.queryRef} placeholder={this.props.placeholder} />
                     <button type="submit" className="search fa fa-search" title="検索する" />
                     <button className={"clear fa fa-times" + (this.state.loading ? " loading" : "")}
                         title="検索結果を閉じる" onClick={this.hideList.bind(this)} />
