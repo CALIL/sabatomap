@@ -1,4 +1,4 @@
-# 鯖江市図書館マップ「さばとマップ」
+/# 鯖江市図書館マップ「さばとマップ」
 
 ![Splash](www/img/splash_for_browser.png)
 
