@@ -95,7 +95,12 @@ npm install --global --production windows-build-tools
 config.xmlのandroid-versionCodeとversionをあげる
 
 https://developer.android.com/studio/publish/app-signing#sign_release<br>
-↑のやり方で署名する<br>
+↑のやり方で署名する
+
+```
+op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
+```
+
 1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存<br>
 keystoreのパスワードは、1Passwordのラベルに保存してある<br>
 keyAliasはcalil<br>
