@@ -43,7 +43,7 @@
     "cordova-lib": "^13.0.0",
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation",
-    "cordova-plugin-inappbrowser": "^5.0.0",
+    "cordova-plugin-inappbrowser": "^6.0.1",
     "core-js": "^2.6.11",
     "del": "^3.0.0",
     "gulp": "^5.0.0",
