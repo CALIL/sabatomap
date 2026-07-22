@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-network-information",
-  "version": "2.0.2",
+  "version": "3.1.0",
   "description": "Cordova Network Information Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
@@ -12,13 +12,8 @@
       "browser"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-network-information"
-  },
-  "bugs": {
-    "url": "https://github.com/apache/cordova-plugin-network-information/issues"
-  },
+  "repository": "github:apache/cordova-plugin-network-information",
+  "bugs": "https://github.com/apache/cordova-plugin-network-information/issues",
   "keywords": [
     "cordova",
     "network",
@@ -30,25 +25,23 @@
     "cordova-browser"
   ],
   "scripts": {
-    "test": "npm run eslint",
-    "eslint": "eslint www && eslint src && eslint tests"
+    "test": "npm run lint",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "author": "Apache Software Foundation",
   "license": "Apache-2.0",
   "engines": {
     "cordovaDependencies": {
       "3.0.0": {
+        "cordova": ">=9"
+      },
+      "4.0.0": {
         "cordova": ">100"
       }
     }
   },
   "devDependencies": {
-    "eslint": "^4.0.0",
-    "eslint-config-semistandard": "^11.0.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-node": "^5.0.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "@cordova/eslint-config": "^6.0.1"
   }
 }

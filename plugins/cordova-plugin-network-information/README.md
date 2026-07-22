@@ -1,32 +1,39 @@
 ---
+# cordova-docs build metadata
 title: Network Information
 description: Get information about wireless connectivity.
 ---
 <!--
-# license: Licensed to the Apache Software Foundation (ASF) under one
-#         or more contributor license agreements.  See the NOTICE file
-#         distributed with this work for additional information
-#         regarding copyright ownership.  The ASF licenses this file
-#         to you under the Apache License, Version 2.0 (the
-#         "License"); you may not use this file except in compliance
-#         with the License.  You may obtain a copy of the License at
 #
-#           http://www.apache.org/licenses/LICENSE-2.0
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
 #
-#         Unless required by applicable law or agreed to in writing,
-#         software distributed under the License is distributed on an
-#         "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-#         KIND, either express or implied.  See the License for the
-#         specific language governing permissions and limitations
-#         under the License.
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
 -->
-
-|AppVeyor|Travis CI|
-|:-:|:-:|
-|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-network-information?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-network-information)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-network-information.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-network-information)|
-
 # cordova-plugin-network-information
 
+[![npm - Latest](https://img.shields.io/npm/v/cordova-plugin-network-information/latest?label=Latest%20Release%20(npm))](https://npmjs.com/package/cordova-plugin-network-information)
+[![GitHub](https://img.shields.io/github/package-json/v/apache/cordova-plugin-network-information?label=Development%20(Git))](https://github.com/apache/cordova-plugin-network-information)
+
+[![GitHub - Node Workflow](https://github.com/apache/cordova-plugin-network-information/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/ci.yml?query=branch%3Amaster)
+[![Android Testsuite](https://github.com/apache/cordova-plugin-network-information/actions/workflows/android.yml/badge.svg)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/android.yml)
+[![Chrome Testsuite](https://github.com/apache/cordova-plugin-network-information/actions/workflows/chrome.yml/badge.svg)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/chrome.yml)
+[![iOS Testsuite](https://github.com/apache/cordova-plugin-network-information/actions/workflows/ios.yml/badge.svg)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/ios.yml)
+[![Lint Test](https://github.com/apache/cordova-plugin-network-information/actions/workflows/lint.yml/badge.svg)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/lint.yml)
+[![GitHub - Release Audit Workflow](https://github.com/apache/cordova-plugin-network-information/actions/workflows/release-audit.yml/badge.svg?branch=master)](https://github.com/apache/cordova-plugin-network-information/actions/workflows/release-audit.yml?query=branch%3Amaster)
 
 This plugin provides an implementation of an old version of the
 [Network Information API](http://www.w3.org/TR/2011/WD-netinfo-api-20110607/).
@@ -62,6 +69,7 @@ wifi connection, and whether the device has an internet connection.
 - Connection.CELL_2G
 - Connection.CELL_3G
 - Connection.CELL_4G
+- Connection.CELL_5G
 - Connection.CELL
 - Connection.NONE
 
@@ -83,6 +91,7 @@ function checkConnection() {
     states[Connection.CELL_2G]  = 'Cell 2G connection';
     states[Connection.CELL_3G]  = 'Cell 3G connection';
     states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL_5G]  = 'Cell 5G connection';
     states[Connection.CELL]     = 'Cell generic connection';
     states[Connection.NONE]     = 'No network connection';
 
@@ -91,14 +100,6 @@ function checkConnection() {
 
 checkConnection();
 ```
-
-### API Change
-
-Until Cordova 2.3.0, the `Connection` object was accessed via
-`navigator.network.connection`, after which it was changed to
-`navigator.connection` to match the W3C specification.  It's still
-available at its original location, but is deprecated and will
-eventually be removed.
 
 ### iOS Quirks
 
@@ -143,6 +144,10 @@ function onOffline() {
 }
 ```
 
+### Quirks
+
+This plugin is unable to broadcast events while in the background. Use `navigator.connection.type` to check connection status on the [resume](https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume) event instead.
+
 ### iOS Quirks
 
 During initial startup, the first offline event (if applicable) takes at least a second to fire.
@@ -174,6 +179,10 @@ function onOnline() {
     // Handle the online event
 }
 ```
+
+### Quirks
+
+This plugin is unable to broadcast events while in the background. Use `navigator.connection.type` to check connection status on the [resume](https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume) event instead.
 
 ### iOS Quirks
 
@@ -233,34 +242,52 @@ function onOnline() {
 
 When the online event fires in the preceding code, call the app's `tryToUploadFile` function.
 
-If the FileTransfer object's upload function fails, call the app's `offlineWrite` function to save the current data somewhere.
+If the upload fails, then call the app's `offlineWrite` function to save the current data somewhere.
 
->*Note* This example requires the FileTransfer plugin.
+>*Note* For simplicity, file reading & writing was omitted. Refer to the [cordova-plugin-file](https://github.com/apache/cordova-plugin-file#cordova-plugin-file) documentation for more information on file handling.
 
 ```js
 function tryToUploadFile() {
     // !! Assumes variable fileURL contains a valid URL to a text file on the device,
     var fileURL = getDataFileEntry().toURL();
+    
+    getFileBlobSomehow(fileURL, function(fileBlob) {
+        var success = function (r) {
+            console.log("Response = " + r.response);
+            display("Uploaded. Response: " + r.response);
+        };
 
-    var success = function (r) {
-        console.log("Response = " + r.response);
-        display("Uploaded. Response: " + r.response);
-    }
+        var fail = function (error) {
+            console.log("An error has occurred: Code = " + error.code || error.status);
+            offlineWrite("Failed to upload: some offline data");
+        }
 
-    var fail = function (error) {
-        console.log("An error has occurred: Code = " + error.code);
-        offlineWrite("Failed to upload: some offline data");
-    }
+        var xhr = new XMLHttpRequest();
 
-    var options = new FileUploadOptions();
-    options.fileKey = "file";
-    options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
-    options.mimeType = "text/plain";
+        xhr.onerror = fail;
+        xhr.ontimeout = fail;
+        xhr.onload = function() {
+            // If the response code was successful...
+            if (xhr.status >= 200 && xhr.status < 400) {
+                success(xhr);
+            }
+            else {
+                fail(xhr)
+            }
+        }
 
-    var ft = new FileTransfer();
-    // Make sure you add the domain of your server URL to the
-    // Content-Security-Policy <meta> element in index.html.
-    ft.upload(fileURL, encodeURI(SERVER), success, fail, options);
+        // Make sure you add the domain of your server URL to the
+        // Content-Security-Policy <meta> element in index.html.
+        xhr.open("POST", encodeURI(SERVER));
+
+        xhr.setRequestHeader("Content-Type", "text/plain");
+
+        // The server request handler could read this header to
+        // set the filename.
+        xhr.setRequestHeader("X-Filename", fileURL.substr(fileURL.lastIndexOf("/") + 1));
+
+        xhr.send(fileBlob);
+    });
 };
 ```
 
@@ -295,5 +322,3 @@ function onOffline() {
     console.log("lost connection");
 }
 ```
- 
-[Apache Cordova issue tracker]: https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Network%20Information%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC

@@ -18,6 +18,7 @@
  */
 
 #import "LMLogger.h"
+#import <UserNotifications/UserNotifications.h>
 
 @class CDVLocationManager;
 @class AppDelegate;
@@ -25,10 +26,13 @@
 @implementation LMLogger
 
 - (void) postLocalNotificationWithMessage: (NSString*) alertBody {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.alertBody = alertBody;
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    content.body = alertBody;
+    content.sound = [UNNotificationSound defaultSound];
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString]
+                                                                          content:content
+                                                                          trigger:nil];
+    [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
 }
 
 - (void) debugLog: (NSString*) format, ... {

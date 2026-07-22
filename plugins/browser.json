@@ -10,16 +10,16 @@
     "cordova-plugin-bluetooth-status": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "com.unarin.cordova.beacon": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-device-orientation": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
