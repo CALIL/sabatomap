@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { flushSync } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 const Fragment = React.Fragment;
 
 const REGION = 'sabae';
@@ -74,11 +75,16 @@ class Main extends Component {
 
 export default function InitUI(props, element) {
     console.log('InitUI called with element:', element, 'props:', props);
-    
-    // React 18のcreateRootを使用せず、従来のReactDOM.renderを使用
-    const result = ReactDOM.render(<Main facilities={props.facilities} />, element);
-    console.log('ReactDOM.render result:', result);
-    return result;
+
+    // app.jsがInitUIの戻り値をコントローラとして同期的に使うため、
+    // flushSyncでレンダーを完了させてからMainのインスタンスを返す
+    let instance = null;
+    const root = createRoot(element);
+    flushSync(() => {
+        root.render(<Main facilities={props.facilities} ref={(el) => { instance = el; }} />);
+    });
+    console.log('InitUI instance:', instance);
+    return instance;
 }
 
 
