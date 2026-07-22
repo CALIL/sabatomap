@@ -39,7 +39,7 @@
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
     "cordova": "^13.0.0",
     "cordova-android": "^15.0.0",
-    "cordova-ios": "^7.0.0",
+    "cordova-ios": "^8.1.1",
     "cordova-lib": "^13.0.0",
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation",
