@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="30006" id="jp.calil.sabatomap" version="3.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="30007" id="jp.calil.sabatomap" version="3.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>さばとマップ</name>
     <description>さばとマップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
@@ -17,7 +17,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="7000" />
     <platform name="android">
-        <preference name="android-targetSdkVersion" value="35" />
+        <preference name="android-targetSdkVersion" value="36" />
         <allow-intent href="market:*" />
         <preference name="SplashShowOnlyFirstTime" value="true" />
         <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
