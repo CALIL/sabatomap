@@ -53,7 +53,7 @@
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
     "natives": "^1.1.6",
-    "postcss": "^8.5.14",
+    "postcss": "^8.5.23",
     "postcss-assets": "^6.0.0",
     "sass": "^1.52.2",
     "uglifyify": "^5.0.2",
