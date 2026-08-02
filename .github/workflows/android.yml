@@ -1,0 +1,113 @@
+name: Android ビルド
+
+# Android の APK が組み上がるところまで通す。
+#
+# ci.yml は web 側（browserify / sass）までしか見ていない。
+# cordova のプラグインや Gradle 側が壊れても気づけないので分けてある。
+#
+# 実機やエミュレータは使わない。cordova build android は端末を要求しないが、
+# npm run build（cordova run android）は要求するので混同しないこと。
+#
+# ランナーは ske-v2。ske-v1 の summerwind 版 actions-runner-controller は
+# 2026-06-03 に gha-runner-scale-set へ移行済みで、
+# runs-on: [self-hosted, Linux] では拾われない。
+# → CALIL/ske-v2 の kube/actions-runner/README.md
+#
+# ランナーの image は ghcr.io/actions/actions-runner で、
+# ubuntu-latest と違って JDK も Android SDK も入っていない。
+# どちらも毎回入れる。
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: APK を組む
+    runs-on: ske-v2
+    # SDK の取得と Gradle の初回実行で伸びる。キャッシュが温まれば10分程度
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # zizmor: ignore[cache-poisoning]
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # AGP 8.10（cordova-android 15）が JDK 17 以上を要求する
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+        with:
+          packages: >-
+            platform-tools
+            platforms;android-36
+            build-tools;36.0.0
+
+      # ランナーは毎回使い捨てなので、Gradle の取得物は自分で持ち越す
+      - name: Gradle のキャッシュ
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('package-lock.json', 'config.xml') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Install
+        run: npm ci
+
+      # www/ を作る。これが無いと空のアプリが焼き上がる
+      - name: web 側をビルド
+        run: npm run copy
+
+      # config.xml と package.json の cordova.plugins から復元する。
+      # platforms/android は .gitignore されているので毎回作り直し
+      - name: Android プラットフォームを用意
+        run: npx cordova prepare android
+
+      - name: 要件の確認
+        run: npx cordova requirements android
+
+      # デバッグビルド。署名は要らない（release は keystore が要るので CI ではやらない）
+      - name: APK を組む
+        run: npx cordova build android --debug
+        env:
+          # ske-v2 は memory limit 8Gi。Gradle と Kotlin に取らせすぎると
+          # OOMKilled でランナーごと落ちる
+          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
+
+      - name: できたものを確認
+        run: |
+          set -euo pipefail
+          apk=$(find platforms/android/app/build/outputs/apk -name '*.apk' | head -1)
+          [ -n "$apk" ] || { echo "APK が見つからない"; exit 1; }
+          ls -lh "$apk"
+          echo "APK_PATH=$apk" >> "$GITHUB_ENV"
+
+      - name: APK を残す
+        uses: actions/upload-artifact@v7
+        with:
+          name: sabatomap-debug-apk
+          path: ${{ env.APK_PATH }}
+          retention-days: 14
