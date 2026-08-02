@@ -17,7 +17,7 @@
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-wkwebview": "^0.6.10",
     "es6-object-assign": "^1.1.0",
-    "geolib": "^2.0.22",
+    "geolib": "^3.3.14",
     "ol": "^5.3.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
