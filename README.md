@@ -4,8 +4,25 @@
 
 ## 対象プラットフォーム
 
-- iOS (iOS8.3+)
-- Android (15+)
+- **iOS 18 以上**
+- **Android 10 以上**（API 29）
+
+「ここ7年ほどに出た iPhone / Pixel を、その機種で入る最新 OS まで上げた状態」を想定しています。
+
+- iOS 26 は iPhone 11（2019年）以降が対象です。2018年の XR / XS が iOS 18 止まりなので、そこまで拾って 18 を下限にしています
+- Android の WebView は OS と別に Play ストアで更新されます。Chrome 139（2025年8月）以降は Android 10 以上が要件なので、Android 10 以上なら最新の WebView が入ります。Pixel 3a の最終 OS が Android 12L、Pixel 4 / 5 が Android 13 なので、いずれも該当します
+
+### 下限を変えるとき
+
+**3か所を必ず一緒に動かしてください。**
+
+| 場所 | 何を書くか |
+|---|---|
+| `config.xml` の `deployment-target` | iOS の下限。未指定だと cordova-ios の既定が黙って効く |
+| `config.xml` の `android-minSdkVersion` | Android の下限。未指定だと cordova-android の既定が黙って効く |
+| `.browserslistrc` | Babel の変換範囲と core-js の注入量、autoprefixer のプレフィックス |
+
+`android-targetSdkVersion` は**下限ではありません**。合わせて作る API のレベルで、Google Play の要件です。インストールできる端末を狭めるものではないので、下限の話とは混ぜないでください。
 
 ## ビルド手順
 

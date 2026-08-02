@@ -17,6 +17,14 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="7000" />
     <platform name="android">
+        <!-- 下限。書かないと cordova-android の既定（15 では 24 = Android 7.0）が
+             黙って効くので明示する。
+             29 = Android 10。Chrome / WebView が Chrome 139 以降 Android 10 以上を
+             要件にしており、これより下の端末は WebView が更新されない。
+             .browserslistrc と対で決めているので片方だけ動かさないこと -->
+        <preference name="android-minSdkVersion" value="29" />
+        <!-- 合わせて作る API のレベル。Google Play の要件であって、
+             インストールできる端末を狭めるものではない -->
         <preference name="android-targetSdkVersion" value="36" />
         <allow-intent href="market:*" />
         <preference name="SplashShowOnlyFirstTime" value="true" />
@@ -31,6 +39,11 @@
         <framework src="android.gradle" custom="true" />
     </platform>
     <platform name="ios">
+        <!-- 下限。書かないと cordova-ios の既定（8 では 13.0）が黙って効く。
+             iOS 26 は iPhone 11（2019年）以降が対象で、2018年の XR / XS が
+             iOS 18 止まり。そこまで拾って 18.0 にしている。
+             .browserslistrc と対で決めているので片方だけ動かさないこと -->
+        <preference name="deployment-target" value="18.0" />
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>館内マップの表示に位置情報を使います。位置情報へのアクセスを許可してください。</string>
         </edit-config>
