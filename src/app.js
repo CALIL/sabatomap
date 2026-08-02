@@ -2,9 +2,9 @@ import {transform, transformExtent} from 'ol/proj';
 import {easeOut, elastic} from 'ol/easing';
 import Map from 'ol/Map';
 import {getDistance} from 'ol/sphere';
-import View from 'ol/view';
-import XYZ from 'ol/source/xyz';
-import Tile from 'ol/layer/tile';
+import View from 'ol/View';
+import XYZ from 'ol/source/XYZ';
+import Tile from 'ol/layer/Tile';
 
 import Kanikama from './libs/kanikama.js';
 import Kanimarker from './libs/kanimarker.js';
