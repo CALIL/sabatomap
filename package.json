@@ -70,5 +70,8 @@
       "cordova-plugin-network-information": {},
       "cordova-plugin-inappbrowser": {}
     }
+  },
+  "engines": {
+    "node": ">=22.9.0"
   }
 }
