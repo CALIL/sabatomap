@@ -1,5 +1,6 @@
 import gulp from 'gulp';
-import del from 'del';
+// 名前付きで取る。del 8 は default を持たない
+import { deleteAsync } from 'del';
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 const sass = gulpSass(dartSass);
@@ -44,10 +45,9 @@ gulp.task('sass', function () {
   }
 );
 
-gulp.task('clean', (done) => {
-    del(['platforms/ios/www/**']);
-    done();
-});
+// 削除の完了を待ってから done() を呼ぶ。
+// 以前は待たずに done() していたので、消し終わる前に次へ進んでいた
+gulp.task('clean', () => deleteAsync(['platforms/ios/www/**']));
 gulp.task('watch', (done) => {
     gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['buildjs', 'sass']);
     done();
