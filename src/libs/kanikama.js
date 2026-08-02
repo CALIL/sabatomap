@@ -7,7 +7,10 @@
 
  */
 
-import geolib from 'geolib'
+// 名前付きで取る。geolib 3 は default を持たないので
+// import geolib from 'geolib' だと undefined になる。
+// 名前付きなら 2 でも 3 でも動く。
+import { getDistance } from 'geolib'
 
 /**
  * ビーコンオブジェクトが同じかどうか評価する
@@ -277,7 +280,7 @@ export default class Kanikama {
       if (floor._runtime.beacons.length > 0) {
         floor._runtime.beacons.sort((a, b) => b.rssi - a.rssi);
         for (const b of floor._runtime.beacons) {
-          const distance = geolib.getDistance(b, floor._runtime.beacons[0]);
+          const distance = getDistance(b, floor._runtime.beacons[0]);
           if (distance <= effectiveRange) {
             rssiSum += b.rssi;
             rssiCount++;
