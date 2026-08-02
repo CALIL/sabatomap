@@ -5,30 +5,26 @@
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
     "start": "npm run copy && npm run compile && npx cordova prepare && npx cordova run browser",
-    "compile": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js",
+    "compile": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js",
     "copy": "npm run compile && gulp sass && gulp copy_css && gulp copy_fonts && gulp copy_jsons",
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
-    "build_browser": "browserify -g [ babelify --presets [ \"@babel/preset-env\" \"@babel/preset-react\"  ] ] -g uglifyify  --entry src/app.js > www/js/all.js"
+    "build_browser": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js"
   },
   "dependencies": {
     "cordova-browser": "^7.0.0",
     "cordova-plugin-bluetooth-status": "~1.0.4",
     "cordova-plugin-wkwebview": "^0.6.10",
-    "es6-object-assign": "^1.1.0",
     "geolib": "^3.3.14",
     "ol": "^5.3.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "superagent": "^10.3.0",
-    "whatwg-fetch": "^2.0.4"
+    "superagent": "^10.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.6",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-transform-flow-strip-types": "^7.10.4",
-    "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.27.1",
     "@babel/register": "^7.10.4",

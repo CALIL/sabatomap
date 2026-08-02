@@ -6,6 +6,28 @@
 
 さばとマップ（Sabatomap）は、鯖江市図書館の屋内ナビゲーション用ハイブリッドモバイルアプリケーションです。Apache Cordova、React、iBeacon技術を使用して、利用者が本を見つけて図書館のフロアを移動するのを支援します。
 
+## サポート下限とビルド条件
+
+**iOS 18 以上 / Android 10 以上（API 29）**。「ここ7年ほどに出た iPhone / Pixel を、その機種で入る最新 OS まで上げた状態」を想定しています。
+
+下限は 3 か所に分かれていて、**必ず一緒に動かします**。
+
+| 場所 | 値 | 効くもの |
+|---|---|---|
+| `config.xml` の `deployment-target` | `18.0` | iOS でインストールできる範囲 |
+| `config.xml` の `android-minSdkVersion` | `29` | Android でインストールできる範囲 |
+| `.browserslistrc` | `ios_saf >= 18` / `chrome >= 130` | Babel の変換、core-js の注入量、autoprefixer |
+
+`android-targetSdkVersion`（36）は**下限ではありません**。合わせて作る API のレベルで、Google Play の要件です。インストールできる端末を狭めるものではありません。
+
+### Babel の設定は babel.config.json に集約されている
+
+`.babelrc` は使いません。browserify の `-g babelify` はグローバル変換で `node_modules` も通しますが、**`.babelrc` は `node_modules` に適用されません**。`babel.config.json`（ルート設定）なら両方に効きます。
+
+`compile` スクリプトで `--presets` を渡さないでください。**プログラム指定の options は設定ファイルより優先される**ため、`--presets @babel/preset-env` のように素で渡すと、設定ファイル側の `useBuiltIns` や `targets` がまるごと無視されます。以前これで polyfill が 1 つも入っていませんでした。
+
+ポリフィルは `useBuiltIns: "usage"` + core-js 3 で自動注入します。`@babel/polyfill` は使いません（非推奨、Babel 8 で削除）。
+
 ## よく使う開発コマンド
 
 ### 開発

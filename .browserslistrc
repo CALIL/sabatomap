@@ -1,4 +1,19 @@
-last 2 versions
-safari >= 7
-ie 11
-Firefox ESR
+# サポート下限。config.xml の android-minSdkVersion / deployment-target と
+# 対で決めているので、片方だけ動かさないこと。
+#
+# 「ここ7年ほどに出た iPhone / Pixel が、その機種で入る最新 OS まで
+#   上げてある状態」を想定している。
+#
+# ios_saf >= 18
+#   iOS 26 は iPhone 11（2019年）以降に対応する。2018年の XR / XS だけが
+#   iOS 18 止まりなので、そこまで拾って 18 を下限にする。
+#   まだ iOS 26 に上げていない人もこれで入る。
+#
+# chrome >= 130
+#   Android の WebView は OS と別に Play ストアで更新される。
+#   Chrome 139（2025年8月）以降は Android 10 以上が要件なので、
+#   Android 10 以上の端末には最新の WebView が入る。
+#   Pixel 3a の最終 OS が Android 12L、Pixel 4 / 5 が Android 13 なので
+#   いずれも該当する。更新が遅れている端末を見込んで 1 年ぶん戻してある。
+ios_saf >= 18
+chrome >= 130
