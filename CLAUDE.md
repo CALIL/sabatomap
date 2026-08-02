@@ -28,6 +28,28 @@
 
 ポリフィルは `useBuiltIns: "usage"` + core-js 3 で自動注入します。`@babel/polyfill` は使いません（非推奨、Babel 8 で削除）。
 
+## package.json の overrides
+
+上流が古い依存を掴んでいて、そのままでは脆弱性が残るものだけ固定しています。**外すと `npm audit` の high / moderate が戻ります。**
+
+| | 固定先 | 理由 |
+|---|---|---|
+| `terser` | `^4.8.1` | uglifyify 5.0.2 が `terser ^3.7.5` を要求するが、ReDoS の修正は 4.8.1。**5 系にはしないこと** — uglifyify は `ujs.minify()` を同期で呼んでおり、terser 5 の `minify()` は Promise を返すので壊れる |
+| `uuid` | `^11.1.1` | cordova-ios 8.1.1 → xcode 3.0.1 が `uuid ^7.0.3`。xcode は `uuid.v4()` しか使わず、11 でもそのまま動くことを確認済み |
+
+### 残っている指摘（elliptic 系 4件・low）
+
+`elliptic` に修正版がありません（`browserify-sign` `create-ecdh` `crypto-browserify` はその親）。
+
+いずれも browserify が Node の組み込みモジュールを差し替えるために持っているもので、**ソースが `crypto` を読み込んでいないためバンドルには入りません**。確認方法：
+
+```bash
+npx browserify -g babelify -g uglifyify --entry src/app.js --list | grep -c elliptic
+# → 0
+```
+
+上流が直すか、browserify をやめるまでは消せません。
+
 ## よく使う開発コマンド
 
 ### 開発
