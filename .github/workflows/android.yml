@@ -64,15 +64,14 @@ jobs:
             platforms;android-36
             build-tools;36.0.0
 
-      # ランナーは毎回使い捨てなので、Gradle の取得物は自分で持ち越す
-      - name: Gradle のキャッシュ
-        uses: actions/cache@v4
+      # cordova は wrapper を「システムの gradle で」作る。
+      # ubuntu-latest には最初から入っているが、このランナーには無いので入れる。
+      # 版は cordova-android の cdv-gradle-config-defaults.json に合わせてある。
+      # ランナーは毎回使い捨てなので、取得物の持ち越しもこれに任せる。
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('package-lock.json', 'config.xml') }}
-          restore-keys: gradle-${{ runner.os }}-
+          gradle-version: '8.14.2'
 
       - name: Install
         run: npm ci
