@@ -57,7 +57,7 @@
     "postcss-assets": "^6.0.0",
     "sass": "^1.102.0",
     "uglifyify": "^5.0.2",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^2.0.0"
   },
   "author": "CALIL Inc.",
   "license": "MIT",
