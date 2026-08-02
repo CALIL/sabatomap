@@ -6,7 +6,7 @@
  */
 
 import LayerGroup from 'ol/layer/Group';
-import XYZ from 'ol/source/xyz';
+import XYZ from 'ol/source/XYZ';
 import VectorSource from 'ol/source/Vector';
 import TileLayer from 'ol/layer/Tile';
 import Style from 'ol/style/Style';
