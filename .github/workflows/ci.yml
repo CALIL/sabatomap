@@ -44,5 +44,13 @@ jobs:
       - name: Install
         run: npm ci
 
+      # ここだけテンプレートから変えている。
+      #
+      # このリポジトリの npm run build は
+      #   npm run copy && npx cordova run android
+      # で、run は端末かエミュレータへアプリを送り込む操作。CI では成立しない。
+      #
+      # copy が web 側の組み立て一式（browserify → sass → css/fonts/jsons）に
+      # あたるので、依存を更新して壊れていないかはこれで分かる。
       - name: Build
-        run: npm run build
+        run: npm run copy
