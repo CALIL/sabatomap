@@ -8,7 +8,9 @@ npm-debug.log
 node_modules
 
 
-www/
+# 先頭の / でリポジトリ直下だけに限定する。これが無いと全階層の www/ に当たり、
+# plugins/<plugin>/www/ まで巻き込んで cordova プラグインの JS が追跡から漏れる。
+/www/
 
 # iOS
 platforms/ios
@@ -20,5 +22,20 @@ android-release.apk
 
 # browser
 platforms/browser
+
+# cordova のプラグイン導入状態。platforms/ 以下と対で意味を持つファイルで、
+# platforms/ を無視している以上これも追跡してはいけない。
+#
+# コミットされていると cordova-lib の addHelper.js
+# installPluginsForNewPlatform() が「このプラットフォームには全部入っている」と
+# 判断し、作り直した platforms/<name> にプラグインを 1 件も入れない。
+# 手元は platforms/ が残っているので気づけず、クリーンチェックアウトの CI だけが
+# プラグイン抜きの APK を焼く。
+#
+# plugins/fetch.json は導入元と cli_variables の記録でプラットフォームに依らないため、
+# 引き続き追跡する。
+plugins/android.json
+plugins/ios.json
+plugins/browser.json
 
 sabatomap-keystore.jks
