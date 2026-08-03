@@ -82,6 +82,11 @@
 
         <framework src="CoreBluetooth.framework" />
         <framework src="CoreLocation.framework" />
+        <!-- LMLogger の debugNotification で使う。
+             cordova-ios は CLANG_ENABLE_MODULES = YES なので
+             #import <UserNotifications/UserNotifications.h> だけでも
+             自動リンクされるが、上の2つと同じく明示しておく -->
+        <framework src="UserNotifications.framework" />
 
     </platform>
 
@@ -103,7 +108,6 @@
         <source-file src="src/android/PausableThreadPoolExecutor.java" target-dir="src/com/unarin/cordova/beacon" />
 
         <framework src="src/android/cordova-plugin-ibeacon.gradle" custom="true" type="gradleReference" />
-        <framework src="com.android.support:support-core-utils:26+" />
     </platform>
 
 </plugin>
