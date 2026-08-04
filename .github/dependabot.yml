@@ -46,6 +46,16 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "babelify"
         update-types: ["version-update:semver-major"]
+      # react のメジャー更新は周辺ライブラリの対応状況をまとめて確認してから
+      # 手動で判断する。詳細は Todoist を参照
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-minor-patch:
         patterns:
