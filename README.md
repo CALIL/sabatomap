@@ -111,9 +111,13 @@ npm install --global --production windows-build-tools
 ## Android版ストアへ公開
 config.xmlのandroid-versionCodeとversionをあげる
 
+```bash
+npm run compile
+```
+
 1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存
 
-```
+```bash
 op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
 ```
 
@@ -121,7 +125,7 @@ keystoreのパスワードは、1Passwordのラベルに保存してある<br>
 keyAliasはcalil<br>
 keyPasswordはkeystoreと同じ
 
-```
+```bash
 jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab calil
 jarsigner -verify platforms/android/app/build/outputs/bundle/release/app-release.aab
 ```

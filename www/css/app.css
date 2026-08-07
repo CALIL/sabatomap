@@ -30,25 +30,9 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   -webkit-appearance: none;
 }
 
-@-webkit-keyframes spinner {
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
 @keyframes spinner {
   to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes waiting {
-  0%, 40%, 100% {
-    background-size: 32px;
-  }
-  20% {
-    background-size: 40px;
+    transform: rotate(360deg);
   }
 }
 @keyframes waiting {
@@ -85,10 +69,8 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   border: 2px solid #D4D4D4;
   outline: none;
   -webkit-user-select: text;
-  -webkit-transition: border 0.9s;
   transition: border 0.9s;
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
 }
 #ui .box input::-webkit-search-cancel-button {
@@ -98,11 +80,11 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s;
 }
-#ui .box input:focus {
-  border: 2px solid rgba(56, 149, 255, 0.85);
-}
 #ui .box input:focus::-webkit-input-placeholder {
   opacity: 0;
+}
+#ui .box input:focus {
+  border: 2px solid rgba(56, 149, 255, 0.85);
 }
 #ui .box input:focus ~ button {
   color: rgba(56, 149, 255, 0.85);
@@ -125,7 +107,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   right: 16px;
   border: none;
   background: none;
-  -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
   transition: color 0.4s, right 0.4s, opacity 0.6s;
 }
 #ui .box button:focus {
@@ -142,30 +123,10 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   top: 15px;
   bottom: 15px;
   width: 0;
-  -webkit-transition: border-left-color 0.4s;
   transition: border-left-color 0.4s;
 }
 #ui .box button.search {
   right: 63px;
-}
-#ui .results {
-  -webkit-overflow-scrolling: touch;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  position: absolute;
-  top: 1px;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 90000;
-  background-color: #fff;
-  padding: 70px 17px 17px;
-  -webkit-transition: opacity 0.6s;
-  transition: opacity 0.6s;
 }
 #ui .results a {
   text-decoration: none;
@@ -180,10 +141,25 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   text-align: center;
   background-color: #69947a;
   width: 80%;
-  -webkit-box-shadow: 1px 3px 1px 1px #eee;
-          box-shadow: 1px 3px 1px 1px #eee;
+  box-shadow: 1px 3px 1px 1px #eee;
   font-size: 4.5vw;
   border-radius: 4px;
+}
+#ui .results {
+  -webkit-overflow-scrolling: touch;
+  -webkit-user-select: none;
+          user-select: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 90000;
+  background-color: #fff;
+  padding: 70px 17px 17px;
+  transition: opacity 0.6s;
 }
 #ui .results:before {
   z-index: 10;
@@ -194,7 +170,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   left: 0;
   right: 16px;
   pointer-events: none;
-  background: -webkit-gradient(linear, left top, left bottom, from(rgb(255, 255, 255)), to(rgba(255, 255, 255, 0)));
   background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
 }
 #ui .results::-webkit-scrollbar {
@@ -215,12 +190,10 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
 #ui .results .books > div {
   position: relative;
   height: 110px;
-  -webkit-transition: border-left-color 0.4s;
   transition: border-left-color 0.4s;
   cursor: pointer;
   overflow: hidden;
-  -webkit-box-shadow: 1px 1px 10px #CACACA;
-          box-shadow: 1px 1px 10px #CACACA;
+  box-shadow: 1px 1px 10px #CACACA;
   margin-top: 10px;
   border-left: 4px solid #fff;
 }
@@ -238,8 +211,7 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   margin: auto;
   width: 80px;
   z-index: 1;
-  -webkit-box-shadow: 1px 0px 1px 0 #999;
-          box-shadow: 1px 0px 1px 0 #999;
+  box-shadow: 1px 0px 1px 0 #999;
   background-color: #fff;
 }
 #ui .results .books > div .title {
@@ -260,7 +232,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   right: 15px;
   left: 16px;
   bottom: 13px;
-  -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s;
 }
 #ui .results .books > div .stocks.notfetch {
@@ -272,7 +243,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   bottom: 45px;
   font-size: 10px;
   color: #DEDEDE;
-  -webkit-transition: color 1s;
   transition: color 1s;
 }
 .ios #ui .results {
@@ -347,14 +317,11 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   bottom: 16px;
   left: 14px;
   border-radius: 2px;
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
 }
 #floors > div {
   display: block;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   height: 45px;
   width: 45px;
@@ -369,7 +336,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   height: 45px;
   width: 45px;
   background-color: #fff;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
 }
 #floors > div:first-child label {
@@ -394,20 +360,16 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   height: 40px;
   width: 40px;
   padding: 10px;
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  box-sizing: content-box;
   right: 2px;
   top: 70px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   position: absolute;
   border-radius: 50%;
   background: url('../img/compass.svg') no-repeat center;
   background-size: 30px;
-  -webkit-transition: opacity 0.25s linear, visibility 0.25s linear 0.25s;
   transition: opacity 0.25s linear, visibility 0.25s linear 0.25s;
 }
 #compass.hidden {
@@ -421,8 +383,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
 #locator > button {
   position: absolute;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   user-focus: none;
   height: 36px;
@@ -433,13 +393,10 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   right: 0;
   bottom: 0;
   margin: 13px;
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  box-sizing: content-box;
   padding: 10px;
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   background-size: 32px;
-  -webkit-transition: opacity 0.4s;
   transition: opacity 0.4s;
 }
 #locator > button.disabled {
@@ -457,21 +414,17 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
 }
 #locator > button.waiting {
   background: rgba(255, 255, 255, 0.96) url('../img/target-blue.svg') no-repeat center;
-  -webkit-animation: waiting 3s infinite ease-in-out;
-          animation: waiting 3s infinite ease-in-out;
+  animation: waiting 3s infinite ease-in-out;
 }
 #locator > button:focus {
   outline: 0;
 }
 #locator > div {
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
   opacity: 0;
   pointer-events: none;
   border: 2px solid #148cf5;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   position: absolute;
   padding: 5px 10px;
@@ -556,8 +509,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
 
 #detail {
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   overflow: hidden;
   position: absolute;
@@ -568,9 +519,7 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   padding: 14px;
   z-index: 1200000;
   background-color: rgb(251, 251, 251);
-  -webkit-box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
-          box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
-  -webkit-transition: top 0.5s;
+  box-shadow: 0 0 12px rgba(78, 78, 78, 0.7);
   transition: top 0.5s;
 }
 #detail.show {
@@ -593,7 +542,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   right: 0;
   border: none;
   background: none;
-  -webkit-transition: color 0.4s, right 0.4s, opacity 0.6s;
   transition: color 0.4s, right 0.4s, opacity 0.6s;
 }
 #detail .close:hover {
@@ -610,14 +558,15 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   font-size: 20px;
   position: absolute;
   top: 0;
-  -webkit-transition: color 0.4s;
   transition: color 0.4s;
-  bottom: 0;
-  left: 0;
-  width: 40px;
 }
 .ios #detail .back {
   top: 20px;
+}
+#detail .back {
+  bottom: 0;
+  left: 0;
+  width: 40px;
 }
 #detail .back > i {
   display: block;
@@ -664,7 +613,6 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   border: 1px solid #bfbfbf;
   border-radius: 5px;
   background: #ffffff;
-  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ededed));
   background: linear-gradient(to bottom, #ffffff, #ededed);
   font: normal normal normal 12px trebuchet ms;
   color: #6b6b6b;
@@ -673,13 +621,11 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
 #detail a:hover, #detail a:focus {
   border: 1px solid #dcdcdc;
   background: #ffffff;
-  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
   background: linear-gradient(to bottom, #ffffff, #ffffff);
   color: #6b6b6b;
   text-decoration: none;
 }
 #detail a:active {
   background: #999999;
-  background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#ededed));
   background: linear-gradient(to bottom, #999999, #ededed);
 }
