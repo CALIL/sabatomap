@@ -145,4 +145,39 @@ describe('InitUI（本番と同じ入口）', () => {
 
     container.remove();
   });
+
+  /*
+   src/app.js の loadFacility は UI.setFacility(facility) の**直後に同期で**
+   loadFloor(floor.id) → UI.setFloorId(id) を呼ぶ。
+
+   React 17 までは React のイベント外の setState が同期に流れていたので、
+   setFloorId の時点で Floors はマウント済みだった。createRoot（React 18 以降）の
+   自動バッチングでは描画が遅延するため floorsRef.current が null のままで、
+   App.jsx の `if (this.floorsRef.current)` が黙って握りつぶす。
+   結果、起動時にどの階も選択されない。
+
+   act() を挟まずに app.js と同じ順で呼ぶのが再現条件。
+   */
+  it('setFacility の直後に setFloorId を呼んでも階が選択される', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    let instance;
+    await act(async () => {
+      instance = InitUI({ facilities: FACILITIES }, container);
+    });
+
+    await act(async () => {
+      // app.js の loadFacility と同じ並び。間に await を挟まない
+      instance.setFacility(FACILITIES[0]);
+      instance.setFloorId('7');
+    });
+
+    const radios = [...container.querySelectorAll('#floors .floor input')];
+    expect(radios.map((r) => r.value)).toEqual(['8', '7']);   // 階は逆順に並ぶ
+    expect(radios.find((r) => r.value === '7').checked).toBe(true);
+    expect(radios.find((r) => r.value === '8').checked).toBe(false);
+
+    container.remove();
+  });
 });
