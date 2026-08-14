@@ -7,10 +7,23 @@
 
  */
 
-// 名前付きで取る。geolib 3 は default を持たないので
-// import geolib from 'geolib' だと undefined になる。
-// 名前付きなら 2 でも 3 でも動く。
-import { getDistance } from 'geolib'
+/*
+ 距離は ol/sphere で測る。geolib は 2026-08-15 にやめた。
+
+ geolib は getDistance 1箇所のためだけに 23KB（成果物の 3.7%）を占めていた。
+ ol/sphere は app.js が既に使っていて追加のコストがない。
+
+ **加えて geolib は値を間違えていた。** sabae.json のビーコンは
+ latitude に経度、longitude に緯度が入っている（鯖江市は北緯 35.96 / 東経 136.18 なのに
+ latitude が 136.18 側）。geolib は名前で読むので入れ替わったまま計算していた。
+ 全 23,603 ペアで実測すると平均 18.1 パーセント、最大 98.8 パーセントずれ、
+ 下の effectiveRange（3m）の判定が 144 組で変わっていた。
+
+ このリポジトリは他のどこでも**位置で**扱っていて正しい。たとえば app.js は
+ `transform([p.latitude, p.longitude], "EPSG:4326", ...)` と、第1要素を経度として渡す。
+ ol/sphere も [経度, 緯度] を取るので、同じ並びで渡せば揃う。
+ */
+import { getDistance } from 'ol/sphere'
 
 /**
  * ビーコンオブジェクトが同じかどうか評価する
@@ -279,8 +292,14 @@ export default class Kanikama {
     for (let floor of this.currentFacility.floors) {
       if (floor._runtime.beacons.length > 0) {
         floor._runtime.beacons.sort((a, b) => b.rssi - a.rssi);
+        const nearest = floor._runtime.beacons[0];
         for (const b of floor._runtime.beacons) {
-          const distance = getDistance(b, floor._runtime.beacons[0]);
+          // ol/sphere は [経度, 緯度] を取る。sabae.json は latitude 側に経度が
+          // 入っているので、この並びで渡すのが正しい（import の上のコメントを参照）
+          const distance = getDistance(
+            [b.latitude, b.longitude],
+            [nearest.latitude, nearest.longitude]
+          );
           if (distance <= effectiveRange) {
             rssiSum += b.rssi;
             rssiCount++;

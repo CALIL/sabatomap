@@ -111,8 +111,8 @@ npm test          # vitest run
 `import C from 'pkg'` がコンポーネントではなくオブジェクトになって描画時に落ちます。
 型もビルドも通るので、1回描画するテストが無いと気づけません。
 
-`test/interop.test.js` は `superagent` と `geolib` の受け取り方、および `src/api.js` の
-クエリ正規化関数を固定します。
+`test/interop.test.js` は `ol/sphere` の受け取り方、`src/api.js` のクエリ正規化関数、
+および **`src/sabae.json` の座標の並び**（後述）を固定します。
 
 グローバルの `window.app`（`src/app.js:5313` で代入）を `src/component` の各所が直に参照するため、
 `test/setup.js` でスタブしています。`app.js` を読み込むと `ol` と `cordova` まで要るためです。
@@ -134,6 +134,20 @@ npm test          # vitest run
 
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
+
+### プラグインを package.json に足すときの注意
+
+`cordova-plugin-device` を devDependencies に持っていましたが、2026-08-15 に外しました。
+`plugins/fetch.json` で **`is_top_level=false`**（`com.unarin.cordova.beacon` の依存）であり、
+`package.json` の `cordova.plugins` にも無く、`src` でも `device.*` を使っていません
+（2022年の `d20c756`「device.platform → cordova.platformId」で使われなくなった）。
+`cordova prepare` は vendoring 済みの `plugins/cordova-plugin-device/` から入れるので、
+npm 側の宣言は不要です。
+
+`cordova-lib` も同時に外しました。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
+
+**プラグインを足すときは `package.json` の `cordova.plugins` と `plugins/` が本体で、
+devDependencies は `cordova plugin add` の副産物**だと思ってください。
 
 ## cordova プラグインの git 参照は SHA で固定しています
 
@@ -182,6 +196,28 @@ path データの出典は Font Awesome Free 5.15.4 の `svgs/solid/*.svg` で�
 アイコンのライセンスは CC BY 4.0 です。
 
 ## データの置き場所
+
+### ★ sabae.json は latitude に経度、longitude に緯度が入っている
+
+鯖江市は北緯 35.96 / 東経 136.18 ですが、`beacons` / `nearest1` / `nearest2` / `nearestD` の
+**448点すべてで `latitude` に 136 台、`longitude` に 35 台**が入っています。名前が逆です。
+
+**このリポジトリは座標を「位置」で扱っていて、それで辻褄が合っています。**
+第1要素（`latitude`）を経度、第2要素（`longitude`）を緯度として渡す約束です。
+
+| 場所 | 書き方 |
+|---|---|
+| `src/app.js` の `change:position` | `transform([p.latitude, p.longitude], "EPSG:4326", ...)` |
+| `src/libs/kanikama.js` のフロア判定 | `getDistance([b.latitude, b.longitude], ...)`（`ol/sphere` は `[経度, 緯度]`） |
+| `bbox` | `[経度, 緯度, 経度, 緯度]`。こちらは EPSG:4326 の正しい並び |
+
+**フィールド名を直すなら、上の2箇所も同時に直してください。** データだけ直すと
+地図のマーカーと距離が両方おかしくなります。片方だけでも同じです。
+`test/interop.test.js` の「sabae.json の座標の並び」がこの取り違えを落とします。
+
+かつて `geolib` を使っていたときは、**名前で読むライブラリだったので間違えていました**。
+全 24,449 ペアで実測すると平均 18.1〜18.4 パーセント、最大 98.8 パーセントずれ、
+3m 判定が 170 組で変わっていました。2026-08-15 に `ol/sphere` へ寄せて解消しています。
 
 ### 施設・ビーコンデータは src/sabae.json が唯一のソース
 
