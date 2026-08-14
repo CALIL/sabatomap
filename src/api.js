@@ -141,7 +141,6 @@ export class api {
         if (book.detail || !book.holdings.includes(100622)) return;
         // if (fetchCount >= 3) return;
         const url = `https://sabatomap-mapper.calil.jp/get?uuid=${this.data.uuid}&id=${book.id}`
-        console.log(url);
         fetchCount += 1;
         fetch(url).then((r) => r.json()).then((r) => {
           book.detail = r.data;

@@ -63,7 +63,6 @@ let fitRotation = function (r) {
     }
   }
   let view =  map.getView();
-  console.log(virtualAngle,view.rotation);
   if(view.rotation !== virtualAngle){
       view.animate({rotation: virtualAngle * Math.PI / 180, duration: 400, easing: easeOut});
   }
@@ -450,7 +449,6 @@ export default class App {
   }
 
   locatorClicked() {
-    console.log(kanilayer);
     return locatorClicked();
   }
 
