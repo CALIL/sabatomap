@@ -22,8 +22,7 @@
     "geolib": "^3.3.14",
     "ol": "^5.3.3",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "superagent": "^10.3.0"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.4",

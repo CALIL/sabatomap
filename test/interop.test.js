@@ -9,15 +9,10 @@
 // 「何を import してどう使っているか」の契約をここに固定しておけば、
 // 実装側が受け方を変えたときに気づける。
 import { describe, it, expect } from 'vitest';
-import request from 'superagent';
 import { getDistance } from 'geolib';
 import { api, normalizeQuery, isEmptyQuery, isEqualQuery, stripQuery } from '../src/api.js';
 
 describe('CommonJS 依存の受け取り方', () => {
-  it('superagent は get を持つ', () => {
-    expect(typeof request.get).toBe('function');
-  });
-
   it('geolib の getDistance は関数', () => {
     expect(typeof getDistance).toBe('function');
     // 鯖江市図書館の敷地内で 0 より大きい距離が出る
