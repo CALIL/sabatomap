@@ -1,6 +1,6 @@
 import gulp from 'gulp';
-// 名前付きで取る。del 8 は default を持たない
-import { deleteAsync } from 'del';
+// 削除は Node 標準で足りるので del は使わない
+import { rm } from 'node:fs/promises';
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 const sass = gulpSass(dartSass);
@@ -47,7 +47,13 @@ gulp.task('sass', function () {
 
 // 削除の完了を待ってから done() を呼ぶ。
 // 以前は待たずに done() していたので、消し終わる前に次へ進んでいた
-gulp.task('clean', () => deleteAsync(['platforms/ios/www/**']));
+//
+// del の頃は 'platforms/ios/www/**' というグロブを渡していたので、
+// 中身だけを消してディレクトリ自体は空のまま残していた。fs.rm は
+// ディレクトリごと消すが、cordova prepare が updateWww で作り直すため
+// 問題ない（cordova-common の FileUpdater が cpSync を recursive で呼ぶ）。
+// force: true があるので platforms/ios が無い状態でも失敗しない。
+gulp.task('clean', () => rm('platforms/ios/www', { recursive: true, force: true }));
 gulp.task('watch', (done) => {
     gulp.watch(['src/*.js', 'src/*.jsx', 'src/*.sass'], ['buildjs', 'sass']);
     done();
