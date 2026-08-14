@@ -122,6 +122,35 @@ npm test          # vitest run
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
 
+## データの置き場所
+
+### 施設・ビーコンデータは src/sabae.json が唯一のソース
+
+`src/app.js` が `import rules from './sabae.json'` で読み、`initializeApp()` が
+`InitUI({facilities: rules})` と `kanikama.facilities_ = rules` に渡します。
+**施設・フロア・ビーコンを増やすときはこのファイルだけを直してください。**
+
+経緯を書いておきます。2016年の初版はこの形でした。`src/app.js` には `__RULES__` という
+プレースホルダだけがあり、`gulp buildjs` が `replace('__RULES__', fs.readFileSync('src/sabae.json'))`
+でビルド時に差し込んでいました。ところが 2019-04-23（`a1eb2dc`）にビルドが gulp から
+npm script の素の browserify へ移った際、replace 工程が無くなったぶんを埋めるために
+**JSON が `src/app.js` へ直接貼り付けられ**（+4935/-77、458行 → 5316行）、
+`src/sabae.json` は 2016-02-15 から更新されないまま残りました。
+
+2026-08-15 に `import` へ戻しました。両者は `JSON.stringify` レベルで完全一致していた
+（どちらも凍結していた）ので、データの内容は変わっていません。
+
+### 配架図の GeoJSON は S3 から取ります
+
+`src/libs/kanilayer.js` の `getHaikaVectorSource_` が
+`https://s3-ap-northeast-1.amazonaws.com/calil.sabatomap2/<フロアID>.json` を読みます。
+
+`src/json/7.json` と `8.json` は**同じ内容のローカル控え**です。2019-10-29 に
+一度ローカル参照へ変えた（`d256d85`）ものの同日に S3 へ戻した（`e5569f3`）ため、
+現在どこからも読まれていません。**S3 バケットが失われたときの控えとして残してあります。**
+`tools/build.mjs` の `COPIES` が `www/json/` へ置くのも同じ理由です。
+ローカル参照へ戻すのは `getHaikaVectorSource_` の1行です。
+
 ## よく使う開発コマンド
 
 ### 開発
