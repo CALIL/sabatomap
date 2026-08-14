@@ -20,26 +20,32 @@
 |---|---|
 | `config.xml` の `deployment-target` | iOS の下限。未指定だと cordova-ios の既定が黙って効く |
 | `config.xml` の `android-minSdkVersion` | Android の下限。未指定だと cordova-android の既定が黙って効く |
-| `.browserslistrc` | Babel の変換範囲と core-js の注入量、autoprefixer のプレフィックス |
+| `.browserslistrc` | esbuild の `target` と autoprefixer のプレフィックス |
 
 `android-targetSdkVersion` は**下限ではありません**。合わせて作る API のレベルで、Google Play の要件です。インストールできる端末を狭めるものではないので、下限の話とは混ぜないでください。
 
 ## ビルド手順
 
 ```bash
-npm install -g cordova
-npm update
-cordova platform add ios
-cordova platform add android
-npm start
-npm run build
-npm run build_ios
+npm ci
+npx cordova platform add ios
+npx cordova platform add android
+npm start           # www/ を作って cordova prepare → ブラウザで実行
+npm run build       # Android（実機かエミュレータが必要）
+npm run build_ios   # iOS
 ```
+
+`www/` の組み立ては `node tools/build.mjs`（esbuild）です。`npm run watch` で
+`src/` を見張りながら作り直せます。詳しくは CLAUDE.md を参照してください。
+
+**`npm run build_browser` の成果物をブラウザで直接開いても動きません。**
+`www/index.html` が `cordova.js` を読んで `deviceready` を待つ設計で、`cordova.js` は
+`cordova prepare` が `platforms/browser/www/` に注入するためです。確認は `npm start` で。
 
 ## 変更の反映
 
 ```bash
-cordova prepare
+npm run copy && npx cordova prepare
 ```
 
 ## デバッグ
@@ -97,11 +103,7 @@ fontawesome-free-5.15.4-web
 ```
 
 ダウンロードして↑に保存<br>
-gulpでコピーするように変更
-
-## Windowsでnode-sassのビルドに失敗する場合
-
-npm install --global --production windows-build-tools
+`tools/build.mjs` の `COPIES` でコピーするように変更
 
 ## Android版で最初の位置情報の許可についてのメッセージが英語になる場合
 

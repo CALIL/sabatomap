@@ -1,5 +1,5 @@
 import {transform, transformExtent} from 'ol/proj';
-import {easeOut, elastic} from 'ol/easing';
+import {easeOut} from 'ol/easing';
 import Map from 'ol/Map';
 import {getDistance} from 'ol/sphere';
 import View from 'ol/View';
@@ -83,10 +83,14 @@ var fitFloor = function () {
     map.getView().setRotation((180 - homeAngle) * Math.PI / 180);
     _duration = 0;
   }
+  // easing は渡さない。OpenLayers 5 の既定（inAndOut）が使われる。
+  // 以前は elastic を渡していたが ol/easing に elastic は存在せず（ol 5.3.3 に0件）、
+  // browserify の ESM interop が undefined を黙って通していたため
+  // 実際には View.js の `options.easing || inAndOut` で既定が効いていた。
+  // esbuild は存在しない export をエラーにするのでここで気づいた。
   return map.getView().fit(transformExtent(homeBoundingBox, "EPSG:4326", "EPSG:3857"), {
     duration: _duration,
-    constrainResolution: false,
-    easing: elastic
+    constrainResolution: false
   });
 };
 
