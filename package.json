@@ -4,13 +4,15 @@
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
   "repositry": "https://github.com/CALIL/sabatomap",
   "scripts": {
-    "start": "npm run copy && npm run compile && npx cordova prepare && npx cordova run browser",
-    "compile": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js",
-    "copy": "npm run compile && gulp sass && gulp copy_css && gulp copy_fonts && gulp copy_jsons",
+    "start": "npm run copy && npx cordova prepare && npx cordova run browser",
+    "copy": "node tools/build.mjs release",
+    "compile": "node tools/build.mjs release",
+    "build_browser": "node tools/build.mjs release",
+    "watch": "node tools/build.mjs watch",
+    "clean": "node tools/build.mjs clean",
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
-    "build_browser": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js",
     "test": "vitest run"
   },
   "dependencies": {
@@ -24,13 +26,8 @@
     "superagent": "^10.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@babel/preset-env": "^7.29.7",
-    "@babel/preset-react": "^7.29.7",
-    "@babel/register": "^7.29.7",
     "autoprefixer": "^10.5.4",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.1",
+    "browserslist": "^4.28.8",
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
     "cordova": "^13.0.0",
     "cordova-android": "^15.1.0",
@@ -40,17 +37,11 @@
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation",
     "cordova-plugin-inappbrowser": "^7.0.0",
     "cordova-plugin-network-information": "^3.1.0",
-    "core-js": "^3.49.0",
-    "gulp": "^5.0.0",
-    "gulp-postcss": "^10.0.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sass": "^6.0.1",
+    "esbuild": "^0.28.2",
     "jsdom": "^30.0.1",
     "postcss": "^8.5.25",
     "postcss-assets": "^6.0.0",
     "sass": "^1.102.0",
-    "uglifyify": "^5.0.2",
-    "vinyl-source-stream": "^2.0.0",
     "vitest": "^4.1.10"
   },
   "author": "CALIL Inc.",
@@ -72,8 +63,10 @@
   "engines": {
     "node": ">=22.9.0"
   },
+  "allowScripts": {
+    "esbuild": true
+  },
   "overrides": {
-    "terser": "^4.8.1",
     "uuid": "^11.1.1"
   }
 }
