@@ -32,10 +32,9 @@ const r = (...p) => path.join(repoRoot, ...p);
 const COPIES = [
   // ol.css は www/index.html が vendor/css/ol.css として読んでいる
   { from: ['node_modules/ol/ol.css'], to: 'www/vendor/css' },
-  // Font Awesome。www/index.html は現状 CDN を読んでいてこのコピーを参照していないが、
-  // ここで挙動を変えないよう gulp と同じものを置く
-  { from: ['fontawesome-free-5.15.4-web/css/fontawesome.css'], to: 'www/vendor/css' },
-  { from: ['fontawesome-free-5.15.4-web/webfonts'], to: 'www/vendor/webfonts' },
+  // Font Awesome のコピーは 2026-08-15 にやめた。
+  // アイコンは src/component/Icon.jsx がインライン SVG で描く
+  //
   // 配架図の GeoJSON。2019-10-29 に S3 参照へ戻して以来どこからも読まれていないが、
   // S3 バケットが失われたときの控えとして同梱を続ける。
   // ローカル参照へ戻すのは src/libs/kanilayer.js の getHaikaVectorSource_ の1行

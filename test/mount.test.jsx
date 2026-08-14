@@ -16,6 +16,7 @@ import Stocks from '../src/component/Stocks.jsx';
 import Floors from '../src/component/Floors.jsx';
 import Locator from '../src/component/Locator.jsx';
 import Facilities from '../src/component/Facilities.jsx';
+import Icon from '../src/component/Icon.jsx';
 
 const mounted = [];
 
@@ -87,6 +88,8 @@ describe('各コンポーネントが描画できる', () => {
     const el = await mount(<Book book={BOOK} showCover={true} selectBook={() => {}} />);
     expect(el.querySelector('.title').textContent).toContain('テスト書名');
     expect(el.querySelector('img')).not.toBeNull();
+    // fa-play をインライン SVG に置き換えた
+    expect(el.querySelector('.next svg.icon path')).not.toBeNull();
   });
 
   it('Search', async () => {
@@ -94,7 +97,30 @@ describe('各コンポーネントが描画できる', () => {
     expect(el.querySelector('input[type=search]').placeholder).toBe('探したいこと');
     expect(el.querySelector('button.search')).not.toBeNull();
     expect(el.querySelector('button.clear')).not.toBeNull();
+    // 検索ボタンと閉じるボタンのアイコンがインライン SVG で出ている
+    expect(el.querySelectorAll('svg.icon')).toHaveLength(2);
+    expect(el.querySelector('button.search svg.icon path')).not.toBeNull();
   });
+});
+
+describe('Icon（Font Awesome の置き換え）', () => {
+  // Font Awesome の webfont も CDN も使わない。使うのはこの5つだけ
+  for (const [name, viewBox] of Object.entries({
+    'search': '0 0 512 512',
+    'times': '0 0 352 512',
+    'play': '0 0 448 512',
+    'arrow-left': '0 0 448 512',
+    'chevron-right': '0 0 320 512',
+  })) {
+    it(`${name} が描画できる`, async () => {
+      const el = await mount(<Icon name={name} />);
+      const svg = el.querySelector('svg.icon');
+      expect(svg).not.toBeNull();
+      expect(svg.getAttribute('viewBox')).toBe(viewBox);
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
+      expect(svg.querySelector('path').getAttribute('d').length).toBeGreaterThan(50);
+    });
+  }
 });
 
 describe('InitUI（本番と同じ入口）', () => {

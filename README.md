@@ -94,16 +94,11 @@ cordova plugin rm cordova-plugin-device-orientation
 cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 ```
 
-## Androidでfontawesomeが表示されない場合
+## アイコン
 
-https://fontawesome.com/v5/download
-
-```
-fontawesome-free-5.15.4-web
-```
-
-ダウンロードして↑に保存<br>
-`tools/build.mjs` の `COPIES` でコピーするように変更
+`src/component/Icon.jsx` がインライン SVG で描きます。Font Awesome の同梱と CDN 参照は
+2026-08-15 に撤去しました（オフラインでアイコンが消える経路だったため）。
+アイコンを増やすときは `Icon.jsx` の `ICONS` に path を足してください。
 
 ## Android版で最初の位置情報の許可についてのメッセージが英語になる場合
 
