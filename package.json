@@ -2,7 +2,7 @@
   "name": "sabatomap",
   "version": "1.7.0-dev",
   "description": "鯖江市図書館マップアプリ「さばとマップ」",
-  "repositry": "https://github.com/CALIL/sabatomap",
+  "repository": "https://github.com/CALIL/sabatomap",
   "scripts": {
     "start": "npm run copy && npx cordova prepare && npx cordova run browser",
     "copy": "node tools/build.mjs release",
@@ -18,7 +18,6 @@
   "dependencies": {
     "cordova-browser": "^7.0.0",
     "cordova-plugin-bluetooth-status": "~1.0.4",
-    "cordova-plugin-wkwebview": "^0.6.10",
     "geolib": "^3.3.14",
     "ol": "^5.3.3",
     "react": "^19.2.8",
@@ -27,13 +26,13 @@
   "devDependencies": {
     "autoprefixer": "^10.5.4",
     "browserslist": "^4.28.8",
-    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon",
+    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon#c60fb0eb01ee30d67f937dd2ac6da6faebd83682",
     "cordova": "^13.0.0",
     "cordova-android": "^15.1.0",
     "cordova-ios": "^8.1.1",
     "cordova-lib": "^13.0.0",
     "cordova-plugin-device": "^3.0.0",
-    "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation",
+    "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499",
     "cordova-plugin-inappbrowser": "^7.0.0",
     "cordova-plugin-network-information": "^3.1.0",
     "esbuild": "^0.28.2",

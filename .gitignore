@@ -38,4 +38,10 @@ plugins/android.json
 plugins/ios.json
 plugins/browser.json
 
+# platforms/ 以下と対で意味を持つ状態ファイル。plugins/*.json と同じ理由で追跡しない。
+# コミットされていた頃の中身は browser 5.0.4 / android 6.4.0 / ios 4.5.5 で、
+# package.json の cordova-browser ^7 / cordova-android ^15.1 / cordova-ios ^8.1 から
+# 2〜9 メジャー古い情報が残り続けていた。
+platforms/platforms.json
+
 sabatomap-keystore.jks

@@ -122,6 +122,28 @@ npm test          # vitest run
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
 
+## cordova プラグインの git 参照は SHA で固定しています
+
+```
+com.unarin.cordova.beacon:         github:CALIL/cordova-plugin-ibeacon#c60fb0e...
+cordova-plugin-device-orientation: github:CALIL/cordova-plugin-device-orientation#16a8747...
+```
+
+ref 指定なしだと `npm install` を実行したタイミングで解決先が変わります。
+実際に3年前まで巻き戻った差分が手元に残っていたことがあります。
+
+**ただし `plugins/` をコミットしている間、これはビルド内容には効きません。**
+cordova-lib の `restore-util.js` は `plugins/<id>/` があれば「導入済み」と判断して
+node_modules を見に行かないので、`cordova prepare` が焼くのは**コミット済みの
+`plugins/<id>/`** です。上げるときは `cordova plugin remove` / `add` で
+`plugins/` も入れ直してください。Dependabot の bump PR は `package-lock.json` しか
+触らないのでビルド内容は 1 バイトも変わりません。
+
+`platforms/platforms.json` は追跡していません。`platforms/` を無視している以上、
+それと対で意味を持つ状態ファイルを追跡してはいけないためです
+（`plugins/*.json` と同じ理由）。以前はコミットされていて、中身が
+`browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
+
 ## アイコンはインライン SVG
 
 `src/component/Icon.jsx` が `<svg className="icon">` を描きます。使うのは
