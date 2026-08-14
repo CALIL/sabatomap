@@ -8,20 +8,36 @@
 
  */
 
-import request from 'superagent';
-
 const ENDPOINT = 'https://unitrad.calil.jp/v1/';
 const FIELDS = ['free', 'title', 'author', 'publisher', 'isbn', 'ndc', 'year_start', 'year_end', 'region'];
 
 
 /**
  * Unitrad APIにアクセスするための共通関数
- * @param command APIのコマンド
- * @returns {Object}
+ *
+ * 以前は superagent の `.query(obj).end(cb)` だった。fetch に寄せたのは
+ * superagent を落とすため。挙動は次の3点で揃えてある。
+ *   - 2xx 以外は失敗として扱う（superagent の .end() が err を立てるのと同じ）
+ *   - レスポンスは JSON としてパースする
+ *   - polling が「更新なし」を res.body === null で判定していたので、
+ *     空のレスポンスは null を返す
+ *
+ * @param command {String} APIのコマンド
+ * @param params {Object} クエリパラメータ
+ * @returns {Promise<Object>} パース済みのレスポンス
  * @private
  */
-function _request(command) {
-  return request.get(ENDPOINT + command);
+function _request(command, params) {
+  const url = new URL(command, ENDPOINT);
+  for (let [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+  return fetch(url)
+    .then((res) => {
+      if (!res.ok) throw new Error(`${command}: ${res.status} ${res.statusText}`);
+      return res.text();
+    })
+    .then((text) => (text === '' ? null : JSON.parse(text)));
 }
 
 
@@ -47,32 +63,36 @@ export class api {
 
   search(query) {
     if (!this.killed) {
-      _request('search').query(stripQuery(query)).end((err, res) => {
-        if (!err) {
-          this.receive(res.body);
-        } else {
-          setTimeout(() => this.search(query), 1000)
-        }
-      })
+      // then に成功と失敗を両方渡す。catch にすると receive() が投げた例外まで
+      // 拾って再検索してしまい、superagent の .end(cb) と挙動が変わる
+      _request('search', stripQuery(query)).then(
+        (data) => this.receive(data),
+        () => setTimeout(() => this.search(query), 1000)
+      );
     }
   }
 
   polling() {
     if (!this.killed) {
-      _request('polling')
-        .query({
-          uuid: this.data.uuid,
-          version: this.data.version,
-          diff: 1,
-          timeout: 10
-        })
-        .end((err, res) => {
-          if (res.body === null) {
+      // timeout はサーバ側のロングポーリングの指定で、クライアントの待ち時間ではない
+      _request('polling', {
+        uuid: this.data.uuid,
+        version: this.data.version,
+        diff: 1,
+        timeout: 10
+      }).then(
+        (data) => {
+          if (data === null) {
             setTimeout(() => this.polling(), 100)
           } else {
-            this.receive(res.body)
+            this.receive(data)
           }
-        })
+        },
+        // 以前は err を見ずに res.body を触っていたので、通信が失敗すると
+        // res が undefined で TypeError になりポーリングが止まっていた。
+        // search と同じく間を置いて再試行する
+        () => setTimeout(() => this.polling(), 1000)
+      );
     }
   }
 
@@ -199,12 +219,14 @@ export function stripQuery(query) {
 
 /**
  * マッピングデータを取得する
+ *
+ * **このリポジトリでは誰も呼んでいない**（unitrad-ui 由来のコードの名残）。
+ * さばとマップの棚マッピングは sabatomap-mapper.calil.jp を使う。
+ *
  * @param region {String} リージョン
  * @param callback {Function} マッピングデータを受け取るコールバック関数
  */
 export function fetchMapping(region, callback) {
-  _request('mapping').query({'region': region}).end((err, res) => {
-    callback(res.body)
-  })
+  _request('mapping', {'region': region}).then(callback, console.error)
 }
 

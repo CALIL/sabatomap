@@ -232,6 +232,13 @@ cordova prepare
    - 図書カタログ用Unitrad APIとのインターフェース
    - 本を物理的な棚の位置にマッピング
    - フロアプラン上でターゲット棚をハイライト
+   - **通信は `fetch` のみ。** 2026-08-15 に superagent を撤去しました。
+     `polling` は `timeout=10` を渡しますが、これは**サーバ側のロングポーリングの指定**で
+     クライアントの待ち時間ではありません。「更新なし」はレスポンスが `null` で返ります
+   - `fetchMapping` は**どこからも呼ばれていません**（unitrad-ui 由来の名残）。
+     さばとマップの棚マッピングは `sabatomap-mapper.calil.jp` を使います。
+     `normalizeQuery` / `isEmptyQuery` / `isEqualQuery` も app 側からは未使用で、
+     テストが挙動を固定しているだけです
 
 ### データフロー
 
