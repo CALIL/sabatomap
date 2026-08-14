@@ -28,6 +28,35 @@
 
 ポリフィルは `useBuiltIns: "usage"` + core-js 3 で自動注入します。`@babel/polyfill` は使いません（非推奨、Babel 8 で削除）。
 
+### Flow は使いません
+
+`src/api.js` と `src/component/App.jsx` に Flow の型注釈と `// @flow` プラグマが残っていましたが、
+2026-08-15 に撤去しました。`flow-bin` も `.flowconfig` も無く、`UnitradQuery` / `UnitradResult` /
+`UnitradQueryLoose` という**型名がどこにも定義されていない**状態だったので、型検査は一度も
+走っていませんでした（unitrad-ui 由来のコードの名残）。
+
+**`// @flow` を書き戻さないでください。** rolldown / oxc / esbuild はいずれも Flow を扱えず、
+プラグマ1行だけで `Flow is not supported` としてパースを拒否します。`vitest` が動かなくなります。
+
+## テスト
+
+```bash
+npm test          # vitest run
+```
+
+`test/mount.test.jsx` が jsdom で React コンポーネントを実際に `createRoot` してマウントします。
+**「ビルドが通る」だけでは足りない**ためです。CommonJS の依存を バンドラー が `__toESM(..., 1)` で
+包むと、`__esModule` を見ずに `module.exports` 全体が `default` に入り、
+`import C from 'pkg'` がコンポーネントではなくオブジェクトになって描画時に落ちます。
+型もビルドも通るので、1回描画するテストが無いと気づけません。
+
+`test/interop.test.js` は `superagent` と `geolib` の受け取り方、および `src/api.js` の
+クエリ正規化関数を固定します。
+
+グローバルの `window.app`（`src/app.js:5313` で代入）を `src/component` の各所が直に参照するため、
+`test/setup.js` でスタブしています。`app.js` を読み込むと `ol` と `cordova` まで要るためです。
+`fetch` も解決しない Promise を返すスタブにしてあり、テストが実 API を叩くことはありません。
+
 ## package.json の overrides
 
 上流が古い依存を掴んでいて、そのままでは脆弱性が残るものだけ固定しています。**外すと `npm audit` の high / moderate が戻ります。**
