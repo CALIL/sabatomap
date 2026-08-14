@@ -55,7 +55,6 @@ export default class Kanilayer extends LayerGroup {
     var xid = ("0000000000" + parseInt(id)).slice(-10);
 
     return new XYZ({
-      // url: "https://tiles.haika.io/" + xid + "/{z}/{x}/{y}.png",
       url: "https://lab.calil.jp/sabatomap/tiles/" + xid + "/{z}/{x}/{y}.png",
       maxZoom: 24
     });
@@ -68,8 +67,9 @@ export default class Kanilayer extends LayerGroup {
    * @private
    */
   getHaikaVectorSource_(id) {
+    // ローカルの控えへ戻すならこの1行を "json/" + id + ".json" にする。
+    // src/json/*.json は tools/build.mjs が www/json/ へ置いている
     return new VectorSource({
-      // url: ("https://app.haika.io/api/facility/2/" + (id) + ".geojson"),
       url: "https://s3-ap-northeast-1.amazonaws.com/calil.sabatomap2/" + id + ".json",
       format: new GeoJSON()
     });

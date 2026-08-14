@@ -106,13 +106,18 @@ cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 が正常に動いているか確かめる
 
 ## Android版ストアへ公開
-config.xmlのandroid-versionCodeとversionをあげる
+
+`config.xml` の `android-versionCode` と `version` をあげる。
 
 ```bash
-npm run compile
+npm run copy
+npx cordova prepare android
+npx cordova build android --release -- --packageType=bundle
 ```
 
-1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存
+`--packageType=bundle` を付けないと AAB ではなく APK ができる。Google Play が要求するのは AAB。
+
+1Password から、さばとマップの keystore をダウンロードしてプロジェクトのルートに保存する。
 
 ```bash
 op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
@@ -127,12 +132,8 @@ jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs
 jarsigner -verify platforms/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-
-以下、古いやり方
-npm run release
-1passwordから、さばとマップのkeystoreをダウンロードしてプロジェクトのルートに保存
-android_build.batの内容を1行ずつコマンドラインで実行する
-keystoreのパスワードは、1Passwordのラベルに保存してある
+`npm run release` は `cordova run android --release` で、**実機かエミュレータへ送り込む操作**なので
+ストア用の成果物は作れない。混同しないこと。
 
 ## 更新履歴
 
