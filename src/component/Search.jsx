@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Book from './Book.jsx';
 import Stocks from './Stocks.jsx';
+import Icon from './Icon.jsx';
 
 import { api } from '../api.js';
 
@@ -146,9 +147,9 @@ export default class Search extends Component {
             <div className={!this.state.visible || this.state.currentBook ? 'empty' : null}>
                 <form className="box" action="#" onSubmit={this.onSubmit.bind(this)}>
                     <input type="search" ref={this.queryRef} placeholder={this.props.placeholder} />
-                    <button type="submit" className="search fa fa-search" title="検索する" />
-                    <button className={"clear fa fa-times" + (this.state.loading ? " loading" : "")}
-                        title="検索結果を閉じる" onClick={this.hideList.bind(this)} />
+                    <button type="submit" className="search" title="検索する"><Icon name="search" /></button>
+                    <button className={"clear" + (this.state.loading ? " loading" : "")}
+                        title="検索結果を閉じる" onClick={this.hideList.bind(this)}><Icon name="times" /></button>
                 </form>
                 <div className="results">
                     <div className="books">
@@ -172,9 +173,9 @@ export default class Search extends Component {
                 {this.state.currentBook ? (
                     <div id="detail" className="show">
                         <div className="back" onClick={this.backToList.bind(this)}>
-                            <i className="fa fa-arrow-left" />
+                            <Icon name="arrow-left" />
                         </div>
-                        <button className="fa fa-times close" title="結果を閉じる" onClick={this.backToList.bind(this)} />
+                        <button className="close" title="結果を閉じる" onClick={this.backToList.bind(this)}><Icon name="times" /></button>
                         <div className="block">
                             <div className="title">{this.state.currentBook.title}
                                 <div className="author">{this.state.currentBook.author}</div>
@@ -184,7 +185,7 @@ export default class Search extends Component {
                             />
                             {(() => {
                                 for (let url of Object.values(this.state.currentBook.url)) {
-                                    return <a href={url} target="_blank"><i className="fa fa-chevron-right" /> 予約・詳細を見る</a>
+                                    return <a href={url} target="_blank"><Icon name="chevron-right" /> 予約・詳細を見る</a>
                                 }
                             })()}
                         </div>

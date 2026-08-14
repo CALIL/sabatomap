@@ -22,6 +22,14 @@ body {
   display: block;
 }
 
+.icon {
+  height: 1em;
+  fill: currentColor;
+  display: inline-block;
+  vertical-align: -0.125em;
+  overflow: visible;
+}
+
 input[type=search] {
   -webkit-appearance: none;
   -webkit-border-radius: 0;
@@ -568,7 +576,7 @@ input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-se
   left: 0;
   width: 40px;
 }
-#detail .back > i {
+#detail .back > .icon {
   display: block;
   position: absolute;
   top: 55px;

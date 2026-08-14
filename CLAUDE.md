@@ -122,6 +122,30 @@ npm test          # vitest run
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
 
+## アイコンはインライン SVG
+
+`src/component/Icon.jsx` が `<svg className="icon">` を描きます。使うのは
+`search` / `times` / `play` / `arrow-left` / `chevron-right` の**5つだけ**です。
+増やすときは `ICONS` に viewBox と path を足してください。
+
+**Font Awesome には戻さないでください。** 2026-08-15 に撤去した理由が2つあります。
+
+1. 実際に使うのは5アイコンなのに、`fontawesome-free-5.15.4-web/` として
+   **1701ファイル（約14.6MB）を同梱**していた
+2. `www/index.html` はローカルの CSS ではなく **CDN（`use.fontawesome.com`）を読んでいた**ので、
+   **オフラインではアイコンが出なかった**。Cordova アプリで外部ホストに依存していた
+
+寸法は Font Awesome の webfont と**ピクセル単位で一致**させてあります。`src/app.sass` の
+`.icon` が `height: 1em` だけを指定し、width を指定していないので、幅は viewBox の比率で
+決まります（`fa-times` なら 352/512 = 0.6875em）。これは Font Awesome の
+`svg-inline--fa` と同じ寸法です。**width を足さないこと。**
+
+`fill: currentColor` も必須です。`.box button` が `color` と `transition: color 0.4s` で
+`:hover` / `:focus` の色を変えており、`::before` のグリフだった前提を保つためです。
+
+path データの出典は Font Awesome Free 5.15.4 の `svgs/solid/*.svg` で、
+アイコンのライセンスは CC BY 4.0 です。
+
 ## データの置き場所
 
 ### 施設・ビーコンデータは src/sabae.json が唯一のソース

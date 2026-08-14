@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Stocks from './Stocks.jsx';
+import Icon from './Icon.jsx';
 
 export default (props) => {
     return (
@@ -14,7 +15,7 @@ export default (props) => {
             </div>
             <Stocks detail={props.book.detail}
              selectStock={(stockIndex) => props.selectBook(props.book, stockIndex)} />
-            <div className="next"><i className="fa fa-play" /></div>
+            <div className="next"><Icon name="play" /></div>
         </div>
     );
 }

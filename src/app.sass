@@ -17,6 +17,18 @@ body
   &.visible
     display: block
 
+// アイコン（src/component/Icon.jsx のインライン SVG）
+// Font Awesome の webfont だった頃の見え方に合わせてある。
+// height を 1em にして width を指定しないので、幅は viewBox の比率で決まる
+// （fa-times なら 352/512 = 0.6875em）。これは Font Awesome の
+// svg-inline--fa と同じ寸法。色は currentColor で親から継承する
+.icon
+  height: 1em
+  fill: currentColor
+  display: inline-block
+  vertical-align: -0.125em
+  overflow: visible
+
 // 検索ボタンのリセット(iOS用)
 input[type=search]
   -webkit-appearance: none
@@ -474,7 +486,7 @@ input[type=search]
     bottom: 0
     left: 0
     width: 40px
-    > i
+    > .icon
       display: block
       position: absolute
       top: 55px
