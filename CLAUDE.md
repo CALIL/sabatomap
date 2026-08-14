@@ -16,17 +16,65 @@
 |---|---|---|
 | `config.xml` の `deployment-target` | `18.0` | iOS でインストールできる範囲 |
 | `config.xml` の `android-minSdkVersion` | `29` | Android でインストールできる範囲 |
-| `.browserslistrc` | `ios_saf >= 18` / `chrome >= 130` | Babel の変換、core-js の注入量、autoprefixer |
+| `.browserslistrc` | `ios_saf >= 18` / `chrome >= 130` | esbuild の `target`、autoprefixer |
 
 `android-targetSdkVersion`（36）は**下限ではありません**。合わせて作る API のレベルで、Google Play の要件です。インストールできる端末を狭めるものではありません。
 
-### Babel の設定は babel.config.json に集約されている
+### ビルドは tools/build.mjs（esbuild）
 
-`.babelrc` は使いません。browserify の `-g babelify` はグローバル変換で `node_modules` も通しますが、**`.babelrc` は `node_modules` に適用されません**。`babel.config.json`（ルート設定）なら両方に効きます。
+2026-08-15 に browserify + babelify + uglifyify + gulp + Babel + core-js の一式を撤去し、
+**`tools/build.mjs` の esbuild に置き換えました**。Babel も gulp も使いません。
 
-`compile` スクリプトで `--presets` を渡さないでください。**プログラム指定の options は設定ファイルより優先される**ため、`--presets @babel/preset-env` のように素で渡すと、設定ファイル側の `useBuiltIns` や `targets` がまるごと無視されます。以前これで polyfill が 1 つも入っていませんでした。
+```bash
+node tools/build.mjs release   # www/ を作る（minify あり・sourcemap なし）
+node tools/build.mjs debug     # minify せず inline sourcemap つき
+node tools/build.mjs watch     # src/ を見張って debug ビルドを回し続ける
+node tools/build.mjs clean     # platforms/ios/www を消す
+```
 
-ポリフィルは `useBuiltIns: "usage"` + core-js 3 で自動注入します。`@babel/polyfill` は使いません（非推奨、Babel 8 で削除）。
+`.browserslistrc` から esbuild の `target` を作るのは `tools/browserslist-target.mjs` です。
+**下限をここにハードコードしないでください。** 3か所（`config.xml` の2つと `.browserslistrc`）が
+ずれないよう、`.browserslistrc` を唯一のソースにしてあります。
+
+`unitrad-view` / `unitrac-ui` / `unitrad-ui` / `unitrad-ui-nagano` / `unitrad-kintone-plugin` は
+`tools/lib/` に js / css / html / site を分けていますが、あれは conf ごとに2000件以上を並列
+ビルドするための構造です。sabatomap は配信先が1つなので1ファイルに収めてあります。
+`tools/browserslist-target.mjs` はあちらと同じものなので、直すときは横展開してください。
+
+**CSS は esbuild を通していません**（他リポジトリと同じ方針）。`sass` の `compile` →
+`postcss([autoprefixer, postcss-assets])` です。2点だけ動かさないこと。
+
+- **`style: 'expanded'` を明示している。** `gulp-sass` 6 の modern API の既定と同じ値で、
+  変えると出力が変わります。移行時に gulp 版と1文字も違わないことを確認しました
+- **`postcss-assets` は必須。** `src/app.sass` が `resolve()` を6箇所で使っています
+
+### polyfill は入れていません
+
+`useBuiltIns: "usage"` + core-js 3 をやめました。実測の根拠がこれです。
+
+- core-js は26モジュール（+ internals 145）＝ **145KB 注入されていました**が、中身は全部が誤検知
+- `useBuiltIns: "usage"` は受け手の型を見ずメソッド名だけで判定します。配列の `map` /
+  `filter` / `forEach` を書いただけで iterator ヘルパーの polyfill が入るのが増幅源でした
+- `src/` が実際に使うのは `new Map()` 1箇所と `Array.prototype.includes` 2箇所だけで、
+  どちらも chrome 130 / iOS 18 にネイティブです
+
+**下限を下げるときはここを再確認してください。** 足りない API が出たら core-js を戻すのではなく、
+`unitrad-view` の `src/js/polyfill.ts` のように「足りないものだけ」を補う形にします。
+
+### process.env.NODE_ENV は define で固定しています
+
+browserify のときは定義されておらず、`react-dom/client.js` の
+`"production" === process.env.NODE_ENV` が偽になって **development ビルドが実行されていました**
+（成果物に `Invalid hook call` などの development 専用文字列が残り、ブラウザのコンソールに
+`Download the React DevTools for a better development experience` が出ていた）。
+`tools/build.mjs` の `define` で固定しているので外さないこと。
+
+### charset は utf8 を明示しています
+
+esbuild の既定は `charset: 'ascii'` で、日本語を `\uXXXX` に展開します。browserify は生の
+UTF-8 を出していて本番で動いていたので挙動を合わせました（`www/index.html` が
+`<meta charset="utf-8">` を宣言しており、`charset` 属性の無い外部スクリプトは文書の
+符号化で解釈されます）。成果物を grep で確かめられる利点もあります。
 
 ### Flow は使いません
 
@@ -59,40 +107,43 @@ npm test          # vitest run
 
 ## package.json の overrides
 
-上流が古い依存を掴んでいて、そのままでは脆弱性が残るものだけ固定しています。**外すと `npm audit` の high / moderate が戻ります。**
+上流が古い依存を掴んでいて、そのままでは脆弱性が残るものだけ固定しています。
 
 | | 固定先 | 理由 |
 |---|---|---|
-| `terser` | `^4.8.1` | uglifyify 5.0.2 が `terser ^3.7.5` を要求するが、ReDoS の修正は 4.8.1。**5 系にはしないこと** — uglifyify は `ujs.minify()` を同期で呼んでおり、terser 5 の `minify()` は Promise を返すので壊れる |
 | `uuid` | `^11.1.1` | cordova-ios 8.1.1 → xcode 3.0.1 が `uuid ^7.0.3`。xcode は `uuid.v4()` しか使わず、11 でもそのまま動くことを確認済み |
 
-### 残っている指摘（elliptic 系 4件・low）
+`terser` の `^4.8.1` 固定は **uglifyify のためだけに存在していた**ので、esbuild 移行で外しました。
+`npm audit` は現在 **0 件**です（browserify が Node の組み込みモジュールを差し替えるために
+持っていた `elliptic` 系 low 4件も、browserify ごと消えました）。
 
-`elliptic` に修正版がありません（`browserify-sign` `create-ecdh` `crypto-browserify` はその親）。
+### allowScripts
 
-いずれも browserify が Node の組み込みモジュールを差し替えるために持っているもので、**ソースが `crypto` を読み込んでいないためバンドルには入りません**。確認方法：
-
-```bash
-npx browserify -g babelify -g uglifyify --entry src/app.js --list | grep -c elliptic
-# → 0
-```
-
-上流が直すか、browserify をやめるまでは消せません。
+`esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
+入っていなくてもポーリングにフォールバックするので許可していません。
 
 ## よく使う開発コマンド
 
 ### 開発
 
-- `npm start` - コンパイル、準備、ブラウザで実行
-- `npm run compile` - BrowserifyとBabelでJavaScriptをバンドル
-- `npm run copy` - コンパイルとすべてのgulpタスクを実行
+- `npm start` - `www/` を作って `cordova prepare` → ブラウザで実行
+- `npm run watch` - `src/` を見張って `www/` を作り直し続ける
+- `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**CI が呼ぶのはこれ**
+
+`copy` / `compile` / `build_browser` は同じ `node tools/build.mjs release` の別名です。
+`copy` という名前は `ci.yml` と `android.yml` が呼んでいるので変えないこと。
 
 ### ビルド
 
 - `npm run build` - Android向けビルド
 - `npm run build_ios` - iOS向けビルド（iPhone-14をターゲット）
-- `npm run build_browser` - ブラウザのみのビルド
+- `npm run build_browser` - `www/js/all.js` と `www/css/app.css` を作るだけ
 - `npm run release` - Androidリリース版のビルド
+
+**`npm run build_browser` の成果物をブラウザで直接開いても動きません。**
+`www/index.html` が `<script src="cordova.js">` を読んで `deviceready` を待つ設計で、
+`cordova.js` は `cordova prepare` が `platforms/browser/www/` に注入するため
+`www/` 直下には存在しません。ブラウザでの確認は `npm start` を使ってください。
 
 ### プラットフォームセットアップ
 

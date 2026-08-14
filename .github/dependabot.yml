@@ -31,30 +31,16 @@ updates:
       default-days: 7
       semver-major-days: 30
     ignore:
-      # Babel 8 にはまだ上げられない。ビルドが browserify + babelify で、
-      # babelify の最新 10.0.0 が peer に @babel/core ^7.0.0 を要求する。
-      # @babel/core だけ 8 にすると npm ci が ERESOLVE で落ちる（#129 で実測）。
+      # Babel と babelify の ignore は 2026-08-15 に外した。
+      # browserify + babelify + Babel を撤去して esbuild へ移したので、
+      # 「babelify の peer が @babel/core ^7.0.0 固定で Babel 8 に上げられない」という
+      # 前提そのものが無くなった。
       #
-      # 移行にはこれらも要る。単なるバージョン更新では済まない。
-      #   - babelify が Babel 8 に対応すること
-      #   - @babel/polyfill をやめること（Babel 8 で削除。現状どこからも参照が無い）
-      #   - @babel/plugin-proposal-class-properties をやめること
-      #     （Babel 8 では preset-env に入っていて、この名前のパッケージは無い）
-      #
-      # 対応後にこの ignore を外してください。
-      - dependency-name: "@babel/*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "babelify"
-        update-types: ["version-update:semver-major"]
       # react のメジャー更新は周辺ライブラリの対応状況をまとめて確認してから
       # 手動で判断する。詳細は Todoist を参照
       - dependency-name: "react"
         update-types: ["version-update:semver-major"]
       - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@types/react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@types/react-dom"
         update-types: ["version-update:semver-major"]
     groups:
       npm-minor-patch:
