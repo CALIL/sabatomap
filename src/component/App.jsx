@@ -60,7 +60,6 @@ class Main extends Component {
         }
     }
     render() {
-        console.log('Main render called, systemid:', this.state.systemid);
         var offline = '';
         if (this.state.offline) {
             offline = (
@@ -68,7 +67,6 @@ class Main extends Component {
             )
         }
         if (this.state.systemid == null) {
-            console.log('Rendering Facilities');
             return (
                 <Fragment>
                     <Facilities facilities={this.props.facilities} />
@@ -76,7 +74,6 @@ class Main extends Component {
                 </Fragment>
             );
         }
-        console.log('Rendering Search and Floors');
         return (
             <Fragment>
                 <Search placeholder="探したいこと・調べたいこと" region={REGION} />
@@ -89,8 +86,6 @@ class Main extends Component {
 }
 
 export default function InitUI(props, element) {
-    console.log('InitUI called with element:', element, 'props:', props);
-
     // app.jsがInitUIの戻り値をコントローラとして同期的に使うため、
     // flushSyncでレンダーを完了させてからMainのインスタンスを返す
     let instance = null;
@@ -98,7 +93,6 @@ export default function InitUI(props, element) {
     flushSync(() => {
         root.render(<Main facilities={props.facilities} ref={(el) => { instance = el; }} />);
     });
-    console.log('InitUI instance:', instance);
     return instance;
 }
 
