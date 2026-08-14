@@ -42,11 +42,24 @@ node tools/build.mjs clean     # platforms/ios/www を消す
 `tools/browserslist-target.mjs` はあちらと同じものなので、直すときは横展開してください。
 
 **CSS は esbuild を通していません**（他リポジトリと同じ方針）。`sass` の `compile` →
-`postcss([autoprefixer, postcss-assets])` です。2点だけ動かさないこと。
+release なら `postcss([autoprefixer, cssnano])`、debug なら `postcss([autoprefixer])` です。
 
-- **`style: 'expanded'` を明示している。** `gulp-sass` 6 の modern API の既定と同じ値で、
-  変えると出力が変わります。移行時に gulp 版と1文字も違わないことを確認しました
-- **`postcss-assets` は必須。** `src/app.sass` が `resolve()` を6箇所で使っています
+- **`style: 'expanded'` を明示している。** minify は `cssnano` に任せるので、
+  `sass` 側は読みやすい出力のままにしておきます
+- **`minify` は release だけ。** debug で潰すと手元で読めなくなります。
+  `unitrad-view` / `unitrac-ui` などと同じ構成です
+- **`autoprefixer` はまだ仕事をしているので外さないこと。** この下限（chrome 130 / iOS 18）でも
+  `-webkit-user-select` を6件と `-webkit-transition` を1件足します
+  （後者は `::-webkit-input-placeholder` の中なので正しい挙動）
+
+### postcss-assets はやめました
+
+`resolve('compass.svg')` を `url('../img/compass.svg')` に置き換えるだけの用途で使っていましたが、
+**2021-05-13 を最後に更新が止まっており**、CALIL の全ミラーで使っているのは sabatomap だけでした。
+`src/app.sass` に `url('../img/…')` と直接書く形にして依存を外しています（6箇所）。
+
+`../img/` は `www/css/app.css` から見た相対パスです。**画像を増やすときも `url('../img/…')` と
+書いてください。** `resolve()` を書き戻すと未定義の関数として出力にそのまま残ります。
 
 ### polyfill は入れていません
 

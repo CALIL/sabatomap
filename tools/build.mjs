@@ -19,7 +19,7 @@ import esbuild from 'esbuild';
 import * as sass from 'sass';
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
-import postcssAssets from 'postcss-assets';
+import cssnano from 'cssnano';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -69,16 +69,20 @@ function copyAssets() {
 
 async function buildCss({ production }) {
   const srcFile = r('src/app.sass');
-  // style は expanded を明示する。gulp-sass 6 の modern API の既定と同じで、
-  // 変えると出力が変わってしまう
+  // style は expanded を明示する。minify は cssnano に任せるので、
+  // sass 側は読みやすい出力のままにしておく
   const compiled = sass.compile(srcFile, { style: 'expanded' });
 
-  const result = await postcss([
-    autoprefixer,
-    // src/app.sass が resolve() を6箇所で使っているので postcss-assets は必須。
-    // gulp のときと同じ値を渡す
-    postcssAssets({ loadPaths: [r('www/img')], relativeTo: r('www/css') }),
-  ]).process(compiled.css, { from: undefined });
+  /*
+   autoprefixer は .browserslistrc を読む。この下限（chrome 130 / iOS 18）でも
+   まだ仕事があり、-webkit-user-select を6件と -webkit-transition を1件足す
+   （後者は ::-webkit-input-placeholder の中なので正しい）。
+
+   minify は release だけ。debug で潰すと手元で読めなくなる。
+   unitrad-view / unitrac-ui などと同じ構成にしてある。
+   */
+  const plugins = production ? [autoprefixer, cssnano] : [autoprefixer];
+  const result = await postcss(plugins).process(compiled.css, { from: undefined });
 
   for (const warn of result.warnings()) console.warn(`[css] ${warn.toString()}`);
 
