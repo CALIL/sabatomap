@@ -25,8 +25,24 @@ class Main extends Component {
         // if (this.detailRef.current) {
         //     this.detailRef.current.setState({ query: '' });
         // }
-        this.setState({ floors: [] }); // CSSアニメーション対策のためクリアする
-        this.setState({ systemid: facility.systemid, floors: facility.floors });
+        //
+        // flushSync で1回ずつ流している理由が2つある。
+        //
+        // 1. app.js の loadFacility は、この直後に同期で loadFloor → UI.setFloorId を呼ぶ。
+        //    React 17 までは React のイベント外の setState が同期に流れていたので、
+        //    その時点で Floors がマウント済みだった。createRoot（React 18 以降）の
+        //    自動バッチングでは描画が遅れ、setFloorId が floorsRef.current === null で
+        //    握りつぶされて起動時にどの階も選択されない状態になる。
+        //    InitUI が同じ理由で flushSync しているのと同じ扱いにする。
+        // 2. floors を空にしてから入れ直すのは CSS アニメーションの作り直しが目的で、
+        //    2回の setState が別々に描画されることが前提になっている。
+        //    自動バッチングでまとめられると空の描画が起きず、意図が失われる。
+        flushSync(() => {
+            this.setState({ floors: [] }); // CSSアニメーション対策のためクリアする
+        });
+        flushSync(() => {
+            this.setState({ systemid: facility.systemid, floors: facility.floors });
+        });
     }
     setFloorId(id) {
         if (this.floorsRef.current) {
