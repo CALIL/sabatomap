@@ -10,7 +10,8 @@
     "release": "npm run copy && npx cordova run android --release",
     "build": "npm run copy && npx cordova run android",
     "build_ios": "npm run copy && npx cordova run ios --target='iPhone-14'",
-    "build_browser": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js"
+    "build_browser": "browserify -g babelify -g uglifyify --entry src/app.js > www/js/all.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "cordova-browser": "^7.0.0",
@@ -24,7 +25,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
-    "@babel/plugin-transform-flow-strip-types": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
     "@babel/register": "^7.29.7",
@@ -45,11 +45,13 @@
     "gulp-postcss": "^10.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^6.0.1",
+    "jsdom": "^30.0.1",
     "postcss": "^8.5.25",
     "postcss-assets": "^6.0.0",
     "sass": "^1.102.0",
     "uglifyify": "^5.0.2",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "vitest": "^4.1.10"
   },
   "author": "CALIL Inc.",
   "license": "MIT",

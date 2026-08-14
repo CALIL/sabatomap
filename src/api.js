@@ -1,4 +1,3 @@
-// @flow
 /*
 
  Unitrad UI APIライブラリ
@@ -30,14 +29,10 @@ function _request(command) {
 export class api {
   /**
    * 検索APIの起動
-   * @param query - 検索クエリ
-   * @param callback - コールバック関数
+   * @param query {Object} 検索クエリ
+   * @param callback {Function} 検索結果を受け取るコールバック関数
    */
-  callback: (data: UnitradResult) => void;
-  killed: boolean;
-  data: UnitradResult;
-
-  constructor(query: UnitradQuery, callback: (data: UnitradResult) => void) {
+  constructor(query, callback) {
     this.callback = callback;
     this.killed = false;
     this.search(query);
@@ -50,7 +45,7 @@ export class api {
     this.killed = true;
   }
 
-  search(query: UnitradQuery) {
+  search(query) {
     if (!this.killed) {
       _request('search').query(stripQuery(query)).end((err, res) => {
         if (!err) {
@@ -81,7 +76,7 @@ export class api {
     }
   }
 
-  receive(data: UnitradResult) {
+  receive(data) {
     if (!this.killed) {
       if (data.books_diff) {
         Array.prototype.push.apply(this.data.books, data.books_diff.insert);
@@ -146,7 +141,7 @@ export class api {
  * @param query
  * @returns {Object}
  */
-export function normalizeQuery(query: UnitradQueryLoose): UnitradQuery {
+export function normalizeQuery(query) {
   let tmp = {};
   for (let k of FIELDS) {
     tmp[k] = query[k] ? query[k] : '';
@@ -161,7 +156,7 @@ export function normalizeQuery(query: UnitradQueryLoose): UnitradQuery {
  * @param query
  * @returns {boolean}
  */
-export function isEmptyQuery(query: ?UnitradQuery): boolean {
+export function isEmptyQuery(query) {
   if (query) {
     for (let k of FIELDS) {
       if (k === 'region') continue;
@@ -178,7 +173,7 @@ export function isEmptyQuery(query: ?UnitradQuery): boolean {
  * @param q2 比較先クエリ
  * @returns {boolean}
  */
-export function isEqualQuery(q1: UnitradQuery, q2: UnitradQuery): boolean {
+export function isEqualQuery(q1, q2) {
   for (let k of FIELDS) {
     if (k === 'region') continue;
     if ((q1 && q1.hasOwnProperty(k) ? q1[k] : '') !== (q2 && q2.hasOwnProperty(k) ? q2[k] : '' )) return false
@@ -192,7 +187,7 @@ export function isEqualQuery(q1: UnitradQuery, q2: UnitradQuery): boolean {
  * @param query
  * @returns {Object} query
  */
-export function stripQuery(query: UnitradQuery): UnitradQuery {
+export function stripQuery(query) {
   let tmp = {};
   for (let k of FIELDS) {
     if (query.hasOwnProperty(k) && query[k] !== '') {
@@ -205,9 +200,9 @@ export function stripQuery(query: UnitradQuery): UnitradQuery {
 /**
  * マッピングデータを取得する
  * @param region {String} リージョン
- * @param callback(data) コールバック関数
+ * @param callback {Function} マッピングデータを受け取るコールバック関数
  */
-export function fetchMapping(region: string, callback: (data: any) => void): void {
+export function fetchMapping(region, callback) {
   _request('mapping').query({'region': region}).end((err, res) => {
     callback(res.body)
   })

@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
