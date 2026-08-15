@@ -430,6 +430,9 @@ export default class App {
     this.navigateShelf = this.navigateShelf.bind(this);
     this.locatorClicked = this.locatorClicked.bind(this);
     this.getUI = this.getUI.bind(this);
+    this.pushBeacons = this.pushBeacons.bind(this);
+    this.getMap = this.getMap.bind(this);
+    this.getMarker = this.getMarker.bind(this);
   }
 
   initializeApp() {
@@ -454,6 +457,46 @@ export default class App {
 
   getUI() {
     return UI;
+  }
+
+  /*
+   ここから下は地図の中身を外から掴むための入口。
+
+   iBeacon も端末のコンパスもブラウザには無いので、測位から先を動かすには
+   外から差し込むしかない。test/e2e はここを使って
+   「ビーコンを受け取った」状態を作り、描画を撮る。手で調べるときにも使える。
+   */
+
+  /**
+   * ビーコンの測定値を流し込む
+   *
+   * 本番で cordova のプラグインが呼ぶ delegate.didRangeBeaconsInRegion と同じ入口。
+   * ここを通すと kanikama のフロア判定と kanimarker の位置更新まで一続きで動く。
+   *
+   * @param beacons {Array} [{uuid, major, minor, rssi}, ...]
+   */
+  pushBeacons(beacons) {
+    return didRangeBeaconsInRegion(beacons);
+  }
+
+  /**
+   * OpenLayers の Map を返す
+   *
+   * View の状態を固定したり rendercomplete を待ったりするのに使う。
+   * initializeApp より前は null。
+   */
+  getMap() {
+    return map;
+  }
+
+  /**
+   * 現在地マーカー（Kanimarker）を返す
+   *
+   * 撮影前に cancelAnimation() を呼んで描画を止めるのに使う。
+   * initializeApp より前は null。
+   */
+  getMarker() {
+    return kanimarker;
   }
 }
 

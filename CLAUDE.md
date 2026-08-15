@@ -114,9 +114,57 @@ npm test          # vitest run
 `test/interop.test.js` は `ol/sphere` の受け取り方、`src/api.js` のクエリ正規化関数、
 および **`src/sabae.json` の座標の並び**（後述）を固定します。
 
-グローバルの `window.app`（`src/app.js:5313` で代入）を `src/component` の各所が直に参照するため、
+グローバルの `window.app` を `src/component` の各所が直に参照するため、
 `test/setup.js` でスタブしています。`app.js` を読み込むと `ol` と `cordova` まで要るためです。
 `fetch` も解決しない Promise を返すスタブにしてあり、テストが実 API を叩くことはありません。
+
+### 地図の描画は e2e でしか見ていない
+
+**jsdom は canvas を持たないので、`npm test` は OpenLayers の描画を1行も検証していません。**
+地図・レイヤー・マーカーが壊れたと分かるのは `test/e2e` だけです。
+
+```bash
+npm run copy && npx cordova prepare browser   # 先に配信物を作る
+cd test/e2e && npm ci && npx playwright install chromium
+npx playwright test                            # 基準画像と突き合わせる
+npx playwright test --update-snapshots         # 見た目を意図的に変えたとき
+```
+
+`test/e2e` は**独立した `package.json`** です（本番の依存を汚さないため。`unitrad-view` と同じ）。
+
+- 配信は `platforms/browser/www`。`www/` を直接配信しないのは、`index.html` が
+  `cordova.js` を読んで `deviceready` を待つ設計で、それを置くのが `cordova prepare` だから
+- ネットワークは全部スタブ（`support/stub.mjs`）。**ホスト名ではなくパスで当てている**。
+  ホスト決め打ちにすると向き先が変わったとき静かに実 API へ素通りする
+- タイルは単色 PNG をその場で生成して返す。**棚の絵は配架図タイル（ラスタ）に焼かれている**ので、
+  基準画像に写るのは OpenLayers が描くもの（ラベル・旗・ハイライト・マーカー）だけになる。
+  レンダラの退行を見るには都合がよい
+- 配架図の GeoJSON は `src/json/*.json` を流用する。S3 が返すものの控え
+
+**撮る前に必ず `settle()` を通すこと。** `rendercomplete` を1回待つだけでは足りません。
+その瞬間に要求されていなかったタイルは待ってもらえず、**ベースタイルのレイヤーは
+`initializeApp` の 500ms 後に visible になる**ので取りこぼします。`settle()` は
+通信が2回続けて動かなくなるまで回し、`view.getAnimating()` が下りるのも待ちます。
+
+**基準画像は OS ごとに別ファイル**です（`-chromium-linux.png` / `-chromium-win32.png`）。
+文字の描画が OS で違うので共有できません。Linux 側は CI が書き出したものを
+artifact から持ち帰ってコミットします。
+
+### 地図を外から動かすための入口
+
+`window.app` に3つ足してあります。ブラウザには iBeacon もコンパスも無いので、
+測位から先を動かすには外から差し込むしかありません。手で調べるときにも使えます。
+
+| | |
+|---|---|
+| `app.pushBeacons(beacons)` | 本番で cordova のプラグインが呼ぶ `didRangeBeaconsInRegion` と同じ入口 |
+| `app.getMap()` | View の状態を見る / `rendercomplete` を待つ |
+| `app.getMarker()` | `cancelAnimation()` で描画を止める |
+
+**追従モードはブラウザでは到達できません。** `invalidateLocator`（`app.js`）が
+`change:mode` を購読していて、`cordova.plugins.BluetoothStatus.hasBTLE` か
+`BTenabled` が偽なら**その場で `setMode("normal")` に戻す**からです。
+e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確かめています。
 
 ## package.json の overrides
 
