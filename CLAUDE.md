@@ -219,24 +219,36 @@ iOS のビルドが壊れます。**CI は Android しか組まないので気�
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
 
-### プラグインを package.json に足すときの注意
+### プラグインは package.json が唯一のソースです
 
-`cordova-plugin-device` を devDependencies に持っていましたが、2026-08-15 に外しました。
-`plugins/fetch.json` で **`is_top_level=false`**（`com.unarin.cordova.beacon` の依存）であり、
-`package.json` の `cordova.plugins` にも無く、`src` でも `device.*` を使っていません
-（2022年の `d20c756`「device.platform → cordova.platformId」で使われなくなった）。
-`cordova prepare` は vendoring 済みの `plugins/cordova-plugin-device/` から入れるので、
-npm 側の宣言は不要です。
+**`plugins/` は追跡していません**（`platforms/` と同じ生成物扱い。cordova の推奨）。
+`cordova prepare` が `package.json` の `cordova.plugins` と devDependencies を見て
+node_modules から組み立てます。
 
-**ただし `plugins/` をやめるなら、先にこれを固定してください。** `fetch.json` の記録は
-`"id": "cordova-plugin-device@*"` で、vendoring をやめた瞬間にレジストリの最新を
-引くようになります。iBeacon プラグインが `<dependency id="cordova-plugin-device" version="*" />`
-を宣言しているので、外すことはできません。
+```
+package.json（cordova.plugins + devDependencies）
+  → npm ci で node_modules へ
+    → cordova prepare が plugins/ を組み立て
+      → platforms/<name> へ導入
+```
 
-`cordova-lib` も同時に外しました。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
+プラグインを足すときは `cordova plugin add <名前>` を使ってください。
+`package.json` の両方（`cordova.plugins` と devDependencies）に書かれます。
 
-**プラグインを足すときは `package.json` の `cordova.plugins` と `plugins/` が本体で、
-devDependencies は `cordova plugin add` の副産物**だと思ってください。
+**2026-08-15 に vendoring をやめました。** コミットしていた頃は cordova-lib の
+`restore-util.js` が「`plugins/<id>/` があるなら導入済み」と判断して node_modules を
+見に行かないため、**package.json を上げてもビルド内容が変わりませんでした**。
+実際に `cordova-plugin-device-orientation` が宣言 3.0.1-dev / 実体 3.0.0-dev で
+ずれていましたし、Dependabot の bump PR は `package-lock.json` しか触らないので
+1バイトも効きませんでした。
+
+`cordova-plugin-device` は **iBeacon プラグインが `<dependency>` で要求している**ので
+外せません。vendoring をやめると `fetch.json` の `@*` でレジストリの最新を引くように
+なるため、devDependencies に `^3.0.0` として明示しています。
+`src` から `device.*` は使っていません（2022年の `d20c756`
+「device.platform → cordova.platformId」で使われなくなった）。
+
+`cordova-lib` も外してあります。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
 
 ## cordova プラグインの git 参照は SHA で固定しています
 
@@ -248,17 +260,11 @@ cordova-plugin-device-orientation: github:CALIL/cordova-plugin-device-orientatio
 ref 指定なしだと `npm install` を実行したタイミングで解決先が変わります。
 実際に3年前まで巻き戻った差分が手元に残っていたことがあります。
 
-**ただし `plugins/` をコミットしている間、これはビルド内容には効きません。**
-cordova-lib の `restore-util.js` は `plugins/<id>/` があれば「導入済み」と判断して
-node_modules を見に行かないので、`cordova prepare` が焼くのは**コミット済みの
-`plugins/<id>/`** です。上げるときは `cordova plugin remove` / `add` で
-`plugins/` も入れ直してください。Dependabot の bump PR は `package-lock.json` しか
-触らないのでビルド内容は 1 バイトも変わりません。
+`plugins/` の追跡をやめたので、**この固定がそのままビルド内容に効きます。**
 
 `platforms/platforms.json` は追跡していません。`platforms/` を無視している以上、
-それと対で意味を持つ状態ファイルを追跡してはいけないためです
-（`plugins/*.json` と同じ理由）。以前はコミットされていて、中身が
-`browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
+それと対で意味を持つ状態ファイルを追跡してはいけないためです。以前はコミットされていて、
+中身が `browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
 
 ## アイコンはインライン SVG
 
