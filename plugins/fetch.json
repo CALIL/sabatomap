@@ -23,14 +23,6 @@
     "is_top_level": false,
     "variables": {}
   },
-  "cordova-plugin-device-orientation": {
-    "source": {
-      "type": "registry",
-      "id": "github:CALIL/cordova-plugin-device-orientation"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-network-information": {
     "source": {
       "type": "registry",
@@ -39,10 +31,10 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-inappbrowser": {
+  "cordova-plugin-device-orientation": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-inappbrowser@7.0.0"
+      "id": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499"
     },
     "is_top_level": true,
     "variables": {}

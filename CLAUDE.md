@@ -166,6 +166,37 @@ artifact から持ち帰ってコミットします。
 `BTenabled` が偽なら**その場で `setMode("normal")` に戻す**からです。
 e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確かめています。
 
+### ★ Android 12 以降で現在地ボタンが死んでいる可能性があります
+
+`cordova-plugin-bluetooth-status` は **2016年2月が最終公開**で、Android の権限体系が
+変わる前の作りのままです。`plugin.xml` が宣言するのは `BLUETOOTH` と `BLUETOOTH_ADMIN`
+だけで、**どちらも targetSdk 31 以上のアプリでは無視されます**。
+
+`cordova platform add android` で生成されるマニフェストを見ると、実際に
+
+```
+BLUETOOTH / BLUETOOTH_ADMIN     ← レガシー。targetSdk 36 では効かない
+BLUETOOTH_SCAN                  ← iBeacon プラグインが足したもの
+（BLUETOOTH_CONNECT は無い）
+```
+
+となります。`BluetoothStatus.java` の `initPlugin()` は
+
+```java
+sendJS("... hasBTLE = true;");     // ここまでは通る
+if (bluetoothAdapter.isEnabled())  // API 31+ は BLUETOOTH_CONNECT が要る
+```
+
+の順で、`isEnabled()` が例外を投げても false を返しても、**`BTenabled` は
+初期値の `false` のまま**になります（`BluetoothStatus.js` が `false` で初期化）。
+`invalidateLocator` はこれを見て「測定できません」を出し続けます。
+
+**未検証です。Android 12 以降の実機で、Bluetooth を ON にした状態で
+現在地ボタンを押せば1分で分かります。** iOS は別実装なので影響しません。
+
+iBeacon プラグイン側の `isBluetoothEnabled()` も同じ `isEnabled()` を呼ぶので、
+そちらへ乗り換えるだけでは直りません。
+
 ## package.json の overrides
 
 上流が古い依存を掴んでいて、そのままでは脆弱性が残るものだけ固定しています。
@@ -173,6 +204,11 @@ e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確�
 | | 固定先 | 理由 |
 |---|---|---|
 | `uuid` | `^11.1.1` | cordova-ios 8.1.1 → xcode 3.0.1 が `uuid ^7.0.3`。xcode は `uuid.v4()` しか使わず、11 でもそのまま動くことを確認済み |
+
+**`uuid` は 11 が上限です。**「uuid@10 and below is no longer supported. For ESM codebases,
+update to uuid@latest. For CommonJS codebases, use uuid@11」と本家が言っており、
+`xcode` は `require('uuid')` の CommonJS です。最新は 14 ですが、上げると
+iOS のビルドが壊れます。**CI は Android しか組まないので気づけません。**
 
 `terser` の `^4.8.1` 固定は **uglifyify のためだけに存在していた**ので、esbuild 移行で外しました。
 `npm audit` は現在 **0 件**です（browserify が Node の組み込みモジュールを差し替えるために
@@ -191,6 +227,11 @@ e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確�
 （2022年の `d20c756`「device.platform → cordova.platformId」で使われなくなった）。
 `cordova prepare` は vendoring 済みの `plugins/cordova-plugin-device/` から入れるので、
 npm 側の宣言は不要です。
+
+**ただし `plugins/` をやめるなら、先にこれを固定してください。** `fetch.json` の記録は
+`"id": "cordova-plugin-device@*"` で、vendoring をやめた瞬間にレジストリの最新を
+引くようになります。iBeacon プラグインが `<dependency id="cordova-plugin-device" version="*" />`
+を宣言しているので、外すことはできません。
 
 `cordova-lib` も同時に外しました。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
 
