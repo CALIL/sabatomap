@@ -25,7 +25,7 @@
   "devDependencies": {
     "autoprefixer": "^10.5.4",
     "browserslist": "^4.28.8",
-    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon#e0c446ef625d8e04497973d355904561be29237e",
+    "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon#e03aa41f364d2e6c66f22c7b7dcfe7c025b32fa6",
     "cordova": "^13.0.0",
     "cordova-android": "^15.1.0",
     "cordova-browser": "^7.0.0",

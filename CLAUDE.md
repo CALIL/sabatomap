@@ -372,19 +372,34 @@ ref 指定なしだと `npm install` を実行したタイミングで解決先�
 それと対で意味を持つ状態ファイルを追跡してはいけないためです。以前はコミットされていて、
 中身が `browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
 
-## ★ AltBeacon は 2.19 に据え置いています
+## ★ AltBeacon は autobind で使っています。手動 bind に戻さないこと
 
-`CALIL/cordova-plugin-ibeacon` の `src/android/cordova-plugin-ibeacon.gradle` で
-`org.altbeacon:android-beacon-library:2.19` を指しています。**上げないでください。**
+`CALIL/cordova-plugin-ibeacon` の `src/android/LocationManager.java` は
+**autobind**（`startRangingBeacons` / `addRangeNotifier`）で書かれています。
+`bind()` / `unbind()` / `BeaconConsumer` / `setRangeNotifier` /
+`startRangingBeaconsInRegion` は**使わないでください。**
 
-2026-08-03 に 2.21.1 へ上げたところ、**実機がビーコンを1本も検出しなくなりました。**
-2026-08-15 に 2.19 へ戻して復旧しています。
+2026-08 に、これで4日ほど**測位が完全に死にました**。
+
+### 何が起きたか
+
+2026-08-03 に altbeacon を 2.19 → 2.21.1 に上げたところ、実機がビーコンを
+1本も検出しなくなりました。**2.21.2 でも直らず、2.19 に戻すと直る**という状態でした。
+
+原因は版ではなく、**このファイルが 2.19 で廃止された手動 bind の API を
+使い続けていたこと**でした。`CHANGELOG` の 2.19 は "Manual binding/unbinding
+deprecated. (#1046)"。公式の移行ガイドは **"Do not mix old binding methods with
+new autobind methods"** と明記しています。2.19 は「廃止したが動く」版で、
+2.20 以降で実際に壊れました。2026-08-15 に autobind へ移し、2.21.2 で復旧しています。
+
+→ https://altbeacon.github.io/android-beacon-library/autobind.html
 
 ### なぜ気づけなかったか
 
 **CI は最後までグリーンでした。** `android.yml` が見ているのは「APK が組み上がるか」
 だけで、ビーコンを検出できるかは誰も検証していません。実機に入れて館内で試すまで
-分からない種類の退行です。
+分からない種類の退行です。**この版や API を触るときは、ビルドの成否ではなく
+実機での検出で判定してください。**
 
 症状も分かりにくいものでした。
 
@@ -399,18 +414,16 @@ ref 指定なしだと `npm install` を実行したタイミングで解決先�
 例外も警告も出ません。**Android は権限や環境が足りないときエラーではなく
 「空のスキャン結果」を返す**ので、権限の問題と見分けが付かず、そちらを延々と疑いました。
 決め手になったのは「**同じ端末・同じビーコンでストア版は動く**」という一言です。
+実機の不具合は、環境や権限を疑う前に**既知の動く版と1変数ずつ比べる**のが早いです。
 
-### 上げ直してよくなる条件
+### プラグインの上流は 2019年で止まっています
 
-2.21.1 は Maven Central の最新ですが、踏んではいけない版です。
+`petermetz/cordova-plugin-ibeacon` は **Android のコードが 2019-12 から一度も
+変わっていません**（以降は docs / CI / Dependabot のみ）。追随してくれる先が無いので、
+Android 側の手当ては CALIL fork で当てます。
 
-| 版 | |
-|---|---|
-| 2.21.1（2025-01・最新） | Corrected default scan periods |
-| 2.21.2（2026-01・CHANGELOG のみ・**未公開**） | **Fixed broken foreground service startup on Android 15** |
-
-**2.21.2 以降が Maven Central に公開されてから**上げてください。
-そのときも、ビルドが通ることではなく**実機でビーコンを検出できること**で判定します。
+一方 **altbeacon 本体は現役**です（★2910・2026-01 更新）。乗り換え先が無いのではなく、
+これが第一選択で、保守されている `Cap-go/capacitor-ibeacon` も中身は altbeacon です。
 
 ### 切り分けの道具
 
