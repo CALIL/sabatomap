@@ -153,7 +153,10 @@ var loadFloor = function (id) {
     }
 
     kanimarker.setPosition(null);
-    kanilayer.setFloorId(id);
+    // 起動直後だけフェードを飛ばす。クロスフェードは「前のフロアから次のフロアへ」の
+    // 演出で、初回は退避先の tileB に入るのが tileA の source＝null。
+    // 相手がいないのに 378ms 動いていた（フェーズ0のタイル待ち → 200ms → 150ms）
+    kanilayer.setFloorId(id, kanilayer.floorId !== false);
     UI.setFloorId(id);
   }
 
