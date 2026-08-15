@@ -127,6 +127,37 @@ cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 \hooks\after_platform_add\update_ibeacon_plugin_message.js
 が正常に動いているか確かめる
 
+## Android のテスト版を自動で配る
+
+`master` へ入るたびに、署名済み AAB を組んで **Google Play の内部アプリ共有**へ上げます
+（`.github/workflows/android-deploy.yml`）。実行のまとめにダウンロード URL が出ます。
+
+**テスターは Play ストアアプリの設定で「内部アプリ共有」を有効に**してから URL を開いてください。
+
+手動実行すると配信先を選べます。
+
+| 配信先 | 中身 |
+|---|---|
+| `internalsharing`（既定） | ビルドごとに URL。**versionCode が重複していても通る**ので自動配信に向く。トラックには影響しない |
+| `internal`（内部テスト） | Play 経由で配られ更新も自動。**`android-versionCode` を先に上げること**。ここで使った番号は production の下限にもなる |
+
+### 動かす前に要るもの
+
+リポジトリの Secrets に3つ。**まだ設定されていません。**
+
+| Secret | 中身 |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | `op document get yc7l6u4qqffwdaawb5aauhfmbm \| base64 -w0` の出力 |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore のパスワード（1Password のラベル）。keyPassword も同じ |
+| `PLAY_SERVICE_ACCOUNT_JSON` | Play Developer API のサービスアカウント鍵（JSON そのまま） |
+
+サービスアカウントは Google Cloud で作り、**Play Console → ユーザーと権限**で
+「リリースを管理」を付けます。権限の反映に時間がかかることがあります。
+
+**このリポジトリは public です。** ワークフローは `pull_request` では走らせていません。
+同一リポジトリのブランチからの PR には secrets が渡るためで、
+配信は `push: master` と手動実行に限っています。
+
 ## Android版ストアへ公開
 
 `config.xml` の `android-versionCode` と `version` をあげる。

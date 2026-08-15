@@ -45,6 +45,9 @@ platforms/platforms.json
 
 sabatomap-keystore.jks
 
+# CI が Secrets から作る署名設定。パスワードが入るので絶対に追跡しない
+build-ci.json
+
 # e2e の実行時生成物。ゴールデン画像（map.spec.mjs-snapshots/）は追跡する
 test/e2e/test-results/
 test/e2e/playwright-report/
