@@ -99,6 +99,49 @@ UTF-8 を出していて本番で動いていたので挙動を合わせまし�
 **`// @flow` を書き戻さないでください。** rolldown / oxc / esbuild はいずれも Flow を扱えず、
 プラグマ1行だけで `Flow is not supported` としてパースを拒否します。`vitest` が動かなくなります。
 
+## React は preact/compat に差し替えています
+
+ソースは `import React from 'react'` のまま書けますが、**成果物に入るのは preact** です。
+`tools/build.mjs` の esbuild `alias` で差し替えています。react-dom が成果物の 28%
+（180KB）を占めていたためで、628KB → 462KB になりました。
+
+**`vitest.config.mjs` にも同じ alias を入れてあります。** 揃えないとテストは react を、
+実機は preact を動かすことになり、マウントテストが本番と別物を検証してしまいます。
+
+`act` だけは経路が違います。react は本体（`'react'`）から出しますが、preact/compat は
+出さず **`preact/test-utils`** にあります。`test/mount.test.jsx` はそちらから取っています。
+
+差し替えても **e2e の基準画像は 8 枚とも 1 画素も変わりませんでした。**
+
+## スプラッシュはアプリ側が消しています
+
+**最短 2 秒出したうえで、地図が描き終わるのを待って消します**（`app.js` の `hideSplash`）。
+通信が死んでいても 8 秒で打ち切ります。
+
+`config.xml` の `AutoHideSplashScreen=false` と対で動きます。**true のままだと
+cordova-android は `navigator.splashscreen.hide()` を受け付けません**
+（`SplashScreenPlugin.java` の `action.equals("hide") && autoHide == false`）。
+
+**`SplashScreenDelay` は書かないでください。** 指定すると cordova-android は
+`onPageFinished` を見なくなり、その時間だけ出しっぱなしになります。2026-08-15 まで
+`7000` が入っていて、アプリの準備が 0.5 秒で終わっても **7 秒**待たされていました。
+
+`cordova-plugin-splashscreen` は入っていませんが、**cordova-android 15 と cordova-ios 8 は
+スプラッシュをプラットフォーム本体で持っている**ので、これらの preference は生きています。
+
+ブラウザ版は `www/index.html` の `#splash` が担当します（cordova-browser に実装が無いため）。
+`app.css` より先に出したいのでスタイルはインラインです。**全画面を覆うので、e2e は
+`#splash` が消えるのを待ってから撮ります。**
+
+### 起動時間の測り方
+
+```bash
+node test/e2e/startup.mjs 7
+```
+
+ネットワークは e2e と同じスタブなので、JS の解析・実行とアプリ側の待ち時間だけを
+切り出せます。デスクトップでの絶対値に意味は無いので、**変更の前後を同じ機械で**比べます。
+
 ## テスト
 
 ```bash
