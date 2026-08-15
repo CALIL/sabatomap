@@ -42,27 +42,42 @@ export default class Search extends Component {
         this.intervalCount += 1;
         if (this.state.query === '') {
             this.queueDetail = [];
+            return;
         }
-        if (this.queueDetail.length > 0) {
-            const data = this.queueDetail[0];
-            if (this.cacheDetail[data.book.id]) return;
-            if (this.state.uuid === data.uuid) {
-                const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
-                fetch(url).then((r) => r.json()).then((r) => {
-                    this.state.books.map((book) => {
-                        if (book.id === data.book.id) {
-                            book.detail = r.data;
-                        }
-                    });
-                    if (this.state.currentBook && this.state.currentBook.id === data.book.id) {
-                        this.selectBook(this.state.currentBook);
-                    }
-                    if(this.api) this.setState({});
-                    this.cacheDetail[data.book.id] = r.data;
-                });
-            }
+
+        // 取得済みのものは捨てて先へ進む。
+        //
+        // Unitrad は集計中ずっとポーリングし、そのたびにコールバックが
+        // 「detail がまだ無い本」を全部積み直すので、取得が終わる前に次の
+        // ポーリングが来ると同じ本が二重に積まれる。
+        // ここで shift せずに return していたため、その二重ぶんが先頭に居座り
+        // **キューが二度と進まなかった**。後ろに並んだ本の所蔵情報が永久に出ない。
+        while (this.queueDetail.length > 0 && this.cacheDetail[this.queueDetail[0].book.id]) {
             this.queueDetail.shift();
         }
+        if (this.queueDetail.length === 0) return;
+
+        const data = this.queueDetail.shift();
+        // 前の検索のぶんは取りに行かない
+        if (this.state.uuid !== data.uuid) return;
+
+        const url = `https://sabatomap-mapper.calil.jp/get?uuid=${data.uuid}&id=${data.book.id}`
+        fetch(url).then((r) => r.json()).then((r) => {
+            this.state.books.forEach((book) => {
+                if (book.id === data.book.id) {
+                    book.detail = r.data;
+                }
+            });
+            if (this.state.currentBook && this.state.currentBook.id === data.book.id) {
+                this.selectBook(this.state.currentBook);
+            }
+            if (this.api) this.setState({});
+            this.cacheDetail[data.book.id] = r.data;
+        }).catch((e) => {
+            // 握りつぶすと未処理の rejection になり、原因が追えなくなる。
+            // キャッシュには入れないので、集計中なら次のポーリングで積み直される
+            console.error('[所蔵情報] 取得に失敗:', data.book.id, e);
+        });
     }
     componentDidUpdate() {
     }

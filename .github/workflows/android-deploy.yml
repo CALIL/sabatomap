@@ -1,0 +1,201 @@
+name: Android テスト版の配信
+
+# 署名済み AAB を組んで Google Play へ上げる。
+#
+# android.yml は「組み上がるところまで」を見るだけで、成果物は署名なしの
+# デバッグ APK。こちらは keystore で署名した AAB を作って配信する。
+#
+# ## 配信先が2つある
+#
+# internalsharing（内部アプリ共有）… 既定。ビルドごとにダウンロード URL が出る。
+#   **versionCode が重複していても受け付ける**ので、master へ入るたびに
+#   自動で上げられる。トラック（production / internal）には一切影響しない。
+#   テスターは Play ストアアプリで「内部アプリ共有」を有効にしておく必要がある。
+#
+# internal（内部テスト）… 手動実行のときだけ選べる。Play 経由で配られ、更新も自動。
+#   **versionCode が厳密に増加していないと弾かれる**ので、
+#   config.xml の android-versionCode を先に上げること。
+#   ここで上げた番号は production の下限にもなる（トラックをまたいで比較される）。
+#
+# ## 動かす前に要るもの
+#
+# リポジトリの Secrets に3つ。README の「Androidリリース手順」も参照。
+#
+#   ANDROID_KEYSTORE_BASE64    1Password の keystore を base64 にしたもの
+#                              op document get yc7l6u4qqffwdaawb5aauhfmbm | base64 -w0
+#   ANDROID_KEYSTORE_PASSWORD  keystore のパスワード（keyPassword も同じ）
+#   PLAY_SERVICE_ACCOUNT_JSON  Play Developer API のサービスアカウント鍵（JSON そのもの）
+#
+# サービスアカウントは Google Cloud で作り、Play Console の
+# ユーザーと権限 →「リリースを管理」を付ける。反映に時間がかかることがある。
+#
+# **secrets を使うので pull_request では絶対に走らせない。** このリポジトリは
+# public で、同一リポジトリのブランチからの PR には secrets が渡る。
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 配信先
+        type: choice
+        default: internalsharing
+        options:
+          - internalsharing
+          - internal
+
+permissions: {}
+
+# 配信は追い越されると困るので、前の実行を打ち切らずに待たせる
+concurrency:
+  group: android-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Play へ上げる
+    # フォークでは動かさない
+    if: github.repository == 'CALIL/sabatomap'
+    runs-on: ske-v2
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 必要な Secrets が無い状態で走らせても、Gradle まで進んでから落ちて
+      # 原因が分かりにくい。最初に見て、無ければここで止める
+      - name: Secrets の確認
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          missing=""
+          [ -n "$KEYSTORE" ] || missing="$missing ANDROID_KEYSTORE_BASE64"
+          [ -n "$KEYSTORE_PASSWORD" ] || missing="$missing ANDROID_KEYSTORE_PASSWORD"
+          [ -n "$PLAY_JSON" ] || missing="$missing PLAY_SERVICE_ACCOUNT_JSON"
+          if [ -n "$missing" ]; then
+            echo "::error::Secrets が足りない:$missing"
+            echo "設定方法は .github/workflows/android-deploy.yml の先頭を読んでください"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # zizmor: ignore[cache-poisoning]
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+        with:
+          packages: >-
+            platform-tools
+            platforms;android-36
+            build-tools;36.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          gradle-version: '8.14.2'
+
+      - name: Install
+        run: npm ci
+
+      - name: web 側をビルド
+        run: npm run copy
+
+      - name: Android プラットフォームを用意
+        run: npx cordova prepare android
+
+      # keystore とパスワードを置く。どちらも作業ディレクトリの外に出さない。
+      # build-ci.json は .gitignore 済み。
+      #
+      # JSON は node で書く。ランナーの image（ghcr.io/actions/actions-runner）は
+      # 最小構成で jq が入っている保証がない。node は setup-node 済みなので確実
+      - name: 署名の準備
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          printf '%s' "$KEYSTORE" | base64 -d > sabatomap-keystore.jks
+          # keyAlias は calil、keyPassword は keystore と同じ（README の記載どおり）
+          node -e '
+            const fs = require("node:fs");
+            const path = require("node:path");
+            fs.writeFileSync("build-ci.json", JSON.stringify({
+              android: { release: {
+                keystore: path.resolve("sabatomap-keystore.jks"),
+                storePassword: process.env.KEYSTORE_PASSWORD,
+                alias: "calil",
+                password: process.env.KEYSTORE_PASSWORD,
+                keystoreType: "jks",
+              } },
+            }));
+          '
+
+      - name: AAB を組む
+        run: npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
+
+      - name: 鍵を消す
+        if: always()
+        run: rm -f sabatomap-keystore.jks build-ci.json
+
+      - name: できたものを確認
+        run: |
+          set -euo pipefail
+          aab=$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -1)
+          [ -n "$aab" ] || { echo "::error::AAB が見つからない"; exit 1; }
+          ls -lh "$aab"
+          echo "AAB_PATH=$aab" >> "$GITHUB_ENV"
+          code=$(grep -o 'android-versionCode="[0-9]*"' config.xml | grep -o '[0-9]*')
+          echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+          echo "versionCode: $code"
+
+      - name: Play へ上げる
+        id: upload
+        uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: jp.calil.sabatomap
+          releaseFiles: ${{ env.AAB_PATH }}
+          # push のときは常に internalsharing。手動実行だけ internal を選べる
+          track: ${{ github.event.inputs.track || 'internalsharing' }}
+          status: completed
+
+      - name: 結果をまとめに出す
+        env:
+          TRACK: ${{ github.event.inputs.track || 'internalsharing' }}
+          URLS: ${{ steps.upload.outputs.internalSharingDownloadUrls }}
+        run: |
+          {
+            echo "## Play へ上げました"
+            echo ""
+            echo "- 配信先: \`$TRACK\`"
+            echo "- versionCode: \`$VERSION_CODE\`"
+            echo "- コミット: \`${GITHUB_SHA:0:7}\`"
+            if [ -n "$URLS" ]; then
+              echo ""
+              echo "### ダウンロード"
+              echo ""
+              echo "$URLS"
+              echo ""
+              echo "Play ストアアプリの設定で「内部アプリ共有」を有効にしてから開いてください。"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

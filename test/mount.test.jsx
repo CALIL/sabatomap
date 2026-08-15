@@ -11,6 +11,7 @@ import { describe, it, expect, afterEach } from 'vitest';
 // react / react-dom / react-dom/client は vitest.config.mjs の alias で
 // preact/compat に差し替わるので、本番と同じものを動かしている
 import { act } from 'preact/test-utils';
+import { createRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import InitUI from '../src/component/App.jsx';
@@ -183,5 +184,89 @@ describe('InitUI（本番と同じ入口）', () => {
     expect(radios.find((r) => r.value === '8').checked).toBe(false);
 
     container.remove();
+  });
+});
+
+/*
+ 所蔵情報（Stocks）の取得キュー。
+
+ Unitrad は集計中ずっとポーリングし、そのたびに Search のコールバックが
+ 「detail がまだ無い本」を全部キューへ積み直す。積んだ本の取得が終わる前に
+ 次のポーリングが来ると、同じ本が二重に積まれる。
+
+ 以前の fetchDetail は先頭が取得済みだったとき shift せずに return していたので、
+ その二重ぶんが先頭に居座り、**キューが二度と進まなくなっていた**。
+ 後ろに並んだ本の所蔵情報が永久に出ない。
+ */
+describe('所蔵情報の取得キュー', () => {
+  const item = (id) => ({ uuid: 'u1', book: { id } });
+  const origFetch = globalThis.fetch;
+  afterEach(() => { globalThis.fetch = origFetch; });
+
+  async function searchWithQueue(queue, cache) {
+    const ref = createRef();
+    await mount(<Search placeholder="探す" region="Fukui_Sabae" ref={ref} />);
+    const s = ref.current;
+    await act(async () => s.setState({ query: 'ねこ', uuid: 'u1', books: [] }));
+    s.cacheDetail = cache;
+    s.queueDetail = queue;
+    return s;
+  }
+
+  it('先頭が取得済みでもキューが進む', async () => {
+    const calls = [];
+    globalThis.fetch = (url) => { calls.push(url); return new Promise(() => {}); };
+
+    // A は取得済み。二重に積まれて先頭に残っている状態
+    const s = await searchWithQueue([item('A'), item('B')], { A: { stocks: [] } });
+
+    s.fetchDetail();
+
+    expect(s.queueDetail).toHaveLength(0);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain('id=B');
+  });
+
+  it('取得済みが続いても全部捨てて次を取りに行く', async () => {
+    const calls = [];
+    globalThis.fetch = (url) => { calls.push(url); return new Promise(() => {}); };
+
+    const s = await searchWithQueue(
+      [item('A'), item('B'), item('C')],
+      { A: { stocks: [] }, B: { stocks: [] } }
+    );
+
+    s.fetchDetail();
+
+    expect(s.queueDetail).toHaveLength(0);
+    expect(calls[0]).toContain('id=C');
+  });
+
+  it('取得に失敗しても次へ進む', async () => {
+    globalThis.fetch = () => Promise.reject(new Error('ネットワーク断'));
+
+    const s = await searchWithQueue([item('A'), item('B')], {});
+
+    s.fetchDetail();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(s.queueDetail.map((q) => q.book.id)).toEqual(['B']);
+
+    s.fetchDetail();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(s.queueDetail).toHaveLength(0);
+  });
+
+  it('検索が切り替わったぶん（uuid 違い）は捨てる', async () => {
+    const calls = [];
+    globalThis.fetch = (url) => { calls.push(url); return new Promise(() => {}); };
+
+    const s = await searchWithQueue(
+      [{ uuid: 'u0', book: { id: 'X' } }, item('B')],
+      {}
+    );
+
+    s.fetchDetail();
+    expect(calls).toHaveLength(0);            // 古い検索のぶんは取りに行かない
+    expect(s.queueDetail.map((q) => q.book.id)).toEqual(['B']);
   });
 });

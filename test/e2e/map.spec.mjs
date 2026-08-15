@@ -4,6 +4,7 @@ import {
   viewState, markerState, expectMapScreenshot,
   BEACON_F7, BEACON_F7_FAR, BEACON_F8, SHELF_ID,
 } from './support/app.mjs';
+import { stubNetwork } from './support/stub.mjs';
 
 /*
  地図の描画を実ブラウザで確かめる。
@@ -16,6 +17,61 @@ import {
  */
 
 const PORT = Number(process.env.E2E_PORT ?? 5173);
+
+test.describe('スプラッシュ', () => {
+  /*
+   www/index.html の #splash は全画面を覆う。
+
+   アプリ側の z-index が桁違いに大きく（#offline 2000000 / #detail 1200000 /
+   検索ボックス .box 1000000 / 検索結果 90000）、9999 で置いたら
+   検索ボックスとその中の読み込み表示が透けて出た。
+
+   .box は position + z-index で自前の重ね合わせコンテキストを作るので、
+   その上に出られれば中身もまとめて隠れる。画面の何点かで最前面を確かめる。
+   */
+  test('出ている間は UI を覆い隠す', async ({ page }) => {
+    await stubNetwork(page, { port: PORT });
+    await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'commit' });
+    await page.waitForSelector('#ui input[type=search]', { timeout: 20000 });
+
+    const top = await page.evaluate(() => {
+      const s = document.getElementById('splash');
+      if (!s) return { gone: true };
+      const box = document.querySelector('#ui .box');
+      const r = box.getBoundingClientRect();
+      const at = (x, y) => {
+        const el = document.elementFromPoint(x, y);
+        return el === s || s.contains(el);
+      };
+      return {
+        gone: false,
+        zIndex: Number(getComputedStyle(s).zIndex),
+        // 検索ボックスの左端・中央・右端（消去ボタンと読み込み表示がいる）
+        coversBox: [r.left + 8, (r.left + r.right) / 2, r.right - 8]
+          .every((x) => at(x, (r.top + r.bottom) / 2)),
+        coversCenter: at(innerWidth / 2, innerHeight / 2 + 200),
+        coversBottom: at(innerWidth / 2, innerHeight - 40),
+      };
+    });
+
+    expect(top.gone).toBe(false);
+    // アプリ側の最大 2000000 より上にいること
+    expect(top.zIndex).toBeGreaterThan(2000000);
+    expect(top.coversBox).toBe(true);
+    expect(top.coversCenter).toBe(true);
+    expect(top.coversBottom).toBe(true);
+  });
+
+  test('最短 2 秒出てから消える', async ({ page }) => {
+    await stubNetwork(page, { port: PORT });
+    await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'commit' });
+    await page.waitForSelector('#splash', { state: 'detached', timeout: 20000 });
+
+    const at = await page.evaluate(() => performance.now());
+    // ロゴを見せるための下限。地図が遅ければさらに延びる
+    expect(at).toBeGreaterThan(1900);
+  });
+});
 
 test.describe('地図', () => {
   test('起動すると1階の配架図が出る', async ({ page }) => {
@@ -237,5 +293,32 @@ test.describe('検索', () => {
     await settle(page);
     await expectMapScreenshot(page, 'search-shelf.png');
     expect(errors).toEqual([]);
+  });
+
+  /*
+   検索欄の右のボタンは1つしかなく、通常は ✘（検索結果を閉じる）、
+   集計中は .loading が付いてスピナーが :before で乗る。
+   両方出すと重なって読めないので、読み込み中は ✘ を隠す。
+
+   Unitrad は running が true の間ポーリングを続ける。
+   スタブの searchRunning でその状態を作る。
+   */
+  test('集計中は ✘ を隠してスピナーだけ出す', async ({ page }) => {
+    await stubNetwork(page, { port: PORT, searchRunning: true });
+    await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'commit' });
+    await page.waitForSelector('#splash', { state: 'detached', timeout: 20000 });
+
+    await page.fill('#ui input[type=search]', 'ねこ');
+    await page.press('#ui input[type=search]', 'Enter');
+    await page.waitForSelector('#ui .clear.loading', { timeout: 20000 });
+
+    const clear = page.locator('#ui .clear.loading');
+    // ボタン自体は押せるまま（検索結果を閉じられる）
+    await expect(clear).toBeVisible();
+    // 中の ✘ だけが消えている
+    await expect(clear.locator('.icon')).toBeHidden();
+    // スピナーは出ている
+    expect(await clear.evaluate((el) =>
+      getComputedStyle(el, ':before').animationName)).toBe('spinner');
   });
 });

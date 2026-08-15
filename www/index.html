@@ -25,7 +25,13 @@
   #splash {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    /*
+      アプリ側の z-index が桁違いに大きいので、それより上に置く。
+      app.sass の最大は #offline の 2000000（他に #detail 1200000、
+      検索ボックス .box 1000000、検索結果 90000）。
+      9999 にしていたら検索ボックスとその中の読み込み表示が透けて出た
+    */
+    z-index: 9000000;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -48,7 +48,13 @@ export const MAPPER_RESULT = {
  * ページのネットワークを固定する
  * @returns {{blocked: string[], calls: Record<string, number>}} 遮断した URL と種別ごとの回数
  */
-export async function stubNetwork(page, { port }) {
+/**
+ * @param page {import('@playwright/test').Page}
+ * @param port {number} 静的配信のポート。ここ宛ては素通しする
+ * @param searchRunning {boolean} 検索応答の running を true にして
+ *   「まだ集計中」の状態を作る。読み込み表示の見た目を確かめるのに使う
+ */
+export async function stubNetwork(page, { port, searchRunning = false }) {
   const blocked = [];
   const calls = { baseTile: 0, floorTile: 0, geojson: 0, search: 0, polling: 0, mapper: 0, cover: 0 };
 
@@ -70,7 +76,10 @@ export async function stubNetwork(page, { port }) {
     const geo = pathname.match(/\/calil\.sabatomap2\/(\d+)\.json$/);
     if (geo) { calls.geojson++; return json(readJson(`src/json/${geo[1]}.json`)); }
 
-    if (pathname.endsWith('/v1/search')) { calls.search++; return json(JSON.stringify(SEARCH_RESULT)); }
+    if (pathname.endsWith('/v1/search')) {
+      calls.search++;
+      return json(JSON.stringify({ ...SEARCH_RESULT, running: searchRunning }));
+    }
     if (pathname.endsWith('/v1/polling')) { calls.polling++; return json('null'); }
     if (pathname.endsWith('/get')) { calls.mapper++; return json(JSON.stringify(MAPPER_RESULT)); }
     if (pathname.endsWith('/openbd_cover')) { calls.cover++; return png(COVER); }
