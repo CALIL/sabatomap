@@ -438,8 +438,7 @@ export default class Kanilayer extends LayerGroup {
         this.vector.setOpacity(0);
       } else {
         this.tileA.setOpacity(1);
-        this.tileB.setVisible(false);
-        this.tileB.setSource(null);
+        this.hideTileB_();
         this.vector.setOpacity(1);
       }
 
@@ -486,6 +485,25 @@ export default class Kanilayer extends LayerGroup {
 
       return this.changed();
     }
+  }
+
+  /**
+   * @nodoc 背面タイルを隠す
+   *
+   * ソースは外さない。preload を付けたタイルレイヤーは ol 10 から
+   * setTimeout(0) でタイル要求を投げるようになっており、その間に
+   * setSource(null) を呼ぶと遅れて走る enqueueTiles が null を掴んで
+   * 「Cannot read properties of null (reading 'getTileGridForProjection')」で落ちる。
+   *
+   * visible を false にすればレイヤーは描画対象から外れるので、
+   * 古いソースが残っていても要求は飛ばない。次のフロア切り替えで
+   * 上書きされるので、残るのは常に1個だけ
+   *
+   * @private
+   */
+  hideTileB_() {
+    this.tileB.setVisible(false);
+    return this.tileB.setOpacity(0);
   }
 
   /**
@@ -539,8 +557,7 @@ export default class Kanilayer extends LayerGroup {
           return this.vector.setOpacity(time);
         } else {
           this.vector.setOpacity(1);
-          this.tileB.setVisible(false);
-          this.tileB.setSource(null);
+          this.hideTileB_();
           return this.fadeAnimation = null;
         }
       }

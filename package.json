@@ -18,7 +18,7 @@
   "dependencies": {
     "cordova-browser": "^7.0.0",
     "cordova-plugin-bluetooth-status": "~1.0.4",
-    "ol": "9.2.4",
+    "ol": "10.10.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
