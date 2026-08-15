@@ -242,26 +242,26 @@ var debugRangedAny = function (beacons) {
 };
 
 /*
- 初回起動でビーコンを拾えないことへの手当て。
+ 起動直後にビーコンを拾えないことへの手当て。
 
- **プラグインの requestWhenInUseAuthorization は Android では何もしない**
- （PluginResult.OK を返すだけ）。実際の権限要求はネイティブの pluginInitialize が
- 握っていて、**結果を受け取る口が無い**。
+ **autobind は最初の startRangingBeacons で非同期にサービスへ束縛する。**
+ その束縛が終わる前に来た最初の領域の開始要求が取りこぼされ、スキャンが
+ 始まらないまま終わることがある。閉じて開き直すと動くのは、前のセッションの
+ スキャンが生きているシングルトンをそのまま使うため。
 
- つまり初回起動では、権限ダイアログが出ている最中に ranging を始めてしまい、
- 利用者が許可しても誰も再開しないので、その回はビーコンを拾えないまま終わる。
- 2回目以降は許可済みなので動く。「一度閉じて開き直すと測位する」の正体。
+ **同じ領域をもう一度 start しても直らない。** AltBeacon は既に ranging 中の
+ 領域として扱い、サービスへの適用が素通りする。デバッグビルドだけ動いていたのは、
+ __DEBUG__ で「全UUID」の**別の領域**を並行して start していて、そちらの適用に
+ 巻き込まれて本来の領域も走り出していたから。
 
- プラグイン側で onRequestPermissionResult を実装するのが本筋だが、
- Cordova の権限結果は requestCode で振り分けられ、このプラグインは
- Activity.requestPermissions を直接叩いているため戻ってこない。
- アプリ側で、**まだ1本も見ていない間だけ数回やり直す**ことで拾う。
+ なので stop してから start する。領域が一度外れるので、次の start が
+ 確実に変更として適用される。
  */
 var sabaeRegion = null;
 var locationManager;
 var rangingRetryTimers = [];
 
-/** 何度でも呼んでよい。同じ領域の ranging は AltBeacon 側でまとめられる */
+/** 起動時の1回目。ここは素直に start でよい */
 var startRanging = function () {
   if (locationManager == null || sabaeRegion == null) {
     return;
@@ -270,16 +270,33 @@ var startRanging = function () {
 };
 
 /**
- * まだ1本も見ていなければ ranging をやり直す
+ * ranging を張り直す
  *
- * 権限ダイアログの応答は数秒〜数十秒かかることがあるので、間隔を空けて数回。
- * 1本でも見えたら以降は何もしない（館外では無駄に走らせない）。
+ * **stop を挟むのが要点。** start だけでは変化なしとして素通りする。
+ * stop が失敗しても start は投げる（そもそも張れていない場合があるため）。
+ */
+var restartRanging = function () {
+  if (locationManager == null || sabaeRegion == null) {
+    return;
+  }
+  locationManager.stopRangingBeaconsInRegion(sabaeRegion)
+    .then(startRanging)
+    .fail(function (e) {
+      console.error(e);
+      startRanging();
+    });
+};
+
+/**
+ * まだ1本も見ていなければ ranging を張り直す
+ *
+ * 間隔を空けて数回。1本でも見えたら以降は何もしない（館外では無駄に走らせない）。
  */
 var scheduleRangingRetries = function () {
-  for (const delay of [4000, 10000, 20000]) {
+  for (const delay of [3000, 8000, 20000]) {
     rangingRetryTimers.push(setTimeout(function () {
       if (beaconsSeen === 0) {
-        startRanging();
+        restartRanging();
       }
     }, delay));
   }
@@ -459,13 +476,12 @@ var initializeApp = function () {
       scheduleRangingRetries();
 
       /*
-       権限ダイアログは別のウィンドウなので pause/resume を伴う。タイマーが
-       尽きたあとに許可された場合の受け皿として、復帰時にも同じ判定をしておく。
-       1本でも見えていれば何もしない
+       タイマーが尽きたあとの受け皿。復帰のたびに、まだ1本も見ていなければ張り直す。
+       権限のダイアログも別ウィンドウなので pause/resume を伴い、ここに入る
        */
       document.addEventListener("resume", function () {
         if (beaconsSeen === 0) {
-          startRanging();
+          restartRanging();
         }
       });
 
