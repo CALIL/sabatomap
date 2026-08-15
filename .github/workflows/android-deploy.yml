@@ -165,8 +165,39 @@ jobs:
             }));
           '
 
+      # internalsharing のときだけ versionCode を差し替える。
+      #
+      # config.xml の番号は本番と同じ（リリースのたびに手で上げるもの）。
+      # 本番を入れている端末では**同じ番号のものを上書きできない**ので、
+      # Play ストアが「3.0.8 をダウンロードできません」と言って止まる。
+      #
+      # 内部アプリ共有はトラックに属さず、番号の重複も許されるので、
+      # ここで大きくしても production の下限には影響しない。
+      #
+      # 値は 2020-01-01 UTC からの分数。単調に増え、いまは7桁で、
+      # Play の上限 2100000000 には千年単位で届かない。
+      #
+      # internal（内部テストトラック）のときは触らない。あちらは番号が
+      # そのまま production の下限になるので、config.xml で意識して上げる
+      - name: テスト版の versionCode を決める
+        env:
+          TRACK: ${{ github.event.inputs.track || 'internalsharing' }}
+        run: |
+          set -euo pipefail
+          if [ "$TRACK" = "internalsharing" ]; then
+            code=$(( ( $(date -u +%s) - 1577836800 ) / 60 ))
+            echo "VERSION_CODE_ARG=--versionCode=$code" >> "$GITHUB_ENV"
+            echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+            echo "内部アプリ共有用に $code を使います"
+          else
+            echo "VERSION_CODE_ARG=" >> "$GITHUB_ENV"
+            echo "config.xml の値をそのまま使います"
+          fi
+
+      # VERSION_CODE_ARG は前のステップが GITHUB_ENV へ入れたもの。
+      # ${{ }} で展開せず、シェルの変数として渡す（テンプレート注入を避ける）
       - name: AAB を組む
-        run: npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle
+        run: npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle ${VERSION_CODE_ARG:-}
         env:
           GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
 
@@ -181,9 +212,14 @@ jobs:
           [ -n "$aab" ] || { echo "::error::AAB が見つからない"; exit 1; }
           ls -lh "$aab"
           echo "AAB_PATH=$aab" >> "$GITHUB_ENV"
-          code=$(grep -o 'android-versionCode="[0-9]*"' config.xml | grep -o '[0-9]*')
-          echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
-          echo "versionCode: $code"
+          # 差し替えていないとき（internal トラック）だけ config.xml から拾う
+          if [ -z "${VERSION_CODE:-}" ]; then
+            code=$(grep -o 'android-versionCode="[0-9]*"' config.xml | grep -o '[0-9]*')
+            echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+            echo "versionCode: $code"
+          else
+            echo "versionCode: $VERSION_CODE"
+          fi
 
       # OIDC で認証情報ファイルを作る。鍵は発行されず、数分で失効する
       - name: Google Cloud の認証
@@ -202,8 +238,9 @@ jobs:
           serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
           packageName: jp.calil.sabatomap
           releaseFiles: ${{ env.AAB_PATH }}
-          # push のときは常に internalsharing。手動実行だけ internal を選べる
-          track: ${{ github.event.inputs.track || 'internalsharing' }}
+          # push のときは常に internalsharing。手動実行だけ internal を選べる。
+          # track（単数）は非推奨で、将来のアクション更新で消える
+          tracks: ${{ github.event.inputs.track || 'internalsharing' }}
           status: completed
 
       - name: 結果をまとめに出す
@@ -224,5 +261,9 @@ jobs:
               echo "$URLS"
               echo ""
               echo "Play ストアアプリの設定で「内部アプリ共有」を有効にしてから開いてください。"
+              echo ""
+              echo "**ストア版が入っている端末では、このテスト版を入れると"
+              echo "ストア版へ戻せなくなります**（versionCode が下がるため）。"
+              echo "戻すときは一度アンインストールしてください。"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
