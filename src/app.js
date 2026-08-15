@@ -200,6 +200,38 @@ var DEBUG_ANY_REGION = "debug-any";
 var anyRanging = 0;
 var anyBeacons = [];
 var probeStatus = "-";
+var geoStatus = "-";
+
+/**
+ * 位置情報の権限と位置情報サービスを、プラグインを足さずに確かめる（デバッグビルド専用）
+ *
+ * Android 12 以降、BLUETOOTH_SCAN に neverForLocation が付いていないと、
+ * **スキャン結果を受け取るのに位置情報の権限と位置情報サービスの両方が要る**。
+ * 足りなくても例外にはならず、結果が空で返るだけなので中からは分からない。
+ *
+ * WebView の geolocation は同じ ACCESS_FINE_LOCATION と位置情報サービスを使う。
+ * ここが通れば、残る容疑は「付近のデバイス」（BLUETOOTH_SCAN）だけに絞れる。
+ *
+ *   1 PERMISSION_DENIED   → アプリに位置情報の権限が無い
+ *   2 POSITION_UNAVAILABLE → 端末の位置情報サービスが切れている
+ *   3 TIMEOUT              → 判定できず（屋内で測位に時間がかかっただけのことも）
+ */
+var probeGeolocation = function () {
+  if (navigator.geolocation == null) {
+    geoStatus = "geolocation なし";
+    return;
+  }
+  geoStatus = "確認中";
+  navigator.geolocation.getCurrentPosition(function () {
+    geoStatus = "許可あり";
+  }, function (e) {
+    geoStatus = "NG(" + e.code + ") " + e.message;
+  }, {
+    timeout: 8000,
+    maximumAge: 0,
+    enableHighAccuracy: true
+  });
+};
 
 var debugRangedAny = function (beacons) {
   anyRanging++;
@@ -528,12 +560,14 @@ var initializeApp = function () {
    pointer-events: none なので下のボタンはそのまま押せる。
    */
   if (__DEBUG__) {
+    probeGeolocation();
     beaconDebug = createBeaconDebug(function () {
       var s = diagnostics();
       // UUID を絞らない領域の分。ここだけ見えているなら UUID 違い
       s.anyRanging = anyRanging;
       s.anyBeacons = anyBeacons;
       s.probe = probeStatus;
+      s.geo = geoStatus;
       return s;
     }, {
       ios: typeof cordova !== "undefined" && cordova !== null && cordova.platformId === "ios"

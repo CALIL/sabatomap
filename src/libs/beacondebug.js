@@ -94,6 +94,8 @@ export default function createBeaconDebug(getState, { ios = false } = {}) {
       }
     }
     lines.push(`プラグイン ${s.probe}`);
+    // 位置情報が通るなら、BLE が空な理由は「付近のデバイス」に絞れる
+    lines.push(`位置情報 ${s.geo}`);
 
     el.textContent = lines.join('\n');
   };
