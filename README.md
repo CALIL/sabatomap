@@ -141,18 +141,15 @@ cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 | `internalsharing`（既定） | ビルドごとに URL。**versionCode が重複していても通る**ので自動配信に向く。トラックには影響しない |
 | `internal`（内部テスト） | Play 経由で配られ更新も自動。**`android-versionCode` を先に上げること**。ここで使った番号は production の下限にもなる |
 
-### 動かす前に要るもの
+### 認証は OIDC で、鍵は置きません
 
-リポジトリの Secrets に3つ。**まだ設定されていません。**
+GitHub の OIDC トークンを Workload Identity Federation で交換します。
+**Play へ上げる鍵はこのリポジトリに置きません。**
 
-| Secret | 中身 |
-|---|---|
-| `ANDROID_KEYSTORE_BASE64` | `op document get yc7l6u4qqffwdaawb5aauhfmbm \| base64 -w0` の出力 |
-| `ANDROID_KEYSTORE_PASSWORD` | keystore のパスワード（1Password のラベル）。keyPassword も同じ |
-| `PLAY_SERVICE_ACCOUNT_JSON` | Play Developer API のサービスアカウント鍵（JSON そのまま） |
-
-サービスアカウントは Google Cloud で作り、**Play Console → ユーザーと権限**で
-「リリースを管理」を付けます。権限の反映に時間がかかることがあります。
+必要な Variables / Secrets は `.github/workflows/android-deploy.yml` の先頭に
+一覧があります。**まだ設定されていないので、いまのままでは最初のステップで止まります。**
+値と、Google Cloud 側のリソース（サービスアカウントと Workload Identity の紐付け）は
+社内の非公開リポジトリで管理しています。
 
 **このリポジトリは public です。** ワークフローは `pull_request` では走らせていません。
 同一リポジトリのブランチからの PR には secrets が渡るためで、

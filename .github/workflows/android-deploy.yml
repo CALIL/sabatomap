@@ -17,17 +17,29 @@ name: Android テスト版の配信
 #   config.xml の android-versionCode を先に上げること。
 #   ここで上げた番号は production の下限にもなる（トラックをまたいで比較される）。
 #
+# ## 認証
+#
+# GitHub の OIDC トークンを Workload Identity Federation で交換する。
+# **Play へ上げる鍵はリポジトリに置かない。**
+#
+# アップロード側のアクションは認証情報を自前で読まず、GOOGLE_APPLICATION_CREDENTIALS
+# を立てて google-auth-library の ADC に任せている。そこへ WIF の認証情報ファイルの
+# パスを渡している（serviceAccountJson は「パス」を受け取る入力）。
+#
 # ## 動かす前に要るもの
 #
-# リポジトリの Secrets に3つ。README の「Androidリリース手順」も参照。
+# Variables（秘密ではないので変数側）
+#   GCP_WORKLOAD_IDENTITY_PROVIDER  google-github-actions/auth に渡す provider の完全名
+#   GCP_PLAY_DEPLOYER_SA            なりすます先のサービスアカウント
+#   ANDROID_KEY_ALIAS               keystore の鍵エイリアス
 #
-#   ANDROID_KEYSTORE_BASE64    1Password の keystore を base64 にしたもの
-#                              op document get yc7l6u4qqffwdaawb5aauhfmbm | base64 -w0
-#   ANDROID_KEYSTORE_PASSWORD  keystore のパスワード（keyPassword も同じ）
-#   PLAY_SERVICE_ACCOUNT_JSON  Play Developer API のサービスアカウント鍵（JSON そのもの）
+# Secrets
+#   ANDROID_KEYSTORE_BASE64         署名用 keystore を base64 にしたもの
+#   ANDROID_KEYSTORE_PASSWORD       keystore のパスワード（keyPassword も同じ）
 #
-# サービスアカウントは Google Cloud で作り、Play Console の
-# ユーザーと権限 →「リリースを管理」を付ける。反映に時間がかかることがある。
+# サービスアカウントは Play Console の「ユーザーと権限」へ招待し、アプリ単位で
+# 「テスト版トラックとしてのアプリのリリース」を付ける。
+# その中に「内部共有用の APK のアップロード」が含まれる。
 #
 # **secrets を使うので pull_request では絶対に走らせない。** このリポジトリは
 # public で、同一リポジトリのブランチからの PR には secrets が渡る。
@@ -61,28 +73,33 @@ jobs:
     timeout-minutes: 45
     permissions:
       contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      # 必要な Secrets が無い状態で走らせても、Gradle まで進んでから落ちて
+      # 設定が足りない状態で走らせても、Gradle まで進んでから落ちて
       # 原因が分かりにくい。最初に見て、無ければここで止める
-      - name: Secrets の確認
+      - name: 設定の確認
         env:
+          WIF_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          DEPLOYER_SA: ${{ vars.GCP_PLAY_DEPLOYER_SA }}
+          KEY_ALIAS: ${{ vars.ANDROID_KEY_ALIAS }}
           KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
         run: |
           set -euo pipefail
           missing=""
-          [ -n "$KEYSTORE" ] || missing="$missing ANDROID_KEYSTORE_BASE64"
-          [ -n "$KEYSTORE_PASSWORD" ] || missing="$missing ANDROID_KEYSTORE_PASSWORD"
-          [ -n "$PLAY_JSON" ] || missing="$missing PLAY_SERVICE_ACCOUNT_JSON"
+          [ -n "$WIF_PROVIDER" ] || missing="$missing vars.GCP_WORKLOAD_IDENTITY_PROVIDER"
+          [ -n "$DEPLOYER_SA" ] || missing="$missing vars.GCP_PLAY_DEPLOYER_SA"
+          [ -n "$KEY_ALIAS" ] || missing="$missing vars.ANDROID_KEY_ALIAS"
+          [ -n "$KEYSTORE" ] || missing="$missing secrets.ANDROID_KEYSTORE_BASE64"
+          [ -n "$KEYSTORE_PASSWORD" ] || missing="$missing secrets.ANDROID_KEYSTORE_PASSWORD"
           if [ -n "$missing" ]; then
-            echo "::error::Secrets が足りない:$missing"
-            echo "設定方法は .github/workflows/android-deploy.yml の先頭を読んでください"
+            echo "::error::設定が足りない:$missing"
+            echo "何を入れるかは .github/workflows/android-deploy.yml の先頭を読んでください"
             exit 1
           fi
 
@@ -123,17 +140,17 @@ jobs:
       # keystore とパスワードを置く。どちらも作業ディレクトリの外に出さない。
       # build-ci.json は .gitignore 済み。
       #
-      # JSON は node で書く。ランナーの image（ghcr.io/actions/actions-runner）は
-      # 最小構成で jq が入っている保証がない。node は setup-node 済みなので確実
+      # JSON は node で書く。ランナーの image は最小構成で jq が入っている保証がない。
+      # node は setup-node 済みなので確実
       - name: 署名の準備
         env:
           KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ vars.ANDROID_KEY_ALIAS }}
         run: |
           set -euo pipefail
           umask 077
           printf '%s' "$KEYSTORE" | base64 -d > sabatomap-keystore.jks
-          # keyAlias は calil、keyPassword は keystore と同じ（README の記載どおり）
           node -e '
             const fs = require("node:fs");
             const path = require("node:path");
@@ -141,7 +158,7 @@ jobs:
               android: { release: {
                 keystore: path.resolve("sabatomap-keystore.jks"),
                 storePassword: process.env.KEYSTORE_PASSWORD,
-                alias: "calil",
+                alias: process.env.KEY_ALIAS,
                 password: process.env.KEYSTORE_PASSWORD,
                 keystoreType: "jks",
               } },
@@ -168,11 +185,21 @@ jobs:
           echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
           echo "versionCode: $code"
 
+      # OIDC で認証情報ファイルを作る。鍵は発行されず、数分で失効する
+      - name: Google Cloud の認証
+        id: auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_PLAY_DEPLOYER_SA }}
+
       - name: Play へ上げる
         id: upload
         uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
         with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          # 鍵ではなく WIF の認証情報ファイル。中身は検証されず、
+          # GOOGLE_APPLICATION_CREDENTIALS に立てられるだけ
+          serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
           packageName: jp.calil.sabatomap
           releaseFiles: ${{ env.AAB_PATH }}
           # push のときは常に internalsharing。手動実行だけ internal を選べる
