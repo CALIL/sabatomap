@@ -141,18 +141,15 @@ cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 | `internalsharing`（既定） | ビルドごとに URL。**versionCode が重複していても通る**ので自動配信に向く。トラックには影響しない |
 | `internal`（内部テスト） | Play 経由で配られ更新も自動。**`android-versionCode` を先に上げること**。ここで使った番号は production の下限にもなる |
 
-### 動かす前に要るもの
+### 認証は OIDC で、鍵は置きません
 
-リポジトリの Secrets に3つ。**まだ設定されていません。**
+GitHub の OIDC トークンを Workload Identity Federation で交換します。
+**Play へ上げる鍵はこのリポジトリに置きません。**
 
-| Secret | 中身 |
-|---|---|
-| `ANDROID_KEYSTORE_BASE64` | `op document get yc7l6u4qqffwdaawb5aauhfmbm \| base64 -w0` の出力 |
-| `ANDROID_KEYSTORE_PASSWORD` | keystore のパスワード（1Password のラベル）。keyPassword も同じ |
-| `PLAY_SERVICE_ACCOUNT_JSON` | Play Developer API のサービスアカウント鍵（JSON そのまま） |
-
-サービスアカウントは Google Cloud で作り、**Play Console → ユーザーと権限**で
-「リリースを管理」を付けます。権限の反映に時間がかかることがあります。
+必要な Variables / Secrets は `.github/workflows/android-deploy.yml` の先頭に
+一覧があります。**まだ設定されていないので、いまのままでは最初のステップで止まります。**
+値と、Google Cloud 側のリソース（サービスアカウントと Workload Identity の紐付け）は
+社内の非公開リポジトリで管理しています。
 
 **このリポジトリは public です。** ワークフローは `pull_request` では走らせていません。
 同一リポジトリのブランチからの PR には secrets が渡るためで、
@@ -170,20 +167,18 @@ npx cordova build android --release -- --packageType=bundle
 
 `--packageType=bundle` を付けないと AAB ではなく APK ができる。Google Play が要求するのは AAB。
 
-1Password から、さばとマップの keystore をダウンロードしてプロジェクトのルートに保存する。
+1Password の「さばとマップ」の keystore をダウンロードして、プロジェクトのルートに
+`sabatomap-keystore.jks` として保存する（`.gitignore` 済み）。
+パスワードと鍵エイリアスも同じ項目に入っている。
 
 ```bash
-op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
-```
-
-keystoreのパスワードは、1Passwordのラベルに保存してある<br>
-keyAliasはcalil<br>
-keyPasswordはkeystoreと同じ
-
-```bash
-jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab calil
+op document get <item> --output ./sabatomap-keystore.jks
+jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab <alias>
 jarsigner -verify platforms/android/app/build/outputs/bundle/release/app-release.aab
 ```
+
+**このリポジトリは public なので、item ID や鍵エイリアスは書かない。**
+必要な値は 1Password 側にある。
 
 `npm run release` は `cordova run android --release` で、**実機かエミュレータへ送り込む操作**なので
 ストア用の成果物は作れない。混同しないこと。
