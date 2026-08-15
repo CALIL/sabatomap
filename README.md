@@ -122,15 +122,31 @@ cordova plugin add https://github.com/CALIL/cordova-plugin-device-orientation
 2026-08-15 に撤去しました（オフラインでアイコンが消える経路だったため）。
 アイコンを増やすときは `Icon.jsx` の `ICONS` に path を足してください。
 
-## Android版で最初の位置情報の許可についてのメッセージが英語になる場合
+## Android の位置情報の許可ダイアログは OS のものです
 
-\hooks\after_platform_add\update_ibeacon_plugin_message.js
-が正常に動いているか確かめる
+**アプリから文言は変えられません。** 表示されるのは Android 標準のダイアログで、
+日本語の文言は OS が用意しています。
+
+かつて `hooks/after_platform_add/update_ibeacon_plugin_message.js` が
+プラグインの英文を日本語へ置換していましたが、2026-08-16 に削除しました。
+**2019 年から何も置換していなかった**ためです。
+
+- 上流のプラグインが 2019-12 に文言を設定で変えられるようにした際、
+  置換対象の英文（`This app needs location access`）が消えた。
+  実際 2.0.5（2019-10）にはあり、2.0.9（2023-01）には無い
+- いまのプラグインは独自ダイアログを出さず、`Activity.requestPermissions` を
+  直接呼ぶだけ。`AlertDialog` の import は残っているが未使用
+- CI が焼いた APK と署名済み release APK の dex を検索して、
+  日本語も英語も **0 件**であることを確認済み
+
+そもそも `platforms/` 以下の生成物を書き換える作りだったので、
+**動いていたとしても `cordova prepare` のたびに上書きされて消えていました。**
 
 ## Android のテスト版を自動で配る
 
-`master` へ入るたびに、署名済み AAB を組んで **Google Play の内部アプリ共有**へ上げます
+`master` へ入るたびに、署名済み **APK** を組んで **Google Play の内部アプリ共有**へ上げます
 （`.github/workflows/android-deploy.yml`）。実行のまとめにダウンロード URL が出ます。
+内部テストトラック（`internal`）を選んだときだけ AAB になります。
 
 **テスターは Play ストアアプリの設定で「内部アプリ共有」を有効に**してから URL を開いてください。
 
