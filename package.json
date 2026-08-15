@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "ol": "10.10.0",
+    "preact": "10.29.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

@@ -11,6 +11,29 @@
   <link href="css/app.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<!--
+  スプラッシュ。app.css より先に出したいので、ここだけインラインで書く。
+
+  実機は cordova のネイティブスプラッシュがこの上に被さっているので普段は見えない。
+  ブラウザ版にはネイティブのスプラッシュが無いため、これが本体になる。
+  消すのは app.js の hideSplash で、ネイティブ側と同時に消える。
+-->
+<div id="splash">
+  <img src="img/splash_for_browser.png" alt="さばとマップ" width="214" height="77">
+</div>
+<style>
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0068B1;
+    transition: opacity .25s ease-out;
+  }
+  #splash.hidden { opacity: 0; pointer-events: none; }
+</style>
 <div id="map"></div>
 <div id="compass" class="hidden"></div>
 <div id="ui"></div>

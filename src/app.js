@@ -153,7 +153,10 @@ var loadFloor = function (id) {
     }
 
     kanimarker.setPosition(null);
-    kanilayer.setFloorId(id);
+    // 起動直後だけフェードを飛ばす。クロスフェードは「前のフロアから次のフロアへ」の
+    // 演出で、初回は退避先の tileB に入るのが tileA の source＝null。
+    // 相手がいないのに 378ms 動いていた（フェーズ0のタイル待ち → 200ms → 150ms）
+    kanilayer.setFloorId(id, kanilayer.floorId !== false);
     UI.setFloorId(id);
   }
 
@@ -162,6 +165,64 @@ var loadFloor = function (id) {
 
 var didRangeBeaconsInRegion = function (beacons) {
   return kanikama.push(beacons);
+};
+
+// スプラッシュを出しておく最短時間（ミリ秒）。ロゴを見せるための下限で、
+// アプリの準備はこれより早く終わる（実測で地図が描き終わるのが 0.5 秒前後）
+var SPLASH_MIN = 2000;
+
+// 地図が出ないときの打ち切り。通信が死んでいても必ず消えるようにする
+var SPLASH_MAX = 8000;
+
+var splashHidden = false;
+
+/**
+ * スプラッシュを消す
+ *
+ * index.html の #splash（ブラウザ版の本体）と、cordova のネイティブスプラッシュを
+ * 同時に消す。実機ではネイティブが上に被さっているので #splash は見えない。
+ *
+ * ネイティブ側は config.xml の AutoHideSplashScreen=false と対で動く。
+ * true のままだと cordova-android は hide を受け付けず、SplashScreenDelay の
+ * 時間だけ出しっぱなしになる
+ */
+var hideSplash = function () {
+  if (splashHidden) {
+    return;
+  }
+  splashHidden = true;
+
+  var el = document.getElementById("splash");
+  if (el != null) {
+    el.classList.add("hidden");
+    setTimeout(function () {
+      if (el.parentNode != null) {
+        el.parentNode.removeChild(el);
+      }
+    }, 300);
+  }
+
+  if (navigator.splashscreen != null) {
+    navigator.splashscreen.hide();
+  }
+};
+
+/**
+ * 地図が描き終わってからスプラッシュを消す。ただし最短 SPLASH_MIN は待つ
+ */
+var scheduleHideSplash = function () {
+  setTimeout(hideSplash, SPLASH_MAX);
+
+  var done = function () {
+    var rest = SPLASH_MIN - performance.now();
+    setTimeout(hideSplash, rest > 0 ? rest : 0);
+  };
+
+  if (map != null) {
+    map.once("rendercomplete", done);
+  } else {
+    done();
+  }
 };
 
 var initializeApp = function () {
@@ -234,10 +295,6 @@ var initializeApp = function () {
       locationManager.startRangingBeaconsInRegion(region).fail(console.error);
     }
 
-    if (navigator.splashscreen != null) {
-      setTimeout(navigator.splashscreen.hide, 2000);
-    }
-
     if (navigator.connection != null && navigator.connection.type === "none") {
       UI.setState({
         offline: true
@@ -277,9 +334,14 @@ var initializeApp = function () {
     })
   });
 
-  setTimeout((function () {
+  // ベースタイル（建物の外の地図）は最初は隠しておく。起動直後のビューは
+  // 日本全体（zoom 6）で、施設へ寄せる前にこれを出すと日本地図が一瞬見えるため。
+  //
+  // 以前は 500ms の固定待ちだったが、実測ではビューが施設へ寄るのは 100ms 前後で、
+  // 400ms ぶん無駄に待っていた。配架図が描き終わってから出す
+  map.once("rendercomplete", function () {
     return osm.setVisible(true);
-  }), 500);
+  });
 
   kanimarker = new Kanimarker(map);
   kanimarker.on("change:mode", invalidateLocator);
@@ -350,6 +412,11 @@ var initializeApp = function () {
   window.addEventListener("BluetoothStatus.enabled", invalidateLocator);
   window.addEventListener("BluetoothStatus.disabled", invalidateLocator);
   kanikama.facilities_ = rules;
+
+  // プラットフォームを問わず走らせる。上の cordova ブロックは
+  // platformId !== "browser" で括られていて、ブラウザ版はそこを通らない
+  scheduleHideSplash();
+
   return loadFacility("7");
 };
 

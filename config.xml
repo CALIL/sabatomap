@@ -14,8 +14,17 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="default" />
     <preference name="webviewbounce" value="false" />
-    <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="SplashScreenDelay" value="7000" />
+    <!-- スプラッシュはアプリ側が消す（app.js の hideSplash）。
+         最短 2 秒出したうえで、地図が描き終わるのを待って消す。
+
+         false にしないと cordova-android は navigator.splashscreen.hide() を
+         受け付けない（SplashScreenPlugin.java の `action.equals("hide") &&
+         autoHide == false`）。既定は true。
+
+         SplashScreenDelay は指定しない。指定すると android は onPageFinished を
+         見なくなり、その時間だけ出しっぱなしになる。以前は 7000 が入っていて、
+         アプリの準備が 0.5 秒で終わっても 7 秒待たされていた -->
+    <preference name="AutoHideSplashScreen" value="false" />
     <platform name="android">
         <!-- 下限。書かないと cordova-android の既定（15 では 24 = Android 7.0）が
              黙って効くので明示する。
@@ -27,7 +36,6 @@
              インストールできる端末を狭めるものではない -->
         <preference name="android-targetSdkVersion" value="36" />
         <allow-intent href="market:*" />
-        <preference name="SplashShowOnlyFirstTime" value="true" />
         <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
         <icon density="hdpi" src="res/icons/android/icon-72-hdpi.png" />
         <icon density="xhdpi" src="res/icons/android/icon-96-xhdpi.png" />
@@ -53,8 +61,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="FadeSplashScreen" value="true" />
-        <preference name="ShowSplashScreenSpinner" value="false" />
-        <preference name="AutoHideSplashScreen" value="false" />
         <preference name="Orientation" value="all" />
         <icon height="57" platform="ios" src="res/icons/ios/icon.png" width="57" />
         <icon height="114" platform="ios" src="res/icons/ios/icon@2x.png" width="114" />
@@ -87,11 +93,7 @@
         <preference name="WindowsDefaultUriPrefix" value="ms-appx://" />
     </platform>
     <platform name="browser">
-        <preference name="SplashScreen" value="img/splash_for_browser.png" />
-        <preference name="SplashScreenDelay" value="3000" />
-        <preference name="SplashScreenBackgroundColor" value="#0068B1" />
-        <preference name="ShowSplashScreen" value="true" />
-        <preference name="SplashScreenWidth" value="428" />
-        <preference name="SplashScreenHeight" value="154" />
+        <!-- cordova-browser にスプラッシュの実装は無く、以下は 1 つも読まれていなかった。
+             ブラウザ版のスプラッシュは www/index.html の #splash が担当する -->
     </platform>
 </widget>

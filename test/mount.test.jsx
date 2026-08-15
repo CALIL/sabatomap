@@ -6,7 +6,11 @@
 // なくオブジェクトになり、描画時に Element type is invalid で落ちる。
 // 型もビルドも通るので、1回描画するテストが無いと気づけない。
 import { describe, it, expect, afterEach } from 'vitest';
-import { act } from 'react';
+// act だけは preact から直接取る。react は本体（'react'）から出すが、
+// preact/compat は出さず preact/test-utils にある。
+// react / react-dom / react-dom/client は vitest.config.mjs の alias で
+// preact/compat に差し替わるので、本番と同じものを動かしている
+import { act } from 'preact/test-utils';
 import { createRoot } from 'react-dom/client';
 
 import InitUI from '../src/component/App.jsx';
