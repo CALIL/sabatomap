@@ -62,6 +62,23 @@ export async function enableBluetooth(page) {
   });
 }
 
+/**
+ * BLE はあるが Bluetooth は切れている端末のふりをする
+ *
+ * platformId を差し替えられるのは、app.js が Android のときだけ
+ * BTenabled を信用しないようにしているため。ブラウザのプラットフォームでは
+ * platformId が 'browser' なので、そのままでは Android の分岐を通らない
+ */
+export async function pretendBluetoothOff(page, { platformId } = {}) {
+  await page.evaluate((id) => {
+    const bt = window.cordova?.plugins?.BluetoothStatus;
+    if (!bt) throw new Error('cordova.plugins.BluetoothStatus が無い');
+    bt.hasBTLE = true;
+    bt.BTenabled = false;
+    if (id) window.cordova.platformId = id;
+  }, platformId);
+}
+
 /** 1フレーム回して rendercomplete を待つ */
 async function renderOnce(page, ms) {
   await page.evaluate((timeout) => new Promise((resolve, reject) => {

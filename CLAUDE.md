@@ -166,7 +166,7 @@ artifact から持ち帰ってコミットします。
 `BTenabled` が偽なら**その場で `setMode("normal")` に戻す**からです。
 e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確かめています。
 
-### ★ Android 12 以降で現在地ボタンが死んでいる可能性があります
+### ★ Android では Bluetooth の ON/OFF を判定していません
 
 `cordova-plugin-bluetooth-status` は **2016年2月が最終公開**で、Android の権限体系が
 変わる前の作りのままです。`plugin.xml` が宣言するのは `BLUETOOTH` と `BLUETOOTH_ADMIN`
@@ -189,13 +189,34 @@ if (bluetoothAdapter.isEnabled())  // API 31+ は BLUETOOTH_CONNECT が要る
 
 の順で、`isEnabled()` が例外を投げても false を返しても、**`BTenabled` は
 初期値の `false` のまま**になります（`BluetoothStatus.js` が `false` で初期化）。
-`invalidateLocator` はこれを見て「測定できません」を出し続けます。
+つまり「オフ」と「分からない」を区別できません。
 
-**未検証です。Android 12 以降の実機で、Bluetooth を ON にした状態で
-現在地ボタンを押せば1分で分かります。** iOS は別実装なので影響しません。
+そのままだと `invalidateLocator` が「測定できません」を出し続けて
+**現在地ボタンが永久に塞がります。**
 
-iBeacon プラグイン側の `isBluetoothEnabled()` も同じ `isEnabled()` を呼ぶので、
-そちらへ乗り換えるだけでは直りません。
+#### どう直したか
+
+`app.js` の `canTrustBluetoothState()` が **Android では `BTenabled` を信用しません。**
+
+| | Android | iOS |
+|---|---|---|
+| BLE を持たない端末 | ボタンを塞ぐ（`hasBTLE` は権限が要らないので当てにできる） | 同じ |
+| Bluetooth がオフ | **塞がない。** 押せば測位に進み、取れなければ「BluetoothがONか確かめてください」 | 押した時点で「BluetoothをONにしてください」 |
+
+読み取るだけのために `BLUETOOTH_CONNECT`（実行時許可）をユーザーに求めるのは
+割に合わないと判断しました。iOS は CoreBluetooth で権限の分割が無いので
+これまで通りです。
+
+**iBeacon プラグイン側の `isBluetoothEnabled()` も、AltBeacon の
+`checkAvailability()` 経由で同じ `isEnabled()` を呼びます。**
+乗り換えても直りません（調査済み）。
+
+e2e で Android と iOS の両方を固定してあります
+（`pretendBluetoothOff(page, {platformId})`）。
+
+代償として、Android 11 以前でも Bluetooth オフの案内が
+「押してから」になります。minSdk は 29 なので該当はしますが、
+判定できない機種のほうが多数です。
 
 ## package.json の overrides
 

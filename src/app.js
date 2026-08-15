@@ -377,8 +377,42 @@ var navigateShelf = function (floorId, shelves) {
   }
 };
 
+/**
+ * Bluetooth が有効かどうかを信用してよいか
+ *
+ * Android 12（API 31）から BluetoothAdapter.isEnabled() には BLUETOOTH_CONNECT が
+ * 要る。cordova-plugin-bluetooth-status は 2016年で止まっていて BLUETOOTH と
+ * BLUETOOTH_ADMIN しか宣言しておらず、どちらも targetSdk 31 以上では無視される。
+ *
+ * 例外を投げても false を返しても BTenabled は BluetoothStatus.js の初期値
+ * false のままになるので、「オフ」と「分からない」を区別できない。
+ * そのまま使うと現在地ボタンが永久に「測定できません」になる。
+ *
+ * 読み取るだけのために BLUETOOTH_CONNECT（実行時許可）を要求するのは割に合わないので、
+ * Android では判定をあきらめて、測位そのものの結果で案内する。
+ * iOS は CoreBluetooth で権限の分割が無いのでこれまで通り信用してよい。
+ */
+var canTrustBluetoothState = function () {
+  return typeof cordova !== "undefined" && cordova !== null && cordova.platformId !== "android";
+};
+
+/** 現在地の測定ができる見込みがあるか */
+var canLocate = function () {
+  if (!(typeof cordova !== "undefined" && cordova !== null) || !(cordova.plugins.BluetoothStatus != null)) {
+    return false;
+  }
+
+  // hasBTLE は hasSystemFeature(FEATURE_BLUETOOTH_LE) 由来で権限が要らないため、
+  // どの Android でも当てにできる
+  if (!cordova.plugins.BluetoothStatus.hasBTLE) {
+    return false;
+  }
+
+  return !canTrustBluetoothState() || cordova.plugins.BluetoothStatus.BTenabled;
+};
+
 var invalidateLocator = function () {
-  if (!(typeof cordova !== "undefined" && cordova !== null) || !(cordova.plugins.BluetoothStatus != null) || !cordova.plugins.BluetoothStatus.hasBTLE || !cordova.plugins.BluetoothStatus.BTenabled) {
+  if (!canLocate()) {
     kanimarker.setMode("normal");
     return UI.setMode("disabled");
   } else if (waitingPosition) {
@@ -399,7 +433,10 @@ var waitPosition = function () {
 
     if (waitingPosition === 0) {
       if (kanikama.currentPosition === null) {
-        UI.notify("現在地を取得できませんでした");
+        // Bluetooth の状態を先に確かめられない環境では、ここでしか伝えられない
+        UI.notify(canTrustBluetoothState()
+          ? "現在地を取得できませんでした"
+          : "現在地を取得できませんでした。BluetoothがONか確かめてください");
       }
       if (kanikama.currentPosition && kanikama.accuracy > 10) {
         UI.notify("棚の中に入ると正確な位置がわかります");
@@ -421,7 +458,7 @@ var locatorClicked = function () {
       if (!(typeof cordova !== "undefined" && cordova !== null) || !(cordova.plugins.BluetoothStatus != null) || !cordova.plugins.BluetoothStatus.hasBTLE) {
         UI.notify("この機種は現在地を測定できません");
         return fitFloor();
-      } else if (!cordova.plugins.BluetoothStatus.BTenabled) {
+      } else if (canTrustBluetoothState() && !cordova.plugins.BluetoothStatus.BTenabled) {
         return UI.notify("BluetoothをONにしてください");
       } else if (kanikama.currentPosition === null) {
         return waitPosition();
