@@ -64,6 +64,37 @@ jobs:
             platforms;android-36
             build-tools;36.0.0
 
+      # デバッグ鍵を run をまたいで使い回す。
+      #
+      # ランナーは毎回まっさらなコンテナで ~/.android/debug.keystore が無い。
+      # 放っておくと **Gradle がビルドごとに違う鍵を自動生成する**ので、
+      # 焼き上がる APK の署名が毎回変わり、実機では前のものを
+      # アンインストールしないと入らない。館内で試すときに毎回これをやることになる。
+      #
+      # 鍵そのものは秘密ではない（Android SDK が誰の手元でも自動生成するもの）。
+      # 中身を追跡すると public リポジトリに鍵が乗るので、キャッシュで持ち回す。
+      # 落ちても次のステップが作り直すだけなので、失敗しても止めない。
+      - name: デバッグ鍵を復元する
+        id: debug-keystore
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: android-debug-keystore-v1
+
+      - name: 無ければデバッグ鍵を作る
+        if: steps.debug-keystore.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.android
+          # Android SDK が既定で使うのと同じパラメータ
+          keytool -genkeypair -v \
+            -keystore ~/.android/debug.keystore \
+            -storepass android -keypass android \
+            -alias androiddebugkey \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10950
+          echo "新しいデバッグ鍵を作りました。次回からはキャッシュから復元されます"
+
       # cordova は wrapper を「システムの gradle で」作る。
       # ubuntu-latest には最初から入っているが、このランナーには無いので入れる。
       # 版は cordova-android の cdv-gradle-config-defaults.json に合わせてある。
