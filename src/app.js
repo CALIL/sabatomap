@@ -62,9 +62,17 @@ let fitRotation = function (r) {
       virtualAngle = oldAngle + (360 - n);
     }
   }
-  let view =  map.getView();
-  if(view.rotation !== virtualAngle){
-      view.animate({rotation: virtualAngle * Math.PI / 180, duration: 400, easing: easeOut});
+  let view = map.getView();
+  let target = virtualAngle * Math.PI / 180;
+
+  // View に rotation という公開プロパティは無い。ol 3 のころから getRotation() で、
+  // ここは undefined と度数を比べていたので条件が常に真になり、
+  // 向きが合っていても毎回 400ms のアニメーションが走っていた
+  //
+  // 単位もずれていた。virtualAngle は度、getRotation() はラジアン。
+  // 浮動小数の丸めで厳密には一致しないので、0.01 度ぶんの幅で見る
+  if (Math.abs(view.getRotation() - target) > 0.0002) {
+    view.animate({rotation: target, duration: 400, easing: easeOut});
   }
 };
 
@@ -263,7 +271,6 @@ var initializeApp = function () {
     layers: [osm, kanilayer],
     controls: [],
     target: "map",
-    logo: false,
 
     view: new View({
       center: [15139450.747885207, 4163881.1440642904],
@@ -358,9 +365,16 @@ var navigateShelf = function (floorId, shelves) {
   kanilayer.setTargetShelves(shelves);
 
   if (shelves.length > 0) {
+    // 第2引数はオプションオブジェクト。ol 4 までは size を直接渡す形だったが
+    // ol 5 で変わっており、配列を渡しても無視されていた
+    //
+    // ol 5 の fit は既定でズームレベルへ丸めていた（実測 19.404 → 19）。
+    // ol 6 からは View の constrainResolution（既定 false）に従うので
+    // 丸めずぴったり合わせる。棚へ移動したときに一段引かなくなり、
+    // 配架図のラベルが出るようになった
     return map.getView().fit(
       transformExtent(homeBoundingBox, "EPSG:4326", "EPSG:3857"),
-      map.getSize()
+      {size: map.getSize()}
     );
   }
 };

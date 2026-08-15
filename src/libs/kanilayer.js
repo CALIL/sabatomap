@@ -407,8 +407,11 @@ export default class Kanilayer extends LayerGroup {
     this.targetPosition = null;
     this.targetImageUrl = preThis.targetImageUrl;
     this.targetImageUrl2 = preThis.targetImageUrl2;
-    this.vector.on("postcompose", this.postcompose_.bind(this));
-    this.tileA.on("precompose", this.precompose_.bind(this));
+    // ol 6 でレイヤーの描画イベントは precompose/postcompose から
+    // prerender/postrender へ改名された。map 側は名前が変わっていないが、
+    // 代わりにキャンバスを持たなくなっている
+    this.vector.on("postrender", this.postrender_.bind(this));
+    this.tileA.on("prerender", this.prerender_.bind(this));
 
     if (options_.kFloor != null) {
       this.setFloorId(options_.kFloor, false);
@@ -417,9 +420,14 @@ export default class Kanilayer extends LayerGroup {
 
   /**
    * フロアを変更する
-   * @param newId {String} フロアID
-   * @param animation
-   * @returns {*|{min, max}}
+   *
+   * animation を付けると、いま出ているタイルを背面（tileB）へ退避してから
+   * 新しいフロアを前面（tileA）で読み、prerender_ が3段階でフェードさせる。
+   * 付けないと即座に差し替わる
+   *
+   * @param newId {String} フロアID。null なら配架図を消してフロア0のタイルにする
+   * @param animation {Boolean} フェードさせるか
+   * @returns {*} 同じフロアなら undefined、変えたなら changed() の戻り
    */
   setFloorId(newId, animation = true) {
     var newSource;
@@ -435,8 +443,7 @@ export default class Kanilayer extends LayerGroup {
         this.vector.setOpacity(0);
       } else {
         this.tileA.setOpacity(1);
-        this.tileB.setVisible(false);
-        this.tileB.setSource(null);
+        this.hideTileB_();
         this.vector.setOpacity(1);
       }
 
@@ -486,6 +493,25 @@ export default class Kanilayer extends LayerGroup {
   }
 
   /**
+   * @nodoc 背面タイルを隠す
+   *
+   * ソースは外さない。preload を付けたタイルレイヤーは ol 10 から
+   * setTimeout(0) でタイル要求を投げるようになっており、その間に
+   * setSource(null) を呼ぶと遅れて走る enqueueTiles が null を掴んで
+   * 「Cannot read properties of null (reading 'getTileGridForProjection')」で落ちる。
+   *
+   * visible を false にすればレイヤーは描画対象から外れるので、
+   * 古いソースが残っていても要求は飛ばない。次のフロア切り替えで
+   * 上書きされるので、残るのは常に1個だけ
+   *
+   * @private
+   */
+  hideTileB_() {
+    this.tileB.setVisible(false);
+    return this.tileB.setOpacity(0);
+  }
+
+  /**
    * デバッグ表示の有無を設定する
    * @param newValue {Boolean} する:true, しない: false
    * @returns {*|{min, max}}
@@ -496,10 +522,11 @@ export default class Kanilayer extends LayerGroup {
   }
 
   /**
-   * @nodoc マップ描画処理
+   * @nodoc タイル描画前の処理。フロア切り替えのフェードを進める
+   * @param event {import("ol/render/Event").default}
    * @private
    */
-  precompose_(event) {
+  prerender_(event) {
     var time;
     var frameState = event.frameState;
 
@@ -535,8 +562,7 @@ export default class Kanilayer extends LayerGroup {
           return this.vector.setOpacity(time);
         } else {
           this.vector.setOpacity(1);
-          this.tileB.setVisible(false);
-          this.tileB.setSource(null);
+          this.hideTileB_();
           return this.fadeAnimation = null;
         }
       }
@@ -544,10 +570,11 @@ export default class Kanilayer extends LayerGroup {
   }
 
   /**
-   * @nodoc マップ描画処理
+   * @nodoc ベクターレイヤー描画後の処理。デバッグ表示を重ねる
+   * @param event {import("ol/render/Event").default}
    * @private
    */
-  postcompose_(event) {
+  postrender_(event) {
     var debugText;
     var context;
 
