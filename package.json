@@ -49,8 +49,8 @@
     "plugins": {
       "cordova-plugin-bluetooth-status": {},
       "com.unarin.cordova.beacon": {},
-      "cordova-plugin-device-orientation": {},
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-device-orientation": {}
     }
   },
   "engines": {
