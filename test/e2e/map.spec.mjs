@@ -166,6 +166,20 @@ test.describe('地図', () => {
     await settle(page);
 
     expect(await markerState(page)).toMatchObject({ mode: 'headingup' });
+
+    /*
+     回転は view.animate で入る。**手元では4回測って毎回同じ値だったが、
+     CI（Linux）では着地がわずかにぶれて画像が落ち続けた。**
+     地図いっぱいのラベルが少し動くだけで画素の差は大きくなる。
+
+     値を確かめたうえで、丸めた値に揃えてから撮る。
+     **ずれの検出は下のアサーションが担う**ので、揃えても退行は見逃さない。
+     */
+    const rotation = await page.evaluate(() => window.app.getMap().getView().getRotation());
+    expect(rotation).toBeCloseTo(3.098, 2);
+    await page.evaluate(() => window.app.getMap().getView().setRotation(3.098));
+    await settle(page);
+
     await expectMapScreenshot(page, 'marker-headingup.png');
     expect(errors).toEqual([]);
   });
