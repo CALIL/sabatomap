@@ -241,11 +241,61 @@ var debugRangedAny = function (beacons) {
   }
 };
 
+/*
+ 初回起動でビーコンを拾えないことへの手当て。
+
+ **プラグインの requestWhenInUseAuthorization は Android では何もしない**
+ （PluginResult.OK を返すだけ）。実際の権限要求はネイティブの pluginInitialize が
+ 握っていて、**結果を受け取る口が無い**。
+
+ つまり初回起動では、権限ダイアログが出ている最中に ranging を始めてしまい、
+ 利用者が許可しても誰も再開しないので、その回はビーコンを拾えないまま終わる。
+ 2回目以降は許可済みなので動く。「一度閉じて開き直すと測位する」の正体。
+
+ プラグイン側で onRequestPermissionResult を実装するのが本筋だが、
+ Cordova の権限結果は requestCode で振り分けられ、このプラグインは
+ Activity.requestPermissions を直接叩いているため戻ってこない。
+ アプリ側で、**まだ1本も見ていない間だけ数回やり直す**ことで拾う。
+ */
+var sabaeRegion = null;
+var locationManager;
+var rangingRetryTimers = [];
+
+/** 何度でも呼んでよい。同じ領域の ranging は AltBeacon 側でまとめられる */
+var startRanging = function () {
+  if (locationManager == null || sabaeRegion == null) {
+    return;
+  }
+  locationManager.startRangingBeaconsInRegion(sabaeRegion).fail(console.error);
+};
+
+/**
+ * まだ1本も見ていなければ ranging をやり直す
+ *
+ * 権限ダイアログの応答は数秒〜数十秒かかることがあるので、間隔を空けて数回。
+ * 1本でも見えたら以降は何もしない（館外では無駄に走らせない）。
+ */
+var scheduleRangingRetries = function () {
+  for (const delay of [4000, 10000, 20000]) {
+    rangingRetryTimers.push(setTimeout(function () {
+      if (beaconsSeen === 0) {
+        startRanging();
+      }
+    }, delay));
+  }
+};
+
 var didRangeBeaconsInRegion = function (beacons) {
   rangingCallbacks++;
   beaconsSeen += beacons.length;
   lastRangeAt = Date.now();
   lastBeacons = beacons;
+
+  // 1本でも届いたらやり直しは要らない
+  if (beaconsSeen > 0 && rangingRetryTimers.length > 0) {
+    rangingRetryTimers.forEach(clearTimeout);
+    rangingRetryTimers = [];
+  }
 
   var result = kanikama.push(beacons);
 
@@ -340,7 +390,6 @@ var scheduleHideSplash = function () {
 var initializeApp = function () {
   var region;
   var delegate;
-  var locationManager;
   var ref;
   var compassSuccess;
   var body;
@@ -405,7 +454,20 @@ var initializeApp = function () {
 
       locationManager.setDelegate(delegate);
       region = new locationManager.BeaconRegion("sabatomap", "00000000-71C7-1001-B000-001C4D532518");
-      locationManager.startRangingBeaconsInRegion(region).fail(console.error);
+      sabaeRegion = region;
+      startRanging();
+      scheduleRangingRetries();
+
+      /*
+       権限ダイアログは別のウィンドウなので pause/resume を伴う。タイマーが
+       尽きたあとに許可された場合の受け皿として、復帰時にも同じ判定をしておく。
+       1本でも見えていれば何もしない
+       */
+      document.addEventListener("resume", function () {
+        if (beaconsSeen === 0) {
+          startRanging();
+        }
+      });
 
       if (__DEBUG__) {
         /*
