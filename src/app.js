@@ -290,10 +290,15 @@ var restartRanging = function () {
 /**
  * まだ1本も見ていなければ ranging を張り直す
  *
- * 間隔を空けて数回。1本でも見えたら以降は何もしない（館外では無駄に走らせない）。
+ * **1回目を早くするほど測位が早く出る。** 3秒始まりのときは実機で
+ * 起動から5秒ほどかかっていた（3秒＋スキャン周期 1.1秒）。
+ * 束縛はそれより前に終わっているので 1.5 秒から始める。
+ * 仮に早すぎて空振りしても、後続がそのまま効くので害はない。
+ *
+ * 1本でも見えたら以降は何もしない（館外では無駄に走らせない）。
  */
 var scheduleRangingRetries = function () {
-  for (const delay of [3000, 8000, 20000]) {
+  for (const delay of [1500, 3500, 8000, 20000]) {
     rangingRetryTimers.push(setTimeout(function () {
       if (beaconsSeen === 0) {
         restartRanging();
