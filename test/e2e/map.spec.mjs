@@ -328,6 +328,12 @@ test.describe('検索', () => {
     await page.waitForSelector('#ui .books > div', { timeout: 20000 });
     await page.click('#ui .books > div:first-child');
     await page.waitForSelector('#detail.show', { timeout: 10000 });
+    /*
+     所蔵のバッジは .notfetch が外れてから opacity 0.4s でフェードインする。
+     待たずに撮ると**途中の半透明が写って毎回違う画像になる**。
+     一覧の側と同じ待ちを入れる
+     */
+    await page.waitForSelector('#detail .stocks:not(.notfetch)', { timeout: 20000 });
 
     await expectUiScreenshot(page, 'detail.png');
 
