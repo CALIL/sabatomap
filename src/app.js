@@ -334,9 +334,14 @@ var initializeApp = function () {
     })
   });
 
-  setTimeout((function () {
+  // ベースタイル（建物の外の地図）は最初は隠しておく。起動直後のビューは
+  // 日本全体（zoom 6）で、施設へ寄せる前にこれを出すと日本地図が一瞬見えるため。
+  //
+  // 以前は 500ms の固定待ちだったが、実測ではビューが施設へ寄るのは 100ms 前後で、
+  // 400ms ぶん無駄に待っていた。配架図が描き終わってから出す
+  map.once("rendercomplete", function () {
     return osm.setVisible(true);
-  }), 500);
+  });
 
   kanimarker = new Kanimarker(map);
   kanimarker.on("change:mode", invalidateLocator);
