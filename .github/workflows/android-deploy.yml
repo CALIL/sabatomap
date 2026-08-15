@@ -205,6 +205,11 @@ jobs:
         if: always()
         run: rm -f sabatomap-keystore.jks build-ci.json
 
+      # 成果物そのものを見る。
+      #
+      # 「--versionCode を渡したつもり」で終わらせない。AGP がマージした
+      # マニフェストを読んで、狙った番号が実際に焼かれたかを確かめ、
+      # 違えばここで止める。**上げてしまってからでは端末側でしか分からない。**
       - name: できたものを確認
         run: |
           set -euo pipefail
@@ -212,14 +217,22 @@ jobs:
           [ -n "$aab" ] || { echo "::error::AAB が見つからない"; exit 1; }
           ls -lh "$aab"
           echo "AAB_PATH=$aab" >> "$GITHUB_ENV"
-          # 差し替えていないとき（internal トラック）だけ config.xml から拾う
-          if [ -z "${VERSION_CODE:-}" ]; then
-            code=$(grep -o 'android-versionCode="[0-9]*"' config.xml | grep -o '[0-9]*')
-            echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
-            echo "versionCode: $code"
-          else
-            echo "versionCode: $VERSION_CODE"
+
+          manifest=$(find platforms/android/app/build/intermediates -name 'AndroidManifest.xml' -path '*erged*' | head -1)
+          if [ -z "$manifest" ]; then
+            echo "::error::マージ済みマニフェストが見つからない。versionCode を確認できない"
+            exit 1
           fi
+          built=$(grep -o 'android:versionCode="[0-9]*"' "$manifest" | grep -o '[0-9]*' | head -1)
+          name=$(grep -o 'android:versionName="[^"]*"' "$manifest" | sed 's/.*="//;s/"//' | head -1)
+          echo "焼かれた versionCode: $built  versionName: $name"
+
+          if [ -n "${VERSION_CODE:-}" ] && [ "$built" != "$VERSION_CODE" ]; then
+            echo "::error::versionCode が指定と違う（指定 $VERSION_CODE / 実際 $built）"
+            exit 1
+          fi
+          echo "VERSION_CODE=$built" >> "$GITHUB_ENV"
+          echo "VERSION_NAME=$name" >> "$GITHUB_ENV"
 
       # OIDC で認証情報ファイルを作る。鍵は発行されず、数分で失効する
       - name: Google Cloud の認証
@@ -252,7 +265,8 @@ jobs:
             echo "## Play へ上げました"
             echo ""
             echo "- 配信先: \`$TRACK\`"
-            echo "- versionCode: \`$VERSION_CODE\`"
+            echo "- versionCode: \`$VERSION_CODE\`（**マージ済みマニフェストで確認済み**）"
+            echo "- versionName: \`$VERSION_NAME\`（ストアの表示はこちら。テスト版でも本番と同じ）"
             echo "- コミット: \`${GITHUB_SHA:0:7}\`"
             if [ -n "$URLS" ]; then
               echo ""
