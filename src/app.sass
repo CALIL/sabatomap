@@ -1,3 +1,26 @@
+/*
+ 日本語のフォントスタック。**書き換えるときはここだけを直す。**
+
+ 各 OS の UI フォントを先頭に置き、日本語は OS ごとの標準へ落とす形にしてある。
+
+   system-ui / -apple-system   OS の UI フォント。iOS と macOS は SF Pro が当たり、
+                               日本語は自動で Hiragino Sans へ落ちる
+   Hiragino Sans               上が効かない古い WebView 向けの明示
+   Noto Sans JP / CJK JP       Android と Linux。**素の sans-serif 頼みだった**
+   Yu Gothic UI / Meiryo       Windows（開発時のブラウザ確認用）
+
+ 前のスタックからの変更点は3つ。
+
+ 1. **「ヒラギノ角ゴ ProN W3」をやめた。** 名前にウェイト（W3）が入っていると
+    その字面に固定され、font-weight: 600 を指定しても太らない。太字が必要な
+    タイトルや所蔵バッジで効いてしまう
+ 2. **「游ゴシック」を Yu Gothic UI に替えた。** 無印の游ゴシックは Windows で
+    細すぎて読みにくい。UI 用に調整された方を使う
+ 3. **Noto を明示した。** Android は素の sans-serif でも Noto Sans CJK に
+    当たるが、たまたま当たっているだけの状態だった
+ */
+$font-sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", Meiryo, sans-serif
+
 html, body, #map
   height: 100%
   width: 100%
@@ -6,10 +29,17 @@ html, body, #map
   -webkit-tap-highlight-color: transparent
   -webkit-touch-callout: none
   overflow: hidden
-  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif
+  font-family: $font-sans
 
 body
   background-color: #fff
+  /*
+   日本語は欧文より字面が大きく、行間が詰まると読みにくい。
+   ブラウザ既定の normal（おおむね 1.2）は狭すぎるので、本文の基準を置く。
+   **単位を付けないこと。** 1.6em と書くと子が計算済みの px を継ぐので、
+   フォントサイズを変えた子で行間が追従しなくなる
+   */
+  line-height: 1.6
 
 #map
   background-color: #eeeeee
@@ -62,7 +92,9 @@ input[type=search]
       top: 22px
     input
       color: #727171
-      font-family: sans-serif
+      // フォームは既定でフォントを継承しないので明示する。
+      // sans-serif 決め打ちだと、本文だけ日本語スタックで検索欄だけ別物になる
+      font-family: inherit
       font-size: 100%
       width: 100%
       padding: 15px
@@ -130,8 +162,10 @@ input[type=search]
       background-color: #69947a
       width: 80%
       box-shadow: 1px 3px 1px 1px #eee
-      font-size: 4.5vw
-      border-radius: 4px 
+      // 4.5vw だけだと画面幅で字が決まり、タブレットでは大きくなりすぎ、
+      // 狭い端末では読めなくなる。下限と上限を付けて挟む
+      font-size: clamp(0.875rem, 4.5vw, 1.25rem)
+      border-radius: 4px
         
         
     -webkit-overflow-scrolling: touch
@@ -168,12 +202,29 @@ input[type=search]
     .books
       margin-left: -17px
       margin-right: -17px
+      /*
+       カードはグリッドで組む。**高さを固定して中身を絶対配置していた頃は、
+       フォントが大きくなるとタイトルが途中で切れていた。**
+
+         title  cover next
+         author cover next
+         stocks cover next
+
+       表紙は isbn があるときだけ出るので、無いときに列が潰れるよう
+       grid-area で明示的に置く（自動配置に任せると他がずれる）。
+       */
       > div
-        position: relative
-        height: 110px
+        display: grid
+        grid-template-columns: minmax(0, 1fr) auto auto
+        grid-template-areas: "title cover next" "author cover next" "stocks cover next"
+        align-content: center
+        column-gap: 0.75rem
+        row-gap: 0.25rem
+        // 高さは min-height。字が大きければカードの背が伸びる
+        min-height: 110px
+        padding: 0.875rem 0.625rem 0.875rem 1rem
         transition: border-left-color 0.4s
         cursor: pointer
-        overflow: hidden
         box-shadow: 1px 1px 10px #CACACA
         margin-top: 10px
         border-left: 4px solid #fff
@@ -182,48 +233,58 @@ input[type=search]
         &:hover > .next
           color: #08A2E8
         img
-          position: absolute
-          top: 0
-          bottom: 0
-          right: 32px
-          margin: auto
+          grid-area: cover
+          align-self: center
           width: 80px
-          z-index: 1
           box-shadow: 1px 0px 1px 0 #999
           background-color: #fff
+        /*
+         タイトルは2行で固定し、はみ出しは隠す。
+         **max-height の em 計算に頼らない。** line-clamp なら行数で切るので、
+         フォントが拡大されても半端な位置で切れない
+         */
         .title
-          position: absolute
-          font-size: 16px
-          line-height: 1.2em
+          grid-area: title
+          font-size: 1rem
+          // 見出しなので本文の 1.6 より詰める。2行ぶんの min-height と対
+          line-height: 1.45
           font-weight: 600
-          top: 16px
-          right: 110px
-          left: 17px
           color: #444444
           text-decoration: none
-          max-height: 2.4em
+          display: -webkit-box
+          -webkit-box-orient: vertical
+          -webkit-line-clamp: 2
+          overflow: hidden
+          // 1行のタイトルでもカードの高さを揃える（1.45 × 2行）
+          min-height: 2.9em
+        // 以前はタイトルの中に入れ子で、2行分の箱を奪い合っていた
+        .author
+          grid-area: author
+          font-size: 0.8125rem
+          line-height: 1.5
+          color: #777
+          display: -webkit-box
+          -webkit-box-orient: vertical
+          -webkit-line-clamp: 1
           overflow: hidden
         .stocks
-          position: absolute
-          right: 15px
-          left: 16px
-          bottom: 13px
+          grid-area: stocks
+          align-self: end
           transition: opacity 0.4s
           &.notfetch
             opacity: 0
         .next
-          position: absolute
-          right: 10px
-          bottom: 45px
-          font-size: 10px
+          grid-area: next
+          align-self: center
+          font-size: 0.625rem
           color: #DEDEDE
           transition: color 1s
     .ios &
       padding-top: 100px
     > .hint
-      font-size: 13px
+      font-size: 0.8125rem
     > .message
-      font-size: 14px
+      font-size: 0.875rem
       font-weight: 600
       color: #555
       margin: 10px 0
@@ -263,27 +324,23 @@ input[type=search]
       border-top-color: rgba(0, 0, 0, 0.6)
       animation: spinner .6s linear infinite
       -webkit-animation: spinner .6s linear infinite
+  // 所蔵のバッジ。padding と min-width を em にして、字が大きくなれば
+  // バッジも一緒に育つようにする（px 固定だと中で窮屈になる）
+  .stockA, .stockB
+    font-size: 0.875rem
+    line-height: 1.4
+    border-radius: 2px
+    padding: 0.2em 0.7em
+    color: #fff
+    font-weight: 600
+    text-align: center
+    display: inline-block
+    min-width: 4.3em
   .stockA
     margin-right: 5px
-    font-size: 14px
-    border-radius: 2px
-    padding: 3px 10px
     background-color: #08A2E8
-    color: #fff
-    font-weight: 600
-    text-align: center
-    display: inline-block
-    min-width: 60px
   .stockB
-    font-size: 14px
-    border-radius: 2px
-    padding: 3px 10px
     background-color: #969696
-    color: #fff
-    font-weight: 600
-    text-align: center
-    display: inline-block
-    min-width: 60px
 
 #floors
   position: absolute
@@ -294,17 +351,23 @@ input[type=search]
   > div
     display: block
     user-select: none
-    height: 45px
-    width: 45px
+    /*
+     数字は flex で中央に置く。
+     **line-height: 48px を height: 45px の箱に入れていたので 1.5px 下がっていた。**
+     行ボックスはフォントに追従して伸びるので、拡大するとさらにずれる。
+     min-height にしてあるので、字が大きければボタンも広がる
+     */
     label
-      line-height: 48px
-      text-align: center
-      font-size: 18px
-      font-family: Helvetica, Arial, serif
-      display: block
+      display: flex
+      align-items: center
+      justify-content: center
+      min-height: 45px
+      min-width: 45px
+      font-size: 1.125rem
+      // 中身は数字だけなので欧文で揃える。
+      // 最後が serif だったのを sans-serif に直した（明らかな書き間違い）
+      font-family: Helvetica, Arial, sans-serif
       -webkit-user-select: none
-      height: 45px
-      width: 45px
       background-color: #fff
       transition: background-color 0.3s
     &:first-child label
@@ -383,8 +446,9 @@ input[type=search]
     border-radius: 4px
     background: rgb(255, 255, 255)
     color: #6B6B6B
-    font-size: 14px
-    line-height: 20px
+    // px 固定だと拡大したとき字だけ大きくなって行が重なる
+    font-size: 0.875rem
+    line-height: 1.6
     @media (max-width: 374px)
       bottom: 80px
       right: 12px
@@ -445,7 +509,6 @@ input[type=search]
   user-select: none
   overflow: hidden
   position: absolute
-  top: -170px
   left: 0
   right: 0
   min-height: 100px
@@ -453,6 +516,19 @@ input[type=search]
   z-index: 1200000
   background-color: rgb(251, 251, 251)
   box-shadow: 0 0 12px rgba(78, 78, 78, 0.7)
+  /*
+   退避は top のまま。**transform: translateY(-100%) に替えてはいけない。**
+
+   高さに依存しないので一見きれいだが、**合成レイヤーに昇格して地図の
+   ラスタライズが変わる**。回転中の地図を撮る e2e（marker-headingup）が
+   毎回落ちるようになる。実測で、transform を外すと 3/3 通り、
+   入れると 3/3 落ちた。
+
+   そもそも隠しきれなくなる心配は要らない。下の .block が絶対配置なので
+   **このパネルは中身が増えても 128px から伸びない**（フォントを 32px に
+   しても同じだった）。170px あれば必ず隠れる。
+   */
+  top: -170px
   transition: top 0.5s
   &.show
     top: 0
@@ -481,9 +557,8 @@ input[type=search]
   .back
     cursor: pointer
     border-right: 1px solid #DCDCDC
-    display: block
     color: #999999
-    font-size: 20px
+    font-size: 1.25rem
     position: absolute
     top: 0
     transition: color 0.4s
@@ -492,19 +567,23 @@ input[type=search]
     bottom: 0
     left: 0
     width: 40px
+    // アイコンは flex で中央に。top: 55px の決め打ちだと中身が伸びるとずれる
+    display: flex
+    align-items: center
+    justify-content: center
     > .icon
       display: block
-      position: absolute
-      top: 55px
-      left: 12px
     &:hover
       color: #08A2E8
+  // 検索結果と同じく2行で固定。em 基準の height だと拡大で半端に切れる
   .title
-    height: 2.2em
     font-weight: 600
-    line-height: 1.1em
-    overflow: hidden
+    line-height: 1.45
     margin-right: 40px
+    display: -webkit-box
+    -webkit-box-orient: vertical
+    -webkit-line-clamp: 2
+    overflow: hidden
   .block
     position: absolute
     left: 55px
@@ -531,7 +610,15 @@ input[type=search]
     border-radius: 5px
     background: #ffffff
     background: linear-gradient(to bottom, #ffffff, #ededed)
-    font: normal normal normal 12px trebuchet ms
+    /*
+     font のショートハンドをやめた。**font-family まで trebuchet ms に
+     置き換わり、日本語（「予約・詳細を見る」）が代替フォントで出ていた。**
+     ショートハンドは指定しなかった項目も初期値に戻すので、line-height も
+     一緒に潰れる
+     */
+    font-size: 0.75rem
+    font-weight: normal
+    line-height: 1.5
     color: #6b6b6b
     text-decoration: none
     &:hover, &:focus

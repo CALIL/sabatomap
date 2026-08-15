@@ -179,3 +179,31 @@ export async function expectMapScreenshot(page, name) {
     animations: 'disabled',
   });
 }
+
+/**
+ * UI（検索欄・検索結果・詳細・フロアボタン）を撮る
+ *
+ * **地図と分けているのは、UI の崩れが #map のゴールデンに写らないから。**
+ * 検索結果の一覧はここができるまで画像で検証されていなかった。
+ */
+export async function expectUiScreenshot(page, name) {
+  await expect(page.locator('#ui')).toHaveScreenshot(name, {
+    maxDiffPixelRatio: 0.002,
+    animations: 'disabled',
+  });
+}
+
+/**
+ * ルートのフォントサイズを上げる（拡大表示のふり）
+ *
+ * Android のシステムフォント設定や利用者のズームで字だけが大きくなる状況を作る。
+ * **これで崩れないことが「フォントサイズに耐える」の定義。** px 固定の寸法が
+ * 残っていると、字だけ大きくなって箱が追いつかず切れる。
+ *
+ * 効かせるには UI 側の font-size が rem 基準である必要がある。
+ */
+export async function enlargeFont(page, size = '24px') {
+  await page.addStyleTag({ content: `html { font-size: ${size} }` });
+  // レイアウトが落ち着くのを待つ
+  await page.waitForTimeout(200);
+}

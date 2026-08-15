@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
   openApp, settle, pushBeacons, enableBluetooth, pretendBluetoothOff,
-  viewState, markerState, expectMapScreenshot,
+  viewState, markerState, expectMapScreenshot, expectUiScreenshot, enlargeFont,
   BEACON_F7, BEACON_F7_FAR, BEACON_F8, SHELF_ID,
 } from './support/app.mjs';
 import { stubNetwork } from './support/stub.mjs';
@@ -292,6 +292,71 @@ test.describe('検索', () => {
 
     await settle(page);
     await expectMapScreenshot(page, 'search-shelf.png');
+    expect(errors).toEqual([]);
+  });
+
+  /*
+   UI の見た目を撮る。**#map のゴールデンには UI が写らない**ので、
+   検索結果の一覧はここができるまで画像で検証されていなかった。
+
+   等倍と拡大の2枚を撮るのが要点。px 固定の寸法が残っていると、
+   拡大したときに字だけ大きくなって箱が追いつかず切れる。
+   */
+  test('検索結果の一覧が等倍でも拡大でも崩れない', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await page.fill('#ui input[type=search]', 'ねこ');
+    await page.press('#ui input[type=search]', 'Enter');
+    await page.waitForSelector('#ui .books > div', { timeout: 20000 });
+    await expect(page.locator('#ui .books > div')).toHaveCount(2);
+    // 所蔵が入るまで待つ（.notfetch が外れると不透明になる）
+    await page.waitForSelector('#ui .books .stocks:not(.notfetch)', { timeout: 20000 });
+
+    await expectUiScreenshot(page, 'results.png');
+
+    await enlargeFont(page);
+    await expectUiScreenshot(page, 'results-large.png');
+
+    expect(errors).toEqual([]);
+  });
+
+  test('詳細パネルが等倍でも拡大でも崩れない', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await page.fill('#ui input[type=search]', 'ねこ');
+    await page.press('#ui input[type=search]', 'Enter');
+    await page.waitForSelector('#ui .books > div', { timeout: 20000 });
+    await page.click('#ui .books > div:first-child');
+    await page.waitForSelector('#detail.show', { timeout: 10000 });
+
+    await expectUiScreenshot(page, 'detail.png');
+
+    await enlargeFont(page);
+    await expectUiScreenshot(page, 'detail-large.png');
+
+    expect(errors).toEqual([]);
+  });
+
+  /*
+   フロアボタンの数字が上下中央に来ているか。
+   line-height で中央寄せしていた頃は 1.5px 下がっていて、
+   拡大するとさらにずれていた
+   */
+  test('フロアボタンの数字が等倍でも拡大でも中央に来る', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+    await expect(page.locator('#floors label')).toHaveCount(2);
+
+    await expect(page.locator('#floors')).toHaveScreenshot('floors.png', {
+      maxDiffPixelRatio: 0.002,
+      animations: 'disabled',
+    });
+
+    await enlargeFont(page);
+    await expect(page.locator('#floors')).toHaveScreenshot('floors-large.png', {
+      maxDiffPixelRatio: 0.002,
+      animations: 'disabled',
+    });
+
     expect(errors).toEqual([]);
   });
 
