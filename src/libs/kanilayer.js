@@ -420,9 +420,14 @@ export default class Kanilayer extends LayerGroup {
 
   /**
    * フロアを変更する
-   * @param newId {String} フロアID
-   * @param animation
-   * @returns {*|{min, max}}
+   *
+   * animation を付けると、いま出ているタイルを背面（tileB）へ退避してから
+   * 新しいフロアを前面（tileA）で読み、prerender_ が3段階でフェードさせる。
+   * 付けないと即座に差し替わる
+   *
+   * @param newId {String} フロアID。null なら配架図を消してフロア0のタイルにする
+   * @param animation {Boolean} フェードさせるか
+   * @returns {*} 同じフロアなら undefined、変えたなら changed() の戻り
    */
   setFloorId(newId, animation = true) {
     var newSource;

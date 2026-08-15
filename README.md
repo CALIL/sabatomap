@@ -24,6 +24,28 @@
 
 `android-targetSdkVersion` は**下限ではありません**。合わせて作る API のレベルで、Google Play の要件です。インストールできる端末を狭めるものではないので、下限の話とは混ぜないでください。
 
+## 地図のしくみ
+
+地図は [OpenLayers](https://openlayers.org/) で描いています。レイヤーは3枚重ねです。
+
+| レイヤー | 中身 | 出どころ |
+|---|---|---|
+| ベースタイル | 建物の外の地図 | Mapbox（起動から 500ms 後に表示） |
+| 配架図 (`Kanilayer`) | フロアの平面図と棚のラベル・ハイライト | タイルは `lab.calil.jp/sabatomap/tiles/`、棚の形は S3 の GeoJSON |
+| 現在地 (`Kanimarker`) | 精度円・位置ドット・方位の三角形 | iBeacon の測位結果 |
+
+- **`Kanilayer`**（`src/libs/kanilayer.js`）は `LayerGroup` を継承していて、
+  中にタイル2枚（切り替え時のフェード用）とベクターレイヤー1枚を持ちます。
+  **棚の絵そのものはタイルに焼かれています。** ベクターレイヤーが描くのは
+  棚のラベル、目的地のハイライト、旗のアイコンです
+- **`Kanimarker`**（`src/libs/kanimarker.js`）は専用のベクターレイヤーに
+  Feature を3つ置き、map の `precompose` で毎フレーム位置・向き・精度を更新します。
+  通常・追従・ヘディングアップの3モードがあります
+- 棚の位置と施設・ビーコンの定義は `src/sabae.json`。配架図の GeoJSON は
+  実行時に S3 から取ります（`src/json/*.json` は同じものの控え）
+
+`ol` を上げるときは **`doc/openlayers-migration.md`** を先に読んでください。
+
 ## ビルド手順
 
 ```bash

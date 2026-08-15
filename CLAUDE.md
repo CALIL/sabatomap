@@ -344,8 +344,13 @@ cordova prepare
 
 2. **地図レンダリングシステム**
    - **Kanilayer** (`src/libs/kanilayer.js`): フロアプラン用のカスタムOpenLayersレイヤー
-   - **Kanimarker** (`src/libs/kanimarker.js`): コンパス統合付き利用者位置マーカー
+   - **Kanimarker** (`src/libs/kanimarker.js`): コンパス統合付き利用者位置マーカー。
+     精度円・位置ドット・方位の三角形をそれぞれ Feature として専用の VectorLayer に置き、
+     map の `precompose` で1フレーム分アニメーションを進めて書き戻します
    - ベースタイル: Mapbox、フロアタイル: `lab.calil.jp/sabatomap/tiles/`
+   - **`ol` を上げるときは `doc/openlayers-migration.md` を先に読んでください。**
+     2026-08-15 に 5.3.3 → 10.10.0 へ上げたときの、版ごとに当たった変更・
+     当たらなかった変更・受け入れた見た目の差と、差分を調べる道具がまとまっています
 
 3. **本の検索と位置** (`src/api.js`)
    - 図書カタログ用Unitrad APIとのインターフェース
