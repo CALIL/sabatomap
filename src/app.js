@@ -190,8 +190,6 @@ var initializeApp = function () {
       cordova.plugins.BluetoothStatus.initPlugin();
     }
 
-    // window.open = cordova.InAppBrowser.open;
-
     if (navigator.compass != null) {
       compassSuccess = function (heading) {
         var headingDifference = 7.38;
