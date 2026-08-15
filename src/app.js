@@ -62,9 +62,17 @@ let fitRotation = function (r) {
       virtualAngle = oldAngle + (360 - n);
     }
   }
-  let view =  map.getView();
-  if(view.rotation !== virtualAngle){
-      view.animate({rotation: virtualAngle * Math.PI / 180, duration: 400, easing: easeOut});
+  let view = map.getView();
+  let target = virtualAngle * Math.PI / 180;
+
+  // View に rotation という公開プロパティは無い。ol 3 のころから getRotation() で、
+  // ここは undefined と度数を比べていたので条件が常に真になり、
+  // 向きが合っていても毎回 400ms のアニメーションが走っていた
+  //
+  // 単位もずれていた。virtualAngle は度、getRotation() はラジアン。
+  // 浮動小数の丸めで厳密には一致しないので、0.01 度ぶんの幅で見る
+  if (Math.abs(view.getRotation() - target) > 0.0002) {
+    view.animate({rotation: target, duration: 400, easing: easeOut});
   }
 };
 
