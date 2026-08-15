@@ -60,11 +60,14 @@ class Kanimarker {
    * 現在進行中のアニメーションをキャンセルする
    */
   cancelAnimation() {
+    // heading も消す。コンストラクタの初期値には無いが setHeading が足すので、
+    // 落とすと方位のアニメーションだけ生き残って描画が止まらない
     return this.animations = {
       move: null,
       moveMode: null,
       fade: null,
-      accuracy: null
+      accuracy: null,
+      heading: null
     };
   }
 

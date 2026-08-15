@@ -58,7 +58,64 @@ jobs:
       #   npm run copy && npx cordova run android
       # で、run は端末かエミュレータへアプリを送り込む操作。CI では成立しない。
       #
-      # copy が web 側の組み立て一式（browserify → sass → css/fonts/jsons）に
+      # copy が web 側の組み立て一式（esbuild → sass → vendor/json のコピー）に
       # あたるので、依存を更新して壊れていないかはこれで分かる。
       - name: Build
         run: npm run copy
+
+  e2e:
+    name: 地図の描画
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # www/ を作ってから cordova.js を注入させる。
+      # www/ を直接配信しないのは、index.html が cordova.js を読んで
+      # deviceready を待つ設計で、それを置くのが prepare だから
+      - name: web 側をビルドして browser プラットフォームを用意
+        run: |
+          npm run copy
+          npx cordova prepare browser
+
+      - name: e2e の依存を入れる
+        working-directory: test/e2e
+        run: npm ci
+
+      - name: Chromium を入れる
+        working-directory: test/e2e
+        run: npx playwright install --with-deps chromium
+
+      # jsdom は canvas を持たないので、OpenLayers の描画はここでしか見ていない
+      - name: 地図を描画して基準画像と突き合わせる
+        working-directory: test/e2e
+        run: npx playwright test
+
+      # 基準画像は OS ごとに別ファイル（-chromium-linux.png / -chromium-win32.png）。
+      # 文字の描画が OS で違うので同じ画像は使えない。
+      # Linux 側が無い状態で走らせると playwright が実際の描画を書き出して落ちるので、
+      # ここで持ち帰ってコミットする。
+      - name: 落ちたときの画像とトレースを残す
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-results
+          path: |
+            test/e2e/test-results/
+            test/e2e/playwright-report/
+            test/e2e/map.spec.mjs-snapshots/
+          retention-days: 14

@@ -1,0 +1,204 @@
+import { test, expect } from '@playwright/test';
+import {
+  openApp, settle, pushBeacons, enableBluetooth, viewState, markerState, expectMapScreenshot,
+  BEACON_F7, BEACON_F7_FAR, BEACON_F8, SHELF_ID,
+} from './support/app.mjs';
+
+/*
+ 地図の描画を実ブラウザで確かめる。
+
+ npm test（vitest / jsdom）は canvas を持たないので、Map を作った時点で何も描かれない。
+ OpenLayers の版を上げるときに壊れたと分かるのは、ここだけ。
+
+ ネットワークは全部スタブしてある（test/e2e/support/stub.mjs）。
+ タイルは単色、配架図は src/json/*.json、Unitrad と mapper は固定の応答。
+ */
+
+const PORT = Number(process.env.E2E_PORT ?? 5173);
+
+test.describe('地図', () => {
+  test('起動すると1階の配架図が出る', async ({ page }) => {
+    const { net, errors } = await openApp(page, PORT);
+
+    // 施設が1件なので自動で選ばれ、entrance の 7（1階）が読み込まれる
+    await expect(page.locator('#map')).toHaveClass(/visible/);
+    await expect(page.locator('#floors input[value="7"]')).toBeChecked();
+    expect(net.calls.geojson).toBeGreaterThan(0);
+    expect(net.calls.floorTile).toBeGreaterThan(0);
+    expect(net.calls.baseTile).toBeGreaterThan(0);
+
+    await expectMapScreenshot(page, 'floor-7.png');
+    expect(errors).toEqual([]);
+    expect(net.blocked).toEqual([]);
+  });
+
+  test('フロアを切り替えると2階になる', async ({ page }) => {
+    const { net, errors } = await openApp(page, PORT);
+    const before = net.calls.geojson;
+
+    await page.evaluate(() => window.app.loadFloor('8'));
+    await settle(page);
+
+    await expect(page.locator('#floors input[value="8"]')).toBeChecked();
+    expect(net.calls.geojson).toBeGreaterThan(before);
+
+    await expectMapScreenshot(page, 'floor-8.png');
+    expect(errors).toEqual([]);
+  });
+
+  test('棚を指定するとハイライトされる', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await page.evaluate((id) => window.app.navigateShelf('7', [{ id }]), SHELF_ID);
+    await settle(page);
+
+    await expectMapScreenshot(page, 'shelf-highlight.png');
+    expect(errors).toEqual([]);
+  });
+
+  test('ビーコンを受け取ると現在地マーカーが出る', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    expect(await markerState(page)).toMatchObject({ position: null, mode: 'normal' });
+
+    // 1本だけ押すと nearest1 が当たり、確度 3m の位置が決まる
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+
+    const marker = await markerState(page);
+    expect(marker.position).not.toBeNull();
+    expect(marker.accuracy).toBe(3);
+
+    await expectMapScreenshot(page, 'marker.png');
+    expect(errors).toEqual([]);
+  });
+
+  test('現在地ボタンで追従モードになり中心が現在地に寄る', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    // BLE を持つ端末のふりをしないと invalidateLocator が normal へ戻す
+    await enableBluetooth(page);
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+
+    await page.evaluate(() => window.app.locatorClicked());
+    await settle(page);
+
+    const marker = await markerState(page);
+    expect(marker.mode).toBe('centered');
+
+    // 追従モードでは View の中心がマーカーの位置に一致する
+    const view = await viewState(page);
+    expect(view.center).toEqual(marker.position);
+
+    await expectMapScreenshot(page, 'marker-centered.png');
+    expect(errors).toEqual([]);
+  });
+
+  test('もう一度押すと headingup になる', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await enableBluetooth(page);
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await page.evaluate(() => window.app.getMarker().setHeading(90, true));
+    await settle(page);
+
+    await page.evaluate(() => window.app.locatorClicked());   // normal -> centered
+    await settle(page);
+    await page.evaluate(() => window.app.locatorClicked());   // centered -> headingup
+    await settle(page);
+
+    expect(await markerState(page)).toMatchObject({ mode: 'headingup' });
+    await expectMapScreenshot(page, 'marker-headingup.png');
+    expect(errors).toEqual([]);
+  });
+
+  /*
+   locatorClicked の normal 分岐と invalidateLocator は
+   cordova.plugins.BluetoothStatus.hasBTLE / BTenabled を見る。
+   ブラウザのプロキシは BLE を持たないので、現在地ボタンは追従モードに入らず
+   「この機種は現在地を測定できません」を出して地図を合わせ直すだけになる。
+   **change:mode の購読者がその場で normal へ戻すため、追従モードには到達できない。**
+   実機と挙動が違う場所なので固定しておく。
+   */
+  test('BLE が無い端末では現在地ボタンが測定できない旨を出す', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+
+    await page.evaluate(() => window.app.locatorClicked());
+
+    await expect(page.locator('#locator > div')).toHaveText('この機種は現在地を測定できません');
+    expect(await markerState(page)).toMatchObject({ mode: 'normal' });
+    expect(errors).toEqual([]);
+  });
+
+  test('方位を受け取るとマーカーが回る', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await page.evaluate(() => window.app.getMarker().setHeading(90, true));
+    await settle(page);
+
+    expect(await markerState(page)).toMatchObject({ direction: 90 });
+
+    await expectMapScreenshot(page, 'marker-heading.png');
+    expect(errors).toEqual([]);
+  });
+
+  test('同じフロアの別のビーコンを受け取ると現在地が動く', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+    const first = await markerState(page);
+
+    await pushBeacons(page, [{ ...BEACON_F7_FAR, rssi: -50 }]);
+    await settle(page);
+    const second = await markerState(page);
+
+    expect(second.position).not.toEqual(first.position);
+    expect(errors).toEqual([]);
+  });
+
+  /*
+   kanikama.updateFloor は「現在のフロアを 5 秒間以上検出していない場合」にだけ
+   フロアを切り替える。人が階をまたぐ途中で行き来しないための履歴条件で、
+   別フロアのビーコンを1回受け取っただけでは変わらないのが正しい。
+   */
+  test('別フロアのビーコンを受け取ってもすぐには切り替わらない', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+    await expect(page.locator('#floors input[value="7"]')).toBeChecked();
+
+    await pushBeacons(page, [{ ...BEACON_F8, rssi: -40 }]);
+    await settle(page);
+
+    await expect(page.locator('#floors input[value="7"]')).toBeChecked();
+    expect(errors).toEqual([]);
+  });
+});
+
+test.describe('検索', () => {
+  test('検索して本を開くと棚がハイライトされる', async ({ page }) => {
+    const { net, errors } = await openApp(page, PORT);
+
+    await page.fill('#ui input[type=search]', 'ねこ');
+    await page.press('#ui input[type=search]', 'Enter');
+    await page.waitForSelector('#ui .books > div', { timeout: 20000 });
+
+    expect(net.calls.search).toBe(1);
+    await expect(page.locator('#ui .books > div')).toHaveCount(2);
+
+    await page.click('#ui .books > div:first-child');
+    await page.waitForSelector('#detail.show', { timeout: 10000 });
+    await expect(page.locator('#detail .stocks .stockA')).toHaveText('一般書架 [3]');
+
+    await settle(page);
+    await expectMapScreenshot(page, 'search-shelf.png');
+    expect(errors).toEqual([]);
+  });
+});
