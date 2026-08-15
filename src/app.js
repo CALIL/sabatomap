@@ -11,6 +11,9 @@ import Kanimarker from './libs/kanimarker.js';
 import Kanilayer from './libs/kanilayer.js';
 import InitUI from './component/App.jsx';
 import rules from './sabae.json';
+// デバッグビルド専用。__DEBUG__ が false の release では、下の if ごと
+// minify に落とされ、このモジュール自体もバンドルに入らない
+import createBeaconDebug from './libs/beacondebug.js';
 
 var MAPBOX_TOKEN = "pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w";
 
@@ -163,7 +166,8 @@ var loadFloor = function (id) {
   return setTimeout(fitFloor, 100);
 };
 
-// 測位できなかった理由を切り分けるための計数。app.getDiagnostics() で読む。
+// 測位できなかった理由を切り分けるための計数。
+// app.getDiagnostics() と、デバッグビルドの画面表示から読む。
 //
 // ranging は圏内にビーコンが無くても1秒ごとに空配列で呼ばれる。だから
 // 「呼ばれた回数」と「見えたビーコンの総数」は別のことを教えてくれる。
@@ -176,11 +180,48 @@ var loadFloor = function (id) {
 // 空のスキャン結果が返る**ので、JS からはこの2つを区別できない。
 var rangingCallbacks = 0;
 var beaconsSeen = 0;
+var lastRangeAt = null;
+var lastBeacons = [];
+
+/** デバッグビルドでだけ作られる画面表示。release では丸ごと落ちる */
+var beaconDebug = null;
 
 var didRangeBeaconsInRegion = function (beacons) {
   rangingCallbacks++;
   beaconsSeen += beacons.length;
-  return kanikama.push(beacons);
+  lastRangeAt = Date.now();
+  lastBeacons = beacons;
+
+  var result = kanikama.push(beacons);
+
+  if (beaconDebug !== null) {
+    beaconDebug.update();
+  }
+
+  return result;
+};
+
+/**
+ * 測位まわりの実況
+ *
+ * 実機で「現在地が出ない」と言われたときに、どこで止まっているかを切り分ける。
+ *
+ *   ranging が 0                  → 検出が始まっていない（権限・プラグイン）
+ *   ranging はあるが beacons が 0 → スキャンは回っているが1本も見えていない
+ *   beacons はあるが position が null → 測位アルゴリズムまで届いていない
+ */
+var diagnostics = function () {
+  return {
+    platform: (typeof cordova !== "undefined" && cordova !== null) ? cordova.platformId : "web",
+    ranging: rangingCallbacks,
+    beacons: beaconsSeen,
+    lastRangeAt: lastRangeAt,
+    lastBeacons: lastBeacons,
+    facility: kanikama.currentFacility ? kanikama.currentFacility.id : null,
+    floor: kanikama.currentFloor ? kanikama.currentFloor.id : null,
+    position: kanikama.currentPosition,
+    heading: kanikama.heading
+  };
 };
 
 // スプラッシュを出しておく最短時間（ミリ秒）。ロゴを見せるための下限で、
@@ -429,6 +470,19 @@ var initializeApp = function () {
   window.addEventListener("BluetoothStatus.disabled", invalidateLocator);
   kanikama.facilities_ = rules;
 
+  /*
+   ビーコンの受信状況を画面に出す。**デバッグビルドだけ。**
+
+   実機で測位が出ないとき、USB を繋いで chrome://inspect を開ける状況ばかりでは
+   ないので、端末だけで切り分けられるようにしてある。
+   pointer-events: none なので下のボタンはそのまま押せる。
+   */
+  if (__DEBUG__) {
+    beaconDebug = createBeaconDebug(diagnostics, {
+      ios: typeof cordova !== "undefined" && cordova !== null && cordova.platformId === "ios"
+    });
+  }
+
   // プラットフォームを問わず走らせる。上の cordova ブロックは
   // platformId !== "browser" で括られていて、ブラウザ版はそこを通らない
   scheduleHideSplash();
@@ -635,26 +689,13 @@ export default class App {
   }
 
   /**
-   * 測位まわりの実況を返す
+   * 測位まわりの実況を返す（上の diagnostics() を参照）
    *
-   * 実機で「現在地が出ない」と言われたときに、どこで止まっているかを
-   * その場で切り分けるための入口。Chrome の chrome://inspect から
-   * `app.getDiagnostics()` を叩けば、ビルドし直さずに状態が読める。
-   *
-   *   ranging が 0            → 検出が始まっていない（権限・プラグイン）
-   *   ranging はあるが beacons が 0 → スキャンは回っているが1本も見えていない
-   *   beacons はあるが position が null → 測位アルゴリズムまで届いていない
+   * デバッグビルドでは同じ内容が画面に出ている。こちらは release でも使えるので、
+   * USB を繋げるときは chrome://inspect から `app.getDiagnostics()` で読む。
    */
   getDiagnostics() {
-    return {
-      platform: (typeof cordova !== "undefined" && cordova !== null) ? cordova.platformId : "web",
-      ranging: rangingCallbacks,
-      beacons: beaconsSeen,
-      facility: kanikama.currentFacility ? kanikama.currentFacility.id : null,
-      floor: kanikama.currentFloor ? kanikama.currentFloor.id : null,
-      position: kanikama.currentPosition,
-      heading: kanikama.heading
-    };
+    return diagnostics();
   }
 }
 

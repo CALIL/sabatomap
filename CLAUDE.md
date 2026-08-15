@@ -203,6 +203,43 @@ artifact から持ち帰ってコミットします。
 | `app.pushBeacons(beacons)` | 本番で cordova のプラグインが呼ぶ `didRangeBeaconsInRegion` と同じ入口 |
 | `app.getMap()` | View の状態を見る / `rendercomplete` を待つ |
 | `app.getMarker()` | `cancelAnimation()` で描画を止める |
+| `app.getDiagnostics()` | 測位の実況（`ranging` / `beacons` / `facility` / `floor` / `position`） |
+
+### 測位が出ないときの切り分け
+
+`app.getDiagnostics()` を読みます。**`ranging` は圏内にビーコンが無くても
+1秒ごとに増える**ので、増えているかどうかで意味が変わります。
+
+| | |
+|---|---|
+| `ranging` が 0 | 検出がそもそも始まっていない（権限・プラグイン） |
+| `ranging` はあるが `beacons` が 0 | スキャンは回っているが1本も見えていない |
+| `beacons` はあるが `position` が null | 測位アルゴリズムまで届いていない |
+
+2番目は**館外にいるとき（正常）と、Android 12 以降で「付近のデバイス」または
+位置情報の実行時許可が無いときの両方**で起きます。許可が無い場合はエラーではなく
+空のスキャン結果が返るので、JS からは区別できません。
+
+### デバッグビルドは同じ内容を画面に出します
+
+実機で測位が出ないとき、USB を繋いで `chrome://inspect` を開ける状況ばかりでは
+ありません。`npm run copy:debug` で作ると、`src/libs/beacondebug.js` が
+検索欄の下に受信状況を出します（`pointer-events: none` なので下のボタンは押せます）。
+
+```
+BLE android  ranging 128（1秒前）
+見えている 115:-62 114:-78
+のべ 342 本  施設 7  フロア 7
+測位 nearest1  誤差 3m  minor 115
+方位 137
+```
+
+`android.yml` が焼く debug APK はこちらです。**`release` では `__DEBUG__` が
+false に畳まれ、`beacondebug.js` ごとバンドルから落ちます**（`npm run copy` の
+成果物を grep して確認すること）。`ci.yml` は従来どおり `npm run copy` を見ています。
+
+見え方を確かめるには `test/e2e/shot-debug.mjs` を使います（spec ではないので
+`playwright test` では拾われません）。
 
 **追従モードはブラウザでは到達できません。** `invalidateLocator`（`app.js`）が
 `change:mode` を購読していて、`cordova.plugins.BluetoothStatus.hasBTLE` か
@@ -411,10 +448,11 @@ npm script の素の browserify へ移った際、replace 工程が無くなっ�
 
 - `npm start` - `www/` を作って `cordova prepare` → ブラウザで実行
 - `npm run watch` - `src/` を見張って `www/` を作り直し続ける
-- `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**CI が呼ぶのはこれ**
+- `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**`ci.yml` が呼ぶのはこれ**
+- `npm run copy:debug` - 同じものを minify せず `__DEBUG__` を立てて作る。**`android.yml` が呼ぶのはこれ**
 
 `copy` / `compile` / `build_browser` は同じ `node tools/build.mjs release` の別名です。
-`copy` という名前は `ci.yml` と `android.yml` が呼んでいるので変えないこと。
+`copy` という名前は `ci.yml` が、`copy:debug` は `android.yml` が呼んでいるので変えないこと。
 
 ### ビルド
 
