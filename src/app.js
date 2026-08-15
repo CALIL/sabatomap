@@ -163,8 +163,44 @@ var loadFloor = function (id) {
   return setTimeout(fitFloor, 100);
 };
 
+// 測位できなかった理由を切り分けるための計数。
+//
+// ranging は圏内にビーコンが無くても1秒ごとに空配列で呼ばれる。だから
+// 「呼ばれた回数」と「見えたビーコンの総数」は別のことを教えてくれる。
+//
+//   呼ばれていない       → ranging がそもそも始まっていない
+//   呼ばれるが総数が0    → スキャンは回っているがビーコンが1本も見えていない
+//
+// 後者は館外にいるとき（正常）と、Android 12 以降で「付近のデバイス」または
+// 位置情報の実行時許可が無いときの両方で起きる。**許可が無い場合はエラーではなく
+// 空のスキャン結果が返る**ので、JS からはこの2つを区別できない。
+// 区別できないぶんは文言で両方に触れる。
+var rangingCallbacks = 0;
+var beaconsSeen = 0;
+
 var didRangeBeaconsInRegion = function (beacons) {
+  rangingCallbacks++;
+  beaconsSeen += beacons.length;
   return kanikama.push(beacons);
+};
+
+/**
+ * 測位できなかったときの案内を選ぶ
+ *
+ * 「現在地を取得できませんでした」だけだと、館外にいるのか、権限が無くて
+ * BLE が一切見えていないのかが区別できず、利用者も開発者も次の手を打てない。
+ */
+var locateFailureMessage = function () {
+  if (!(typeof cordova !== "undefined" && cordova !== null) || cordova.platformId === "browser") {
+    return "現在地を取得できませんでした";
+  }
+  if (rangingCallbacks === 0) {
+    return "ビーコンの検出を開始できていません。アプリの権限を確認してください";
+  }
+  if (beaconsSeen === 0) {
+    return "ビーコンが見つかりません。館内で、位置情報と「付近のデバイス」を許可してお試しください";
+  }
+  return "現在地を取得できませんでした";
 };
 
 // スプラッシュを出しておく最短時間（ミリ秒）。ロゴを見せるための下限で、
@@ -500,10 +536,11 @@ var waitPosition = function () {
 
     if (waitingPosition === 0) {
       if (kanikama.currentPosition === null) {
-        // Bluetooth の状態を先に確かめられない環境では、ここでしか伝えられない
-        UI.notify(canTrustBluetoothState()
-          ? "現在地を取得できませんでした"
-          : "現在地を取得できませんでした。BluetoothがONか確かめてください");
+        // かつては Android でだけ「BluetoothがONか確かめてください」と足していたが、
+        // **測位できない理由の大半は館外にいてビーコンが無いこと**で、
+        // Bluetooth が入っていても出てしまい誤解を招いた。
+        // 決め打ちをやめ、ranging の実績から選ぶ
+        UI.notify(locateFailureMessage());
       }
       if (kanikama.currentPosition && kanikama.accuracy > 10) {
         UI.notify("棚の中に入ると正確な位置がわかります");
@@ -613,6 +650,29 @@ export default class App {
    */
   getMarker() {
     return kanimarker;
+  }
+
+  /**
+   * 測位まわりの実況を返す
+   *
+   * 実機で「現在地が出ない」と言われたときに、どこで止まっているかを
+   * その場で切り分けるための入口。Chrome の chrome://inspect から
+   * `app.getDiagnostics()` を叩けば、ビルドし直さずに状態が読める。
+   *
+   *   ranging が 0            → 検出が始まっていない（権限・プラグイン）
+   *   ranging はあるが beacons が 0 → スキャンは回っているが1本も見えていない
+   *   beacons はあるが position が null → 測位アルゴリズムまで届いていない
+   */
+  getDiagnostics() {
+    return {
+      platform: (typeof cordova !== "undefined" && cordova !== null) ? cordova.platformId : "web",
+      ranging: rangingCallbacks,
+      beacons: beaconsSeen,
+      facility: kanikama.currentFacility ? kanikama.currentFacility.id : null,
+      floor: kanikama.currentFloor ? kanikama.currentFloor.id : null,
+      position: kanikama.currentPosition,
+      heading: kanikama.heading
+    };
   }
 }
 
