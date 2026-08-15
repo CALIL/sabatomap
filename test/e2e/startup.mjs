@@ -38,11 +38,16 @@ for (let i = 0; i < RUNS; i++) {
     document.addEventListener('deviceready', () => mark('deviceready'), false);
 
     // 実機のスプラッシュはアプリが hide を呼ぶまで出る。
-    // ブラウザには実装が無いので、呼ばれた時刻だけ記録する
-    navigator.splashscreen = {
-      hide: () => mark('splashHidden'),
-      show: () => {},
-    };
+    // ブラウザには実装が無いので、呼ばれた時刻だけ記録する。
+    // cordova.js の modulemapper が後から上書きしにいくので、
+    // 代入ではなく再定義できないアクセサとして置く
+    const stub = {hide: () => mark('splashHidden'), show: () => {}};
+    Object.defineProperty(navigator, 'splashscreen', {
+      configurable: false,
+      enumerable: true,
+      get: () => stub,
+      set: () => {},
+    });
 
     // window.app が生えた瞬間と initializeApp が呼ばれた瞬間
     let app;
@@ -86,6 +91,10 @@ for (let i = 0; i < RUNS; i++) {
     m.once('rendercomplete', () => { window.__mark('settled'); res(); });
     m.render();
   }));
+  // スプラッシュを消す時刻は地図より後になりうるので最後に待つ。
+  // 呼ばれないビルドもあるので取りこぼしても止めない
+  await page.waitForFunction(() => window.__t.splashHidden !== undefined, null, {timeout: 9000})
+    .catch(() => {});
 
   const t = await page.evaluate(() => {
     const nav = performance.getEntriesByType('navigation')[0];

@@ -41,6 +41,9 @@ export async function openApp(page, port) {
     const map = window.app.getMap();
     return map && map.getLayers().item(0).getVisible();
   }, null, { timeout: 20000 });
+  // スプラッシュ（www/index.html の #splash）は最短 2 秒出る。
+  // 全画面を覆うので、消えるまで待たないと地図の代わりにこれを撮ってしまう
+  await page.waitForSelector('#splash', { state: 'detached', timeout: 20000 });
   await settle(page);
   return { net, errors };
 }

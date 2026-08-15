@@ -164,6 +164,64 @@ var didRangeBeaconsInRegion = function (beacons) {
   return kanikama.push(beacons);
 };
 
+// スプラッシュを出しておく最短時間（ミリ秒）。ロゴを見せるための下限で、
+// アプリの準備はこれより早く終わる（実測で地図が描き終わるのが 0.5 秒前後）
+var SPLASH_MIN = 2000;
+
+// 地図が出ないときの打ち切り。通信が死んでいても必ず消えるようにする
+var SPLASH_MAX = 8000;
+
+var splashHidden = false;
+
+/**
+ * スプラッシュを消す
+ *
+ * index.html の #splash（ブラウザ版の本体）と、cordova のネイティブスプラッシュを
+ * 同時に消す。実機ではネイティブが上に被さっているので #splash は見えない。
+ *
+ * ネイティブ側は config.xml の AutoHideSplashScreen=false と対で動く。
+ * true のままだと cordova-android は hide を受け付けず、SplashScreenDelay の
+ * 時間だけ出しっぱなしになる
+ */
+var hideSplash = function () {
+  if (splashHidden) {
+    return;
+  }
+  splashHidden = true;
+
+  var el = document.getElementById("splash");
+  if (el != null) {
+    el.classList.add("hidden");
+    setTimeout(function () {
+      if (el.parentNode != null) {
+        el.parentNode.removeChild(el);
+      }
+    }, 300);
+  }
+
+  if (navigator.splashscreen != null) {
+    navigator.splashscreen.hide();
+  }
+};
+
+/**
+ * 地図が描き終わってからスプラッシュを消す。ただし最短 SPLASH_MIN は待つ
+ */
+var scheduleHideSplash = function () {
+  setTimeout(hideSplash, SPLASH_MAX);
+
+  var done = function () {
+    var rest = SPLASH_MIN - performance.now();
+    setTimeout(hideSplash, rest > 0 ? rest : 0);
+  };
+
+  if (map != null) {
+    map.once("rendercomplete", done);
+  } else {
+    done();
+  }
+};
+
 var initializeApp = function () {
   var region;
   var delegate;
@@ -232,10 +290,6 @@ var initializeApp = function () {
       locationManager.setDelegate(delegate);
       region = new locationManager.BeaconRegion("sabatomap", "00000000-71C7-1001-B000-001C4D532518");
       locationManager.startRangingBeaconsInRegion(region).fail(console.error);
-    }
-
-    if (navigator.splashscreen != null) {
-      setTimeout(navigator.splashscreen.hide, 2000);
     }
 
     if (navigator.connection != null && navigator.connection.type === "none") {
@@ -350,6 +404,11 @@ var initializeApp = function () {
   window.addEventListener("BluetoothStatus.enabled", invalidateLocator);
   window.addEventListener("BluetoothStatus.disabled", invalidateLocator);
   kanikama.facilities_ = rules;
+
+  // プラットフォームを問わず走らせる。上の cordova ブロックは
+  // platformId !== "browser" で括られていて、ブラウザ版はそこを通らない
+  scheduleHideSplash();
+
   return loadFacility("7");
 };
 
