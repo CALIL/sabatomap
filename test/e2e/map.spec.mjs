@@ -294,4 +294,31 @@ test.describe('検索', () => {
     await expectMapScreenshot(page, 'search-shelf.png');
     expect(errors).toEqual([]);
   });
+
+  /*
+   検索欄の右のボタンは1つしかなく、通常は ✘（検索結果を閉じる）、
+   集計中は .loading が付いてスピナーが :before で乗る。
+   両方出すと重なって読めないので、読み込み中は ✘ を隠す。
+
+   Unitrad は running が true の間ポーリングを続ける。
+   スタブの searchRunning でその状態を作る。
+   */
+  test('集計中は ✘ を隠してスピナーだけ出す', async ({ page }) => {
+    await stubNetwork(page, { port: PORT, searchRunning: true });
+    await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'commit' });
+    await page.waitForSelector('#splash', { state: 'detached', timeout: 20000 });
+
+    await page.fill('#ui input[type=search]', 'ねこ');
+    await page.press('#ui input[type=search]', 'Enter');
+    await page.waitForSelector('#ui .clear.loading', { timeout: 20000 });
+
+    const clear = page.locator('#ui .clear.loading');
+    // ボタン自体は押せるまま（検索結果を閉じられる）
+    await expect(clear).toBeVisible();
+    // 中の ✘ だけが消えている
+    await expect(clear.locator('.icon')).toBeHidden();
+    // スピナーは出ている
+    expect(await clear.evaluate((el) =>
+      getComputedStyle(el, ':before').animationName)).toBe('spinner');
+  });
 });
