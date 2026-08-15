@@ -241,6 +241,11 @@ false に畳まれ、`beacondebug.js` ごとバンドルから落ちます**（`
 見え方を確かめるには `test/e2e/shot-debug.mjs` を使います（spec ではないので
 `playwright test` では拾われません）。
 
+**`copy:debug` のあとは `npm run copy` に戻してからコミットすること。**
+`www/css/app.css` は追跡されている生成物なので、minify されていない版
+（9.5KB → 640行ほど増える）がそのまま差分に出ます。`www/js/all.js` は
+追跡外なので影響しません。
+
 **追従モードはブラウザでは到達できません。** `invalidateLocator`（`app.js`）が
 `change:mode` を購読していて、`cordova.plugins.BluetoothStatus.hasBTLE` か
 `BTenabled` が偽なら**その場で `setMode("normal")` に戻す**からです。
