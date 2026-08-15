@@ -116,6 +116,22 @@ function jsOptions({ production }) {
        */
       define: { 'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development') },
       /*
+       react / react-dom を preact/compat に差し替える。ソースは react のまま書ける。
+
+       react-dom が成果物の 28%（180KB）を占めていた。preact に替えると
+       628KB が 448KB になる。解析と実行が短くなるぶん起動が速い。
+
+       react-dom/client は preact/compat/client に対応が要る（createRoot がある）。
+       react/jsx-runtime は今は使っていないが、将来 automatic runtime に
+       切り替えたときに素の react を掴まないよう先に張っておく。
+       */
+      alias: {
+        react: 'preact/compat',
+        'react-dom': 'preact/compat',
+        'react-dom/client': 'preact/compat/client',
+        'react/jsx-runtime': 'preact/compat/jsx-runtime',
+      },
+      /*
        esbuild の既定は charset: 'ascii' で、日本語を \uXXXX に展開する。
        browserify は生の UTF-8 を出していて本番で動いているので挙動を合わせる。
        www/index.html が <meta charset="utf-8"> を宣言しており、
