@@ -407,8 +407,11 @@ export default class Kanilayer extends LayerGroup {
     this.targetPosition = null;
     this.targetImageUrl = preThis.targetImageUrl;
     this.targetImageUrl2 = preThis.targetImageUrl2;
-    this.vector.on("postcompose", this.postcompose_.bind(this));
-    this.tileA.on("precompose", this.precompose_.bind(this));
+    // ol 6 でレイヤーの描画イベントは precompose/postcompose から
+    // prerender/postrender へ改名された。map 側は名前が変わっていないが、
+    // 代わりにキャンバスを持たなくなっている
+    this.vector.on("postrender", this.postrender_.bind(this));
+    this.tileA.on("prerender", this.prerender_.bind(this));
 
     if (options_.kFloor != null) {
       this.setFloorId(options_.kFloor, false);
@@ -496,10 +499,11 @@ export default class Kanilayer extends LayerGroup {
   }
 
   /**
-   * @nodoc マップ描画処理
+   * @nodoc タイル描画前の処理。フロア切り替えのフェードを進める
+   * @param event {import("ol/render/Event").default}
    * @private
    */
-  precompose_(event) {
+  prerender_(event) {
     var time;
     var frameState = event.frameState;
 
@@ -544,10 +548,11 @@ export default class Kanilayer extends LayerGroup {
   }
 
   /**
-   * @nodoc マップ描画処理
+   * @nodoc ベクターレイヤー描画後の処理。デバッグ表示を重ねる
+   * @param event {import("ol/render/Event").default}
    * @private
    */
-  postcompose_(event) {
+  postrender_(event) {
     var debugText;
     var context;
 

@@ -263,7 +263,6 @@ var initializeApp = function () {
     layers: [osm, kanilayer],
     controls: [],
     target: "map",
-    logo: false,
 
     view: new View({
       center: [15139450.747885207, 4163881.1440642904],
@@ -358,9 +357,16 @@ var navigateShelf = function (floorId, shelves) {
   kanilayer.setTargetShelves(shelves);
 
   if (shelves.length > 0) {
+    // 第2引数はオプションオブジェクト。ol 4 までは size を直接渡す形だったが
+    // ol 5 で変わっており、配列を渡しても無視されていた
+    //
+    // ol 5 の fit は既定でズームレベルへ丸めていた（実測 19.404 → 19）。
+    // ol 6 からは View の constrainResolution（既定 false）に従うので
+    // 丸めずぴったり合わせる。棚へ移動したときに一段引かなくなり、
+    // 配架図のラベルが出るようになった
     return map.getView().fit(
       transformExtent(homeBoundingBox, "EPSG:4326", "EPSG:3857"),
-      map.getSize()
+      {size: map.getSize()}
     );
   }
 };

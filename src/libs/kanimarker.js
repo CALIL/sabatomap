@@ -4,16 +4,52 @@
  This software is released under the MIT License.
  http://opensource.org/licenses/mit-license.php
  */
-import {easeOut,linear,inAndOut} from 'ol/easing';
+import {easeOut, linear, inAndOut} from 'ol/easing';
+import Feature from 'ol/Feature';
+import Circle from 'ol/geom/Circle';
+import Point from 'ol/geom/Point';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
-import Circle from 'ol/geom/Circle';
 import Stroke from 'ol/style/Stroke';
+import CircleStyle from 'ol/style/Circle';
+import Icon from 'ol/style/Icon';
+
+// マーカーの寸法（CSS ピクセル）。
+//
+// ol 5 では地図座標で指定していて、位置ドットは `4 * pixelRatio * resolution`
+// マップ単位＝ `4 * pixelRatio` CSS ピクセルだった。つまり retina で 8、
+// それ以外で 4 と、同じ端末設定でも大きさが変わっていた。
+// Feature に載せると CSS ピクセルで素直に書けるので、実機（retina）で
+// 描かれていた値をそのまま定数にする。
+const DOT_RADIUS = 8;
+const DOT_STROKE_WIDTH = 3;
+
+// 方位を示す三角形。ol 5 では生の canvas に
+// moveTo(0,-20) / lineTo(-7,-12) / lineTo(7,-12) で描いていた。
+//
+// 縁は付けない。元のコードは strokeStyle と lineWidth 3 を設定していたが
+// stroke() を呼んでおらず fill() だけなので、実際には縁が無い。
+// SVG に stroke を書くと内側へ 1.5 食い込んで、見える青が
+// 幅 14 から 7.4 まで縮む（実測で確認済み）
+//
+// 回転の中心をマーカー位置に合わせたいので、原点を中央に置いた
+// 正方形にしてある。頂点までの距離は 20 なので 44x44 で足りる。
+// width/height と viewBox は必ず同じ値にする。ずらすと ol が固有サイズと
+// viewBox のどちらで大きさを決めるかに結果が左右される
+const HEADING_ICON_SRC =
+  'data:image/svg+xml;charset=utf-8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">' +
+    '<path d="M22 2 L15 10 L29 10 Z" fill="#00a0e9"/>' +
+    '</svg>'
+  );
 
 class Kanimarker {
   /**
    * マップに現在地マーカーをインストールする
-   * @param map {ol.Map} マップオブジェクト
+   * @param map {import("ol/Map").default} マップオブジェクト
    */
   constructor(map) {
     // [ol.Map] マップオブジェクト（読み込み専用）
@@ -49,9 +85,37 @@ class Kanimarker {
     this.debug_ = false;  // デバッグ表示の有無(内部ステート)
     this.callbacks = {};  // コールバック用変数
 
+    // 精度円・位置ドット・方位の三角形をそれぞれ Feature にする。
+    // ol 5 では postcompose で map のキャンバスへ直接描いていたが、
+    // ol 6 以降は map の描画イベントがキャンバスを持たない
+    this.accuracyFeature_ = new Feature();
+    this.positionFeature_ = new Feature();
+    this.headingFeature_ = new Feature();
+
+    // 3個しか入らないので空間インデックスは要らない
+    this.source_ = new VectorSource({
+      features: [this.accuracyFeature_, this.positionFeature_, this.headingFeature_],
+      useSpatialIndex: false
+    });
+
+    // updateWhile* が無いと、ビューが動いている間はレイヤーが
+    // 前のフレームのキャンバスを平行移動するだけになり、マーカーが遅れる
+    this.layer_ = new VectorLayer({
+      source: this.source_,
+      updateWhileAnimating: true,
+      updateWhileInteracting: true
+    });
+
+    // 前のフレームで Feature に書いた内容。同じなら触らない。
+    // 毎フレーム書き換えると changed() が render を呼び続けて止まらなくなる
+    this.applied_ = null;
+
     if (this.map != null) {
-      this.map.on("postcompose", this.postcompose_.bind(this));
-      this.map.on("precompose", this.precompose_.bind(this));
+      this.map.addLayer(this.layer_);
+      // map の precompose はどのレイヤーの描画よりも先に飛ぶので、
+      // ここで Feature を書き換えれば同じフレームに載る
+      this.map.on("precompose", this.updateFrame_.bind(this));
+      this.layer_.on("postrender", this.renderDebug_.bind(this));
       this.map.on("pointerdrag", this.pointerdrag_.bind(this));
     }
   }
@@ -137,28 +201,6 @@ class Kanimarker {
             rotation: -(this.direction / 180 * Math.PI),
             easing: easeOut
           })
-
-          //if (from - to !== 0) {
-            
-
-            /*
-            animated = true;
-            this.animations.moveMode = null;
-
-            this.animations.rotationMode = {
-              start: new Date(),
-              from: diff,
-              to: 0,
-              duration: d,
-
-              animate: function (frameStateTime) {
-                var time = (frameStateTime - this.start) / this.duration;
-                this.current = this.from + ((this.to - this.from) * ol.easing.easeOut(time));
-                return time <= 1;
-              }
-            };
-            */
-         // }
         }
 
         if (!animated) {
@@ -166,34 +208,11 @@ class Kanimarker {
           to = this.position;
 
           if (from[0] - to[0] !== 0 || from[1] - to[1] !== 0) {
-            //froms = [from[0] - to[0], from[1] - to[1]];
-            //if (this.animations.moveMode != null && this.animations.moveMode.animate(new Date())) {
-            //  froms = [animations.current[0], animations.moveMode.current[1]];
-            //}
             this.map.getView().animate({
               duration: 800,
               center: to,
               easing: easeOut,
             })
-            /*
-            this.animations.moveMode = {
-              start: new Date(),
-              from: froms,
-              to: [0, 0],
-              duration: 800,
-
-              animate: function (frameStateTime) {
-                var time = (frameStateTime - this.start) / this.duration;
-
-                this.current = [
-                  this.from[0] + ((this.to[0] - this.from[0]) * ol.easing.easeOut(time)),
-                  this.from[1] + ((this.to[1] - this.from[1]) * ol.easing.easeOut(time))
-                ];
-
-                return time <= 1;
-              }
-            };
-            */
           }
         }
 
@@ -410,19 +429,16 @@ class Kanimarker {
   }
 
   /**
-   * nodoc マップ描画処理
+   * nodoc 1フレーム分アニメーションを進めて Feature へ反映する
+   *
+   * map の precompose はレイヤーの描画より前に飛ぶので、ここで書き換えれば
+   * 同じフレームに載る。ol 5 では postcompose で直接キャンバスへ描いていた
+   *
+   * @param event {import("ol/render/Event").default}
+   * @private
    */
-  postcompose_(event) {
-    var txt;
-    var pixel;
-    var diff;
-    var opacity_;
-    var maxSize;
-    var accuracySize;
-    var context = event.context;
-    var vectorContext = event.vectorContext;
+  updateFrame_(event) {
     var frameState = event.frameState;
-    var pixelRatio = frameState.pixelRatio;
     var opacity = 1;
     var position = this.position;
     var accuracy = this.accuracy;
@@ -465,172 +481,177 @@ class Kanimarker {
       }
     }
 
-    if (position != null) {
-      accuracySize = (accuracy / frameState.viewState.resolution);
-      maxSize = Math.max(this.map.getSize()[0], this.map.getSize()[1]);
+    // 追従モードではビューの中心をマーカーへ寄せる。
+    // ol 5 は frameState.viewState.center を直接書き換えていたが、
+    // 同じことを View 側へ一本化した。値が変わっていないときに
+    // setCenter を呼ぶと changed() が飛んで描画が止まらなくなるので、
+    // 座標を比べてから呼ぶ（position は毎フレーム新しい配列になる）
+    if (position != null && this.mode !== "normal") {
+      var center = this.map.getView().getCenter();
 
-      if (accuracySize > 3 && accuracySize * pixelRatio < maxSize) {
-        opacity_ = 0.2 * opacity;
-
-        if (accuracySize < 30) {
-          opacity_ = opacity_ * (accuracySize / 30);
-        }
-
-        if (accuracySize * pixelRatio > maxSize * 0.2) {
-          diff = accuracySize * pixelRatio - maxSize * 0.2;
-          opacity_ = opacity_ * (1 - diff / (maxSize * 0.4));
-          if (opacity_ < 0) {
-            opacity_ = 0;
-          }
-        }
-
-        if (opacity_ > 0) {
-          vectorContext.setStyle(new Style({
-            fill: new Fill({color:[56, 149, 255,opacity_]})
-          }));
-          vectorContext.drawCircle(new Circle(position, accuracySize * pixelRatio * frameState.viewState.resolution/2));
-        }
+      if (center == null || center[0] !== position[0] || center[1] !== position[1]) {
+        this.map.getView().setCenter(position.slice());
       }
-
-      vectorContext.setStyle(new Style({
-        fill: new Fill({
-          color: [0,160,233,opacity]
-        }),
-        stroke: new Stroke({
-          color: [255, 255, 255,opacity],
-          width: 1.5 * pixelRatio
-        })
-      }));
-      vectorContext.drawCircle(new Circle(position, 4 * pixelRatio * frameState.viewState.resolution));
-      context.save();
-
-      if (this.mode !== "normal") {
-        if (this.animations.moveMode != null) {
-          if (this.animations.moveMode.animate(frameState.time)) {
-            position = position.slice();
-            position[0] -= this.animations.moveMode.current[0];
-            position[1] -= this.animations.moveMode.current[1];
-            frameState.animate = true;
-            pixel = this.map.getPixelFromCoordinate(position);
-            context.translate(pixel[0] * pixelRatio, pixel[1] * pixelRatio);
-          } else {
-            this.animations.moveMode = null;
-            context.translate(context.canvas.width / 2, context.canvas.height / 2);
-          }
-        } else {
-          context.translate(context.canvas.width / 2, context.canvas.height / 2);
-        }
-      } else {
-        pixel = this.map.getPixelFromCoordinate(position);
-        context.translate(pixel[0] * pixelRatio, pixel[1] * pixelRatio);
-      }
-
-      context.rotate((direction / 180 * Math.PI) + frameState.viewState.rotation);
-      context.scale(pixelRatio, pixelRatio);
-      context.beginPath();
-      context.moveTo(0, -20);
-      context.lineTo(-7, -12);
-      context.lineTo(7, -12);
-      context.closePath();
-      context.fillStyle = ("rgba(0, 160, 233, " + (opacity) + ")");
-      context.strokeStyle = ("rgba(255, 255, 255, " + (opacity) + ")");
-      context.lineWidth = 3;
-      context.fill();
-      context.restore();
     }
 
-    if (this.debug_) {
-      txt = ("Position:" + this.position + " Heading:" + this.direction + " Accuracy:" + this.accuracy + " Mode:" + this.mode);
-
-      if (this.animations.move != null) {
-        txt += " [Move]";
-      }
-
-      if (this.animations.heading != null) {
-        txt += " [Rotate]";
-      }
-
-      if (this.animations.accuracy != null) {
-        txt += " [Accuracy]";
-      }
-
-      if (this.animations.fade != null) {
-        txt += " [Fadein/Out]";
-      }
-/*
-      if (this.animations.rotationMode != null) {
-        txt += " [HeadingRotation]" + this.animations.rotationMode.current;
-      }
-*/
-      context.save();
-      context.fillStyle = "rgba(255, 255, 255, 0.6)";
-      context.fillRect(0, context.canvas.height - 20, context.canvas.width, 20);
-      context.font = "10px";
-      context.fillStyle = "black";
-      context.fillText(txt, 10, context.canvas.height - 7);
-      return context.restore();
-    }
+    this.applyToFeatures_(position, accuracy, direction, opacity, frameState);
   }
 
   /**
-   * nodoc マップ描画前の処理
+   * nodoc 計算した状態を Feature の geometry と style へ書く
+   * @private
    */
-  precompose_(event) {
-    // var direction;
-    var position;
-    var frameState;
+  applyToFeatures_(position, accuracy, direction, opacity, frameState) {
+    var resolution = frameState.viewState.resolution;
+    var size = this.map.getSize();
+    var maxSize = size ? Math.max(size[0], size[1]) : 0;
 
-    if (this.position !== null && this.mode !== "normal") {
-      frameState = event.frameState;
-      position = this.position;
+    var applied = position == null
+      ? "hidden"
+      : [position[0], position[1], accuracy, direction, opacity, resolution, maxSize].join(",");
 
-      if (this.animations.move != null) {
-        if (this.animations.move.animate(frameState.time)) {
-          position = this.animations.move.current;
-        } else {
-          this.animations.move = null;
-        }
-      }
+    if (this.applied_ === applied) {
+      return;
+    }
 
-      if (this.animations.moveMode != null) {
-        if (this.animations.moveMode.animate(frameState.time)) {
-          position = position.slice();
-          position[0] += this.animations.moveMode.current[0];
-          position[1] += this.animations.moveMode.current[1];
-          frameState.animate = true;
-        } else {
-          this.animations.moveMode = null;
-        }
-      }
+    this.applied_ = applied;
 
-      frameState.viewState.center[0] = position[0];
-      frameState.viewState.center[1] = position[1];
+    // setStyle に null を渡すとレイヤーの既定スタイルへ戻ってしまう。
+    // 何も描かせないときは空配列を渡す
+    if (position == null) {
+      this.accuracyFeature_.setStyle([]);
+      this.positionFeature_.setStyle([]);
+      this.headingFeature_.setStyle([]);
+      return;
+    }
 
-      if (this.mode === "headingup") {
-        //direction = this.direction;
+    // 精度円の半径。ol 5 は accuracy * pixelRatio / 2 マップ単位で描いており、
+    // retina では accuracy マップ単位になっていた
+    this.accuracyFeature_.setGeometry(new Circle(position, accuracy));
+    this.accuracyFeature_.setStyle(this.accuracyStyle_(accuracy / resolution, maxSize, opacity));
 
-        if (this.animations.heading != null) {
-          if (this.animations.heading.animate(frameState.time)) {
-            //direction = this.animations.heading.current;
-          } else {
-            this.animations.heading = null;
-          }
-        }
-        /*
-        diff = 0;
+    this.positionFeature_.setGeometry(new Point(position));
+    this.positionFeature_.setStyle(new Style({
+      zIndex: 1,
 
-        if (this.animations.rotationMode != null) {
-          if (this.animations.rotationMode.animate(frameState.time)) {
-            diff = this.animations.rotationMode.current;
-            frameState.animate = true;
-          } else {
-            this.animations.rotationMode = null;
-          }
-        }
-        frameState.viewState.rotation = -((direction - diff) / 180 * Math.PI);
-        */
+      image: new CircleStyle({
+        radius: DOT_RADIUS,
+
+        fill: new Fill({
+          color: [0, 160, 233, opacity]
+        }),
+
+        stroke: new Stroke({
+          color: [255, 255, 255, opacity],
+          width: DOT_STROKE_WIDTH
+        })
+      })
+    }));
+
+    this.headingFeature_.setGeometry(new Point(position));
+    this.headingFeature_.setStyle(new Style({
+      zIndex: 2,
+
+      image: new Icon({
+        src: HEADING_ICON_SRC,
+        anchor: [0.5, 0.5],
+        opacity: opacity,
+        // ビューの回転を ol が足してくれる。
+        // ol 5 の direction + frameState.viewState.rotation と同じ
+        rotateWithView: true,
+        rotation: direction / 180 * Math.PI
+      })
+    }));
+  }
+
+  /**
+   * nodoc 精度円のスタイル。画面に対して大きくなりすぎたら薄くして消す
+   *
+   * ol 5 は radius を pixelRatio 込みのマップ単位で持っていたため、しきい値にも
+   * pixelRatio が掛かっていた。retina（pixelRatio 2）で見ると
+   * 「円の直径が画面の何割を占めるか」を見ていたことになるので、その形で書く
+   *
+   * @param radiusPx {Number} 精度円の半径（CSS ピクセル）
+   * @param maxSize {Number} 地図の長辺（CSS ピクセル）
+   * @param opacity {Number} フェードの不透明度
+   * @private
+   */
+  accuracyStyle_(radiusPx, maxSize, opacity) {
+    var diameterPx = radiusPx * 2;
+
+    if (!(radiusPx > 3 && diameterPx < maxSize)) {
+      return [];
+    }
+
+    var value = 0.2 * opacity;
+
+    if (radiusPx < 30) {
+      value = value * (radiusPx / 30);
+    }
+
+    if (diameterPx > maxSize * 0.2) {
+      value = value * (1 - (diameterPx - maxSize * 0.2) / (maxSize * 0.4));
+
+      if (value < 0) {
+        value = 0;
       }
     }
+
+    if (!(value > 0)) {
+      return [];
+    }
+
+    return new Style({
+      zIndex: 0,
+
+      fill: new Fill({
+        color: [56, 149, 255, value]
+      })
+    });
+  }
+
+  /**
+   * nodoc デバッグ表示。マーカーのレイヤーの上に直接描く
+   *
+   * ol 6 以降、キャンバスを持つ描画イベントはレイヤー側にしか無い
+   *
+   * @param event {import("ol/render/Event").default}
+   * @private
+   */
+  renderDebug_(event) {
+    var txt;
+    var context;
+
+    if (!this.debug_) {
+      return;
+    }
+
+    context = event.context;
+    txt = ("Position:" + this.position + " Heading:" + this.direction + " Accuracy:" + this.accuracy + " Mode:" + this.mode);
+
+    if (this.animations.move != null) {
+      txt += " [Move]";
+    }
+
+    if (this.animations.heading != null) {
+      txt += " [Rotate]";
+    }
+
+    if (this.animations.accuracy != null) {
+      txt += " [Accuracy]";
+    }
+
+    if (this.animations.fade != null) {
+      txt += " [Fadein/Out]";
+    }
+
+    context.save();
+    context.fillStyle = "rgba(255, 255, 255, 0.6)";
+    context.fillRect(0, context.canvas.height - 20, context.canvas.width, 20);
+    context.font = "10px";
+    context.fillStyle = "black";
+    context.fillText(txt, 10, context.canvas.height - 7);
+    return context.restore();
   }
 
   /**
