@@ -1,13 +1,14 @@
 name: Android テスト版の配信
 
-# 署名済み AAB を組んで Google Play へ上げる。
+# 署名済みの成果物を組んで Google Play へ上げる。
 #
 # android.yml は「組み上がるところまで」を見るだけで、成果物は署名なしの
-# デバッグ APK。こちらは keystore で署名した AAB を作って配信する。
+# デバッグ APK。こちらは keystore で署名したものを作って配信する。
 #
 # ## 配信先が2つある
 #
-# internalsharing（内部アプリ共有）… 既定。ビルドごとにダウンロード URL が出る。
+# internalsharing（内部アプリ共有）… 既定。**APK** を上げる。
+#   ビルドごとにダウンロード URL が出る。
 #   **versionCode が重複していても受け付ける**ので、master へ入るたびに
 #   自動で上げられる。トラック（production / internal）には一切影響しない。
 #   テスターは Play ストアアプリで「内部アプリ共有」を有効にしておく必要がある。
@@ -196,10 +197,26 @@ jobs:
 
       # VERSION_CODE_ARG は前のステップが GITHUB_ENV へ入れたもの。
       # ${{ }} で展開せず、シェルの変数として渡す（テンプレート注入を避ける）
-      - name: AAB を組む
-        run: npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle ${VERSION_CODE_ARG:-}
+      # 内部アプリ共有には **APK** を上げる。internal トラックには AAB。
+      #
+      # Play は AAB を受け取ると、端末ごとの APK を生成して app signing key で
+      # 署名し直す。内部アプリ共有ではこの工程が絡む必要が無く、
+      # APK なら受け取ったものがそのまま配られる。
+      # 実際に AAB では「ダウンロードできません」で配信できなかった。
+      #
+      # internal トラックは Play の通常の配信経路なので AAB が要る
+      # （2021年8月以降、新規リリースは AAB のみ）
+      - name: 成果物を組む
         env:
+          TRACK: ${{ github.event.inputs.track || 'internalsharing' }}
           GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
+        run: |
+          set -euo pipefail
+          if [ "$TRACK" = "internalsharing" ]; then
+            npx cordova build android --release --buildConfig build-ci.json -- ${VERSION_CODE_ARG:-}
+          else
+            npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle ${VERSION_CODE_ARG:-}
+          fi
 
       - name: 鍵を消す
         if: always()
@@ -211,12 +228,18 @@ jobs:
       # マニフェストを読んで、狙った番号が実際に焼かれたかを確かめ、
       # 違えばここで止める。**上げてしまってからでは端末側でしか分からない。**
       - name: できたものを確認
+        env:
+          TRACK: ${{ github.event.inputs.track || 'internalsharing' }}
         run: |
           set -euo pipefail
-          aab=$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -1)
-          [ -n "$aab" ] || { echo "::error::AAB が見つからない"; exit 1; }
-          ls -lh "$aab"
-          echo "AAB_PATH=$aab" >> "$GITHUB_ENV"
+          if [ "$TRACK" = "internalsharing" ]; then
+            out=$(find platforms/android/app/build/outputs/apk -name '*-release.apk' | head -1)
+          else
+            out=$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -1)
+          fi
+          [ -n "$out" ] || { echo "::error::成果物が見つからない"; exit 1; }
+          ls -lh "$out"
+          echo "ARTIFACT_PATH=$out" >> "$GITHUB_ENV"
 
           manifest=$(find platforms/android/app/build/intermediates -name 'AndroidManifest.xml' -path '*erged*' | head -1)
           if [ -z "$manifest" ]; then
@@ -242,6 +265,15 @@ jobs:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GCP_PLAY_DEPLOYER_SA }}
 
+      # Play 側で配信が詰まったときに、ここから直接入れられるようにしておく。
+      # 署名済みなのでストア版と同じ鍵で、そのままインストールできる
+      - name: 成果物を残す
+        uses: actions/upload-artifact@v7
+        with:
+          name: sabatomap-release
+          path: ${{ env.ARTIFACT_PATH }}
+          retention-days: 14
+
       - name: Play へ上げる
         id: upload
         uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
@@ -250,7 +282,7 @@ jobs:
           # GOOGLE_APPLICATION_CREDENTIALS に立てられるだけ
           serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
           packageName: jp.calil.sabatomap
-          releaseFiles: ${{ env.AAB_PATH }}
+          releaseFiles: ${{ env.ARTIFACT_PATH }}
           # push のときは常に internalsharing。手動実行だけ internal を選べる。
           # track（単数）は非推奨で、将来のアクション更新で消える
           tracks: ${{ github.event.inputs.track || 'internalsharing' }}
