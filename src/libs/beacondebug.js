@@ -80,6 +80,21 @@ export default function createBeaconDebug(getState, { ios = false } = {}) {
       : `測位 ${p.algorithm}  誤差 ${p.accuracy}m  minor ${p.beacon ? p.beacon.minor : '-'}`);
     lines.push(`方位 ${s.heading === null ? '-' : Math.round(s.heading)}`);
 
+    /*
+     UUID を絞らない領域の分。**上の「見えている」が空でここに出るなら UUID 違い。**
+     どちらも空なら BLE が何も拾えていない（権限・位置情報サービス・電波）。
+     Android だけ動く（iOS の CLBeaconRegion は UUID 必須）ので、
+     数えていないときは出さない。
+     */
+    if (s.anyRanging > 0 || s.anyBeacons.length > 0) {
+      lines.push(`全UUID ${s.anyRanging}回  ${formatBeacons(s.anyBeacons, 3)}`);
+      const uuids = new Set(s.anyBeacons.map((b) => String(b.uuid).toLowerCase()));
+      if (uuids.size > 0) {
+        lines.push(`UUID ${[...uuids].map((u) => u.slice(0, 13)).join(' ')}`);
+      }
+    }
+    lines.push(`プラグイン ${s.probe}`);
+
     el.textContent = lines.join('\n');
   };
 

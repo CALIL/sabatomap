@@ -186,6 +186,29 @@ var lastBeacons = [];
 /** デバッグビルドでだけ作られる画面表示。release では丸ごと落ちる */
 var beaconDebug = null;
 
+/*
+ デバッグビルドだけ、**UUID を絞らない領域**も並行して測る。
+
+ ranging は領域（UUID）で絞られる。つまり「スキャンは回っているのに0本」は
+ 「BLE が何も拾えていない」とは限らず、**別の UUID のビーコンなら見えている**
+ かもしれない。切り分けるには、絞らない領域で同時に測るしかない。
+
+ AltBeacon は id1 が null の領域を「全部」として扱う。plugin の
+ BeaconRegion.WILDCARD_UUID がそこへ橋渡しする（Android 限定）。
+ */
+var DEBUG_ANY_REGION = "debug-any";
+var anyRanging = 0;
+var anyBeacons = [];
+var probeStatus = "-";
+
+var debugRangedAny = function (beacons) {
+  anyRanging++;
+  anyBeacons = beacons;
+  if (beaconDebug !== null) {
+    beaconDebug.update();
+  }
+};
+
 var didRangeBeaconsInRegion = function (beacons) {
   rangingCallbacks++;
   beaconsSeen += beacons.length;
@@ -340,16 +363,43 @@ var initializeApp = function () {
       locationManager.requestWhenInUseAuthorization();
       delegate = new locationManager.Delegate();
 
-      delegate.didRangeBeaconsInRegion = function (
-        {
-          beacons
-        }) {
-        return didRangeBeaconsInRegion.apply(window, [beacons]);
+      // delegate は1つしか持てないので、どの領域のコールバックかは identifier で分ける
+      delegate.didRangeBeaconsInRegion = function (result) {
+        if (__DEBUG__ && result.region != null && result.region.identifier === DEBUG_ANY_REGION) {
+          return debugRangedAny(result.beacons);
+        }
+        return didRangeBeaconsInRegion.apply(window, [result.beacons]);
       };
 
       locationManager.setDelegate(delegate);
       region = new locationManager.BeaconRegion("sabatomap", "00000000-71C7-1001-B000-001C4D532518");
       locationManager.startRangingBeaconsInRegion(region).fail(console.error);
+
+      if (__DEBUG__) {
+        /*
+         プラグインが見ている状態を画面に出す。getAuthorizationStatus は
+         Android では checkAvailability()（＝BluetoothAdapter.isEnabled()）を
+         見ているだけなので、**BLUETOOTH_CONNECT が無い端末では例外の文言が返る**。
+         それも含めてそのまま出す。何が返るかを知りたいので握り潰さない。
+         */
+        locationManager.getAuthorizationStatus()
+          .then(function (r) {
+            probeStatus = String((r != null ? r.authorizationStatus : null) ?? r);
+          })
+          .fail(function (e) {
+            probeStatus = "取得失敗 " + e;
+          });
+
+        // WILDCARD_UUID は Android だけ。iOS の CLBeaconRegion は UUID 必須
+        if (cordova.platformId === "android") {
+          locationManager
+            .startRangingBeaconsInRegion(
+              new locationManager.BeaconRegion(DEBUG_ANY_REGION, locationManager.BeaconRegion.WILDCARD_UUID))
+            .fail(function (e) {
+              probeStatus = probeStatus + " / 全UUID開始失敗 " + e;
+            });
+        }
+      }
     }
 
     if (navigator.connection != null && navigator.connection.type === "none") {
@@ -478,7 +528,14 @@ var initializeApp = function () {
    pointer-events: none なので下のボタンはそのまま押せる。
    */
   if (__DEBUG__) {
-    beaconDebug = createBeaconDebug(diagnostics, {
+    beaconDebug = createBeaconDebug(function () {
+      var s = diagnostics();
+      // UUID を絞らない領域の分。ここだけ見えているなら UUID 違い
+      s.anyRanging = anyRanging;
+      s.anyBeacons = anyBeacons;
+      s.probe = probeStatus;
+      return s;
+    }, {
       ios: typeof cordova !== "undefined" && cordova !== null && cordova.platformId === "ios"
     });
   }
