@@ -14,6 +14,11 @@ export default defineConfig({
       'react/jsx-runtime': 'preact/compat/jsx-runtime',
     },
   },
+  // tools/build.mjs が建てる印。ここでも建てておかないと、src/app.js を
+  // 読み込んだテストが ReferenceError で落ちる。テストは release 相当で見る
+  define: {
+    __DEBUG__: 'false',
+  },
   test: {
     environment: 'jsdom',
     include: ['test/**/*.test.{js,jsx}'],

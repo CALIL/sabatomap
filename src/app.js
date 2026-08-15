@@ -11,6 +11,9 @@ import Kanimarker from './libs/kanimarker.js';
 import Kanilayer from './libs/kanilayer.js';
 import InitUI from './component/App.jsx';
 import rules from './sabae.json';
+// デバッグビルド専用。__DEBUG__ が false の release では、下の if ごと
+// minify に落とされ、このモジュール自体もバンドルに入らない
+import createBeaconDebug from './libs/beacondebug.js';
 
 var MAPBOX_TOKEN = "pk.eyJ1IjoiY2FsaWxqcCIsImEiOiJxZmNyWmdFIn0.hgdNoXE7D6i7SrEo6niG0w";
 
@@ -163,7 +166,8 @@ var loadFloor = function (id) {
   return setTimeout(fitFloor, 100);
 };
 
-// 測位できなかった理由を切り分けるための計数。app.getDiagnostics() で読む。
+// 測位できなかった理由を切り分けるための計数。
+// app.getDiagnostics() と、デバッグビルドの画面表示から読む。
 //
 // ranging は圏内にビーコンが無くても1秒ごとに空配列で呼ばれる。だから
 // 「呼ばれた回数」と「見えたビーコンの総数」は別のことを教えてくれる。
@@ -176,11 +180,103 @@ var loadFloor = function (id) {
 // 空のスキャン結果が返る**ので、JS からはこの2つを区別できない。
 var rangingCallbacks = 0;
 var beaconsSeen = 0;
+var lastRangeAt = null;
+var lastBeacons = [];
+
+/** デバッグビルドでだけ作られる画面表示。release では丸ごと落ちる */
+var beaconDebug = null;
+
+/*
+ デバッグビルドだけ、**UUID を絞らない領域**も並行して測る。
+
+ ranging は領域（UUID）で絞られる。つまり「スキャンは回っているのに0本」は
+ 「BLE が何も拾えていない」とは限らず、**別の UUID のビーコンなら見えている**
+ かもしれない。切り分けるには、絞らない領域で同時に測るしかない。
+
+ AltBeacon は id1 が null の領域を「全部」として扱う。plugin の
+ BeaconRegion.WILDCARD_UUID がそこへ橋渡しする（Android 限定）。
+ */
+var DEBUG_ANY_REGION = "debug-any";
+var anyRanging = 0;
+var anyBeacons = [];
+var probeStatus = "-";
+var geoStatus = "-";
+
+/**
+ * 位置情報の権限と位置情報サービスを、プラグインを足さずに確かめる（デバッグビルド専用）
+ *
+ * Android 12 以降、BLUETOOTH_SCAN に neverForLocation が付いていないと、
+ * **スキャン結果を受け取るのに位置情報の権限と位置情報サービスの両方が要る**。
+ * 足りなくても例外にはならず、結果が空で返るだけなので中からは分からない。
+ *
+ * WebView の geolocation は同じ ACCESS_FINE_LOCATION と位置情報サービスを使う。
+ * ここが通れば、残る容疑は「付近のデバイス」（BLUETOOTH_SCAN）だけに絞れる。
+ *
+ *   1 PERMISSION_DENIED   → アプリに位置情報の権限が無い
+ *   2 POSITION_UNAVAILABLE → 端末の位置情報サービスが切れている
+ *   3 TIMEOUT              → 判定できず（屋内で測位に時間がかかっただけのことも）
+ */
+var probeGeolocation = function () {
+  if (navigator.geolocation == null) {
+    geoStatus = "geolocation なし";
+    return;
+  }
+  geoStatus = "確認中";
+  navigator.geolocation.getCurrentPosition(function () {
+    geoStatus = "許可あり";
+  }, function (e) {
+    geoStatus = "NG(" + e.code + ") " + e.message;
+  }, {
+    timeout: 8000,
+    maximumAge: 0,
+    enableHighAccuracy: true
+  });
+};
+
+var debugRangedAny = function (beacons) {
+  anyRanging++;
+  anyBeacons = beacons;
+  if (beaconDebug !== null) {
+    beaconDebug.update();
+  }
+};
 
 var didRangeBeaconsInRegion = function (beacons) {
   rangingCallbacks++;
   beaconsSeen += beacons.length;
-  return kanikama.push(beacons);
+  lastRangeAt = Date.now();
+  lastBeacons = beacons;
+
+  var result = kanikama.push(beacons);
+
+  if (beaconDebug !== null) {
+    beaconDebug.update();
+  }
+
+  return result;
+};
+
+/**
+ * 測位まわりの実況
+ *
+ * 実機で「現在地が出ない」と言われたときに、どこで止まっているかを切り分ける。
+ *
+ *   ranging が 0                  → 検出が始まっていない（権限・プラグイン）
+ *   ranging はあるが beacons が 0 → スキャンは回っているが1本も見えていない
+ *   beacons はあるが position が null → 測位アルゴリズムまで届いていない
+ */
+var diagnostics = function () {
+  return {
+    platform: (typeof cordova !== "undefined" && cordova !== null) ? cordova.platformId : "web",
+    ranging: rangingCallbacks,
+    beacons: beaconsSeen,
+    lastRangeAt: lastRangeAt,
+    lastBeacons: lastBeacons,
+    facility: kanikama.currentFacility ? kanikama.currentFacility.id : null,
+    floor: kanikama.currentFloor ? kanikama.currentFloor.id : null,
+    position: kanikama.currentPosition,
+    heading: kanikama.heading
+  };
 };
 
 // スプラッシュを出しておく最短時間（ミリ秒）。ロゴを見せるための下限で、
@@ -299,16 +395,43 @@ var initializeApp = function () {
       locationManager.requestWhenInUseAuthorization();
       delegate = new locationManager.Delegate();
 
-      delegate.didRangeBeaconsInRegion = function (
-        {
-          beacons
-        }) {
-        return didRangeBeaconsInRegion.apply(window, [beacons]);
+      // delegate は1つしか持てないので、どの領域のコールバックかは identifier で分ける
+      delegate.didRangeBeaconsInRegion = function (result) {
+        if (__DEBUG__ && result.region != null && result.region.identifier === DEBUG_ANY_REGION) {
+          return debugRangedAny(result.beacons);
+        }
+        return didRangeBeaconsInRegion.apply(window, [result.beacons]);
       };
 
       locationManager.setDelegate(delegate);
       region = new locationManager.BeaconRegion("sabatomap", "00000000-71C7-1001-B000-001C4D532518");
       locationManager.startRangingBeaconsInRegion(region).fail(console.error);
+
+      if (__DEBUG__) {
+        /*
+         プラグインが見ている状態を画面に出す。getAuthorizationStatus は
+         Android では checkAvailability()（＝BluetoothAdapter.isEnabled()）を
+         見ているだけなので、**BLUETOOTH_CONNECT が無い端末では例外の文言が返る**。
+         それも含めてそのまま出す。何が返るかを知りたいので握り潰さない。
+         */
+        locationManager.getAuthorizationStatus()
+          .then(function (r) {
+            probeStatus = String((r != null ? r.authorizationStatus : null) ?? r);
+          })
+          .fail(function (e) {
+            probeStatus = "取得失敗 " + e;
+          });
+
+        // WILDCARD_UUID は Android だけ。iOS の CLBeaconRegion は UUID 必須
+        if (cordova.platformId === "android") {
+          locationManager
+            .startRangingBeaconsInRegion(
+              new locationManager.BeaconRegion(DEBUG_ANY_REGION, locationManager.BeaconRegion.WILDCARD_UUID))
+            .fail(function (e) {
+              probeStatus = probeStatus + " / 全UUID開始失敗 " + e;
+            });
+        }
+      }
     }
 
     if (navigator.connection != null && navigator.connection.type === "none") {
@@ -428,6 +551,28 @@ var initializeApp = function () {
   window.addEventListener("BluetoothStatus.enabled", invalidateLocator);
   window.addEventListener("BluetoothStatus.disabled", invalidateLocator);
   kanikama.facilities_ = rules;
+
+  /*
+   ビーコンの受信状況を画面に出す。**デバッグビルドだけ。**
+
+   実機で測位が出ないとき、USB を繋いで chrome://inspect を開ける状況ばかりでは
+   ないので、端末だけで切り分けられるようにしてある。
+   pointer-events: none なので下のボタンはそのまま押せる。
+   */
+  if (__DEBUG__) {
+    probeGeolocation();
+    beaconDebug = createBeaconDebug(function () {
+      var s = diagnostics();
+      // UUID を絞らない領域の分。ここだけ見えているなら UUID 違い
+      s.anyRanging = anyRanging;
+      s.anyBeacons = anyBeacons;
+      s.probe = probeStatus;
+      s.geo = geoStatus;
+      return s;
+    }, {
+      ios: typeof cordova !== "undefined" && cordova !== null && cordova.platformId === "ios"
+    });
+  }
 
   // プラットフォームを問わず走らせる。上の cordova ブロックは
   // platformId !== "browser" で括られていて、ブラウザ版はそこを通らない
@@ -635,26 +780,13 @@ export default class App {
   }
 
   /**
-   * 測位まわりの実況を返す
+   * 測位まわりの実況を返す（上の diagnostics() を参照）
    *
-   * 実機で「現在地が出ない」と言われたときに、どこで止まっているかを
-   * その場で切り分けるための入口。Chrome の chrome://inspect から
-   * `app.getDiagnostics()` を叩けば、ビルドし直さずに状態が読める。
-   *
-   *   ranging が 0            → 検出が始まっていない（権限・プラグイン）
-   *   ranging はあるが beacons が 0 → スキャンは回っているが1本も見えていない
-   *   beacons はあるが position が null → 測位アルゴリズムまで届いていない
+   * デバッグビルドでは同じ内容が画面に出ている。こちらは release でも使えるので、
+   * USB を繋げるときは chrome://inspect から `app.getDiagnostics()` で読む。
    */
   getDiagnostics() {
-    return {
-      platform: (typeof cordova !== "undefined" && cordova !== null) ? cordova.platformId : "web",
-      ranging: rangingCallbacks,
-      beacons: beaconsSeen,
-      facility: kanikama.currentFacility ? kanikama.currentFacility.id : null,
-      floor: kanikama.currentFloor ? kanikama.currentFloor.id : null,
-      position: kanikama.currentPosition,
-      heading: kanikama.heading
-    };
+    return diagnostics();
   }
 }
 

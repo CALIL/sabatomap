@@ -114,7 +114,20 @@ function jsOptions({ production }) {
        **development 版が実行されていた**（成果物に Invalid hook call などの
        development 専用文字列が残っていた）。ここで固定して production 版だけにする。
        */
-      define: { 'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development') },
+      define: {
+        'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
+        /*
+         デバッグビルドでだけ有効になる仕掛けの入口。いまは
+         src/libs/beacondebug.js（ビーコンの受信状況を画面に出す）だけが使う。
+
+         `if (__DEBUG__)` で囲っておくと、release では false に畳まれて
+         minify が枝ごと落とす。**import した先のモジュールも落ちる**ので、
+         デバッグ用のコードが本番の成果物に混ざらない。
+         潰れていることは tools/build.mjs の呼び出し側ではなく成果物で確かめること
+         （release ビルドの www/js/all.js を grep する）。
+         */
+        __DEBUG__: JSON.stringify(!production),
+      },
       /*
        react / react-dom を preact/compat に差し替える。ソースは react のまま書ける。
 

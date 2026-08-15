@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run copy && npx cordova prepare && npx cordova run browser",
     "copy": "node tools/build.mjs release",
+    "copy:debug": "node tools/build.mjs debug",
     "compile": "node tools/build.mjs release",
     "build_browser": "node tools/build.mjs release",
     "watch": "node tools/build.mjs watch",

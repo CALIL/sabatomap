@@ -76,9 +76,16 @@ jobs:
       - name: Install
         run: npm ci
 
-      # www/ を作る。これが無いと空のアプリが焼き上がる
+      # www/ を作る。これが無いと空のアプリが焼き上がる。
+      #
+      # ここは **debug ビルド**。__DEBUG__ が立ち、ビーコンの受信状況が画面に出る。
+      # 実機で測位が出ないとき、USB を繋がずに切り分けられるようにするため。
+      # minify されず inline sourcemap が付くので成果物は大きくなるが、
+      # 配信用ではないので構わない（配信は android-deploy.yml が release で作る）。
+      #
+      # release ビルドが通ることは ci.yml が `npm run copy` で見ている
       - name: web 側をビルド
-        run: npm run copy
+        run: npm run copy:debug
 
       # config.xml と package.json の cordova.plugins から復元する。
       # platforms/android は .gitignore されているので毎回作り直し
