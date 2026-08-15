@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import {
-  openApp, settle, pushBeacons, enableBluetooth, viewState, markerState, expectMapScreenshot,
+  openApp, settle, pushBeacons, enableBluetooth, pretendBluetoothOff,
+  viewState, markerState, expectMapScreenshot,
   BEACON_F7, BEACON_F7_FAR, BEACON_F8, SHELF_ID,
 } from './support/app.mjs';
 
@@ -130,6 +131,42 @@ test.describe('地図', () => {
     await page.evaluate(() => window.app.locatorClicked());
 
     await expect(page.locator('#locator > div')).toHaveText('この機種は現在地を測定できません');
+    expect(await markerState(page)).toMatchObject({ mode: 'normal' });
+    expect(errors).toEqual([]);
+  });
+
+  /*
+   Android 12 以降は BluetoothAdapter.isEnabled() に BLUETOOTH_CONNECT が要るが、
+   cordova-plugin-bluetooth-status（2016年で停止）は宣言していない。
+   例外を投げても false を返しても BTenabled は初期値 false のままになり、
+   「オフ」と「分からない」を区別できない。
+
+   そのまま使うと現在地ボタンが永久に塞がるので、Android では BTenabled を
+   信用せず測位そのものの結果で案内する。iOS は権限の分割が無いのでこれまで通り。
+   */
+  test('Android では Bluetooth が切れていても現在地ボタンを塞がない', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+    await pretendBluetoothOff(page, { platformId: 'android' });
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+
+    await page.evaluate(() => window.app.locatorClicked());
+
+    // 「BluetoothをONにしてください」で止めず、測位まで進む
+    await expect(page.locator('#locator > div')).not.toHaveText('BluetoothをONにしてください');
+    expect(await markerState(page)).toMatchObject({ mode: 'centered' });
+    expect(errors).toEqual([]);
+  });
+
+  test('iOS では Bluetooth が切れていることを先に伝える', async ({ page }) => {
+    const { errors } = await openApp(page, PORT);
+    await pretendBluetoothOff(page, { platformId: 'ios' });
+    await pushBeacons(page, [{ ...BEACON_F7, rssi: -50 }]);
+    await settle(page);
+
+    await page.evaluate(() => window.app.locatorClicked());
+
+    await expect(page.locator('#locator > div')).toHaveText('BluetoothをONにしてください');
     expect(await markerState(page)).toMatchObject({ mode: 'normal' });
     expect(errors).toEqual([]);
   });

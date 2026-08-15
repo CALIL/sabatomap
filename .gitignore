@@ -23,20 +23,19 @@ android-release.apk
 # browser
 platforms/browser
 
-# cordova のプラグイン導入状態。platforms/ 以下と対で意味を持つファイルで、
-# platforms/ を無視している以上これも追跡してはいけない。
+# cordova のプラグイン。platforms/ と同じく生成物なので追跡しない（cordova の推奨）。
 #
-# コミットされていると cordova-lib の addHelper.js
-# installPluginsForNewPlatform() が「このプラットフォームには全部入っている」と
-# 判断し、作り直した platforms/<name> にプラグインを 1 件も入れない。
-# 手元は platforms/ が残っているので気づけず、クリーンチェックアウトの CI だけが
-# プラグイン抜きの APK を焼く。
+# 唯一のソースは package.json の cordova.plugins と devDependencies で、
+# `cordova prepare` が node_modules から plugins/ を組み立てる。
 #
-# plugins/fetch.json は導入元と cli_variables の記録でプラットフォームに依らないため、
-# 引き続き追跡する。
-plugins/android.json
-plugins/ios.json
-plugins/browser.json
+# コミットしていた頃は cordova-lib の restore-util.js が
+# 「plugins/<id>/ があるなら導入済み」と判断して node_modules を見に行かないため、
+# package.json を上げてもビルド内容が変わらなかった。実際に
+# cordova-plugin-device-orientation が宣言 3.0.1-dev / 実体 3.0.0-dev でずれていた。
+# Dependabot の bump PR も package-lock.json しか触らないので効かなかった。
+#
+# git 参照のプラグインは SHA で固定してあるので、追跡をやめても解決先は動かない。
+/plugins/
 
 # platforms/ 以下と対で意味を持つ状態ファイル。plugins/*.json と同じ理由で追跡しない。
 # コミットされていた頃の中身は browser 5.0.4 / android 6.4.0 / ios 4.5.5 で、

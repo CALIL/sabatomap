@@ -166,7 +166,7 @@ artifact から持ち帰ってコミットします。
 `BTenabled` が偽なら**その場で `setMode("normal")` に戻す**からです。
 e2e は `enableBluetooth()` で BLE を持つ端末のふりをしてから確かめています。
 
-### ★ Android 12 以降で現在地ボタンが死んでいる可能性があります
+### ★ Android では Bluetooth の ON/OFF を判定していません
 
 `cordova-plugin-bluetooth-status` は **2016年2月が最終公開**で、Android の権限体系が
 変わる前の作りのままです。`plugin.xml` が宣言するのは `BLUETOOTH` と `BLUETOOTH_ADMIN`
@@ -189,13 +189,34 @@ if (bluetoothAdapter.isEnabled())  // API 31+ は BLUETOOTH_CONNECT が要る
 
 の順で、`isEnabled()` が例外を投げても false を返しても、**`BTenabled` は
 初期値の `false` のまま**になります（`BluetoothStatus.js` が `false` で初期化）。
-`invalidateLocator` はこれを見て「測定できません」を出し続けます。
+つまり「オフ」と「分からない」を区別できません。
 
-**未検証です。Android 12 以降の実機で、Bluetooth を ON にした状態で
-現在地ボタンを押せば1分で分かります。** iOS は別実装なので影響しません。
+そのままだと `invalidateLocator` が「測定できません」を出し続けて
+**現在地ボタンが永久に塞がります。**
 
-iBeacon プラグイン側の `isBluetoothEnabled()` も同じ `isEnabled()` を呼ぶので、
-そちらへ乗り換えるだけでは直りません。
+#### どう直したか
+
+`app.js` の `canTrustBluetoothState()` が **Android では `BTenabled` を信用しません。**
+
+| | Android | iOS |
+|---|---|---|
+| BLE を持たない端末 | ボタンを塞ぐ（`hasBTLE` は権限が要らないので当てにできる） | 同じ |
+| Bluetooth がオフ | **塞がない。** 押せば測位に進み、取れなければ「BluetoothがONか確かめてください」 | 押した時点で「BluetoothをONにしてください」 |
+
+読み取るだけのために `BLUETOOTH_CONNECT`（実行時許可）をユーザーに求めるのは
+割に合わないと判断しました。iOS は CoreBluetooth で権限の分割が無いので
+これまで通りです。
+
+**iBeacon プラグイン側の `isBluetoothEnabled()` も、AltBeacon の
+`checkAvailability()` 経由で同じ `isEnabled()` を呼びます。**
+乗り換えても直りません（調査済み）。
+
+e2e で Android と iOS の両方を固定してあります
+（`pretendBluetoothOff(page, {platformId})`）。
+
+代償として、Android 11 以前でも Bluetooth オフの案内が
+「押してから」になります。minSdk は 29 なので該当はしますが、
+判定できない機種のほうが多数です。
 
 ## package.json の overrides
 
@@ -219,24 +240,36 @@ iOS のビルドが壊れます。**CI は Android しか組まないので気�
 `esbuild` の postinstall を許可しています。`@parcel/watcher`（vitest 経由）は
 入っていなくてもポーリングにフォールバックするので許可していません。
 
-### プラグインを package.json に足すときの注意
+### プラグインは package.json が唯一のソースです
 
-`cordova-plugin-device` を devDependencies に持っていましたが、2026-08-15 に外しました。
-`plugins/fetch.json` で **`is_top_level=false`**（`com.unarin.cordova.beacon` の依存）であり、
-`package.json` の `cordova.plugins` にも無く、`src` でも `device.*` を使っていません
-（2022年の `d20c756`「device.platform → cordova.platformId」で使われなくなった）。
-`cordova prepare` は vendoring 済みの `plugins/cordova-plugin-device/` から入れるので、
-npm 側の宣言は不要です。
+**`plugins/` は追跡していません**（`platforms/` と同じ生成物扱い。cordova の推奨）。
+`cordova prepare` が `package.json` の `cordova.plugins` と devDependencies を見て
+node_modules から組み立てます。
 
-**ただし `plugins/` をやめるなら、先にこれを固定してください。** `fetch.json` の記録は
-`"id": "cordova-plugin-device@*"` で、vendoring をやめた瞬間にレジストリの最新を
-引くようになります。iBeacon プラグインが `<dependency id="cordova-plugin-device" version="*" />`
-を宣言しているので、外すことはできません。
+```
+package.json（cordova.plugins + devDependencies）
+  → npm ci で node_modules へ
+    → cordova prepare が plugins/ を組み立て
+      → platforms/<name> へ導入
+```
 
-`cordova-lib` も同時に外しました。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
+プラグインを足すときは `cordova plugin add <名前>` を使ってください。
+`package.json` の両方（`cordova.plugins` と devDependencies）に書かれます。
 
-**プラグインを足すときは `package.json` の `cordova.plugins` と `plugins/` が本体で、
-devDependencies は `cordova plugin add` の副産物**だと思ってください。
+**2026-08-15 に vendoring をやめました。** コミットしていた頃は cordova-lib の
+`restore-util.js` が「`plugins/<id>/` があるなら導入済み」と判断して node_modules を
+見に行かないため、**package.json を上げてもビルド内容が変わりませんでした**。
+実際に `cordova-plugin-device-orientation` が宣言 3.0.1-dev / 実体 3.0.0-dev で
+ずれていましたし、Dependabot の bump PR は `package-lock.json` しか触らないので
+1バイトも効きませんでした。
+
+`cordova-plugin-device` は **iBeacon プラグインが `<dependency>` で要求している**ので
+外せません。vendoring をやめると `fetch.json` の `@*` でレジストリの最新を引くように
+なるため、devDependencies に `^3.0.0` として明示しています。
+`src` から `device.*` は使っていません（2022年の `d20c756`
+「device.platform → cordova.platformId」で使われなくなった）。
+
+`cordova-lib` も外してあります。`cordova` 自身が同じ `^13.0.0` を依存に持つ重複でした。
 
 ## cordova プラグインの git 参照は SHA で固定しています
 
@@ -248,17 +281,11 @@ cordova-plugin-device-orientation: github:CALIL/cordova-plugin-device-orientatio
 ref 指定なしだと `npm install` を実行したタイミングで解決先が変わります。
 実際に3年前まで巻き戻った差分が手元に残っていたことがあります。
 
-**ただし `plugins/` をコミットしている間、これはビルド内容には効きません。**
-cordova-lib の `restore-util.js` は `plugins/<id>/` があれば「導入済み」と判断して
-node_modules を見に行かないので、`cordova prepare` が焼くのは**コミット済みの
-`plugins/<id>/`** です。上げるときは `cordova plugin remove` / `add` で
-`plugins/` も入れ直してください。Dependabot の bump PR は `package-lock.json` しか
-触らないのでビルド内容は 1 バイトも変わりません。
+`plugins/` の追跡をやめたので、**この固定がそのままビルド内容に効きます。**
 
 `platforms/platforms.json` は追跡していません。`platforms/` を無視している以上、
-それと対で意味を持つ状態ファイルを追跡してはいけないためです
-（`plugins/*.json` と同じ理由）。以前はコミットされていて、中身が
-`browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
+それと対で意味を持つ状態ファイルを追跡してはいけないためです。以前はコミットされていて、
+中身が `browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
 
 ## アイコンはインライン SVG
 

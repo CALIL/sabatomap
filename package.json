@@ -29,6 +29,7 @@
     "cordova-browser": "^7.0.0",
     "cordova-ios": "^8.1.1",
     "cordova-plugin-bluetooth-status": "~1.0.4",
+    "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499",
     "cordova-plugin-network-information": "^3.1.0",
     "cssnano": "^8.0.5",
