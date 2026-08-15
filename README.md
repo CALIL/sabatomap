@@ -167,20 +167,18 @@ npx cordova build android --release -- --packageType=bundle
 
 `--packageType=bundle` を付けないと AAB ではなく APK ができる。Google Play が要求するのは AAB。
 
-1Password から、さばとマップの keystore をダウンロードしてプロジェクトのルートに保存する。
+1Password の「さばとマップ」の keystore をダウンロードして、プロジェクトのルートに
+`sabatomap-keystore.jks` として保存する（`.gitignore` 済み）。
+パスワードと鍵エイリアスも同じ項目に入っている。
 
 ```bash
-op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
-```
-
-keystoreのパスワードは、1Passwordのラベルに保存してある<br>
-keyAliasはcalil<br>
-keyPasswordはkeystoreと同じ
-
-```bash
-jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab calil
+op document get <item> --output ./sabatomap-keystore.jks
+jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab <alias>
 jarsigner -verify platforms/android/app/build/outputs/bundle/release/app-release.aab
 ```
+
+**このリポジトリは public なので、item ID や鍵エイリアスは書かない。**
+必要な値は 1Password 側にある。
 
 `npm run release` は `cordova run android --release` で、**実機かエミュレータへ送り込む操作**なので
 ストア用の成果物は作れない。混同しないこと。

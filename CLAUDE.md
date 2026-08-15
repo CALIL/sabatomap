@@ -500,4 +500,5 @@ cordova prepare
 1. config.xmlの`android-versionCode`と`version`を更新
 2. 1Passwordからkeystoreをダウンロード（「さばとマップ」として保存）
 3. keystoreをプロジェクトルートに配置
-4. 適切な署名でリリース版をビルド（keyAlias: calil）
+4. 適切な署名でリリース版をビルド（鍵エイリアスは 1Password の同じ項目にある。
+   **public リポジトリなので値は書かないこと**）
