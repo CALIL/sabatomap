@@ -206,6 +206,10 @@ jobs:
       #
       # internal トラックは Play の通常の配信経路なので AAB が要る
       # （2021年8月以降、新規リリースは AAB のみ）
+      #
+      # **--packageType は両方に明示すること。** cordova-android は --release の
+      # 既定が bundle で、省くと internalsharing でも AAB が焼かれる。
+      # 次の「できたものを確認」が APK を探して落ちる（2026-08-15 に6回連続で失敗）
       - name: 成果物を組む
         env:
           TRACK: ${{ github.event.inputs.track || 'internalsharing' }}
@@ -213,7 +217,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$TRACK" = "internalsharing" ]; then
-            npx cordova build android --release --buildConfig build-ci.json -- ${VERSION_CODE_ARG:-}
+            npx cordova build android --release --buildConfig build-ci.json -- --packageType=apk ${VERSION_CODE_ARG:-}
           else
             npx cordova build android --release --buildConfig build-ci.json -- --packageType=bundle ${VERSION_CODE_ARG:-}
           fi
