@@ -13,9 +13,15 @@ version: 2
 updates:
   # ---------------------------------------------------------------------------
   # npm
+  #   "/"          : アプリ本体
+  #   "/test/e2e"  : playwright の e2e。本番の依存を汚さないため独立した package.json
+  #                  になっており、ルートの lockfile では管理されない
+  # directories 指定はディレクトリごとに PR が分かれるので、両者は別々の PR になる
   # ---------------------------------------------------------------------------
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "/"
+      - "/test/e2e"
     schedule:
       interval: "weekly"
       day: "monday"
