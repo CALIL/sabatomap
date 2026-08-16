@@ -76,7 +76,7 @@ jobs:
       # 落ちても次のステップが作り直すだけなので、失敗しても止めない。
       - name: デバッグ鍵を復元する
         id: debug-keystore
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.android/debug.keystore
           key: android-debug-keystore-v1
