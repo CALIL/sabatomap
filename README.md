@@ -56,7 +56,10 @@ npm ci
 npx cordova platform add ios
 npx cordova platform add android
 npm start           # www/ を作って cordova prepare → ブラウザで実行
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 21) # cordova 15.1.0がGradle 8.14.2に固定 Java 24までしか対応しないためこれを入れる 
 npm run build       # Android（実機かエミュレータが必要）
+
 npm run build_ios   # iOS
 ```
 
