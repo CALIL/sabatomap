@@ -191,7 +191,7 @@ npx cordova build android --release -- --packageType=bundle
 
 1Password の「さばとマップ」の keystore をダウンロードして、プロジェクトのルートに
 `sabatomap-keystore.jks` として保存する（`.gitignore` 済み）。
-パスワードと鍵エイリアスも同じ項目に入っている。
+パスワードも同じ項目に入っている。
 
 ```bash
 op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
