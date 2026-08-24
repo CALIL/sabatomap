@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="30011" id="jp.calil.sabatomap" version="3.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>さばとマップ</name>
+    <name short="さばとマップ">Sabatomap</name>
     <description>さばとマップ</description>
     <author email="contact@calil.jp" href="http://calil.jp">CALIL Inc.</author>
     <content src="index.html" />
@@ -26,6 +26,14 @@
          アプリの準備が 0.5 秒で終わっても 7 秒待たされていた -->
     <preference name="AutoHideSplashScreen" value="false" />
     <platform name="android">
+        <!-- iOS の署名のために <name> を ASCII にしたので、Android のラベルを
+             従来どおり「さばとマップ」に戻す。cordova-android は app_name に
+             <name>（= Sabatomap）を、launcher_name に short 属性を入れるため、
+             application の label を launcher_name 側へ向ける。
+             activity の label は既定で launcher_name を参照している -->
+        <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+            <application android:label="@string/launcher_name" />
+        </edit-config>
         <!-- 下限。書かないと cordova-android の既定（15 では 24 = Android 7.0）が
              黙って効くので明示する。
              29 = Android 10。Chrome / WebView が Chrome 139 以降 Android 10 以上を
