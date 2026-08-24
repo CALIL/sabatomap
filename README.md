@@ -194,8 +194,8 @@ npx cordova build android --release -- --packageType=bundle
 パスワードと鍵エイリアスも同じ項目に入っている。
 
 ```bash
-op document get <item> --output ./sabatomap-keystore.jks
-jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab <alias>
+op document get yc7l6u4qqffwdaawb5aauhfmbm --output ./sabatomap-keystore.jks
+jarsigner -keystore ./sabatomap-keystore.jks platforms/android/app/build/outputs/bundle/release/app-release.aab calil
 jarsigner -verify platforms/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
