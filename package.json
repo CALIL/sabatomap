@@ -34,12 +34,12 @@
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499",
     "cordova-plugin-network-information": "^3.1.0",
-    "cssnano": "^8.0.6",
+    "cssnano": "^8.0.8",
     "esbuild": "^0.28.2",
     "jsdom": "^30.0.1",
     "postcss": "^8.5.25",
-    "sass": "^1.102.0",
-    "vitest": "^4.1.10"
+    "sass": "^1.103.1",
+    "vitest": "^4.1.11"
   },
   "author": "CALIL Inc.",
   "license": "MIT",
