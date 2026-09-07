@@ -51,7 +51,7 @@ jobs:
 
       # AGP 8.10（cordova-android 15）が JDK 17 以上を要求する
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
