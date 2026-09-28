@@ -34,7 +34,7 @@
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499",
     "cordova-plugin-network-information": "^3.1.0",
-    "cssnano": "^8.0.10",
+    "cssnano": "^9.0.1",
     "esbuild": "^0.28.2",
     "jsdom": "^30.1.0",
     "postcss": "^8.5.28",
