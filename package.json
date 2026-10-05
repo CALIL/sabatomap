@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.6.1",
-    "browserslist": "^4.29.0",
+    "browserslist": "^4.29.1",
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon#e03aa41f364d2e6c66f22c7b7dcfe7c025b32fa6",
     "cordova": "^13.0.0",
     "cordova-android": "^15.1.0",
@@ -34,11 +34,11 @@
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-device-orientation": "github:CALIL/cordova-plugin-device-orientation#16a87476e424d75540614772935a282b03ab2499",
     "cordova-plugin-network-information": "^3.1.0",
-    "cssnano": "^9.0.1",
+    "cssnano": "^9.1.0",
     "esbuild": "^0.28.2",
-    "jsdom": "^30.1.0",
+    "jsdom": "^30.1.1",
     "postcss": "^8.5.28",
-    "sass": "^1.104.1",
+    "sass": "^1.105.0",
     "vitest": "^4.1.11"
   },
   "author": "CALIL Inc.",
