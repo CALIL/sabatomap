@@ -165,6 +165,11 @@ input[type=search]
       // 4.5vw だけだと画面幅で字が決まり、タブレットでは大きくなりすぎ、
       // 狭い端末では読めなくなる。下限と上限を付けて挟む
       font-size: clamp(0.875rem, 4.5vw, 1.25rem)
+      // 文字を大きくしたときや幅の狭い端末では収まらず、「索」だけが
+      // 2行目に落ちる。折れるなら文節で区切って2行に均等に割る
+      // （auto-phrase は Chromium だけ。Safari は均等割りだけ効く）
+      text-wrap: balance
+      word-break: auto-phrase
       border-radius: 4px
         
         
