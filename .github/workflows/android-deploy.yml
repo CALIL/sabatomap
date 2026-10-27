@@ -88,7 +88,9 @@ jobs:
     name: Play へ上げる
     # フォークでは動かさない
     if: github.repository == 'CALIL/sabatomap'
-    runs-on: ske-v2
+    # GitHub ホストのランナー。public リポジトリでは自前ランナー（ske-v2）を使わない
+    # （理由は android.yml の先頭）
+    runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
       contents: read
