@@ -8,14 +8,11 @@ name: Android ビルド
 # 実機やエミュレータは使わない。cordova build android は端末を要求しないが、
 # npm run build（cordova run android）は要求するので混同しないこと。
 #
-# ランナーは ske-v2。ske-v1 の summerwind 版 actions-runner-controller は
-# 2026-06-03 に gha-runner-scale-set へ移行済みで、
-# runs-on: [self-hosted, Linux] では拾われない。
-# → CALIL/ske-v2 の kube/actions-runner/README.md
+# ランナーは GitHub ホストの ubuntu-latest。自前ランナー（ske-v2）は使わない。
+# GitHub の推奨どおり、public リポジトリでは self-hosted ランナーを使わない方針。
+# public リポジトリは GitHub ホストランナーが無料なので、費用の理由も無い。
 #
-# ランナーの image は ghcr.io/actions/actions-runner で、
-# ubuntu-latest と違って JDK も Android SDK も入っていない。
-# どちらも毎回入れる。
+# JDK と Android SDK は ubuntu-latest に入っているが、版を固定するため毎回入れる。
 
 on:
   push:
@@ -32,7 +29,7 @@ concurrency:
 jobs:
   build:
     name: APK を組む
-    runs-on: ske-v2
+    runs-on: ubuntu-latest
     # SDK の取得と Gradle の初回実行で伸びる。キャッシュが温まれば10分程度
     timeout-minutes: 45
     permissions:
@@ -66,7 +63,7 @@ jobs:
 
       # デバッグ鍵を run をまたいで使い回す。
       #
-      # ランナーは毎回まっさらなコンテナで ~/.android/debug.keystore が無い。
+      # ランナーは毎回まっさらな VM で ~/.android/debug.keystore が無い。
       # 放っておくと **Gradle がビルドごとに違う鍵を自動生成する**ので、
       # 焼き上がる APK の署名が毎回変わり、実機では前のものを
       # アンインストールしないと入らない。館内で試すときに毎回これをやることになる。
@@ -96,7 +93,7 @@ jobs:
           echo "新しいデバッグ鍵を作りました。次回からはキャッシュから復元されます"
 
       # cordova は wrapper を「システムの gradle で」作る。
-      # ubuntu-latest には最初から入っているが、このランナーには無いので入れる。
+      # ubuntu-latest にも入っているが、版を固定するため入れる。
       # 版は cordova-android の cdv-gradle-config-defaults.json に合わせてある。
       # ランナーは毎回使い捨てなので、取得物の持ち越しもこれに任せる。
       - name: Setup Gradle
@@ -130,8 +127,8 @@ jobs:
       - name: APK を組む
         run: npx cordova build android --debug
         env:
-          # ske-v2 は memory limit 8Gi。Gradle と Kotlin に取らせすぎると
-          # OOMKilled でランナーごと落ちる
+          # ubuntu-latest のメモリは 16GB。Gradle と Kotlin のデーモンが
+          # 別々にヒープを取るので、上限を決めておく
           GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
 
       - name: できたものを確認
