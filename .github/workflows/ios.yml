@@ -1,0 +1,82 @@
+name: iOS ビルド
+
+# iOS のアプリが組み上がるところまで通す。android.yml の iOS 版。
+#
+# ci.yml は web 側までしか見ておらず、android.yml は Android しか組まない。
+# cordova-ios や xcode（npm）の依存、プラグインの iOS 側が壊れても
+# これが無いと誰も気づけない（package.json の overrides の uuid がその例）。
+#
+# 組むのはシミュレータ向けの debug ビルドだけ。署名が要らないので Secrets も使わない。
+# 実機向け（iphoneos）は証明書とプロビジョニングプロファイルが要るので CI ではやらない。
+#
+# ランナーは GitHub ホストの macos-latest。public リポジトリなので無料。
+# 自前ランナーを使わない理由は android.yml と同じ。
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: アプリを組む
+    runs-on: macos-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7 # zizmor: ignore[cache-poisoning]
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Xcode はランナーの既定を使う。cordova-ios 8 は 15.0 以上を要求する。
+      # ランナーの更新で版が変わって落ちたときに追えるよう、版を残しておく
+      - name: Xcode の版
+        run: xcodebuild -version
+
+      - name: Install
+        run: npm ci
+
+      # android.yml と同じく debug ビルド。release が通ることは ci.yml が見ている
+      - name: web 側をビルド
+        run: npm run copy:debug
+
+      # config.xml と package.json の cordova.plugins から復元する。
+      # platforms/ios は .gitignore されているので毎回作り直し
+      - name: iOS プラットフォームを用意
+        run: npx cordova prepare ios
+
+      # `cordova requirements ios` は使わない。ios-deploy（実機へ送る道具）と
+      # CocoaPods も要求して落ちるが、どちらもシミュレータ向けのビルドには要らない
+      # （CocoaPods を使うプラグインは入っていない）。
+      #
+      # --emulator で -sdk iphonesimulator / generic/platform=iOS Simulator になる。
+      # シミュレータの起動はしない
+      - name: アプリを組む
+        run: npx cordova build ios --emulator --debug
+
+      # www/ が空のまま組み上がっても xcodebuild は成功するので、中身まで見る
+      - name: できたものを確認
+        run: |
+          set -euo pipefail
+          app=$(find platforms/ios/build -path '*Debug-iphonesimulator*' -name '*.app' -maxdepth 3 | head -1)
+          [ -n "$app" ] || { echo ".app が見つからない"; exit 1; }
+          du -sh "$app"
+          for f in www/index.html www/cordova.js www/js/all.js www/css/app.css; do
+            [ -s "$app/$f" ] || { echo "$f が入っていない"; exit 1; }
+          done
+          echo "OK: $app"
