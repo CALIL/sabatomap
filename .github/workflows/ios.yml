@@ -7,6 +7,7 @@ name: iOS ビルド
 # これが無いと誰も気づけない（package.json の overrides の uuid がその例）。
 #
 # 組むのはシミュレータ向けの debug ビルドだけ。署名が要らないので Secrets も使わない。
+# 組んだものはシミュレータで起動し、落ちないことと画面を確かめる。
 # 実機向け（iphoneos）は証明書とプロビジョニングプロファイルが要るので CI ではやらない。
 #
 # ランナーは GitHub ホストの macos-latest。public リポジトリなので無料。
@@ -80,3 +81,71 @@ jobs:
             [ -s "$app/$f" ] || { echo "$f が入っていない"; exit 1; }
           done
           echo "OK: $app"
+          echo "APP_PATH=$app" >> "$GITHUB_ENV"
+
+      # ここから起動スモークテスト。組めても起動しないものを拾う
+      # （プラグインのネイティブ側の不整合、config.xml の設定ミスなど）。
+      #
+      # シミュレータには Bluetooth が無く iBeacon も扱えないので、
+      # 測位はここでは一切検証できない。実機で確かめること。
+      #
+      # 端末はランナーに入っている中で最も新しい iOS の iPhone を使う。
+      # 名前を決め打ちするとランナーの更新で消えて落ちる
+      - name: シミュレータを起動
+        run: |
+          set -euo pipefail
+          udid=$(xcrun simctl list devices available -j | jq -r '
+            [.devices | to_entries[] | select(.key | test("SimRuntime\\.iOS-"))
+             | .key as $rt | .value[] | select(.name | startswith("iPhone")) | {rt: $rt, udid}]
+            | sort_by(.rt | capture("iOS-(?<ma>[0-9]+)-(?<mi>[0-9]+)") | [(.ma|tonumber), (.mi|tonumber)])
+            | last | .udid')
+          [ -n "$udid" ] && [ "$udid" != null ] || { echo "使える iPhone のシミュレータが無い"; exit 1; }
+          xcrun simctl list devices | grep "$udid"
+          xcrun simctl boot "$udid"
+          xcrun simctl bootstatus "$udid" -b
+          echo "SIM_UDID=$udid" >> "$GITHUB_ENV"
+
+      # 位置情報の許可ダイアログが地図を覆わないよう先に許可しておく。
+      # Bluetooth は simctl で許可できないので、ダイアログが写ることはある
+      - name: アプリを入れて起動
+        run: |
+          set -euo pipefail
+          xcrun simctl install "$SIM_UDID" "$APP_PATH"
+          xcrun simctl privacy "$SIM_UDID" grant location-always jp.calil.sabatomap
+          out=$(xcrun simctl launch "$SIM_UDID" jp.calil.sabatomap)
+          echo "$out"
+          echo "APP_PID=${out##*: }" >> "$GITHUB_ENV"
+
+      # スプラッシュは地図を描き終えるか 8 秒で消える（app.js の hideSplash）。
+      # 余裕を見て 20 秒待ってから、まだ生きているかを見る
+      - name: 起動直後に落ちていないか確認
+        run: |
+          set -euo pipefail
+          sleep 20
+          if ! ps -p "$APP_PID" > /dev/null; then
+            echo "::error::アプリが起動後 20 秒以内に終了した"
+            exit 1
+          fi
+          echo "20 秒後も動いている（pid $APP_PID）"
+
+      # console.* は cordova-ios が NSLog に流すので、JS 側の出力もここに出る。
+      # 実 API とタイルへ通信するので、通信由来のエラーで落とすことはしない
+      - name: 画面とログを取る
+        if: always() && env.SIM_UDID != ''
+        run: |
+          set -uo pipefail
+          mkdir -p ios-smoke
+          xcrun simctl io "$SIM_UDID" screenshot ios-smoke/screen.png
+          xcrun simctl spawn "$SIM_UDID" log show --last 5m --style compact \
+            --predicate 'process == "Sabatomap"' > ios-smoke/app.log
+          cp -R ~/Library/Logs/DiagnosticReports ios-smoke/ 2>/dev/null || true
+          echo "--- アプリのログ（末尾） ---"
+          tail -n 80 ios-smoke/app.log
+
+      - name: 画面とログを残す
+        if: always() && env.SIM_UDID != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-smoke
+          path: ios-smoke/
+          retention-days: 14
