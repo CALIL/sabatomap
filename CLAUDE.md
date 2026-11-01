@@ -314,7 +314,7 @@ e2e で Android と iOS の両方を固定してあります
 **`uuid` は 11 が上限です。**「uuid@10 and below is no longer supported. For ESM codebases,
 update to uuid@latest. For CommonJS codebases, use uuid@11」と本家が言っており、
 `xcode` は `require('uuid')` の CommonJS です。最新は 14 ですが、上げると
-iOS のビルドが壊れます。**CI は Android しか組まないので気づけません。**
+iOS のビルドが壊れます。`ios.yml` がシミュレータ向けに組んでいるので、上げれば CI が落ちます。
 
 `terser` の `^4.8.1` 固定は **uglifyify のためだけに存在していた**ので、esbuild 移行で外しました。
 `npm audit` は現在 **0 件**です（browserify が Node の組み込みモジュールを差し替えるために
@@ -541,10 +541,14 @@ npm script の素の browserify へ移った際、replace 工程が無くなっ�
 - `npm start` - `www/` を作って `cordova prepare` → ブラウザで実行
 - `npm run watch` - `src/` を見張って `www/` を作り直し続ける
 - `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**`ci.yml` が呼ぶのはこれ**
-- `npm run copy:debug` - 同じものを minify せず `__DEBUG__` を立てて作る。**`android.yml` が呼ぶのはこれ**
+- `npm run copy:debug` - 同じものを minify せず `__DEBUG__` を立てて作る。**`android.yml` / `ios.yml` が呼ぶのはこれ**
 
 `copy` / `compile` / `build_browser` は同じ `node tools/build.mjs release` の別名です。
-`copy` という名前は `ci.yml` が、`copy:debug` は `android.yml` が呼んでいるので変えないこと。
+`copy` という名前は `ci.yml` が、`copy:debug` は `android.yml` と `ios.yml` が呼んでいるので変えないこと。
+
+`ios.yml` はシミュレータ向けの debug ビルド（`cordova build ios --emulator`）だけを組みます。
+署名が要らないので Secrets は使いません。`cordova requirements ios` は ios-deploy と
+CocoaPods を要求して落ちますが、どちらもこのビルドには不要なので呼んでいません。
 
 ### ビルド
 
