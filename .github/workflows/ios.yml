@@ -52,9 +52,11 @@ jobs:
       - name: Install
         run: npm ci
 
-      # android.yml と同じく debug ビルド。release が通ることは ci.yml が見ている
+      # android.yml と違い release で作る。配る物に近い状態で起動を確かめるため。
+      # debug だと probeGeolocation（app.js）が WebView の geolocation を呼び、
+      # 「"localhost" would like to use your current location」が地図を覆う
       - name: web 側をビルド
-        run: npm run copy:debug
+        run: npm run copy
 
       # config.xml と package.json の cordova.plugins から復元する。
       # platforms/ios は .gitignore されているので毎回作り直し
@@ -106,41 +108,64 @@ jobs:
           echo "SIM_UDID=$udid" >> "$GITHUB_ENV"
 
       # 位置情報の許可ダイアログが地図を覆わないよう先に許可しておく。
-      # Bluetooth は simctl で許可できないので、ダイアログが写ることはある
+      # シミュレータは Bluetooth LE 非対応（PeripheralManagerStateUnsupported）なので
+      # Bluetooth のダイアログは出ない
       - name: アプリを入れて起動
         run: |
           set -euo pipefail
-          xcrun simctl install "$SIM_UDID" "$APP_PATH"
-          xcrun simctl privacy "$SIM_UDID" grant location-always jp.calil.sabatomap
-          out=$(xcrun simctl launch "$SIM_UDID" jp.calil.sabatomap)
+          xcrun simctl install "${SIM_UDID}" "${APP_PATH}"
+          xcrun simctl privacy "${SIM_UDID}" grant location-always jp.calil.sabatomap
+          out=$(xcrun simctl launch "${SIM_UDID}" jp.calil.sabatomap)
           echo "$out"
           echo "APP_PID=${out##*: }" >> "$GITHUB_ENV"
 
       # スプラッシュは地図を描き終えるか 8 秒で消える（app.js の hideSplash）。
-      # 余裕を見て 20 秒待ってから、まだ生きているかを見る
+      # 余裕を見て 20 秒待ってから、まだ生きているかを見る。
+      #
+      # 生きているだけでは JS が動いた証拠にならないので、app.js の
+      # locationManager.setDelegate が iBeacon プラグインに届いたこともログで見る。
+      # 「Registering delegate callback ID」はプラグインのネイティブ側が出す
+      # （debugLogEnabled は既定で有効で、app.js は切っていない）。
+      # ここまで来ていれば、バンドルの読み込み → deviceready → 初期化が通っている。
+      #
+      # 変数を ${} で囲んでいるのは、macOS の bash 3.2 が直後の全角文字の
+      # バイトまで変数名として読むため
       - name: 起動直後に落ちていないか確認
         run: |
           set -euo pipefail
           sleep 20
-          if ! ps -p "$APP_PID" > /dev/null; then
+          if ! ps -p "${APP_PID}" > /dev/null; then
             echo "::error::アプリが起動後 20 秒以内に終了した"
             exit 1
           fi
-          echo "20 秒後も動いている（pid $APP_PID）"
+          echo "20 秒後も動いている（pid ${APP_PID}）"
+          mkdir -p ios-smoke
+          xcrun simctl spawn "${SIM_UDID}" log show --last 5m --style compact \
+            --predicate 'process == "Sabatomap"' > ios-smoke/app-full.log
+          if ! grep -q 'Registering delegate callback ID' ios-smoke/app-full.log; then
+            echo "::error::JS からプラグインの呼び出しが届いていない（app.js の初期化が通っていない）"
+            exit 1
+          fi
+          echo "JS からプラグインまで届いている"
 
-      # console.* は cordova-ios が NSLog に流すので、JS 側の出力もここに出る。
-      # 実 API とタイルへ通信するので、通信由来のエラーで落とすことはしない
+      # console.* は cordova-ios が NSLog に流すので、JS 側の出力も app.log に出る。
+      # 実 API とタイルへ通信するので、通信由来のエラーで落とすことはしない。
+      #
+      # プロセス全体のログは CoreLocation や WebKit の定型行で 3000 行を超えるので、
+      # アプリ自身（cordova とプラグイン、JS の console）が出した行だけを app.log に抜く。
+      # 全体は app-full.log に残す
       - name: 画面とログを取る
         if: always() && env.SIM_UDID != ''
         run: |
           set -uo pipefail
           mkdir -p ios-smoke
-          xcrun simctl io "$SIM_UDID" screenshot ios-smoke/screen.png
-          xcrun simctl spawn "$SIM_UDID" log show --last 5m --style compact \
-            --predicate 'process == "Sabatomap"' > ios-smoke/app.log
+          xcrun simctl io "${SIM_UDID}" screenshot ios-smoke/screen.png
+          xcrun simctl spawn "${SIM_UDID}" log show --last 5m --style compact \
+            --predicate 'process == "Sabatomap"' > ios-smoke/app-full.log
+          grep -E '\(Sabatomap(\.debug\.dylib)?\)' ios-smoke/app-full.log > ios-smoke/app.log || true
           cp -R ~/Library/Logs/DiagnosticReports ios-smoke/ 2>/dev/null || true
-          echo "--- アプリのログ（末尾） ---"
-          tail -n 80 ios-smoke/app.log
+          echo "--- アプリのログ ---"
+          cat ios-smoke/app.log
 
       - name: 画面とログを残す
         if: always() && env.SIM_UDID != ''

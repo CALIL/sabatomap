@@ -540,15 +540,33 @@ npm script の素の browserify へ移った際、replace 工程が無くなっ�
 
 - `npm start` - `www/` を作って `cordova prepare` → ブラウザで実行
 - `npm run watch` - `src/` を見張って `www/` を作り直し続ける
-- `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**`ci.yml` が呼ぶのはこれ**
-- `npm run copy:debug` - 同じものを minify せず `__DEBUG__` を立てて作る。**`android.yml` / `ios.yml` が呼ぶのはこれ**
+- `npm run copy` - `www/` を作る（JS・CSS・vendor・json）。**`ci.yml` / `ios.yml` が呼ぶのはこれ**
+- `npm run copy:debug` - 同じものを minify せず `__DEBUG__` を立てて作る。**`android.yml` が呼ぶのはこれ**
 
 `copy` / `compile` / `build_browser` は同じ `node tools/build.mjs release` の別名です。
-`copy` という名前は `ci.yml` が、`copy:debug` は `android.yml` と `ios.yml` が呼んでいるので変えないこと。
+`copy` という名前は `ci.yml` と `ios.yml` が、`copy:debug` は `android.yml` が呼んでいるので変えないこと。
 
-`ios.yml` はシミュレータ向けの debug ビルド（`cordova build ios --emulator`）だけを組みます。
-署名が要らないので Secrets は使いません。`cordova requirements ios` は ios-deploy と
-CocoaPods を要求して落ちますが、どちらもこのビルドには不要なので呼んでいません。
+### ios.yml（シミュレータでの起動スモークテスト）
+
+シミュレータ向けのアプリ（`cordova build ios --emulator --debug`）を組み、最新 iOS の
+iPhone シミュレータで起動して次を確かめます。署名が要らないので Secrets は使いません。
+
+- 20 秒後もプロセスが生きている（起動直後のクラッシュ）
+- ログに iBeacon プラグインの `Registering delegate callback ID` が出ている。
+  app.js の `setDelegate` がネイティブまで届いた＝バンドルの読み込みから初期化まで通った証拠
+- 画面とアプリのログを artifact `ios-smoke` に残す。`console.*` は cordova-ios が
+  NSLog に流すので、JS 側の出力も `app.log` に出ます
+
+**シミュレータには Bluetooth LE が無い**（`PeripheralManagerStateUnsupported`）ので、
+測位は一切検証できません。実機で確かめてください。
+
+web 側は **release**（`npm run copy`）で組みます。debug だと `probeGeolocation`（app.js）が
+WebView の geolocation を呼び、ネイティブの許可とは別に
+「"localhost" would like to use your current location」というダイアログが出て地図を覆うためです。
+**iOS で debug ビルドを配る場合も、このダイアログが出ます。**
+
+`cordova requirements ios` は ios-deploy と CocoaPods を要求して落ちますが、
+どちらもこのビルドには不要なので呼んでいません。
 
 ### ビルド
 
