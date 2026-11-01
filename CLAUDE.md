@@ -316,6 +316,15 @@ e2e で Android と iOS の両方を固定してあります
 | | 固定先 | 理由 |
 |---|---|---|
 | `uuid` | `^11.1.1` | cordova-ios 8.1.1 → xcode 3.0.1 が `uuid ^7.0.3`。xcode は `uuid.v4()` しか使わず、11 でもそのまま動くことを確認済み |
+| `shelljs` | `^0.10.0` | cordova-browser 7.0.0（2023年から更新なし）が `^0.8.5`。0.8 は glob 7 → minimatch 3 を連れてきて、minimatch の DoS（GHSA-g3hv-75wg-m249・修正は 11.0.1 のみ）が残る。0.10 は fast-glob に替わっていて minimatch を使わない。cordova-browser が使うのは `cp` / `rm` / `config` だけ |
+| `minimatch` | `^11.0.3` | 同じ advisory。cordova-fetch → `@npmcli/*`（npm 本体の最新も）がまだ `^10` を要求する。利用側はすべて `{ minimatch }` / `.Minimatch` の名前付き取り込みなので 11 と互換 |
+| `glob` | `^14.0.2` | `@npmcli/*` と cacache が `^13`。13 は GHSA-3g3m-2fjr-6pw4（AbortSignal で止めた後も走査が続く）。14 は Node の対応範囲と path-scurry 3 以外に差がない |
+
+**shelljs / minimatch / glob の3つは、上流の cordova・npm が上げたら外してください。**
+cordova-browser が shelljs を、`@npmcli/arborist` が minimatch 11・glob 14 を要求するように
+なれば不要です（2026-11-01 時点では cordova-browser 7.0.0、`@npmcli/arborist` 10.0.4 のまま）。
+これらは `cordova prepare` の中でしか動かないので、壊れれば `ci.yml`（browser）・
+`android.yml`・`ios.yml` のどれかが落ちます。
 
 **`uuid` は 11 が上限です。**「uuid@10 and below is no longer supported. For ESM codebases,
 update to uuid@latest. For CommonJS codebases, use uuid@11」と本家が言っており、
