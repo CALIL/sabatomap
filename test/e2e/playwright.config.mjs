@@ -24,6 +24,11 @@ export default defineConfig({
 
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 } },
+    // iOS の WebView と同じエンジン。アプリ内の WKWebView そのものではないが、
+    // JS と描画の差（Safari だけ壊れる類）はここで拾える。
+    // iPhone の端末エミュレーション（isMobile / hasTouch）は使わない。
+    // chromium と同じ条件で動かし、差をエンジンだけに絞るため
+    { name: 'webkit', use: { ...devices['Desktop Safari'], viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 } },
   ],
 
   webServer: {

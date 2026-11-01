@@ -96,9 +96,10 @@ jobs:
         working-directory: test/e2e
         run: npm ci
 
-      - name: Chromium を入れる
+      # webkit は iOS の WebView と同じエンジン。iOS だけ壊れる類をここで拾う
+      - name: Chromium と WebKit を入れる
         working-directory: test/e2e
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
 
       # jsdom は canvas を持たないので、OpenLayers の描画はここでしか見ていない
       - name: 地図を描画して基準画像と突き合わせる

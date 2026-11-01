@@ -168,7 +168,7 @@ npm test          # vitest run
 
 ```bash
 npm run copy && npx cordova prepare browser   # 先に配信物を作る
-cd test/e2e && npm ci && npx playwright install chromium
+cd test/e2e && npm ci && npx playwright install chromium webkit
 npx playwright test                            # 基準画像と突き合わせる
 npx playwright test --update-snapshots         # 見た目を意図的に変えたとき
 ```
@@ -189,7 +189,13 @@ npx playwright test --update-snapshots         # 見た目を意図的に変え�
 `initializeApp` の 500ms 後に visible になる**ので取りこぼします。`settle()` は
 通信が2回続けて動かなくなるまで回し、`view.getAnimating()` が下りるのも待ちます。
 
-**基準画像は OS ごとに別ファイル**です（`-chromium-linux.png` / `-chromium-win32.png`）。
+**chromium と webkit の両方で回します。** webkit は iOS の WebView と同じエンジンで、
+Safari だけ壊れる類の JS と描画の差をここで拾います。アプリ内の WKWebView そのものでは
+ないので、ネイティブプラグインは通りません（起動の確認は `ios.yml` が担当）。
+iPhone の端末エミュレーション（`isMobile` / `hasTouch`）は使わず、chromium と同じ条件にして
+差をエンジンだけに絞っています。
+
+**基準画像は OS とブラウザごとに別ファイル**です（`-chromium-linux.png` / `-webkit-win32.png` など）。
 文字の描画が OS で違うので共有できません。Linux 側は CI が書き出したものを
 artifact から持ち帰ってコミットします。
 
