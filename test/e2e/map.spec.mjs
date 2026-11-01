@@ -328,8 +328,12 @@ test.describe('検索', () => {
     await page.press('#ui input[type=search]', 'Enter');
     await page.waitForSelector('#ui .books > div', { timeout: 20000 });
     await expect(page.locator('#ui .books > div')).toHaveCount(2);
-    // 所蔵が入るまで待つ（.notfetch が外れると不透明になる）
-    await page.waitForSelector('#ui .books .stocks:not(.notfetch)', { timeout: 20000 });
+    // 2冊とも所蔵が入るまで待つ（.notfetch が外れると不透明になる）。
+    // 1冊目だけ待つと、webkit では2冊目がまだ空のまま撮れてしまう
+    await page.waitForFunction(() => {
+      const books = [...document.querySelectorAll('#ui .books > div')];
+      return books.length === 2 && books.every((b) => b.querySelector('.stocks:not(.notfetch)'));
+    }, null, { timeout: 20000 });
 
     await expectUiScreenshot(page, 'results.png');
 
