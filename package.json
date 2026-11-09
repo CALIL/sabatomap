@@ -18,13 +18,13 @@
   },
   "dependencies": {
     "ol": "10.11.0",
-    "preact": "11.0.0",
+    "preact": "11.1.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "autoprefixer": "^10.6.1",
-    "browserslist": "^4.29.4",
+    "autoprefixer": "^10.6.2",
+    "browserslist": "^4.29.5",
     "com.unarin.cordova.beacon": "github:CALIL/cordova-plugin-ibeacon#e03aa41f364d2e6c66f22c7b7dcfe7c025b32fa6",
     "cordova": "^13.0.0",
     "cordova-android": "^15.1.0",
@@ -37,8 +37,8 @@
     "cssnano": "^9.9.0",
     "esbuild": "^0.28.2",
     "jsdom": "^30.1.3",
-    "postcss": "^8.5.31",
-    "sass": "^1.106.1",
+    "postcss": "^8.5.32",
+    "sass": "^1.107.1",
     "vitest": "^5.0.5"
   },
   "author": "CALIL Inc.",
