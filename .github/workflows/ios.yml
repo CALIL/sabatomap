@@ -110,9 +110,16 @@ jobs:
       # 位置情報の許可ダイアログが地図を覆わないよう先に許可しておく。
       # シミュレータは Bluetooth LE 非対応（PeripheralManagerStateUnsupported）なので
       # Bluetooth のダイアログは出ない
+      #
+      # ログをプロセス名で絞るので、実行ファイル名を Info.plist から読んでおく。
+      # cordova-ios 8.2.0 から .app 内の実行ファイルは製品名ではなく常に App になった
+      # （apache/cordova-ios#1697）。版で変わるので決め打ちしない
       - name: アプリを入れて起動
         run: |
           set -euo pipefail
+          exe=$(plutil -extract CFBundleExecutable raw "${APP_PATH}/Info.plist")
+          echo "実行ファイル名: ${exe}"
+          echo "APP_EXE=${exe}" >> "$GITHUB_ENV"
           xcrun simctl install "${SIM_UDID}" "${APP_PATH}"
           xcrun simctl privacy "${SIM_UDID}" grant location-always jp.calil.sabatomap
           out=$(xcrun simctl launch "${SIM_UDID}" jp.calil.sabatomap)
@@ -141,7 +148,7 @@ jobs:
           echo "20 秒後も動いている（pid ${APP_PID}）"
           mkdir -p ios-smoke
           xcrun simctl spawn "${SIM_UDID}" log show --last 5m --style compact \
-            --predicate 'process == "Sabatomap"' > ios-smoke/app-full.log
+            --predicate "process == \"${APP_EXE}\"" > ios-smoke/app-full.log
           if ! grep -q 'Registering delegate callback ID' ios-smoke/app-full.log; then
             echo "::error::JS からプラグインの呼び出しが届いていない（app.js の初期化が通っていない）"
             exit 1
@@ -161,8 +168,8 @@ jobs:
           mkdir -p ios-smoke
           xcrun simctl io "${SIM_UDID}" screenshot ios-smoke/screen.png
           xcrun simctl spawn "${SIM_UDID}" log show --last 5m --style compact \
-            --predicate 'process == "Sabatomap"' > ios-smoke/app-full.log
-          grep -E '\(Sabatomap(\.debug\.dylib)?\)' ios-smoke/app-full.log > ios-smoke/app.log || true
+            --predicate "process == \"${APP_EXE}\"" > ios-smoke/app-full.log
+          grep -E "\(${APP_EXE}(\.debug\.dylib)?\)" ios-smoke/app-full.log > ios-smoke/app.log || true
           cp -R ~/Library/Logs/DiagnosticReports ios-smoke/ 2>/dev/null || true
           echo "--- アプリのログ ---"
           cat ios-smoke/app.log

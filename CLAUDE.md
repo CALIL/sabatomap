@@ -572,6 +572,12 @@ iPhone シミュレータで起動して次を確かめます。署名が要ら�
 - 画面とアプリのログを artifact `ios-smoke` に残す。`console.*` は cordova-ios が
   NSLog に流すので、JS 側の出力も `app.log` に出ます
 
+ログはプロセス名で絞っています。**cordova-ios 8.2.0 から `.app` 内の実行ファイル名は
+製品名ではなく常に `App` になりました**（apache/cordova-ios#1697）。`Sabatomap` と
+決め打ちしていたため、8.2.0 でログが0行になり起動確認が落ちました。いまは
+`Info.plist` の `CFBundleExecutable` から読んでいます。クラッシュレポートや dSYM の名前も
+`App` になります。
+
 **シミュレータには Bluetooth LE が無い**（`PeripheralManagerStateUnsupported`）ので、
 測位は一切検証できません。実機で確かめてください。
 
