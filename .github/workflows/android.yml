@@ -145,3 +145,16 @@ jobs:
           name: sabatomap-debug-apk
           path: ${{ env.APK_PATH }}
           retention-days: 14
+
+      # 実験（Gradle 9）: 署名なしで release の APK と AAB まで組めるかを見る。
+      # android-deploy.yml は Play へ上げるので、実験には使わない
+      - name: 実験 release ビルド（署名なし）
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
+        run: |
+          set -euo pipefail
+          npx cordova build android --release -- --packageType=apk --gradleArg=--warning-mode=all 2>&1 | tee release-apk.log
+          npx cordova build android --release -- --packageType=bundle 2>&1 | tee release-aab.log
+          find platforms/android/app/build/outputs -name '*-release*.apk' -o -name '*.aab' | xargs -r ls -lh
+          echo "=== Gradle 10 で使えなくなる警告"
+          grep -iE 'deprecat|Gradle 10' release-apk.log | sort | uniq -c | sort -rn | head -40 || true
