@@ -43,7 +43,12 @@
         <!-- 合わせて作る API のレベル。Google Play の要件であって、
              インストールできる端末を狭めるものではない -->
         <preference name="android-targetSdkVersion" value="36" />
-        <!-- 実験: Gradle 9 でビルドが通るか（cordova-android 15.1.0 の既定は 8.14.2 / AGP 8.10.1） -->
+        <!-- Gradle の版。cordova-android 15.1.0 の既定は 8.14.2 だが、Gradle 8 は
+             2025-07-31 でサポートが終わったので 9 に上書きしている。AGP は既定の 8.10.1 のまま。
+             ワークフロー（android.yml / android-deploy.yml）の gradle-version と揃えること。
+             cordova-android が Gradle 9 以上を既定にしたら、この行は外す。
+             Gradle 10 は AGP 8.10 と Cordova のテンプレートが対応していないので上げられない
+             （詳細は CLAUDE.md「Gradle の版」） -->
         <preference name="GradleVersion" value="9.9.2" />
         <allow-intent href="market:*" />
         <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />

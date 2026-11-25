@@ -94,7 +94,9 @@ jobs:
 
       # cordova は wrapper を「システムの gradle で」作る。
       # ubuntu-latest にも入っているが、版を固定するため入れる。
-      # 版は cordova-android の cdv-gradle-config-defaults.json に合わせてある。
+      # 版は config.xml の GradleVersion に合わせてある（wrapper の版もそちらで決まる）。
+      # cordova-android 15.1.0 の既定（cdv-gradle-config-defaults.json）は 8.14.2 だが、
+      # Gradle 8 はサポートが終わっているので 9 に上書きしている。
       # ランナーは毎回使い捨てなので、取得物の持ち越しもこれに任せる。
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
@@ -145,16 +147,3 @@ jobs:
           name: sabatomap-debug-apk
           path: ${{ env.APK_PATH }}
           retention-days: 14
-
-      # 実験（Gradle 9）: 署名なしで release の APK と AAB まで組めるかを見る。
-      # android-deploy.yml は Play へ上げるので、実験には使わない
-      - name: 実験 release ビルド（署名なし）
-        env:
-          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.daemon=false
-        run: |
-          set -euo pipefail
-          npx cordova build android --release -- --packageType=apk --gradleArg=--warning-mode=all 2>&1 | tee release-apk.log
-          npx cordova build android --release -- --packageType=bundle 2>&1 | tee release-aab.log
-          find platforms/android/app/build/outputs -name '*-release*.apk' -o -name '*.aab' | xargs -r ls -lh
-          echo "=== Gradle 10 で使えなくなる警告"
-          grep -iE 'deprecat|Gradle 10' release-apk.log | sort | uniq -c | sort -rn | head -40 || true
