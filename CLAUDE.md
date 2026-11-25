@@ -387,6 +387,26 @@ ref 指定なしだと `npm install` を実行したタイミングで解決先�
 それと対で意味を持つ状態ファイルを追跡してはいけないためです。以前はコミットされていて、
 中身が `browser 5.0.4 / android 6.4.0 / ios 4.5.5` と2〜9メジャー古いままでした。
 
+## Gradle の版
+
+**Gradle は 9.9.2 です。** cordova-android 15.1.0 の既定（`cdv-gradle-config-defaults.json`）は
+Gradle 8.14.2 / AGP 8.10.1 ですが、Gradle 8 は 2025-07-31 でサポートが終わったので、
+`config.xml` の `<preference name="GradleVersion" />` で上書きしています（2026-11-25）。
+AGP は既定の 8.10.1 のままで、デバッグ APK・リリース APK・AAB のいずれも組めることを確認しました。
+
+- **版は3か所に書いてあり、揃えて動かします。** `config.xml` の `GradleVersion`、
+  `android.yml` と `android-deploy.yml` の `gradle-version`。wrapper の版を決めるのは
+  `config.xml` 側で、ワークフローの `gradle-version` は wrapper を作るための Gradle です。
+  **ワークフローだけ変えても実際のビルドの版は変わりません**
+- **Gradle 10 には上げられません。** 「Gradle 10 でエラーになる」警告が7種類出ていて、
+  出どころは AGP 8.10.1 の内部（aapt2・lint・BuildType など）と Cordova のテンプレート
+  （`Project` を依存に書く形）です。cordova-android が新しい AGP へ追随するのを待ちます
+- **cordova-android が Gradle 9 以上を既定にしたら、`GradleVersion` の行は外してください。**
+  Cordova の既定から外れた構成は、Cordova を更新するたびに組み合わせを確かめる手間が増えます
+- AGP 9 は Gradle 9.1 以上が前提で、新しい DSL と Kotlin の組み込みが既定になります。
+  AGP を上げるのは Cordova が対応してからにしてください
+- 版を触ったら、ビルドの成否だけでなく**実機での測位**で確かめること（下の AltBeacon の節と同じ理由）
+
 ## ★ AltBeacon は autobind で使っています。手動 bind に戻さないこと
 
 `CALIL/cordova-plugin-ibeacon` の `src/android/LocationManager.java` は
