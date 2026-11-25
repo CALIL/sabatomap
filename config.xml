@@ -43,6 +43,8 @@
         <!-- 合わせて作る API のレベル。Google Play の要件であって、
              インストールできる端末を狭めるものではない -->
         <preference name="android-targetSdkVersion" value="36" />
+        <!-- 実験: Gradle 9 でビルドが通るか（cordova-android 15.1.0 の既定は 8.14.2 / AGP 8.10.1） -->
+        <preference name="GradleVersion" value="9.9.2" />
         <allow-intent href="market:*" />
         <icon density="mdpi" src="res/icons/android/icon-48-mdpi.png" />
         <icon density="hdpi" src="res/icons/android/icon-72-hdpi.png" />
